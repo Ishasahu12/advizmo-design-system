@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Move Money — Money Flow Builder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
+    body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#1c1c1e;max-width:430px;margin:0 auto;min-height:100vh}
+    .sb{display:flex;justify-content:space-between;align-items:center;padding:14px 24px 8px;font-size:15px;font-weight:600;background:#fff;position:sticky;top:0;z-index:100}
+    .nb{display:flex;align-items:center;gap:12px;padding:8px 20px 12px;background:#fff;border-bottom:.5px solid rgba(0,0,0,.06);position:sticky;top:44px;z-index:99}
+    .nb-back{width:32px;height:32px;border-radius:50%;background:#f2f2f7;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer}
+    .nb-back svg{width:18px;height:18px;color:#1c1c1e}
+    .nb-title{font-family:'IBM Plex Sans',sans-serif;font-size:17px;font-weight:700;color:#1c1c1e}
+    .nb-action{margin-left:auto;font-size:14px;font-weight:600;color:#227be2;background:none;border:none;cursor:pointer}
+    .ct{padding:0 20px 140px}
+    .hdr{padding:28px 0 20px}
+    .hdr-title{font-family:'IBM Plex Sans',sans-serif;font-size:26px;font-weight:700;color:#1c1c1e;line-height:1.2;margin-bottom:6px}
+    .hdr-sub{font-size:15px;color:#6b7280;line-height:1.4}
+    .flow-card{margin-bottom:24px}
+    .flow-hdr{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+    .flow-hdr-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:700;color:#fff;flex-shrink:0}
+    .flow-hdr-num.protect{background:#ef8a17}
+    .flow-hdr-num.prepare{background:#227be2}
+    .flow-hdr-num.grow{background:#1b8b58}
+    .flow-hdr-info{flex:1}
+    .flow-hdr-title{font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;color:#1c1c1e}
+    .flow-hdr-desc{font-size:12px;color:#6b7280}
+    .flow-hdr-total{font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700;color:#1c1c1e}
+    .flow-source{background:#1c1c1e;border-radius:16px;padding:16px 18px;color:#fff;display:flex;align-items:center;gap:12px;position:relative}
+    .flow-source::after{content:'';position:absolute;bottom:-20px;left:50%;width:1px;height:20px;background:#d1d5db}
+    .flow-source-icon{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .flow-source-icon svg{width:18px;height:18px;color:#5ba3e8}
+    .flow-source-info{flex:1}
+    .flow-source-name{font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600;color:#fff}
+    .flow-source-bal{font-size:12px;color:#6b7280}
+    .flow-source-amt{font-family:'IBM Plex Sans',sans-serif;font-size:20px;font-weight:700;color:#fff}
+    .flow-connector{display:flex;justify-content:center;padding:20px 0 16px;position:relative}
+    .flow-connector::before{content:'';position:absolute;top:0;left:50%;width:1.5px;height:100%;background:linear-gradient(to bottom,#1c1c1e,#e5e7eb)}
+    .flow-connector-badge{padding:5px 12px;background:#f2f2f7;border-radius:16px;font-size:11px;font-weight:600;color:#6b7280;position:relative;z-index:2}
+    .flow-dests{display:flex;flex-direction:column;gap:8px}
+    .flow-dest{display:flex;align-items:center;gap:12px;padding:14px 16px;background:#f8f9fa;border-radius:14px;border:0.5px solid rgba(0,0,0,.04)}
+    .flow-dest-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .flow-dest-icon svg{width:18px;height:18px}
+    .flow-dest-icon.protect{background:#fef3c7;color:#ef8a17}
+    .flow-dest-icon.prepare{background:#e0efff;color:#227be2}
+    .flow-dest-icon.grow{background:#eefbf4;color:#1b8b58}
+    .flow-dest-info{flex:1;min-width:0}
+    .flow-dest-name{font-size:14px;font-weight:600;color:#1c1c1e}
+    .flow-dest-sub{font-size:12px;color:#6b7280;margin-top:1px}
+    .flow-dest-amt-wrap{text-align:right;flex-shrink:0}
+    .flow-dest-amt{font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700;color:#1c1c1e}
+    .flow-dest-edit{font-size:11px;font-weight:600;color:#227be2;background:none;border:none;cursor:pointer;padding:2px 4px}
+    .flow-alloc{display:flex;gap:3px;margin-top:10px}
+    .flow-alloc-seg{height:4px;border-radius:2px}
+    .flow-after{margin-top:12px;padding:12px 14px;background:#f8f9fa;border-radius:12px;display:flex;gap:12px}
+    .flow-after-item{flex:1;text-align:center}
+    .flow-after-label{font-size:10px;color:#8e8e93;text-transform:uppercase;letter-spacing:.03em;margin-bottom:2px}
+    .flow-after-value{font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:700;color:#1c1c1e}
+    .flow-after-value.positive{color:#1b8b58}
+    .flow-after-value.warn{color:#ef8a17}
+    .flow-after-value.info{color:#227be2}
+    .flow-actions{display:flex;gap:8px;margin-top:12px}
+    .flow-btn{flex:1;padding:10px;border-radius:10px;border:none;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;text-align:center}
+    .flow-btn.primary{background:#227be2;color:#fff}
+    .flow-btn.ghost{background:#e5e7eb;color:#1c1c1e}
+    .divider{height:1px;background:rgba(0,0,0,.06);margin:8px 0 24px}
+    .summary{background:#1c1c1e;border-radius:20px;padding:24px;color:#fff}
+    .summary-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6b7280;margin-bottom:14px}
+    .summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .summary-tile{padding:14px;background:rgba(255,255,255,.06);border-radius:12px}
+    .summary-tile-label{font-size:11px;color:#6b7280;margin-bottom:4px}
+    .summary-tile-value{font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700;color:#fff}
+    .summary-checks{margin-top:14px;display:flex;flex-direction:column;gap:8px}
+    .summary-check{display:flex;align-items:center;gap:8px;font-size:14px;color:#d1d5db}
+    .summary-check-dot{width:20px;height:20px;border-radius:50%;background:rgba(52,211,153,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .summary-check-dot svg{width:12px;height:12px;color:#34d399}
+    .bb{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(255,255,255,.94);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:.5px solid rgba(0,0,0,.08);padding:14px 20px 34px}
+    .bb-btn{width:100%;padding:16px;border-radius:14px;border:none;background:#227be2;color:#fff;font-family:'Inter',sans-serif;font-size:16px;font-weight:600;cursor:pointer}
+  </style>
+</head>
+<body>
+  <div class="sb"><span>9:41</span><div style="display:flex;gap:6px;align-items:center"><svg width="28" height="13" viewBox="0 0 28 13" fill="currentColor"><rect x="0" y=".5" width="23" height="12" rx="3" stroke="currentColor" stroke-width="1" fill="none"/><rect x="24" y="4" width="2.5" height="5" rx="1" fill="currentColor" opacity=".3"/><rect x="1.5" y="2" width="18" height="9" rx="1.5" fill="currentColor"/></svg></div></div>
+  <div class="nb"><button class="nb-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></button><div class="nb-title">Move Money</div><button class="nb-action">Edit All</button></div>
+
+  <div class="ct">
+    <div class="hdr">
+      <div class="hdr-title">Money Flow</div>
+      <div class="hdr-sub">3 independent optimizations. Each flows from one source into its destinations.</div>
+    </div>
+
+    <!-- Flow 1: Pay Bills -->
+    <div class="flow-card">
+      <div class="flow-hdr">
+        <div class="flow-hdr-num protect">1</div>
+        <div class="flow-hdr-info"><div class="flow-hdr-title">Reserve for Bills</div><div class="flow-hdr-desc">Protect · 4 payments</div></div>
+        <div class="flow-hdr-total">$680</div>
+      </div>
+      <div class="flow-source">
+        <div class="flow-source-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+        <div class="flow-source-info"><div class="flow-source-name">Capital One Checking</div><div class="flow-source-bal">$4,200 available</div></div>
+        <div class="flow-source-amt">$680</div>
+      </div>
+      <div class="flow-connector"><div class="flow-connector-badge">4 destinations</div></div>
+      <div class="flow-dests">
+        <div class="flow-dest"><div class="flow-dest-icon protect"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div><div class="flow-dest-info"><div class="flow-dest-name">Electricity</div><div class="flow-dest-sub">Jul 18</div></div><div class="flow-dest-amt-wrap"><div class="flow-dest-amt">$82</div><button class="flow-dest-edit">Edit</button></div></div>
+        <div class="flow-dest"><div class="flow-dest-icon protect"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div><div class="flow-dest-info"><div class="flow-dest-name">Rent</div><div class="flow-dest-sub">Jul 25</div></div><div class="flow-dest-amt-wrap"><div class="flow-dest-amt">$320</div><button class="flow-dest-edit">Edit</button></div></div>
+        <div class="flow-dest"><div class="flow-dest-icon protect"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="flow-dest-info"><div class="flow-dest-name">Car Insurance</div><div class="flow-dest-sub">Jul 28</div></div><div class="flow-dest-amt-wrap"><div class="flow-dest-amt">$195</div><button class="flow-dest-edit">Edit</button></div></div>
+        <div class="flow-dest"><div class="flow-dest-icon protect"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div><div class="flow-dest-info"><div class="flow-dest-name">Netflix</div><div class="flow-dest-sub">Jul 30</div></div><div class="flow-dest-amt-wrap"><div class="flow-dest-amt">$83</div><button class="flow-dest-edit">Edit</button></div></div>
+      </div>
+      <div class="flow-alloc"><div class="flow-alloc-seg" style="width:12%;background:#ef8a17"></div><div class="flow-alloc-seg" style="width:47%;background:#ef8a17"></div><div class="flow-alloc-seg" style="width:29%;background:#ef8a17"></div><div class="flow-alloc-seg" style="width:12%;background:#ef8a17"></div></div>
+      <div class="flow-after">
+        <div class="flow-after-item"><div class="flow-after-label">Checking after</div><div class="flow-after-value warn">$3,520</div></div>
+        <div class="flow-after-item"><div class="flow-after-label">Bills covered</div><div class="flow-after-value positive">4/4 ✓</div></div>
+      </div>
+      <div class="flow-actions"><button class="flow-btn ghost">Skip</button><button class="flow-btn primary">Confirm</button></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Flow 2: Reserve -->
+    <div class="flow-card">
+      <div class="flow-hdr">
+        <div class="flow-hdr-num prepare">2</div>
+        <div class="flow-hdr-info"><div class="flow-hdr-title">Build Emergency Reserve</div><div class="flow-hdr-desc">Prepare · 1 destination</div></div>
+        <div class="flow-hdr-total">$400</div>
+      </div>
+      <div class="flow-source">
+        <div class="flow-source-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+        <div class="flow-source-info"><div class="flow-source-name">Chase Savings</div><div class="flow-source-bal">$12,650 available</div></div>
+        <div class="flow-source-amt">$400</div>
+      </div>
+      <div class="flow-connector"><div class="flow-connector-badge">1 destination</div></div>
+      <div class="flow-dests">
+        <div class="flow-dest"><div class="flow-dest-icon prepare"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/></svg></div><div class="flow-dest-info"><div class="flow-dest-name">Emergency Reserve</div><div class="flow-dest-sub">$8,400 → $10,000 target</div></div><div class="flow-dest-amt-wrap"><div class="flow-dest-amt">$400</div><button class="flow-dest-edit">Edit</button></div></div>
+      </div>
+      <div class="flow-after">
+        <div class="flow-after-item"><div class="flow-after-label">After transfer</div><div class="flow-after-value positive">$8,800</div></div>
+        <div class="flow-after-item"><div class="flow-after-label">Time to goal</div><div class="flow-after-value info">~4 months</div></div>
+      </div>
+      <div class="flow-actions"><button class="flow-btn ghost">Skip</button><button class="flow-btn primary">Confirm</button></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Flow 3: Auto Invest -->
+    <div class="flow-card">
+      <div class="flow-hdr">
+        <div class="flow-hdr-num grow">3</div>
+        <div class="flow-hdr-info"><div class="flow-hdr-title">Invest Idle Cash</div><div class="flow-hdr-desc">Grow · Market open</div></div>
+        <div class="flow-hdr-total">$650</div>
+      </div>
+      <div class="flow-source">
+        <div class="flow-source-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+        <div class="flow-source-info"><div class="flow-source-name">Advizmo Cash</div><div class="flow-source-bal">$4,200 available</div></div>
+        <div class="flow-source-amt">$650</div>
+      </div>
+      <div class="flow-connector"><div class="flow-connector-badge">1 destination · Market open</div></div>
+      <div class="flow-dests">
+        <div class="flow-dest"><div class="flow-dest-icon grow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 7l-5-5-5 5"/></svg></div><div class="flow-dest-info"><div class="flow-dest-name">Balanced Growth Portfolio</div><div class="flow-dest-sub">VTI · BND · VXUS</div></div><div class="flow-dest-amt-wrap"><div class="flow-dest-amt">$650</div><button class="flow-dest-edit">Edit</button></div></div>
+      </div>
+      <div style="margin-top:10px;display:flex;flex-direction:column;gap:5px">
+        <div style="display:flex;justify-content:space-between;padding:8px 12px;background:#f8f9fa;border-radius:8px;font-size:12px"><span style="color:#6b7280">VTI · US Index · 60%</span><span style="font-family:'IBM Plex Sans';font-weight:600">$390 · ~2.01 shares</span></div>
+        <div style="display:flex;justify-content:space-between;padding:8px 12px;background:#f8f9fa;border-radius:8px;font-size:12px"><span style="color:#6b7280">BND · Bonds · 25%</span><span style="font-family:'IBM Plex Sans';font-weight:600">$163 · ~2.18 shares</span></div>
+        <div style="display:flex;justify-content:space-between;padding:8px 12px;background:#f8f9fa;border-radius:8px;font-size:12px"><span style="color:#6b7280">VXUS · Intl · 15%</span><span style="font-family:'IBM Plex Sans';font-weight:600">$97 · ~1.76 shares</span></div>
+      </div>
+      <div class="flow-after">
+        <div class="flow-after-item"><div class="flow-after-label">Diversification</div><div class="flow-after-value positive">+2%</div></div>
+        <div class="flow-after-item"><div class="flow-after-label">Portfolio after</div><div class="flow-after-value">$47,970</div></div>
+      </div>
+      <div class="flow-actions"><button class="flow-btn ghost">Skip</button><button class="flow-btn primary">Confirm</button></div>
+    </div>
+
+    <!-- Summary -->
+    <div class="summary">
+      <div class="summary-label">Optimization Summary</div>
+      <div class="summary-grid">
+        <div class="summary-tile"><div class="summary-tile-label">Recommendations</div><div class="summary-tile-value">3</div></div>
+        <div class="summary-tile"><div class="summary-tile-label">Total allocated</div><div class="summary-tile-value">$1,730</div></div>
+        <div class="summary-tile"><div class="summary-tile-label">Opt score</div><div class="summary-tile-value">68 → 89</div></div>
+        <div class="summary-tile"><div class="summary-tile-label">Annual impact</div><div class="summary-tile-value" style="color:#34d399">+$2,340</div></div>
+      </div>
+      <div class="summary-checks">
+        <div class="summary-check"><div class="summary-check-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>Bills protected</div>
+        <div class="summary-check"><div class="summary-check-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>Emergency fund improved</div>
+        <div class="summary-check"><div class="summary-check-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>Investment scheduled</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bb"><button class="bb-btn">Approve All · $1,730</button></div>
+</body>
+</html>

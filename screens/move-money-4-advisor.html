@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Move Money — Advisor Review</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
+    body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:#f8f9fa;color:#1c1c1e;max-width:430px;margin:0 auto;min-height:100vh}
+    .sb{display:flex;justify-content:space-between;align-items:center;padding:14px 24px 8px;font-size:15px;font-weight:600;background:#f8f9fa;position:sticky;top:0;z-index:100}
+    .nb{display:flex;align-items:center;gap:12px;padding:8px 20px 12px;background:#f8f9fa;position:sticky;top:44px;z-index:99}
+    .nb-back{width:32px;height:32px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+    .nb-back svg{width:18px;height:18px;color:#1c1c1e}
+    .nb-title{font-family:'IBM Plex Sans',sans-serif;font-size:17px;font-weight:700;color:#1c1c1e}
+    .ct{padding:0 16px 160px}
+    .advisor-note{background:#fff;border-radius:20px;padding:24px;margin-top:20px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+    .advisor-note-header{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+    .advisor-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#227be2,#1551a8);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .advisor-avatar svg{width:20px;height:20px;color:#fff}
+    .advisor-meta{flex:1}
+    .advisor-label{font-size:13px;font-weight:600;color:#227be2;text-transform:uppercase;letter-spacing:.04em}
+    .advisor-time{font-size:12px;color:#8e8e93;margin-top:1px}
+    .advisor-text{font-size:15px;line-height:1.55;color:#3a3a3c}
+    .advisor-text strong{color:#1c1c1e;font-weight:600}
+    .opt-card{background:#fff;border-radius:20px;margin-top:12px;box-shadow:0 1px 4px rgba(0,0,0,.04);overflow:hidden}
+    .opt-card-section{padding:20px 22px}
+    .opt-card-section+.opt-card-section{border-top:.5px solid rgba(0,0,0,.06)}
+    .opt-source{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+    .opt-source-icon{width:40px;height:40px;border-radius:12px;background:#1c1c1e;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .opt-source-icon svg{width:20px;height:20px;color:#5ba3e8}
+    .opt-source-info{flex:1}
+    .opt-source-name{font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:600;color:#1c1c1e}
+    .opt-source-bal{font-size:13px;color:#6b7280}
+    .opt-source-amt{font-family:'IBM Plex Sans',sans-serif;font-size:22px;font-weight:700;color:#1c1c1e}
+    .opt-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:4px 10px;border-radius:6px;margin-bottom:10px}
+    .opt-badge.protect{background:#fef3c7;color:#c2790a}
+    .opt-badge.prepare{background:#e0efff;color:#1551a8}
+    .opt-badge.grow{background:#eefbf4;color:#166f47}
+    .opt-title{font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700;color:#1c1c1e;margin-bottom:4px}
+    .opt-desc{font-size:14px;color:#6b7280;line-height:1.4}
+    .opt-dests{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+    .opt-dest{display:flex;align-items:center;gap:12px;padding:12px 14px;background:#f8f9fa;border-radius:12px}
+    .opt-dest-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+    .opt-dest-dot.protect{background:#ef8a17}
+    .opt-dest-dot.prepare{background:#227be2}
+    .opt-dest-dot.grow{background:#1b8b58}
+    .opt-dest-info{flex:1;min-width:0}
+    .opt-dest-name{font-size:14px;font-weight:600;color:#1c1c1e}
+    .opt-dest-sub{font-size:12px;color:#6b7280;margin-top:1px}
+    .opt-dest-amt-wrap{text-align:right;flex-shrink:0}
+    .opt-dest-amt{font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;color:#1c1c1e}
+    .opt-dest-edit{font-size:11px;font-weight:600;color:#227be2;background:none;border:none;cursor:pointer;padding:2px 4px}
+    .opt-after{margin-top:14px;padding:14px;background:#f8f9fa;border-radius:12px}
+    .opt-after-title{font-size:12px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px}
+    .opt-after-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .opt-after-tile{padding:10px;background:#fff;border-radius:10px}
+    .opt-after-tile-label{font-size:11px;color:#8e8e93;margin-bottom:2px}
+    .opt-after-tile-value{font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600;color:#1c1c1e}
+    .opt-after-tile-value.positive{color:#1b8b58}
+    .opt-after-tile-value.warn{background:#fef3c7;color:#ef8a17}
+    .opt-actions{display:flex;gap:8px;margin-top:16px}
+    .opt-btn{flex:1;padding:12px;border-radius:12px;border:none;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;cursor:pointer;text-align:center}
+    .opt-btn.primary{background:#227be2;color:#fff}
+    .opt-btn.ghost{background:#e5e7eb;color:#1c1c1e}
+    .progress{margin-top:20px;padding:0 4px}
+    .progress-bar{display:flex;gap:6px;margin-bottom:8px}
+    .progress-seg{flex:1;height:4px;border-radius:2px;background:#e5e7eb}
+    .progress-seg.done{background:#1b8b58}
+    .progress-seg.active{background:#227be2}
+    .progress-info{display:flex;justify-content:space-between;font-size:12px;color:#8e8e93}
+    .progress-info span:first-child{font-weight:600;color:#227be2}
+    .summary{background:#1c1c1e;border-radius:20px;padding:24px;color:#fff;margin-top:20px}
+    .summary-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6b7280;margin-bottom:14px}
+    .summary-rows{display:flex;flex-direction:column;gap:8px}
+    .summary-row{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(255,255,255,.05);border-radius:10px}
+    .summary-row-label{font-size:14px;color:#9ca3af}
+    .summary-row-value{font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;color:#fff}
+    .summary-row-value.green{color:#34d399}
+    .summary-checks{margin-top:14px;display:flex;flex-direction:column;gap:8px}
+    .summary-check{display:flex;align-items:center;gap:8px;font-size:14px;color:#d1d5db}
+    .summary-check-dot{width:20px;height:20px;border-radius:50%;background:rgba(52,211,153,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .summary-check-dot svg{width:12px;height:12px;color:#34d399}
+    .bb{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(248,249,250,.94);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:.5px solid rgba(0,0,0,.08);padding:14px 16px 34px}
+    .bb-btn{width:100%;padding:16px;border-radius:14px;border:none;background:#227be2;color:#fff;font-family:'Inter',sans-serif;font-size:16px;font-weight:600;cursor:pointer}
+  </style>
+</head>
+<body>
+  <div class="sb"><span>9:41</span><div style="display:flex;gap:6px;align-items:center"><svg width="28" height="13" viewBox="0 0 28 13" fill="currentColor"><rect x="0" y=".5" width="23" height="12" rx="3" stroke="currentColor" stroke-width="1" fill="none"/><rect x="24" y="4" width="2.5" height="5" rx="1" fill="currentColor" opacity=".3"/><rect x="1.5" y="2" width="18" height="9" rx="1.5" fill="currentColor"/></svg></div></div>
+  <div class="nb"><button class="nb-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></button><div class="nb-title">Move Money</div></div>
+
+  <div class="ct">
+    <div class="progress">
+      <div class="progress-bar"><div class="progress-seg done"></div><div class="progress-seg done"></div><div class="progress-seg active"></div></div>
+      <div class="progress-info"><span>Reviewing 3 of 3</span><span>3 cards</span></div>
+    </div>
+
+    <!-- Advisor Note -->
+    <div class="advisor-note">
+      <div class="advisor-note-header">
+        <div class="advisor-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+        <div class="advisor-meta"><div class="advisor-label">Your Advisor</div><div class="advisor-time">Reviewed today at 7:12 AM</div></div>
+      </div>
+      <div class="advisor-text">I've analyzed your accounts. Here are <strong>3 independent recommendations</strong> to optimize $1,730 across your financial life. Each card is separate — review, edit, or skip any one.</div>
+    </div>
+
+    <!-- Card 1: Pay Bills -->
+    <div class="opt-card">
+      <div class="opt-card-section">
+        <div class="opt-badge protect">Protect</div>
+        <div class="opt-title">Reserve for upcoming bills</div>
+        <div class="opt-desc">Set aside $680 so your 4 bills are covered on time. You'll pay them manually through your bank.</div>
+        <div class="opt-source">
+          <div class="opt-source-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+          <div class="opt-source-info"><div class="opt-source-name">Capital One Checking</div><div class="opt-source-bal">$4,200 available</div></div>
+          <div class="opt-source-amt">$680</div>
+        </div>
+        <div class="opt-dests">
+          <div class="opt-dest"><div class="opt-dest-dot protect"></div><div class="opt-dest-info"><div class="opt-dest-name">Electricity</div><div class="opt-dest-sub">Due Jul 18</div></div><div class="opt-dest-amt-wrap"><div class="opt-dest-amt">$82</div><button class="opt-dest-edit">Edit</button></div></div>
+          <div class="opt-dest"><div class="opt-dest-dot protect"></div><div class="opt-dest-info"><div class="opt-dest-name">Rent</div><div class="opt-dest-sub">Due Jul 25</div></div><div class="opt-dest-amt-wrap"><div class="opt-dest-amt">$320</div><button class="opt-dest-edit">Edit</button></div></div>
+          <div class="opt-dest"><div class="opt-dest-dot protect"></div><div class="opt-dest-info"><div class="opt-dest-name">Car Insurance</div><div class="opt-dest-sub">Due Jul 28</div></div><div class="opt-dest-amt-wrap"><div class="opt-dest-amt">$195</div><button class="opt-dest-edit">Edit</button></div></div>
+          <div class="opt-dest"><div class="opt-dest-dot protect"></div><div class="opt-dest-info"><div class="opt-dest-name">Netflix</div><div class="opt-dest-sub">Due Jul 30</div></div><div class="opt-dest-amt-wrap"><div class="opt-dest-amt">$83</div><button class="opt-dest-edit">Edit</button></div></div>
+        </div>
+        <div class="opt-after">
+          <div class="opt-after-title">After allocation</div>
+          <div class="opt-after-grid">
+            <div class="opt-after-tile"><div class="opt-after-tile-label">Checking</div><div class="opt-after-tile-value" style="background:#fef3c7;color:#ef8a17;border-radius:6px;padding:2px 6px;display:inline-block">$3,520</div></div>
+            <div class="opt-after-tile"><div class="opt-after-tile-label">Bills covered</div><div class="opt-after-tile-value positive">4 of 4 ✓</div></div>
+          </div>
+        </div>
+        <div class="opt-actions"><button class="opt-btn ghost">Skip</button><button class="opt-btn primary">Confirm · $680</button></div>
+      </div>
+    </div>
+
+    <!-- Card 2: Reserve -->
+    <div class="opt-card">
+      <div class="opt-card-section">
+        <div class="opt-badge prepare">Prepare</div>
+        <div class="opt-title">Build emergency reserve</div>
+        <div class="opt-desc">Move $400 from savings into your emergency fund. You're 84% of the way to your 6-month goal.</div>
+        <div class="opt-source">
+          <div class="opt-source-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+          <div class="opt-source-info"><div class="opt-source-name">Chase Savings</div><div class="opt-source-bal">$12,650 available</div></div>
+          <div class="opt-source-amt">$400</div>
+        </div>
+        <div class="opt-dests">
+          <div class="opt-dest"><div class="opt-dest-dot prepare"></div><div class="opt-dest-info"><div class="opt-dest-name">Emergency Reserve</div><div class="opt-dest-sub">$8,400 → $10,000 target</div></div><div class="opt-dest-amt-wrap"><div class="opt-dest-amt">$400</div><button class="opt-dest-edit">Edit</button></div></div>
+        </div>
+        <div class="opt-after">
+          <div class="opt-after-title">After allocation</div>
+          <div class="opt-after-grid">
+            <div class="opt-after-tile"><div class="opt-after-tile-label">Reserve after</div><div class="opt-after-tile-value positive">$8,800</div></div>
+            <div class="opt-after-tile"><div class="opt-after-tile-label">Time to goal</div><div class="opt-after-tile-value" style="color:#227be2">~4 months</div></div>
+          </div>
+        </div>
+        <div class="opt-actions"><button class="opt-btn ghost">Skip</button><button class="opt-btn primary">Confirm · $400</button></div>
+      </div>
+    </div>
+
+    <!-- Card 3: Auto Invest -->
+    <div class="opt-card">
+      <div class="opt-card-section">
+        <div class="opt-badge grow">Grow</div>
+        <div class="opt-title">Invest idle cash</div>
+        <div class="opt-desc">Move $650 into your Balanced Growth portfolio. Markets are open — this will purchase today.</div>
+        <div class="opt-source">
+          <div class="opt-source-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+          <div class="opt-source-info"><div class="opt-source-name">Advizmo Cash</div><div class="opt-source-bal">$4,200 available</div></div>
+          <div class="opt-source-amt">$650</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:12px;padding:8px 12px;background:#eefbf4;border-radius:10px">
+          <div style="width:8px;height:8px;border-radius:50%;background:#1b8b58"></div>
+          <div style="font-size:13px;font-weight:600;color:#166f47">Market open · Purchasing today</div>
+        </div>
+        <div class="opt-dests">
+          <div class="opt-dest"><div class="opt-dest-dot grow"></div><div class="opt-dest-info"><div class="opt-dest-name">Balanced Growth Portfolio</div><div class="opt-dest-sub">VTI · BND · VXUS</div></div><div class="opt-dest-amt-wrap"><div class="opt-dest-amt">$650</div><button class="opt-dest-edit">Edit</button></div></div>
+        </div>
+        <div style="margin-top:10px;display:flex;flex-direction:column;gap:6px">
+          <div style="display:flex;justify-content:space-between;padding:8px 12px;background:#f8f9fa;border-radius:8px;font-size:13px"><span style="color:#6b7280">VTI · US Index · 60%</span><span style="font-family:'IBM Plex Sans';font-weight:600">$390 · ~2.01 shares</span></div>
+          <div style="display:flex;justify-content:space-between;padding:8px 12px;background:#f8f9fa;border-radius:8px;font-size:13px"><span style="color:#6b7280">BND · Bonds · 25%</span><span style="font-family:'IBM Plex Sans';font-weight:600">$163 · ~2.18 shares</span></div>
+          <div style="display:flex;justify-content:space-between;padding:8px 12px;background:#f8f9fa;border-radius:8px;font-size:13px"><span style="color:#6b7280">VXUS · International · 15%</span><span style="font-family:'IBM Plex Sans';font-weight:600">$97 · ~1.76 shares</span></div>
+        </div>
+        <div class="opt-after">
+          <div class="opt-after-title">After allocation</div>
+          <div class="opt-after-grid">
+            <div class="opt-after-tile"><div class="opt-after-tile-label">Diversification</div><div class="opt-after-tile-value positive">Improved +2%</div></div>
+            <div class="opt-after-tile"><div class="opt-after-tile-label">Portfolio value</div><div class="opt-after-tile-value">$47,970</div></div>
+          </div>
+        </div>
+        <div class="opt-actions"><button class="opt-btn ghost">Skip</button><button class="opt-btn primary">Confirm · $650</button></div>
+      </div>
+    </div>
+
+    <!-- Summary -->
+    <div class="summary">
+      <div class="summary-label">Optimization Summary</div>
+      <div class="summary-rows">
+        <div class="summary-row"><div class="summary-row-label">Recommendations</div><div class="summary-row-value">3 cards</div></div>
+        <div class="summary-row"><div class="summary-row-label">Total allocated</div><div class="summary-row-value">$1,730</div></div>
+        <div class="summary-row"><div class="summary-row-label">Opt score</div><div class="summary-row-value">68 → 89</div></div>
+        <div class="summary-row"><div class="summary-row-label">Annual impact</div><div class="summary-row-value green">+$2,340</div></div>
+      </div>
+      <div class="summary-checks">
+        <div class="summary-check"><div class="summary-check-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>Bills protected</div>
+        <div class="summary-check"><div class="summary-check-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>Emergency fund improved</div>
+        <div class="summary-check"><div class="summary-check-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>Investment scheduled</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bb"><button class="bb-btn">Approve All · $1,730</button></div>
+</body>
+</html>
