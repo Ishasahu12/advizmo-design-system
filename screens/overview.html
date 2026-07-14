@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Concept 5 — Money Optimization Center</title>
+  <title>Advizmo — Overview</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -21,14 +21,12 @@
       overflow-x: hidden;
     }
 
-    /* Status bar */
     .status-bar {
       display: flex; justify-content: space-between; align-items: center;
       padding: 14px 24px 8px; font-size: 15px; font-weight: 600;
       background: #ffffff; position: sticky; top: 0; z-index: 100;
     }
 
-    /* Navigation */
     .nav-bar {
       display: flex; justify-content: space-between; align-items: center;
       padding: 8px 20px 12px; background: #ffffff;
@@ -42,10 +40,8 @@
     .nav-actions { display: flex; gap: 16px; }
     .nav-actions svg { width: 22px; height: 22px; color: #1c1c1e; }
 
-    /* Content */
     .content { padding: 0 20px 100px; }
 
-    /* Greeting */
     .greeting { padding: 28px 0 4px; }
     .greeting-text {
       font-family: 'IBM Plex Sans', sans-serif;
@@ -55,7 +51,6 @@
       font-size: 15px; color: #6b7280; margin-top: 6px;
     }
 
-    /* Optimization Score Hero */
     .opt-hero {
       margin-top: 24px;
       background: #1c1c1e;
@@ -119,7 +114,6 @@
       background: linear-gradient(90deg, #227be2, #34d399);
     }
 
-    /* Opportunity Cards */
     .opp-section-label {
       font-size: 11px; font-weight: 600; color: #8e8e93;
       text-transform: uppercase; letter-spacing: 0.06em;
@@ -183,9 +177,7 @@
       display: flex; gap: 16px; margin-top: 12px;
       padding-top: 12px; border-top: 0.5px solid rgba(0,0,0,0.06);
     }
-    .opp-num {
-      flex: 1;
-    }
+    .opp-num { flex: 1; }
     .opp-num-label {
       font-size: 11px; color: #8e8e93; text-transform: uppercase;
       letter-spacing: 0.03em; margin-bottom: 2px;
@@ -207,11 +199,8 @@
       cursor: pointer; text-align: center;
     }
     .opp-btn.primary { background: #227be2; color: #ffffff; }
-    .opp-btn.secondary {
-      background: #f2f2f7; color: #1c1c1e;
-    }
+    .opp-btn.secondary { background: #f2f2f7; color: #1c1c1e; }
 
-    /* Money Flow */
     .money-flow {
       background: #f8f9fa; border-radius: 18px; padding: 20px;
     }
@@ -223,9 +212,7 @@
       display: flex; align-items: center; justify-content: space-between;
       padding: 10px 0;
     }
-    .flow-row + .flow-row {
-      border-top: 0.5px solid rgba(0,0,0,0.06);
-    }
+    .flow-row + .flow-row { border-top: 0.5px solid rgba(0,0,0,0.06); }
     .flow-left { display: flex; align-items: center; gap: 10px; }
     .flow-arrow {
       width: 28px; height: 28px; border-radius: 8px;
@@ -235,12 +222,8 @@
     .flow-arrow.in { background: #eefbf4; color: #1b8b58; }
     .flow-arrow.out { background: #fef3c7; color: #ef8a17; }
     .flow-arrow.move { background: #e0efff; color: #227be2; }
-    .flow-label {
-      font-size: 14px; font-weight: 500; color: #1c1c1e;
-    }
-    .flow-sublabel {
-      font-size: 12px; color: #8e8e93;
-    }
+    .flow-label { font-size: 14px; font-weight: 500; color: #1c1c1e; }
+    .flow-sublabel { font-size: 12px; color: #8e8e93; }
     .flow-amount {
       font-family: 'IBM Plex Sans', sans-serif;
       font-size: 15px; font-weight: 600;
@@ -249,25 +232,19 @@
     .flow-amount.negative { color: #be3e30; }
     .flow-amount.neutral { color: #1c1c1e; }
 
-    /* Accounts Compact */
     .accounts-compact {
       display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
     }
     .account-tile {
       background: #f8f9fa; border-radius: 14px; padding: 16px;
     }
-    .account-tile-label {
-      font-size: 12px; color: #8e8e93; margin-bottom: 4px;
-    }
+    .account-tile-label { font-size: 12px; color: #8e8e93; margin-bottom: 4px; }
     .account-tile-value {
       font-family: 'IBM Plex Sans', sans-serif;
       font-size: 18px; font-weight: 700; color: #1c1c1e;
     }
-    .account-tile-sub {
-      font-size: 11px; color: #6b7280; margin-top: 2px;
-    }
+    .account-tile-sub { font-size: 11px; color: #6b7280; margin-top: 2px; }
 
-    /* Portfolio Spark */
     .portfolio-spark {
       background: #f8f9fa; border-radius: 16px; padding: 18px;
     }
@@ -279,19 +256,14 @@
       font-family: 'IBM Plex Sans', sans-serif;
       font-size: 26px; font-weight: 700; color: #1c1c1e;
     }
-    .portfolio-spark-change {
-      font-size: 14px; font-weight: 600; color: #1b8b58;
-    }
-    .spark-bars {
-      height: 56px; display: flex; align-items: flex-end; gap: 3px;
-    }
+    .portfolio-spark-change { font-size: 14px; font-weight: 600; color: #1b8b58; }
+    .spark-bars { height: 56px; display: flex; align-items: flex-end; gap: 3px; }
     .spark-bar {
       flex: 1; border-radius: 2px 2px 0 0; min-height: 4px;
       background: #d1d5db;
     }
     .spark-bar:last-child { background: #227be2; }
 
-    /* Spending Quick */
     .spending-quick {
       background: #f8f9fa; border-radius: 16px; padding: 18px;
     }
@@ -317,14 +289,10 @@
       display: flex; justify-content: space-between; align-items: center;
     }
 
-    /* News */
-    .news-compact {
-      display: flex; flex-direction: column; gap: 8px;
-    }
+    .news-compact { display: flex; flex-direction: column; gap: 8px; }
     .news-pill {
       display: flex; align-items: center; gap: 10px;
-      padding: 12px 16px;
-      background: #f8f9fa; border-radius: 14px;
+      padding: 12px 16px; background: #f8f9fa; border-radius: 14px;
     }
     .news-pill-tag {
       font-size: 10px; font-weight: 700; text-transform: uppercase;
@@ -336,7 +304,6 @@
       line-height: 1.35; flex: 1;
     }
 
-    /* Bottom Nav */
     .bottom-nav {
       position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
       width: 100%; max-width: 430px;
@@ -352,15 +319,12 @@
     }
     .bottom-nav-item svg { width: 24px; height: 24px; color: #8e8e93; }
     .bottom-nav-item.active svg { color: #227be2; }
-    .bottom-nav-label {
-      font-size: 10px; font-weight: 500; color: #8e8e93;
-    }
+    .bottom-nav-label { font-size: 10px; font-weight: 500; color: #8e8e93; }
     .bottom-nav-item.active .bottom-nav-label { color: #227be2; font-weight: 600; }
   </style>
 </head>
 <body>
 
-  <!-- Status Bar -->
   <div class="status-bar">
     <span>9:41</span>
     <div style="display:flex;gap:6px;align-items:center;">
@@ -369,7 +333,6 @@
     </div>
   </div>
 
-  <!-- Navigation -->
   <div class="nav-bar">
     <div class="nav-title">Overview</div>
     <div class="nav-actions">
@@ -379,14 +342,11 @@
   </div>
 
   <div class="content">
-
-    <!-- Greeting -->
     <div class="greeting">
       <div class="greeting-text">Good morning, Sarah</div>
       <div class="greeting-sub">3 ways to optimize your money today</div>
     </div>
 
-    <!-- Optimization Score Hero -->
     <div class="opt-hero">
       <div class="opt-hero-label">Money Optimization Score</div>
       <div class="opt-hero-row">
@@ -405,33 +365,19 @@
       </div>
     </div>
 
-    <!-- Optimization Opportunities -->
     <div class="opp-section-label">Optimization Opportunities</div>
     <div class="opp-list">
-      <!-- Opportunity 1: Protect -->
       <div class="opp-card protect">
         <div class="opp-card-top">
-          <div class="opp-card-category">
-            <div class="opp-card-category-dot protect"></div>
-            Protect
-          </div>
+          <div class="opp-card-category"><div class="opp-card-category-dot protect"></div>Protect</div>
           <div class="opp-card-impact urgent">Urgent</div>
         </div>
         <div class="opp-card-title">Prevent overdraft before Friday</div>
         <div class="opp-card-desc">Your checking won't cover rent. Move money now to avoid a $35 overdraft fee.</div>
         <div class="opp-card-numbers">
-          <div class="opp-num">
-            <div class="opp-num-label">Checking</div>
-            <div class="opp-num-value warn">$1,842</div>
-          </div>
-          <div class="opp-num">
-            <div class="opp-num-label">Rent Due</div>
-            <div class="opp-num-value">$2,200</div>
-          </div>
-          <div class="opp-num">
-            <div class="opp-num-label">Shortfall</div>
-            <div class="opp-num-value warn">-$358</div>
-          </div>
+          <div class="opp-num"><div class="opp-num-label">Checking</div><div class="opp-num-value warn">$1,842</div></div>
+          <div class="opp-num"><div class="opp-num-label">Rent Due</div><div class="opp-num-value">$2,200</div></div>
+          <div class="opp-num"><div class="opp-num-label">Shortfall</div><div class="opp-num-value warn">-$358</div></div>
         </div>
         <div class="opp-card-actions">
           <button class="opp-btn primary">Move $800 from savings</button>
@@ -439,30 +385,17 @@
         </div>
       </div>
 
-      <!-- Opportunity 2: Grow -->
       <div class="opp-card grow">
         <div class="opp-card-top">
-          <div class="opp-card-category">
-            <div class="opp-card-category-dot grow"></div>
-            Grow
-          </div>
+          <div class="opp-card-category"><div class="opp-card-category-dot grow"></div>Grow</div>
           <div class="opp-card-impact high">High Impact</div>
         </div>
         <div class="opp-card-title">Invest idle cash immediately</div>
         <div class="opp-card-desc">$4,200 earning 0.01% in checking. Invest it to earn potentially $210/year more.</div>
         <div class="opp-card-numbers">
-          <div class="opp-num">
-            <div class="opp-num-label">Idle Cash</div>
-            <div class="opp-num-value">$4,200</div>
-          </div>
-          <div class="opp-num">
-            <div class="opp-num-label">Current APY</div>
-            <div class="opp-num-value warn">0.01%</div>
-          </div>
-          <div class="opp-num">
-            <div class="opp-num-label">Potential</div>
-            <div class="opp-num-value good">+$210/yr</div>
-          </div>
+          <div class="opp-num"><div class="opp-num-label">Idle Cash</div><div class="opp-num-value">$4,200</div></div>
+          <div class="opp-num"><div class="opp-num-label">Current APY</div><div class="opp-num-value warn">0.01%</div></div>
+          <div class="opp-num"><div class="opp-num-label">Potential</div><div class="opp-num-value good">+$210/yr</div></div>
         </div>
         <div class="opp-card-actions">
           <button class="opp-btn primary">Invest $3,000 now</button>
@@ -470,30 +403,17 @@
         </div>
       </div>
 
-      <!-- Opportunity 3: Prepare -->
       <div class="opp-card prepare">
         <div class="opp-card-top">
-          <div class="opp-card-category">
-            <div class="opp-card-category-dot prepare"></div>
-            Prepare
-          </div>
+          <div class="opp-card-category"><div class="opp-card-category-dot prepare"></div>Prepare</div>
           <div class="opp-card-impact medium">On Track</div>
         </div>
         <div class="opp-card-title">Complete your emergency fund</div>
         <div class="opp-card-desc">$8,400 saved. $1,600 away from 6-month target. Keep auto-depositing $200/month.</div>
         <div class="opp-card-numbers">
-          <div class="opp-num">
-            <div class="opp-num-label">Saved</div>
-            <div class="opp-num-value good">$8,400</div>
-          </div>
-          <div class="opp-num">
-            <div class="opp-num-label">Goal</div>
-            <div class="opp-num-value">$10,000</div>
-          </div>
-          <div class="opp-num">
-            <div class="opp-num-label">Remaining</div>
-            <div class="opp-num-value info">$1,600</div>
-          </div>
+          <div class="opp-num"><div class="opp-num-label">Saved</div><div class="opp-num-value good">$8,400</div></div>
+          <div class="opp-num"><div class="opp-num-label">Goal</div><div class="opp-num-value">$10,000</div></div>
+          <div class="opp-num"><div class="opp-num-label">Remaining</div><div class="opp-num-value info">$1,600</div></div>
         </div>
         <div class="opp-card-actions">
           <button class="opp-btn secondary">Adjust plan</button>
@@ -501,7 +421,6 @@
       </div>
     </div>
 
-    <!-- Money Flow -->
     <div class="opp-section-label">Money Flow</div>
     <div class="money-flow">
       <div class="money-flow-header">
@@ -509,80 +428,42 @@
       </div>
       <div class="flow-row">
         <div class="flow-left">
-          <div class="flow-arrow in">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
-          </div>
-          <div>
-            <div class="flow-label">Income</div>
-            <div class="flow-sublabel">Paycheck + deposits</div>
-          </div>
+          <div class="flow-arrow in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></div>
+          <div><div class="flow-label">Income</div><div class="flow-sublabel">Paycheck + deposits</div></div>
         </div>
         <div class="flow-amount positive">+$7,400</div>
       </div>
       <div class="flow-row">
         <div class="flow-left">
-          <div class="flow-arrow out">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
-          </div>
-          <div>
-            <div class="flow-label">Spending</div>
-            <div class="flow-sublabel">All categories</div>
-          </div>
+          <div class="flow-arrow out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></div>
+          <div><div class="flow-label">Spending</div><div class="flow-sublabel">All categories</div></div>
         </div>
         <div class="flow-amount negative">-$4,180</div>
       </div>
       <div class="flow-row">
         <div class="flow-left">
-          <div class="flow-arrow move">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </div>
-          <div>
-            <div class="flow-label">Invested</div>
-            <div class="flow-sublabel">Auto-invested</div>
-          </div>
+          <div class="flow-arrow move"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+          <div><div class="flow-label">Invested</div><div class="flow-sublabel">Auto-invested</div></div>
         </div>
         <div class="flow-amount neutral">-$1,200</div>
       </div>
       <div class="flow-row">
         <div class="flow-left">
-          <div class="flow-arrow in">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
-          </div>
-          <div>
-            <div class="flow-label">Net Savings</div>
-            <div class="flow-sublabel">After everything</div>
-          </div>
+          <div class="flow-arrow in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></div>
+          <div><div class="flow-label">Net Savings</div><div class="flow-sublabel">After everything</div></div>
         </div>
         <div class="flow-amount positive">+$2,020</div>
       </div>
     </div>
 
-    <!-- Accounts -->
     <div class="opp-section-label">Accounts</div>
     <div class="accounts-compact">
-      <div class="account-tile">
-        <div class="account-tile-label">Checking</div>
-        <div class="account-tile-value">$1,842</div>
-        <div class="account-tile-sub">Low — needs attention</div>
-      </div>
-      <div class="account-tile">
-        <div class="account-tile-label">Savings</div>
-        <div class="account-tile-value">$12,650</div>
-        <div class="account-tile-sub">84% to goal</div>
-      </div>
-      <div class="account-tile">
-        <div class="account-tile-label">Invested</div>
-        <div class="account-tile-value">$47,320</div>
-        <div class="account-tile-sub">↑ 8.2% return</div>
-      </div>
-      <div class="account-tile">
-        <div class="account-tile-label">Net Worth</div>
-        <div class="account-tile-value">$61,812</div>
-        <div class="account-tile-sub">↑ $2,340 this month</div>
-      </div>
+      <div class="account-tile"><div class="account-tile-label">Checking</div><div class="account-tile-value">$1,842</div><div class="account-tile-sub">Low — needs attention</div></div>
+      <div class="account-tile"><div class="account-tile-label">Savings</div><div class="account-tile-value">$12,650</div><div class="account-tile-sub">84% to goal</div></div>
+      <div class="account-tile"><div class="account-tile-label">Invested</div><div class="account-tile-value">$47,320</div><div class="account-tile-sub">↑ 8.2% return</div></div>
+      <div class="account-tile"><div class="account-tile-label">Net Worth</div><div class="account-tile-value">$61,812</div><div class="account-tile-sub">↑ $2,340 this month</div></div>
     </div>
 
-    <!-- Portfolio -->
     <div class="opp-section-label">Portfolio</div>
     <div class="portfolio-spark">
       <div class="portfolio-spark-header">
@@ -590,61 +471,37 @@
         <div class="portfolio-spark-change">↑ $3,540 (8.2%)</div>
       </div>
       <div class="spark-bars">
-        <div class="spark-bar" style="height:35%"></div>
-        <div class="spark-bar" style="height:42%"></div>
-        <div class="spark-bar" style="height:38%"></div>
-        <div class="spark-bar" style="height:55%"></div>
-        <div class="spark-bar" style="height:48%"></div>
-        <div class="spark-bar" style="height:62%"></div>
-        <div class="spark-bar" style="height:58%"></div>
-        <div class="spark-bar" style="height:72%"></div>
-        <div class="spark-bar" style="height:68%"></div>
-        <div class="spark-bar" style="height:80%"></div>
-        <div class="spark-bar" style="height:75%"></div>
-        <div class="spark-bar" style="height:88%"></div>
+        <div class="spark-bar" style="height:35%"></div><div class="spark-bar" style="height:42%"></div>
+        <div class="spark-bar" style="height:38%"></div><div class="spark-bar" style="height:55%"></div>
+        <div class="spark-bar" style="height:48%"></div><div class="spark-bar" style="height:62%"></div>
+        <div class="spark-bar" style="height:58%"></div><div class="spark-bar" style="height:72%"></div>
+        <div class="spark-bar" style="height:68%"></div><div class="spark-bar" style="height:80%"></div>
+        <div class="spark-bar" style="height:75%"></div><div class="spark-bar" style="height:88%"></div>
       </div>
     </div>
 
-    <!-- Spending -->
     <div class="opp-section-label">Spending Budget</div>
     <div class="spending-quick">
       <div class="spending-quick-header">
         <div style="font-size:14px;color:#6b7280;">$4,180 of $5,800</div>
         <div style="font-family:'IBM Plex Sans';font-size:14px;font-weight:600;color:#1b8b58;">72%</div>
       </div>
-      <div class="spending-quick-bar">
-        <div class="spending-quick-fill"></div>
-      </div>
-      <div class="spending-quick-labels">
-        <span>$1,620 remaining</span>
-        <span>17 days left</span>
-      </div>
+      <div class="spending-quick-bar"><div class="spending-quick-fill"></div></div>
+      <div class="spending-quick-labels"><span>$1,620 remaining</span><span>17 days left</span></div>
       <div class="spending-quick-pace">
         <div style="font-size:13px;color:#6b7280;">Safe daily pace</div>
         <div style="font-family:'IBM Plex Sans';font-size:15px;font-weight:600;color:#1c1c1e;">$95/day</div>
       </div>
     </div>
 
-    <!-- News -->
     <div class="opp-section-label">Market Pulse</div>
     <div class="news-compact">
-      <div class="news-pill">
-        <div class="news-pill-tag">S&P</div>
-        <div class="news-pill-text">Record close on tech earnings beat</div>
-      </div>
-      <div class="news-pill">
-        <div class="news-pill-tag">Fed</div>
-        <div class="news-pill-text">Powell signals September rate cut</div>
-      </div>
-      <div class="news-pill">
-        <div class="news-pill-tag">NVDA</div>
-        <div class="news-pill-text">+4.2% — your position +$280</div>
-      </div>
+      <div class="news-pill"><div class="news-pill-tag">S&P</div><div class="news-pill-text">Record close on tech earnings beat</div></div>
+      <div class="news-pill"><div class="news-pill-tag">Fed</div><div class="news-pill-text">Powell signals September rate cut</div></div>
+      <div class="news-pill"><div class="news-pill-tag">NVDA</div><div class="news-pill-text">+4.2% — your position +$280</div></div>
     </div>
-
   </div>
 
-  <!-- Bottom Navigation -->
   <div class="bottom-nav">
     <div class="bottom-nav-item active">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
