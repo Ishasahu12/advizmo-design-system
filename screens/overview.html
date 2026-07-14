@@ -321,6 +321,11 @@
     .bottom-nav-item.active svg { color: #227be2; }
     .bottom-nav-label { font-size: 10px; font-weight: 500; color: #8e8e93; }
     .bottom-nav-item.active .bottom-nav-label { color: #227be2; font-weight: 600; }
+
+    .nav-links{display:flex;gap:6px;padding:4px 20px 12px;background:#ffffff;overflow-x:auto;scrollbar-width:none;position:sticky;top:82px;z-index:98}
+    .nav-links::-webkit-scrollbar{display:none}
+    .nav-link{flex-shrink:0;padding:7px 14px;border-radius:20px;background:#f2f2f7;border:none;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:#6b7280;cursor:pointer;white-space:nowrap}
+    .nav-link.active{background:#227be2;color:#fff}
   </style>
 </head>
 <body>
@@ -339,6 +344,15 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M16 16l4 4"/></svg>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
     </div>
+  </div>
+
+  <div class="nav-links">
+    <button class="nav-link active">Overview</button>
+    <button class="nav-link" onclick="location.href='move-money-1-workspace.html'">Workspace</button>
+    <button class="nav-link" onclick="location.href='move-money-2-timeline.html'">Timeline</button>
+    <button class="nav-link" onclick="location.href='move-money-3-flow.html'">Flow</button>
+    <button class="nav-link" onclick="location.href='move-money-4-advisor.html'">Advisor</button>
+    <button class="nav-link" onclick="location.href='move-money-5-wallet.html'">Wallet</button>
   </div>
 
   <div class="content">

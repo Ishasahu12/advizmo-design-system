@@ -1,192 +1,497 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Move Money — Apple Wallet</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
-    body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:#ffffff;color:#1c1c1e;max-width:430px;margin:0 auto;min-height:100vh}
-    .sb{display:flex;justify-content:space-between;align-items:center;padding:14px 24px 8px;font-size:15px;font-weight:600;background:#fff;position:sticky;top:0;z-index:100}
-    .nb{display:flex;align-items:center;gap:12px;padding:10px 20px 14px;background:#fff;position:sticky;top:44px;z-index:99}
-    .nb-back{width:32px;height:32px;border-radius:50%;background:#f2f2f7;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer}
-    .nb-back svg{width:18px;height:18px;color:#1c1c1e}
-    .nb-title{font-family:'IBM Plex Sans',sans-serif;font-size:17px;font-weight:700;color:#1c1c1e;flex:1;text-align:center;margin-right:32px}
-    .ct{padding:0 20px 160px}
-    .hdr{padding:20px 0 28px;text-align:center}
-    .hdr-title{font-family:'IBM Plex Sans',sans-serif;font-size:28px;font-weight:700;color:#1c1c1e;line-height:1.15;margin-bottom:8px}
-    .hdr-sub{font-size:15px;color:#8e8e93;line-height:1.4}
-    /* Wallet Cards */
-    .wallet-stack{position:relative;margin-bottom:20px}
-    .wallet-card{border-radius:20px;overflow:hidden;position:relative;margin-bottom:-8px}
-    .wallet-card-gradient{padding:22px 24px;color:#fff;position:relative}
-    .wallet-card-gradient::after{content:'';position:absolute;top:-30px;right:-30px;width:100px;height:100px;background:rgba(255,255,255,.08);border-radius:50%}
-    .wallet-card-badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;opacity:.7;margin-bottom:10px;position:relative;z-index:1}
-    .wallet-card-title{font-family:'IBM Plex Sans',sans-serif;font-size:20px;font-weight:700;color:#fff;margin-bottom:4px;position:relative;z-index:1}
-    .wallet-card-desc{font-size:13px;opacity:.7;margin-bottom:16px;position:relative;z-index:1}
-    .wallet-card-source{display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(255,255,255,.12);border-radius:12px;position:relative;z-index:1}
-    .wallet-card-source-icon{width:28px;height:28px;border-radius:8px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .wallet-card-source-icon svg{width:14px;height:14px;color:rgba(255,255,255,.8)}
-    .wallet-card-source-name{font-size:13px;font-weight:600;color:#fff;flex:1}
-    .wallet-card-source-amt{font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;color:#fff}
-    .wallet-card-body{padding:0 24px 22px}
-    .wallet-card-total{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:.5px solid rgba(0,0,0,.06)}
-    .wallet-card-total-label{font-size:14px;color:#6b7280}
-    .wallet-card-total-value{font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700;color:#1c1c1e}
-    .wallet-dest{display:flex;align-items:center;gap:10px;padding:12px 0}
-    .wallet-dest+.wallet-dest{border-top:.5px solid rgba(0,0,0,.04)}
-    .wallet-dest-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
-    .wallet-dest-dot.protect{background:#ef8a17}
-    .wallet-dest-dot.prepare{background:#227be2}
-    .wallet-dest-dot.grow{background:#1b8b58}
-    .wallet-dest-info{flex:1;min-width:0}
-    .wallet-dest-name{font-size:14px;font-weight:500;color:#1c1c1e}
-    .wallet-dest-sub{font-size:12px;color:#8e8e93;margin-top:1px}
-    .wallet-dest-amt-wrap{text-align:right;flex-shrink:0}
-    .wallet-dest-amt{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600;color:#1c1c1e}
-    .wallet-dest-edit{font-size:11px;font-weight:600;color:#227be2;background:none;border:none;cursor:pointer;padding:2px 4px}
-    .wallet-card-after{margin-top:10px;padding:12px 14px;background:#f8f9fa;border-radius:12px}
-    .wallet-card-after-row{display:flex;justify-content:space-between;align-items:center;padding:3px 0;font-size:12px}
-    .wallet-card-after-label{color:#8e8e93}
-    .wallet-card-after-value{font-family:'IBM Plex Sans',sans-serif;font-weight:600;color:#1c1c1e}
-    .wallet-card-after-value.positive{color:#1b8b58}
-    .wallet-card-after-value.warn{color:#ef8a17}
-    .wallet-card-after-value.info{color:#227be2}
-    .wallet-progress{height:3px;background:#e5e7eb;border-radius:2px;margin-top:8px;overflow:hidden}
-    .wallet-progress-fill{height:100%;border-radius:2px}
-    .wallet-card-actions{display:flex;gap:8px;margin-top:14px}
-    .wallet-btn{flex:1;padding:11px;border-radius:12px;border:none;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;text-align:center}
-    .wallet-btn.primary{background:#227be2;color:#fff}
-    .wallet-btn.ghost{background:#f2f2f7;color:#1c1c1e}
-    .wallet-card-edit{display:flex;justify-content:flex-end;padding:8px 24px 0}
-    .wallet-edit-btn{font-size:13px;font-weight:600;color:#227be2;background:none;border:none;cursor:pointer}
-    /* Stack colors */
-    .wallet-card.protect .wallet-card-gradient{background:linear-gradient(135deg,#1c1c1e 0%,#2d2d35 100%)}
-    .wallet-card.prepare .wallet-card-gradient{background:linear-gradient(135deg,#1c1c1e 0%,#1a2a3d 100%)}
-    .wallet-card.grow .wallet-card-gradient{background:linear-gradient(135deg,#1c1c1e 0%,#1a2d22 100%)}
-    /* Summary */
-    .summary{background:#f8f9fa;border-radius:20px;padding:24px;margin-top:24px}
-    .summary-label{font-size:11px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px}
-    .summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    .summary-tile{padding:14px;background:#fff;border-radius:14px;text-align:center}
-    .summary-tile-label{font-size:11px;color:#8e8e93;margin-bottom:4px}
-    .summary-tile-value{font-family:'IBM Plex Sans',sans-serif;font-size:20px;font-weight:700;color:#1c1c1e}
-    .summary-tile-sub{font-size:11px;margin-top:2px}
-    .summary-tile-sub.positive{color:#1b8b58}
-    .summary-checks{margin-top:16px;display:flex;flex-direction:column;gap:10px}
-    .summary-check{display:flex;align-items:center;gap:10px;font-size:14px;color:#3a3a3c}
-    .summary-check-dot{width:22px;height:22px;border-radius:50%;background:#eefbf4;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .summary-check-dot svg{width:12px;height:12px;color:#1b8b58}
-    .bb{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(255,255,255,.94);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:.5px solid rgba(0,0,0,.08);padding:14px 20px 34px}
-    .bb-btn{width:100%;padding:16px;border-radius:14px;border:none;background:#1c1c1e;color:#fff;font-family:'Inter',sans-serif;font-size:16px;font-weight:600;cursor:pointer}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Advizmo — Wallet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Inter',sans-serif;background:#fff;color:#000;max-width:430px;margin:0 auto;min-height:100vh;position:relative;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.status-bar{display:flex;justify-content:space-between;align-items:center;padding:12px 24px 8px;background:#fff;font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600;letter-spacing:-0.01em}
+.status-bar-right{display:flex;align-items:center;gap:6px}
+.nav-bar{display:flex;align-items:center;justify-content:space-between;padding:8px 20px 12px;background:#fff;position:sticky;top:0;z-index:100}
+.nav-title{font-family:'IBM Plex Sans',sans-serif;font-size:17px;font-weight:700;letter-spacing:-0.02em}
+.back-btn{width:32px;height:32px;border-radius:50%;border:1px solid #e5e5ea;background:none;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.back-btn svg{width:16px;height:16px}
+.scroll-nav{display:flex;gap:6px;padding:4px 20px 12px;background:#fff;overflow-x:auto;scrollbar-width:none;position:sticky;top:82px;z-index:98}
+.scroll-nav::-webkit-scrollbar{display:none}
+.scroll-nav button{flex-shrink:0;padding:7px 14px;border-radius:20px;border:none;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
+.page-content{padding:0 20px 120px}
+.section-label{font-family:'IBM Plex Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#8e8e93;margin-bottom:12px;padding-left:2px}
+.wallet-card{border-radius:16px;overflow:hidden;margin-bottom:20px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.06),0 0 0 1px rgba(0,0,0,0.04)}
+.card-header{padding:20px 20px 16px;position:relative;overflow:hidden}
+.card-header-protect{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%)}
+.card-header-prepare{background:linear-gradient(135deg,#1a1a2e 0%,#0a2647 50%,#144272 100%)}
+.card-header-grow{background:linear-gradient(135deg,#1a1a2e 0%,#1b1b2f 50%,#162447 100%)}
+.card-category{font-family:'IBM Plex Sans',sans-serif;font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:4px}
+.card-title{font-family:'IBM Plex Sans',sans-serif;font-size:20px;font-weight:700;color:#fff;letter-spacing:-0.02em;line-height:1.2}
+.card-market-status{display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:4px 10px;border-radius:6px;background:rgba(52,199,89,0.2);font-family:'Inter',sans-serif;font-size:11px;font-weight:600;color:#34c759}
+.market-dot{width:6px;height:6px;border-radius:50%;background:#34c759;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.card-body{padding:20px}
+.source-section{margin-bottom:20px}
+.source-label{font-family:'Inter',sans-serif;font-size:11px;font-weight:500;color:#8e8e93;margin-bottom:8px;letter-spacing:0.02em}
+.source-chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.source-chips::-webkit-scrollbar{display:none}
+.source-chip{flex-shrink:0;display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:1.5px solid #e5e5ea;background:#fafafa;cursor:pointer;transition:all 0.2s}
+.source-chip.active{border-color:#000;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,0.08)}
+.source-chip-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;font-family:'IBM Plex Sans',sans-serif}
+.source-chip-icon.capone{background:#004977;color:#fff}
+.source-chip-icon.chase{background:#0a5c36;color:#fff}
+.source-chip-icon.advizmo{background:#000;color:#fff}
+.source-chip-info{display:flex;flex-direction:column;gap:1px}
+.source-chip-name{font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:#000;white-space:nowrap}
+.source-chip-bal{font-family:'IBM Plex Sans',sans-serif;font-size:11px;font-weight:500;color:#8e8e93;white-space:nowrap}
+.destinations{display:flex;flex-direction:column;gap:0}
+.dest-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid #f2f2f7}
+.dest-row:last-child{border-bottom:none}
+.dest-left{display:flex;align-items:center;gap:12px;flex:1}
+.dest-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dest-dot.bills{background:#ff9500}
+.dest-dot.tax{background:#af52de}
+.dest-dot.emergency{background:#34c759}
+.dest-dot.vacation{background:#5ac8fa}
+.dest-dot.home{background:#ff2d55}
+.dest-dot.aggressive{background:#ff3b30}
+.dest-dot.dividend{background:#ff9500}
+.dest-dot.kids{background:#5856d6}
+.dest-info{display:flex;flex-direction:column;gap:2px}
+.dest-name{font-family:'Inter',sans-serif;font-size:14px;font-weight:500;color:#000;letter-spacing:-0.01em}
+.dest-sub{font-family:'IBM Plex Sans',sans-serif;font-size:11px;font-weight:500;color:#8e8e93}
+.dest-progress{display:flex;flex-direction:column;align-items:flex-end;gap:2px}
+.dest-amount{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600;color:#000;letter-spacing:-0.02em}
+.dest-progress-bar{width:60px;height:3px;background:#f2f2f7;border-radius:2px;overflow:hidden;margin-top:2px}
+.dest-progress-fill{height:100%;border-radius:2px;transition:width 0.3s}
+.dest-progress-fill.bills{background:#ff9500}
+.dest-progress-fill.tax{background:#af52de}
+.dest-progress-fill.emergency{background:#34c759}
+.dest-progress-fill.vacation{background:#5ac8fa}
+.dest-progress-fill.home{background:#ff2d55}
+.dest-progress-fill.aggressive{background:#ff3b30}
+.dest-progress-fill.dividend{background:#ff9500}
+.dest-progress-fill.kids{background:#5856d6}
+.add-dest{display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;border:1.5px dashed #d1d1d6;border-radius:10px;margin-top:12px;cursor:pointer;transition:all 0.2s}
+.add-dest:hover{border-color:#8e8e93;background:#fafafa}
+.add-dest-text{font-family:'Inter',sans-serif;font-size:13px;font-weight:500;color:#8e8e93}
+.card-divider{height:1px;background:#f2f2f7;margin:16px 0}
+.card-total{display:flex;align-items:center;justify-content:space-between}
+.card-total-label{font-family:'Inter',sans-serif;font-size:13px;font-weight:500;color:#8e8e93}
+.card-total-value{font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700;color:#000;letter-spacing:-0.02em}
+.card-after{display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding:10px 14px;background:#f9f9f9;border-radius:10px}
+.card-after-label{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;color:#8e8e93}
+.card-after-value{font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600;color:#000}
+.allocation-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.alloc-item{padding:10px;background:#f9f9f9;border-radius:10px;text-align:center}
+.alloc-ticker{font-family:'IBM Plex Sans',sans-serif;font-size:11px;font-weight:600;color:#000;letter-spacing:0.02em}
+.alloc-pct{font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;color:#000;margin:2px 0}
+.alloc-name{font-family:'Inter',sans-serif;font-size:10px;font-weight:500;color:#8e8e93}
+.alloc-shares{font-family:'IBM Plex Sans',sans-serif;font-size:10px;font-weight:500;color:#34c759;margin-top:2px}
+.summary-section{margin-top:24px;margin-bottom:24px}
+.summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#e5e5ea;border-radius:14px;overflow:hidden}
+.summary-cell{background:#fff;padding:16px 12px;text-align:center}
+.summary-value{font-family:'IBM Plex Sans',sans-serif;font-size:22px;font-weight:700;color:#000;letter-spacing:-0.03em}
+.summary-label{font-family:'Inter',sans-serif;font-size:10px;font-weight:500;color:#8e8e93;margin-top:2px;letter-spacing:0.02em}
+.bottom-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(255,255,255,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:16px 20px;padding-bottom:calc(16px + env(safe-area-inset-bottom,0px));border-top:1px solid rgba(0,0,0,0.06);z-index:200}
+.approve-btn{width:100%;padding:16px;border-radius:14px;background:#000;color:#fff;font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:600;border:none;cursor:pointer;letter-spacing:-0.01em;transition:all 0.2s}
+.approve-btn:hover{background:#1a1a1a}
+.approve-btn:active{transform:scale(0.98)}
+.bottom-hint{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:10px}
+.bottom-hint-dot{width:4px;height:4px;border-radius:50%;background:#d1d1d6}
+.bottom-hint-text{font-family:'Inter',sans-serif;font-size:11px;font-weight:500;color:#8e8e93}
+.remove-dest{width:20px;height:20px;border-radius:50%;background:#f2f2f7;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all 0.15s}
+.remove-dest:hover{background:#e5e5ea}
+.remove-dest svg{width:10px;height:10px;color:#8e8e93}
+.dest-right{display:flex;align-items:center;gap:10px}
+</style>
 </head>
 <body>
-  <div class="sb"><span>9:41</span><div style="display:flex;gap:6px;align-items:center"><svg width="28" height="13" viewBox="0 0 28 13" fill="currentColor"><rect x="0" y=".5" width="23" height="12" rx="3" stroke="currentColor" stroke-width="1" fill="none"/><rect x="24" y="4" width="2.5" height="5" rx="1" fill="currentColor" opacity=".3"/><rect x="1.5" y="2" width="18" height="9" rx="1.5" fill="currentColor"/></svg></div></div>
-  <div class="nb"><button class="nb-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></button><div class="nb-title">Move Money</div></div>
 
-  <div class="ct">
-    <div class="hdr">
-      <div class="hdr-title">3 optimizations</div>
-      <div class="hdr-sub">Review each card. Edit amounts or skip any recommendation.</div>
+<div class="status-bar">
+  <span>9:41</span>
+  <div class="status-bar-right">
+    <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M1 8h2v4H1V8zM5 5h2v7H5V5zM9 3h2v9H9V3zM13 0h2v12h-2V0z" fill="#000"/></svg>
+    <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M8 2.4C5.6 2.4 3.4 3.4 1.8 5l1.4 1.4C4.4 5.2 6.1 4.4 8 4.4s3.6.8 4.8 2l1.4-1.4C12.6 3.4 10.4 2.4 8 2.4zm0 4c-1.4 0-2.6.6-3.4 1.4L6 9.2c.5-.5 1.2-.8 2-.8s1.5.3 2 .8l1.4-1.4C10.6 7 9.4 6.4 8 6.4z" fill="#000"/></svg>
+    <svg width="24" height="12" viewBox="0 0 24 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="2" stroke="#000" stroke-opacity="0.35"/><rect x="2" y="2" width="17" height="8" rx="1" fill="#000"/><path d="M23 4v4a2 2 0 000-4z" fill="#000" fill-opacity="0.4"/></svg>
+  </div>
+</div>
+
+<div class="nav-bar">
+  <button class="back-btn" onclick="location.href='overview.html'">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+  </button>
+  <span class="nav-title">Move Money</span>
+  <div style="width:32px"></div>
+</div>
+
+<div class="scroll-nav">
+  <button onclick="location.href='overview.html'" style="background:#f2f2f7;color:#6b7280">Overview</button>
+  <button onclick="location.href='move-money-1-workspace.html'" style="background:#f2f2f7;color:#6b7280">Workspace</button>
+  <button onclick="location.href='move-money-2-timeline.html'" style="background:#f2f2f7;color:#6b7280">Timeline</button>
+  <button onclick="location.href='move-money-3-flow.html'" style="background:#f2f2f7;color:#6b7280">Flow</button>
+  <button onclick="location.href='move-money-4-advisor.html'" style="background:#f2f2f7;color:#6b7280">Advisor</button>
+  <button style="background:#227be2;color:#fff">Wallet</button>
+</div>
+
+<div class="page-content">
+
+  <div class="section-label" style="margin-top:8px">Optimization Cards</div>
+
+  <!-- CARD 1 — Pay Bills -->
+  <div class="wallet-card">
+    <div class="card-header card-header-protect">
+      <div class="card-category">Protect</div>
+      <div class="card-title">Pay Bills</div>
     </div>
-
-    <!-- Wallet Card 1: Protect -->
-    <div class="wallet-card protect">
-      <div class="wallet-card-gradient">
-        <div class="wallet-card-badge">Protect</div>
-        <div class="wallet-card-title">Reserve for bills</div>
-        <div class="wallet-card-desc">4 payments due this month</div>
-        <div class="wallet-card-source">
-          <div class="wallet-card-source-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
-          <div class="wallet-card-source-name">Capital One Checking</div>
-          <div class="wallet-card-source-amt">$680</div>
+    <div class="card-body">
+      <div class="source-section">
+        <div class="source-label">From</div>
+        <div class="source-chips">
+          <div class="source-chip active" onclick="selectSource(this)">
+            <div class="source-chip-icon capone">C1</div>
+            <div class="source-chip-info">
+              <span class="source-chip-name">Capital One Checking</span>
+              <span class="source-chip-bal">$4,200</span>
+            </div>
+          </div>
+          <div class="source-chip" onclick="selectSource(this)">
+            <div class="source-chip-icon chase">CH</div>
+            <div class="source-chip-info">
+              <span class="source-chip-name">Chase Checking</span>
+              <span class="source-chip-bal">$3,840</span>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="wallet-card-body">
-        <div class="wallet-card-total"><div class="wallet-card-total-label">Total reserved</div><div class="wallet-card-total-value">$680</div></div>
-        <div class="wallet-dest"><div class="wallet-dest-dot protect"></div><div class="wallet-dest-info"><div class="wallet-dest-name">Electricity</div><div class="wallet-dest-sub">Jul 18</div></div><div class="wallet-dest-amt-wrap"><div class="wallet-dest-amt">$82</div><button class="wallet-dest-edit">Edit</button></div></div>
-        <div class="wallet-dest"><div class="wallet-dest-dot protect"></div><div class="wallet-dest-info"><div class="wallet-dest-name">Rent</div><div class="wallet-dest-sub">Jul 25</div></div><div class="wallet-dest-amt-wrap"><div class="wallet-dest-amt">$320</div><button class="wallet-dest-edit">Edit</button></div></div>
-        <div class="wallet-dest"><div class="wallet-dest-dot protect"></div><div class="wallet-dest-info"><div class="wallet-dest-name">Car Insurance</div><div class="wallet-dest-sub">Jul 28</div></div><div class="wallet-dest-amt-wrap"><div class="wallet-dest-amt">$195</div><button class="wallet-dest-edit">Edit</button></div></div>
-        <div class="wallet-dest"><div class="wallet-dest-dot protect"></div><div class="wallet-dest-info"><div class="wallet-dest-name">Netflix</div><div class="wallet-dest-sub">Jul 30</div></div><div class="wallet-dest-amt-wrap"><div class="wallet-dest-amt">$83</div><button class="wallet-dest-edit">Edit</button></div></div>
-        <div class="wallet-card-after">
-          <div class="wallet-card-after-row"><div class="wallet-card-after-label">Checking after</div><div class="wallet-card-after-value warn">$3,520</div></div>
-          <div class="wallet-card-after-row"><div class="wallet-card-after-label">Bills covered</div><div class="wallet-card-after-value positive">4 of 4 ✓</div></div>
+      <div class="destinations">
+        <div class="dest-row">
+          <div class="dest-left">
+            <div class="dest-dot bills"></div>
+            <div class="dest-info">
+              <span class="dest-name">Bills Account</span>
+              <span class="dest-sub">Utilities, insurance, subscriptions</span>
+            </div>
+          </div>
+          <div class="dest-right">
+            <button class="remove-dest" onclick="this.closest('.dest-row').remove()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+            <div class="dest-progress">
+              <span class="dest-amount">$620</span>
+              <div class="dest-progress-bar"><div class="dest-progress-fill bills" style="width:100%"></div></div>
+            </div>
+          </div>
         </div>
-        <div class="wallet-card-actions"><button class="wallet-btn ghost">Skip</button><button class="wallet-btn primary">Confirm · $680</button></div>
-      </div>
-    </div>
-
-    <!-- Wallet Card 2: Prepare -->
-    <div class="wallet-card prepare">
-      <div class="wallet-card-gradient">
-        <div class="wallet-card-badge">Prepare</div>
-        <div class="wallet-card-title">Build emergency reserve</div>
-        <div class="wallet-card-desc">6-month safety net goal</div>
-        <div class="wallet-card-source">
-          <div class="wallet-card-source-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
-          <div class="wallet-card-source-name">Chase Savings</div>
-          <div class="wallet-card-source-amt">$400</div>
-        </div>
-      </div>
-      <div class="wallet-card-body">
-        <div class="wallet-dest"><div class="wallet-dest-dot prepare"></div><div class="wallet-dest-info"><div class="wallet-dest-name">Emergency Reserve</div><div class="wallet-dest-sub">$8,400 → $10,000</div></div><div class="wallet-dest-amt-wrap"><div class="wallet-dest-amt">$400</div><button class="wallet-dest-edit">Edit</button></div></div>
-        <div class="wallet-card-after">
-          <div class="wallet-card-after-row"><div class="wallet-card-after-label">After transfer</div><div class="wallet-card-after-value positive">$8,800</div></div>
-          <div class="wallet-card-after-row"><div class="wallet-card-after-label">Time to goal</div><div class="wallet-card-after-value info">~4 months</div></div>
-        </div>
-        <div class="wallet-progress"><div class="wallet-progress-fill" style="width:88%;background:linear-gradient(90deg,#227be2,#34d399)"></div></div>
-        <div class="wallet-card-actions"><button class="wallet-btn ghost">Skip</button><button class="wallet-btn primary">Confirm · $400</button></div>
-      </div>
-    </div>
-
-    <!-- Wallet Card 3: Grow -->
-    <div class="wallet-card grow">
-      <div class="wallet-card-gradient">
-        <div class="wallet-card-badge">Grow</div>
-        <div class="wallet-card-title">Invest idle cash</div>
-        <div class="wallet-card-desc">Market open · Purchasing today</div>
-        <div class="wallet-card-source">
-          <div class="wallet-card-source-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
-          <div class="wallet-card-source-name">Advizmo Cash</div>
-          <div class="wallet-card-source-amt">$650</div>
+        <div class="dest-row">
+          <div class="dest-left">
+            <div class="dest-dot tax"></div>
+            <div class="dest-info">
+              <span class="dest-name">Property Tax Account</span>
+              <span class="dest-sub">Quarterly estimated payments</span>
+            </div>
+          </div>
+          <div class="dest-right">
+            <button class="remove-dest" onclick="this.closest('.dest-row').remove()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+            <div class="dest-progress">
+              <span class="dest-amount">$400</span>
+              <div class="dest-progress-bar"><div class="dest-progress-fill tax" style="width:100%"></div></div>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="wallet-card-body">
-        <div class="wallet-dest"><div class="wallet-dest-dot grow"></div><div class="wallet-dest-info"><div class="wallet-dest-name">Balanced Growth</div><div class="wallet-dest-sub">VTI · BND · VXUS</div></div><div class="wallet-dest-amt-wrap"><div class="wallet-dest-amt">$650</div><button class="wallet-dest-edit">Edit</button></div></div>
-        <div style="margin-top:10px;display:flex;flex-direction:column;gap:5px">
-          <div style="display:flex;justify-content:space-between;padding:8px 10px;background:#f8f9fa;border-radius:8px;font-size:12px"><span style="color:#8e8e93">VTI · 60%</span><span style="font-family:'IBM Plex Sans';font-weight:600">$390 · ~2.01 shares</span></div>
-          <div style="display:flex;justify-content:space-between;padding:8px 10px;background:#f8f9fa;border-radius:8px;font-size:12px"><span style="color:#8e8e93">BND · 25%</span><span style="font-family:'IBM Plex Sans';font-weight:600">$163 · ~2.18 shares</span></div>
-          <div style="display:flex;justify-content:space-between;padding:8px 10px;background:#f8f9fa;border-radius:8px;font-size:12px"><span style="color:#8e8e93">VXUS · 15%</span><span style="font-family:'IBM Plex Sans';font-weight:600">$97 · ~1.76 shares</span></div>
-        </div>
-        <div class="wallet-card-after">
-          <div class="wallet-card-after-row"><div class="wallet-card-after-label">Diversification</div><div class="wallet-card-after-value positive">Improved +2%</div></div>
-          <div class="wallet-card-after-row"><div class="wallet-card-after-label">Portfolio after</div><div class="wallet-card-after-value">$47,970</div></div>
-        </div>
-        <div class="wallet-card-actions"><button class="wallet-btn ghost">Skip</button><button class="wallet-btn primary">Confirm · $650</button></div>
+      <div class="add-dest" onclick="addDestination(this)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8e8e93" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        <span class="add-dest-text">Add destination</span>
       </div>
-    </div>
-
-    <!-- Summary -->
-    <div class="summary">
-      <div class="summary-label">Optimization Summary</div>
-      <div class="summary-grid">
-        <div class="summary-tile"><div class="summary-tile-label">Cards</div><div class="summary-tile-value">3</div></div>
-        <div class="summary-tile"><div class="summary-tile-label">Total</div><div class="summary-tile-value">$1,730</div></div>
-        <div class="summary-tile"><div class="summary-tile-label">Opt Score</div><div class="summary-tile-value">89</div><div class="summary-tile-sub positive">↑ from 68</div></div>
-        <div class="summary-tile"><div class="summary-tile-label">Annual Gain</div><div class="summary-tile-value" style="color:#1b8b58">+$2,340</div></div>
+      <div class="card-divider"></div>
+      <div class="card-total">
+        <span class="card-total-label">Total</span>
+        <span class="card-total-value">$1,020</span>
       </div>
-      <div class="summary-checks">
-        <div class="summary-check"><div class="summary-check-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>Bills protected</div>
-        <div class="summary-check"><div class="summary-check-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>Emergency fund improved</div>
-        <div class="summary-check"><div class="summary-check-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>Investment scheduled</div>
+      <div class="card-after">
+        <span class="card-after-label">After transfer, Capital One Checking</span>
+        <span class="card-after-value">$3,180</span>
       </div>
     </div>
   </div>
 
-  <div class="bb"><button class="bb-btn">Approve All · $1,730</button></div>
+  <!-- CARD 2 — Reserve -->
+  <div class="wallet-card">
+    <div class="card-header card-header-prepare">
+      <div class="card-category">Prepare</div>
+      <div class="card-title">Reserve</div>
+    </div>
+    <div class="card-body">
+      <div class="source-section">
+        <div class="source-label">From</div>
+        <div class="source-chips">
+          <div class="source-chip active" onclick="selectSource(this)">
+            <div class="source-chip-icon chase">CH</div>
+            <div class="source-chip-info">
+              <span class="source-chip-name">Chase Savings</span>
+              <span class="source-chip-bal">$12,650</span>
+            </div>
+          </div>
+          <div class="source-chip" onclick="selectSource(this)">
+            <div class="source-chip-icon advizmo">A</div>
+            <div class="source-chip-info">
+              <span class="source-chip-name">Advizmo Cash</span>
+              <span class="source-chip-bal">$4,200</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="destinations">
+        <div class="dest-row">
+          <div class="dest-left">
+            <div class="dest-dot emergency"></div>
+            <div class="dest-info">
+              <span class="dest-name">Emergency Fund</span>
+              <span class="dest-sub">$8,400 → $10,000</span>
+            </div>
+          </div>
+          <div class="dest-right">
+            <button class="remove-dest" onclick="this.closest('.dest-row').remove()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+            <div class="dest-progress">
+              <span class="dest-amount">$300</span>
+              <div class="dest-progress-bar"><div class="dest-progress-fill emergency" style="width:84%"></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="dest-row">
+          <div class="dest-left">
+            <div class="dest-dot vacation"></div>
+            <div class="dest-info">
+              <span class="dest-name">Vacation Fund</span>
+              <span class="dest-sub">$2,100 → $3,000</span>
+            </div>
+          </div>
+          <div class="dest-right">
+            <button class="remove-dest" onclick="this.closest('.dest-row').remove()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+            <div class="dest-progress">
+              <span class="dest-amount">$200</span>
+              <div class="dest-progress-bar"><div class="dest-progress-fill vacation" style="width:70%"></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="dest-row">
+          <div class="dest-left">
+            <div class="dest-dot home"></div>
+            <div class="dest-info">
+              <span class="dest-name">Home Maintenance</span>
+              <span class="dest-sub">$800 → $5,000</span>
+            </div>
+          </div>
+          <div class="dest-right">
+            <button class="remove-dest" onclick="this.closest('.dest-row').remove()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+            <div class="dest-progress">
+              <span class="dest-amount">$150</span>
+              <div class="dest-progress-bar"><div class="dest-progress-fill home" style="width:16%"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="add-dest" onclick="addDestination(this)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8e8e93" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        <span class="add-dest-text">Add destination</span>
+      </div>
+      <div class="card-divider"></div>
+      <div class="card-total">
+        <span class="card-total-label">Total</span>
+        <span class="card-total-value">$650</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 3 — Auto Invest (Market Open) -->
+  <div class="wallet-card">
+    <div class="card-header card-header-grow">
+      <div class="card-category">Grow</div>
+      <div class="card-title">Auto Invest</div>
+      <div class="card-market-status">
+        <div class="market-dot"></div>
+        Market Open
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="source-section">
+        <div class="source-label">From</div>
+        <div class="source-chips">
+          <div class="source-chip active" onclick="selectSource(this)">
+            <div class="source-chip-icon advizmo">A</div>
+            <div class="source-chip-info">
+              <span class="source-chip-name">Advizmo Cash</span>
+              <span class="source-chip-bal">$4,200</span>
+            </div>
+          </div>
+          <div class="source-chip" onclick="selectSource(this)">
+            <div class="source-chip-icon chase">CH</div>
+            <div class="source-chip-info">
+              <span class="source-chip-name">Chase Checking</span>
+              <span class="source-chip-bal">$3,840</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="destinations">
+        <div class="dest-row">
+          <div class="dest-left">
+            <div class="dest-dot aggressive"></div>
+            <div class="dest-info">
+              <span class="dest-name">Aggressive Portfolio</span>
+              <span class="dest-sub">VTI 70% · VXUS 20% · BND 10%</span>
+            </div>
+          </div>
+          <div class="dest-right">
+            <button class="remove-dest" onclick="this.closest('.dest-row').remove()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+            <div class="dest-progress">
+              <span class="dest-amount">$250</span>
+            </div>
+          </div>
+        </div>
+        <div class="dest-row">
+          <div class="dest-left">
+            <div class="dest-dot dividend"></div>
+            <div class="dest-info">
+              <span class="dest-name">Dividend Portfolio</span>
+              <span class="dest-sub">VTI 50% · SCHD 30% · BND 20%</span>
+            </div>
+          </div>
+          <div class="dest-right">
+            <button class="remove-dest" onclick="this.closest('.dest-row').remove()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+            <div class="dest-progress">
+              <span class="dest-amount">$150</span>
+            </div>
+          </div>
+        </div>
+        <div class="dest-row">
+          <div class="dest-left">
+            <div class="dest-dot kids"></div>
+            <div class="dest-info">
+              <span class="dest-name">Kids Portfolio</span>
+              <span class="dest-sub">VTI 80% · VXUS 20%</span>
+            </div>
+          </div>
+          <div class="dest-right">
+            <button class="remove-dest" onclick="this.closest('.dest-row').remove()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+            <div class="dest-progress">
+              <span class="dest-amount">$100</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="add-dest" onclick="addDestination(this)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8e8e93" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        <span class="add-dest-text">Add destination</span>
+      </div>
+      <div class="card-divider"></div>
+      <div class="allocation-grid">
+        <div class="alloc-item">
+          <div class="alloc-ticker">VTI</div>
+          <div class="alloc-pct">62%</div>
+          <div class="alloc-name">US Total Market</div>
+          <div class="alloc-shares">~1.24 shares</div>
+        </div>
+        <div class="alloc-item">
+          <div class="alloc-ticker">BND</div>
+          <div class="alloc-pct">14%</div>
+          <div class="alloc-name">US Bonds</div>
+          <div class="alloc-shares">~0.96 shares</div>
+        </div>
+        <div class="alloc-item">
+          <div class="alloc-ticker">VXUS</div>
+          <div class="alloc-pct">18%</div>
+          <div class="alloc-name">Intl Stock</div>
+          <div class="alloc-shares">~1.82 shares</div>
+        </div>
+      </div>
+      <div class="card-divider"></div>
+      <div class="card-total">
+        <span class="card-total-label">Total</span>
+        <span class="card-total-value">$500</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="summary-section">
+    <div class="section-label">Summary</div>
+    <div class="summary-grid">
+      <div class="summary-cell">
+        <div class="summary-value">$2,170</div>
+        <div class="summary-label">Total Moving</div>
+      </div>
+      <div class="summary-cell">
+        <div class="summary-value">7</div>
+        <div class="summary-label">Destinations</div>
+      </div>
+      <div class="summary-cell">
+        <div class="summary-value">3</div>
+        <div class="summary-label">Sources</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="bottom-bar">
+  <button class="approve-btn">Approve All</button>
+  <div class="bottom-hint">
+    <div class="bottom-hint-dot"></div>
+    <span class="bottom-hint-text">Moves execute at next market open</span>
+    <div class="bottom-hint-dot"></div>
+  </div>
+</div>
+
+<script>
+function selectSource(el){
+  const chips=el.parentElement.querySelectorAll('.source-chip');
+  chips.forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function addDestination(btn){
+  const card=btn.closest('.wallet-card');
+  const dests=card.querySelector('.destinations');
+  const colors=['#ff9500','#af52de','#34c759','#5ac8fa','#ff2d55','#ff3b30','#5856d6'];
+  const color=colors[Math.floor(Math.random()*colors.length)];
+  const row=document.createElement('div');
+  row.className='dest-row';
+  row.innerHTML=`
+    <div class="dest-left">
+      <div class="dest-dot" style="background:${color}"></div>
+      <div class="dest-info">
+        <span class="dest-name">New Destination</span>
+        <span class="dest-sub">Tap to configure</span>
+      </div>
+    </div>
+    <div class="dest-right">
+      <button class="remove-dest" onclick="this.closest('.dest-row').remove()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+      <div class="dest-progress">
+        <span class="dest-amount">$0</span>
+      </div>
+    </div>
+  `;
+  dests.appendChild(row);
+}
+</script>
 </body>
 </html>

@@ -1,211 +1,454 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Move Money — Optimization Timeline</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
-    body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#1c1c1e;max-width:430px;margin:0 auto;min-height:100vh}
-    .sb{display:flex;justify-content:space-between;align-items:center;padding:14px 24px 8px;font-size:15px;font-weight:600;background:#fff;position:sticky;top:0;z-index:100}
-    .nb{display:flex;align-items:center;gap:12px;padding:8px 20px 12px;background:#fff;border-bottom:.5px solid rgba(0,0,0,.06);position:sticky;top:44px;z-index:99}
-    .nb-back{width:32px;height:32px;border-radius:50%;background:#f2f2f7;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer}
-    .nb-back svg{width:18px;height:18px;color:#1c1c1e}
-    .nb-title{font-family:'IBM Plex Sans',sans-serif;font-size:17px;font-weight:700;color:#1c1c1e}
-    .ct{padding:0 20px 140px}
-    .hdr{padding:28px 0 20px}
-    .hdr-tag{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#227be2;margin-bottom:10px}
-    .hdr-tag-dot{width:6px;height:6px;border-radius:50%;background:#227be2}
-    .hdr-title{font-family:'IBM Plex Sans',sans-serif;font-size:26px;font-weight:700;color:#1c1c1e;line-height:1.2;margin-bottom:6px}
-    .hdr-sub{font-size:15px;color:#6b7280;line-height:1.4}
-    .tl{position:relative;padding-left:28px}
-    .tl::before{content:'';position:absolute;left:11px;top:0;bottom:0;width:1.5px;background:#e5e7eb}
-    .tl-item{position:relative;margin-bottom:24px}
-    .tl-dot{position:absolute;left:-28px;top:20px;width:22px;height:22px;border-radius:50%;border:2px solid #fff;display:flex;align-items:center;justify-content:center;z-index:2}
-    .tl-dot.protect{background:#fef3c7;border-color:#ef8a17}
-    .tl-dot.prepare{background:#e0efff;border-color:#227be2}
-    .tl-dot.grow{background:#eefbf4;border-color:#1b8b58}
-    .tl-dot svg{width:12px;height:12px}
-    .tl-dot.protect svg{color:#ef8a17}
-    .tl-dot.prepare svg{color:#227be2}
-    .tl-dot.grow svg{color:#1b8b58}
-    .tl-card{background:#f8f9fa;border-radius:18px;padding:20px;margin-left:8px}
-    .tl-card-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
-    .tl-card-badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:3px 8px;border-radius:6px}
-    .tl-card-badge.protect{background:#fef3c7;color:#c2790a}
-    .tl-card-badge.prepare{background:#e0efff;color:#1551a8}
-    .tl-card-badge.grow{background:#eefbf4;color:#166f47}
-    .tl-card-title{font-family:'IBM Plex Sans',sans-serif;font-size:17px;font-weight:600;color:#1c1c1e;margin-bottom:2px}
-    .tl-card-desc{font-size:13px;color:#6b7280}
-    .tl-card-total{font-family:'IBM Plex Sans',sans-serif;font-size:22px;font-weight:700;color:#1c1c1e;flex-shrink:0;margin-left:12px}
-    .tl-source{display:flex;align-items:center;gap:10px;padding:12px 14px;background:#fff;border-radius:12px;margin-bottom:14px}
-    .tl-source-icon{width:32px;height:32px;border-radius:8px;background:#1c1c1e;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .tl-source-icon svg{width:16px;height:16px;color:#5ba3e8}
-    .tl-source-info{flex:1}
-    .tl-source-name{font-size:13px;font-weight:600;color:#1c1c1e}
-    .tl-source-bal{font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:700;color:#1c1c1e}
-    .tl-dests{display:flex;flex-direction:column;gap:8px}
-    .tl-dest{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#fff;border-radius:10px}
-    .tl-dest-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-    .tl-dest-dot.protect{background:#ef8a17}
-    .tl-dest-dot.prepare{background:#227be2}
-    .tl-dest-dot.grow{background:#1b8b58}
-    .tl-dest-info{flex:1;min-width:0}
-    .tl-dest-name{font-size:13px;font-weight:600;color:#1c1c1e}
-    .tl-dest-sub{font-size:11px;color:#8e8e93}
-    .tl-dest-amt{font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:700;color:#1c1c1e;flex-shrink:0}
-    .tl-dest-edit{font-size:11px;font-weight:600;color:#227be2;background:none;border:none;cursor:pointer;padding:2px 4px}
-    .tl-card-after{margin-top:12px;padding:10px 12px;background:#fff;border-radius:10px}
-    .tl-card-after-row{display:flex;justify-content:space-between;align-items:center;padding:3px 0;font-size:12px}
-    .tl-card-after-label{color:#6b7280}
-    .tl-card-after-value{font-family:'IBM Plex Sans',sans-serif;font-weight:600;color:#1c1c1e}
-    .tl-card-after-value.positive{color:#1b8b58}
-    .tl-card-after-value.warn{color:#ef8a17}
-    .tl-card-actions{display:flex;gap:8px;margin-top:12px}
-    .tl-btn{flex:1;padding:10px;border-radius:10px;border:none;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;text-align:center}
-    .tl-btn.primary{background:#227be2;color:#fff}
-    .tl-btn.ghost{background:#e5e7eb;color:#1c1c1e}
-    .summary{background:#1c1c1e;border-radius:20px;padding:24px;color:#fff;margin-top:8px}
-    .summary-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6b7280;margin-bottom:14px}
-    .summary-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0}
-    .summary-row+.summary-row{border-top:.5px solid rgba(255,255,255,.08)}
-    .summary-row-label{font-size:14px;color:#9ca3af}
-    .summary-row-value{font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;color:#fff}
-    .summary-row-value.green{color:#34d399}
-    .bb{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(255,255,255,.94);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:.5px solid rgba(0,0,0,.08);padding:14px 20px 34px}
-    .bb-btn{width:100%;padding:16px;border-radius:14px;border:none;background:#227be2;color:#fff;font-family:'Inter',sans-serif;font-size:16px;font-weight:600;cursor:pointer}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advizmo — Optimization Timeline</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
+body{background:#f2f2f7;font-family:'Inter',sans-serif;color:#1c1c1e;max-width:430px;margin:0 auto;min-height:100vh;position:relative}
+.status-bar{display:flex;justify-content:space-between;align-items:center;padding:14px 20px 8px;background:#f2f2f7;font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600;position:sticky;top:0;z-index:100}
+.status-bar .time{font-weight:700}
+.status-bar .icons{display:flex;gap:5px;align-items:center}
+.status-bar .icons svg{width:16px;height:16px}
+.nav-bar{display:flex;align-items:center;padding:8px 16px 10px;background:#f2f2f7;position:sticky;top:44px;z-index:99}
+.back-btn{width:36px;height:36px;border-radius:50%;background:rgba(120,120,128,0.08);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.back-btn svg{width:18px;height:18px;fill:none;stroke:#1c1c1e;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.nav-title{flex:1;text-align:center;font-family:'IBM Plex Sans',sans-serif;font-size:17px;font-weight:600;color:#1c1c1e}
+.nav-right{width:36px;flex-shrink:0}
+.scroll-content{padding:0 20px 120px;background:#f2f2f7}
+.section-header{padding:16px 0 6px}
+.section-header h2{font-family:'IBM Plex Sans',sans-serif;font-size:22px;font-weight:700;color:#1c1c1e;letter-spacing:-0.3px}
+.section-header p{font-size:13px;color:#8e8e93;margin-top:3px;line-height:1.4}
+
+.timeline{position:relative;padding:8px 0 0 24px}
+.timeline-line{position:absolute;left:35px;top:36px;bottom:0;width:2px;background:#d1d1d6}
+
+.timeline-step{position:relative;margin-bottom:24px}
+.step-dot{position:absolute;left:-24px;top:28px;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Sans',sans-serif;font-size:11px;font-weight:700;color:#fff;z-index:2;box-shadow:0 2px 6px rgba(0,0,0,0.12)}
+.step-dot.protect{background:#f5a623}
+.step-dot.prepare{background:#227be2}
+.step-dot.grow{background:#34c759}
+
+.step-card{background:#fff;border-radius:16px;padding:18px;box-shadow:0 1px 4px rgba(0,0,0,0.04);margin-left:16px}
+.step-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:12px;font-family:'IBM Plex Sans',sans-serif;font-size:11px;font-weight:600;margin-bottom:12px}
+.step-badge.protect{background:#fff5e6;color:#c77c00}
+.step-badge.prepare{background:#e8f0fe;color:#1a5fc4}
+.step-badge.grow{background:#e6f9ed;color:#1a8c3c}
+.step-badge svg{width:12px;height:12px}
+.step-label{font-family:'IBM Plex Sans',sans-serif;font-size:17px;font-weight:700;color:#1c1c1e;margin-bottom:14px}
+
+.source-section{margin-bottom:14px}
+.source-label{font-size:11px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px}
+.source-chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;padding-bottom:4px}
+.source-chips::-webkit-scrollbar{display:none}
+.source-chip{flex-shrink:0;padding:8px 14px;border-radius:12px;border:1.5px solid #e5e5ea;background:#fff;cursor:pointer;transition:all 0.2s}
+.source-chip.selected{border-color:#227be2;background:#e8f0fe}
+.source-chip:hover{border-color:#c7c7cc}
+.chip-name{font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#1c1c1e}
+.chip-bal{font-size:11px;color:#8e8e93;margin-top:1px}
+.source-chip.selected .chip-name{color:#1a5fc4}
+
+.dest-list{display:flex;flex-direction:column;gap:8px}
+.dest-row{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#f9f9fb;border-radius:12px}
+.dest-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px}
+.dest-icon.bills{background:#fff5e6}
+.dest-icon.tax{background:#f0e6ff}
+.dest-icon.emergency{background:#e8f0fe}
+.dest-icon.vacation{background:#e6f9ed}
+.dest-icon.home{background:#fef3e8}
+.dest-icon.agg{background:#e6f9ed}
+.dest-icon.div{background:#fff5e6}
+.dest-icon.kids{background:#e8f0fe}
+.dest-info{flex:1;min-width:0}
+.dest-name{font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#1c1c1e}
+.dest-desc{font-size:11px;color:#8e8e93;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dest-amount{font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600;color:#1c1c1e;flex-shrink:0}
+.dest-remove{width:28px;height:28px;border-radius:50%;background:rgba(120,120,128,0.06);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;opacity:0.5;transition:opacity 0.15s}
+.dest-remove:hover{opacity:1;background:rgba(255,59,48,0.1)}
+.dest-remove svg{width:14px;height:14px;fill:none;stroke:#ff3b30;stroke-width:2;stroke-linecap:round}
+
+.add-dest{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;border:1.5px dashed #d1d1d6;background:transparent;cursor:pointer;color:#8e8e93;font-size:13px;font-weight:500;transition:all 0.2s;width:100%;margin-top:8px;font-family:'Inter',sans-serif}
+.add-dest:hover{border-color:#227be2;color:#227be2;background:#f0f7ff}
+.add-dest svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+
+.step-total{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:#f2f2f7;border-radius:10px;margin-top:10px}
+.step-total-label{font-size:12px;color:#8e8e93;font-weight:500}
+.step-total-value{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:700;color:#1c1c1e}
+.step-after{font-size:11px;color:#8e8e93;margin-top:6px;text-align:right}
+
+.market-status{display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;font-weight:600}
+.market-status.open{background:#e6f9ed;color:#1a8c3c}
+.market-status.closed{background:#fff5e6;color:#c77c00}
+.market-status .dot{width:7px;height:7px;border-radius:50%}
+.market-status.open .dot{background:#34c759}
+.market-status.closed .dot{background:#f5a623}
+
+.allocation-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #f2f2f7}
+.allocation-row:last-child{border-bottom:none}
+.alloc-ticker{font-family:'IBM Plex Sans',sans-serif;font-size:12px;font-weight:700;color:#1c1c1e;width:44px}
+.alloc-bar-wrap{flex:1;height:6px;background:#f2f2f7;border-radius:3px;overflow:hidden}
+.alloc-bar{height:100%;border-radius:3px}
+.alloc-bar.vti{background:#34c759}
+.alloc-bar.vxus{background:#227be2}
+.alloc-bar.qqq{background:#af52de}
+.alloc-bar.vym{background:#f5a623}
+.alloc-bar.schd{background:#ff9500}
+.alloc-bar.jepi{background:#ff6b6b}
+.alloc-bar.bnd{background:#8e8e93}
+.alloc-shares{font-size:11px;color:#8e8e93;width:52px;text-align:right}
+
+.summary-section{margin-top:8px;padding:18px;background:#fff;border-radius:16px;box-shadow:0 1px 4px rgba(0,0,0,0.04);margin-left:16px}
+.summary-title{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:700;color:#1c1c1e;margin-bottom:12px}
+.summary-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0}
+.summary-row .label{font-size:13px;color:#8e8e93}
+.summary-row .value{font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#1c1c1e}
+.summary-divider{border:none;border-top:1px solid #e5e5ea;margin:8px 0}
+.summary-row.total .label{font-weight:700;color:#1c1c1e;font-size:14px}
+.summary-row.total .value{font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;color:#227be2}
+
+.bottom-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(255,255,255,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:12px 20px 28px;border-top:1px solid #e5e5ea;z-index:100}
+.approve-btn{width:100%;padding:16px;border-radius:14px;background:#227be2;border:none;font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;color:#fff;cursor:pointer;box-shadow:0 4px 14px rgba(34,123,226,0.3);transition:all 0.2s}
+.approve-btn:hover{background:#1a6bc4;box-shadow:0 6px 18px rgba(34,123,226,0.4)}
+.approve-btn:active{transform:scale(0.98)}
+</style>
 </head>
 <body>
-  <div class="sb"><span>9:41</span><div style="display:flex;gap:6px;align-items:center"><svg width="28" height="13" viewBox="0 0 28 13" fill="currentColor"><rect x="0" y=".5" width="23" height="12" rx="3" stroke="currentColor" stroke-width="1" fill="none"/><rect x="24" y="4" width="2.5" height="5" rx="1" fill="currentColor" opacity=".3"/><rect x="1.5" y="2" width="18" height="9" rx="1.5" fill="currentColor"/></svg></div></div>
-  <div class="nb"><button class="nb-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></button><div class="nb-title">Move Money</div></div>
 
-  <div class="ct">
-    <div class="hdr">
-      <div class="hdr-tag"><div class="hdr-tag-dot"></div>Smart Plan</div>
-      <div class="hdr-title">3 optimizations to review</div>
-      <div class="hdr-sub">Each step is independent. Review, edit, or skip any recommendation.</div>
+<div class="status-bar">
+  <span class="time">9:41</span>
+  <div class="icons">
+    <svg viewBox="0 0 16 16"><path d="M1 10.5c2.5-5 10-5 14 0" stroke="#1c1c1e" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M4 10.5c1.5-3 6-3 8 0" stroke="#1c1c1e" stroke-width="1.5" fill="none" stroke-linecap="round"/><circle cx="8" cy="11" r="1.2" fill="#1c1c1e"/></svg>
+    <svg viewBox="0 0 16 16"><rect x="1" y="5" width="12" height="7" rx="1.5" stroke="#1c1c1e" stroke-width="1.3" fill="none"/><rect x="13.5" y="7.5" width="1.5" height="3" rx="0.5" fill="#1c1c1e"/><rect x="3" y="7" width="7" height="3" rx="0.5" fill="#1c1c1e"/></svg>
+  </div>
+</div>
+
+<div class="nav-bar">
+  <button class="back-btn" onclick="location.href='overview.html'">
+    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <div class="nav-title">Optimization Timeline</div>
+  <div class="nav-right"></div>
+</div>
+
+<div class="nav-links" style="display:flex;gap:6px;padding:4px 20px 12px;background:#f2f2f7;overflow-x:auto;scrollbar-width:none;position:sticky;top:82px;z-index:98">
+  <button class="nav-link" onclick="location.href='overview.html'" style="flex-shrink:0;padding:7px 14px;border-radius:20px;background:#fff;border:none;font-family:Inter,sans-serif;font-size:12px;font-weight:600;color:#6b7280;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.04);white-space:nowrap">Overview</button>
+  <button class="nav-link" onclick="location.href='move-money-1-workspace.html'" style="flex-shrink:0;padding:7px 14px;border-radius:20px;background:#fff;border:none;font-family:Inter,sans-serif;font-size:12px;font-weight:600;color:#6b7280;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.04);white-space:nowrap">Workspace</button>
+  <button class="nav-link active" style="flex-shrink:0;padding:7px 14px;border-radius:20px;background:#227be2;border:none;font-family:Inter,sans-serif;font-size:12px;font-weight:600;color:#fff;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.04);white-space:nowrap">Timeline</button>
+  <button class="nav-link" onclick="location.href='move-money-3-flow.html'" style="flex-shrink:0;padding:7px 14px;border-radius:20px;background:#fff;border:none;font-family:Inter,sans-serif;font-size:12px;font-weight:600;color:#6b7280;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.04);white-space:nowrap">Flow</button>
+  <button class="nav-link" onclick="location.href='move-money-4-advisor.html'" style="flex-shrink:0;padding:7px 14px;border-radius:20px;background:#fff;border:none;font-family:Inter,sans-serif;font-size:12px;font-weight:600;color:#6b7280;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.04);white-space:nowrap">Advisor</button>
+  <button class="nav-link" onclick="location.href='move-money-5-wallet.html'" style="flex-shrink:0;padding:7px 14px;border-radius:20px;background:#fff;border:none;font-family:Inter,sans-serif;font-size:12px;font-weight:600;color:#6b7280;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.04);white-space:nowrap">Wallet</button>
+</div>
+
+<div class="scroll-content">
+  <div class="section-header">
+    <h2>Your Plan</h2>
+    <p>Optimize $2,170 across 3 steps</p>
+  </div>
+
+  <div class="timeline">
+    <div class="timeline-line"></div>
+
+    <!-- STEP 1: Protect -->
+    <div class="timeline-step" data-step="protect">
+      <div class="step-dot protect">1</div>
+      <div class="step-card">
+        <div class="step-badge protect">
+          <svg viewBox="0 0 12 12"><path d="M6 1L2 3v3c0 2.8 1.7 5.4 4 6 2.3-.6 4-3.2 4-6V3L6 1z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Protect
+        </div>
+        <div class="step-label">Pay Bills</div>
+
+        <div class="source-section">
+          <div class="source-label">From</div>
+          <div class="source-chips" id="source-protect">
+            <button class="source-chip selected" onclick="selectSource('source-protect', this)" data-balance="4200">
+              <div class="chip-name">Capital One Checking</div>
+              <div class="chip-bal">$4,200</div>
+            </button>
+            <button class="source-chip" onclick="selectSource('source-protect', this)" data-balance="3840">
+              <div class="chip-name">Chase Checking</div>
+              <div class="chip-bal">$3,840</div>
+            </button>
+          </div>
+        </div>
+
+        <div class="dest-list" id="dest-protect">
+          <div class="dest-row" data-amount="620">
+            <div class="dest-icon bills">⚡</div>
+            <div class="dest-info">
+              <div class="dest-name">Bills Account</div>
+              <div class="dest-desc">Electricity · Internet · Phone</div>
+            </div>
+            <div class="dest-amount">$620</div>
+            <button class="dest-remove" onclick="removeDest(this)"><svg viewBox="0 0 14 14"><line x1="4" y1="4" x2="10" y2="10"/><line x1="10" y1="4" x2="4" y2="10"/></svg></button>
+          </div>
+          <div class="dest-row" data-amount="400">
+            <div class="dest-icon tax">🏠</div>
+            <div class="dest-info">
+              <div class="dest-name">Property Tax Account</div>
+              <div class="dest-desc">Quarterly payment reserve</div>
+            </div>
+            <div class="dest-amount">$400</div>
+            <button class="dest-remove" onclick="removeDest(this)"><svg viewBox="0 0 14 14"><line x1="4" y1="4" x2="10" y2="10"/><line x1="10" y1="4" x2="4" y2="10"/></svg></button>
+          </div>
+        </div>
+        <button class="add-dest" onclick="addDest('dest-protect','bills')">
+          <svg viewBox="0 0 16 16"><line x1="8" y1="3" x2="8" y2="13"/><line x1="3" y1="8" x2="13" y2="8"/></svg>
+          Add destination
+        </button>
+
+        <div class="step-total">
+          <span class="step-total-label">Total</span>
+          <span class="step-total-value" id="total-protect">$1,020</span>
+        </div>
+        <div class="step-after" id="after-protect">After: Checking $3,180</div>
+      </div>
     </div>
 
-    <div class="tl">
-      <!-- Step 1: Pay Bills -->
-      <div class="tl-item">
-        <div class="tl-dot protect"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-        <div class="tl-card">
-          <div class="tl-card-hdr">
-            <div>
-              <div class="tl-card-badge protect">Protect</div>
-              <div class="tl-card-title">Reserve for bills</div>
-              <div class="tl-card-desc">Set aside money for 4 upcoming payments</div>
-            </div>
-            <div class="tl-card-total">$680</div>
-          </div>
-          <div class="tl-source">
-            <div class="tl-source-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
-            <div class="tl-source-info"><div class="tl-source-name">Capital One Checking</div></div>
-            <div class="tl-source-bal">$4,200</div>
-          </div>
-          <div class="tl-dests">
-            <div class="tl-dest"><div class="tl-dest-dot protect"></div><div class="tl-dest-info"><div class="tl-dest-name">Electricity</div><div class="tl-dest-sub">Jul 18</div></div><div class="tl-dest-amt">$82</div><button class="tl-dest-edit">Edit</button></div>
-            <div class="tl-dest"><div class="tl-dest-dot protect"></div><div class="tl-dest-info"><div class="tl-dest-name">Rent</div><div class="tl-dest-sub">Jul 25</div></div><div class="tl-dest-amt">$320</div><button class="tl-dest-edit">Edit</button></div>
-            <div class="tl-dest"><div class="tl-dest-dot protect"></div><div class="tl-dest-info"><div class="tl-dest-name">Car Insurance</div><div class="tl-dest-sub">Jul 28</div></div><div class="tl-dest-amt">$195</div><button class="tl-dest-edit">Edit</button></div>
-            <div class="tl-dest"><div class="tl-dest-dot protect"></div><div class="tl-dest-info"><div class="tl-dest-name">Netflix</div><div class="tl-dest-sub">Jul 30</div></div><div class="tl-dest-amt">$83</div><button class="tl-dest-edit">Edit</button></div>
-          </div>
-          <div class="tl-card-after">
-            <div class="tl-card-after-row"><div class="tl-card-after-label">Checking after</div><div class="tl-card-after-value warn">$3,520</div></div>
-            <div class="tl-card-after-row"><div class="tl-card-after-label">Bills covered</div><div class="tl-card-after-value positive">4 of 4 ✓</div></div>
-          </div>
-          <div class="tl-card-actions">
-            <button class="tl-btn ghost">Skip</button>
-            <button class="tl-btn primary">Confirm</button>
+    <!-- STEP 2: Prepare -->
+    <div class="timeline-step" data-step="prepare">
+      <div class="step-dot prepare">2</div>
+      <div class="step-card">
+        <div class="step-badge prepare">
+          <svg viewBox="0 0 12 12"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          Prepare
+        </div>
+        <div class="step-label">Reserve</div>
+
+        <div class="source-section">
+          <div class="source-label">From</div>
+          <div class="source-chips" id="source-prepare">
+            <button class="source-chip selected" onclick="selectSource('source-prepare', this)" data-balance="12650">
+              <div class="chip-name">Chase Savings</div>
+              <div class="chip-bal">$12,650</div>
+            </button>
+            <button class="source-chip" onclick="selectSource('source-prepare', this)" data-balance="4200">
+              <div class="chip-name">Advizmo Cash</div>
+              <div class="chip-bal">$4,200</div>
+            </button>
           </div>
         </div>
-      </div>
 
-      <!-- Step 2: Reserve -->
-      <div class="tl-item">
-        <div class="tl-dot prepare"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/></svg></div>
-        <div class="tl-card">
-          <div class="tl-card-hdr">
-            <div>
-              <div class="tl-card-badge prepare">Prepare</div>
-              <div class="tl-card-title">Build emergency reserve</div>
-              <div class="tl-card-desc">Grow your 6-month safety net</div>
+        <div class="dest-list" id="dest-prepare">
+          <div class="dest-row" data-amount="300">
+            <div class="dest-icon emergency">🛡️</div>
+            <div class="dest-info">
+              <div class="dest-name">Emergency Fund</div>
+              <div class="dest-desc">$8,400 → $10,000</div>
             </div>
-            <div class="tl-card-total">$400</div>
+            <div class="dest-amount">$300</div>
+            <button class="dest-remove" onclick="removeDest(this)"><svg viewBox="0 0 14 14"><line x1="4" y1="4" x2="10" y2="10"/><line x1="10" y1="4" x2="4" y2="10"/></svg></button>
           </div>
-          <div class="tl-source">
-            <div class="tl-source-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
-            <div class="tl-source-info"><div class="tl-source-name">Chase Savings</div></div>
-            <div class="tl-source-bal">$12,650</div>
+          <div class="dest-row" data-amount="200">
+            <div class="dest-icon vacation">✈️</div>
+            <div class="dest-info">
+              <div class="dest-name">Vacation Fund</div>
+              <div class="dest-desc">$2,100 → $3,000</div>
+            </div>
+            <div class="dest-amount">$200</div>
+            <button class="dest-remove" onclick="removeDest(this)"><svg viewBox="0 0 14 14"><line x1="4" y1="4" x2="10" y2="10"/><line x1="10" y1="4" x2="4" y2="10"/></svg></button>
           </div>
-          <div class="tl-dests">
-            <div class="tl-dest"><div class="tl-dest-dot prepare"></div><div class="tl-dest-info"><div class="tl-dest-name">Emergency Reserve</div><div class="tl-dest-sub">$8,400 → $10,000</div></div><div class="tl-dest-amt">$400</div><button class="tl-dest-edit">Edit</button></div>
-          </div>
-          <div class="tl-card-after">
-            <div class="tl-card-after-row"><div class="tl-card-after-label">After transfer</div><div class="tl-card-after-value positive">$8,800</div></div>
-            <div class="tl-card-after-row"><div class="tl-card-after-label">Time to goal</div><div class="tl-card-after-value" style="color:#227be2">~4 months</div></div>
-          </div>
-          <div class="tl-card-actions">
-            <button class="tl-btn ghost">Skip</button>
-            <button class="tl-btn primary">Confirm</button>
+          <div class="dest-row" data-amount="150">
+            <div class="dest-icon home">🔧</div>
+            <div class="dest-info">
+              <div class="dest-name">Home Maintenance</div>
+              <div class="dest-desc">$800 → $5,000</div>
+            </div>
+            <div class="dest-amount">$150</div>
+            <button class="dest-remove" onclick="removeDest(this)"><svg viewBox="0 0 14 14"><line x1="4" y1="4" x2="10" y2="10"/><line x1="10" y1="4" x2="4" y2="10"/></svg></button>
           </div>
         </div>
-      </div>
+        <button class="add-dest" onclick="addDest('dest-prepare','emergency')">
+          <svg viewBox="0 0 16 16"><line x1="8" y1="3" x2="8" y2="13"/><line x1="3" y1="8" x2="13" y2="8"/></svg>
+          Add destination
+        </button>
 
-      <!-- Step 3: Auto Invest -->
-      <div class="tl-item">
-        <div class="tl-dot grow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 2v20M17 7l-5-5-5 5"/></svg></div>
-        <div class="tl-card">
-          <div class="tl-card-hdr">
-            <div>
-              <div class="tl-card-badge grow">Grow</div>
-              <div class="tl-card-title">Invest idle cash</div>
-              <div class="tl-card-desc">Put money to work today</div>
+        <div class="step-total">
+          <span class="step-total-label">Total</span>
+          <span class="step-total-value" id="total-prepare">$650</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3: Grow -->
+    <div class="timeline-step" data-step="grow">
+      <div class="step-dot grow">3</div>
+      <div class="step-card">
+        <div class="step-badge grow">
+          <svg viewBox="0 0 12 12"><path d="M1 9L5 5l3 3 3-5" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Grow
+        </div>
+        <div class="step-label">Auto Invest</div>
+
+        <div class="market-status open">
+          <div class="dot"></div>
+          Market Open · US Markets trading
+        </div>
+
+        <div class="source-section">
+          <div class="source-label">From</div>
+          <div class="source-chips" id="source-grow">
+            <button class="source-chip selected" onclick="selectSource('source-grow', this)" data-balance="4200">
+              <div class="chip-name">Advizmo Cash</div>
+              <div class="chip-bal">$4,200</div>
+            </button>
+            <button class="source-chip" onclick="selectSource('source-grow', this)" data-balance="3840">
+              <div class="chip-name">Chase Checking</div>
+              <div class="chip-bal">$3,840</div>
+            </button>
+          </div>
+        </div>
+
+        <div class="dest-list" id="dest-grow">
+          <div class="dest-row" data-amount="250">
+            <div class="dest-icon agg">📈</div>
+            <div class="dest-info">
+              <div class="dest-name">Aggressive Portfolio</div>
+              <div class="dest-desc">VTI · VXUS · QQQ</div>
             </div>
-            <div class="tl-card-total">$650</div>
+            <div class="dest-amount">$250</div>
+            <button class="dest-remove" onclick="removeDest(this)"><svg viewBox="0 0 14 14"><line x1="4" y1="4" x2="10" y2="10"/><line x1="10" y1="4" x2="4" y2="10"/></svg></button>
           </div>
-          <div class="tl-source">
-            <div class="tl-source-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
-            <div class="tl-source-info"><div class="tl-source-name">Advizmo Cash</div></div>
-            <div class="tl-source-bal">$4,200</div>
+          <div style="padding:2px 4px 6px 50px">
+            <div class="allocation-row"><span class="alloc-ticker">VTI</span><div class="alloc-bar-wrap"><div class="alloc-bar vti" style="width:60%"></div></div><span class="alloc-shares">~1.1 shares</span></div>
+            <div class="allocation-row"><span class="alloc-ticker">VXUS</span><div class="alloc-bar-wrap"><div class="alloc-bar vxus" style="width:25%"></div></div><span class="alloc-shares">~1.8 shares</span></div>
+            <div class="allocation-row"><span class="alloc-ticker">QQQ</span><div class="alloc-bar-wrap"><div class="alloc-bar qqq" style="width:15%"></div></div><span class="alloc-shares">~0.5 shares</span></div>
           </div>
-          <div style="display:flex;align-items:center;gap:6px;margin-bottom:12px;padding:7px 10px;background:#eefbf4;border-radius:8px">
-            <div style="width:7px;height:7px;border-radius:50%;background:#1b8b58"></div>
-            <div style="font-size:12px;font-weight:600;color:#166f47">Market open · Purchasing today</div>
+
+          <div class="dest-row" data-amount="150">
+            <div class="dest-icon div">💎</div>
+            <div class="dest-info">
+              <div class="dest-name">Dividend Portfolio</div>
+              <div class="dest-desc">VYM · SCHD · JEPI</div>
+            </div>
+            <div class="dest-amount">$150</div>
+            <button class="dest-remove" onclick="removeDest(this)"><svg viewBox="0 0 14 14"><line x1="4" y1="4" x2="10" y2="10"/><line x1="10" y1="4" x2="4" y2="10"/></svg></button>
           </div>
-          <div class="tl-dests">
-            <div class="tl-dest"><div class="tl-dest-dot grow"></div><div class="tl-dest-info"><div class="tl-dest-name">Balanced Growth</div><div class="tl-dest-sub">VTI · BND · VXUS</div></div><div class="tl-dest-amt">$650</div><button class="tl-dest-edit">Edit</button></div>
+          <div style="padding:2px 4px 6px 50px">
+            <div class="allocation-row"><span class="alloc-ticker">VYM</span><div class="alloc-bar-wrap"><div class="alloc-bar vym" style="width:40%"></div></div><span class="alloc-shares">~0.8 shares</span></div>
+            <div class="allocation-row"><span class="alloc-ticker">SCHD</span><div class="alloc-bar-wrap"><div class="alloc-bar schd" style="width:35%"></div></div><span class="alloc-shares">~1.2 shares</span></div>
+            <div class="allocation-row"><span class="alloc-ticker">JEPI</span><div class="alloc-bar-wrap"><div class="alloc-bar jepi" style="width:25%"></div></div><span class="alloc-shares">~0.9 shares</span></div>
           </div>
-          <div style="margin-top:10px;display:flex;flex-direction:column;gap:5px">
-            <div style="display:flex;justify-content:space-between;padding:7px 10px;background:#fff;border-radius:7px;font-size:12px"><span style="color:#6b7280">VTI · 60%</span><span style="font-family:'IBM Plex Sans';font-weight:600">$390 · ~2.01 shares</span></div>
-            <div style="display:flex;justify-content:space-between;padding:7px 10px;background:#fff;border-radius:7px;font-size:12px"><span style="color:#6b7280">BND · 25%</span><span style="font-family:'IBM Plex Sans';font-weight:600">$163 · ~2.18 shares</span></div>
-            <div style="display:flex;justify-content:space-between;padding:7px 10px;background:#fff;border-radius:7px;font-size:12px"><span style="color:#6b7280">VXUS · 15%</span><span style="font-family:'IBM Plex Sans';font-weight:600">$97 · ~1.76 shares</span></div>
+
+          <div class="dest-row" data-amount="100">
+            <div class="dest-icon kids">👶</div>
+            <div class="dest-info">
+              <div class="dest-name">Kids Portfolio</div>
+              <div class="dest-desc">VTI · BND · VXUS</div>
+            </div>
+            <div class="dest-amount">$100</div>
+            <button class="dest-remove" onclick="removeDest(this)"><svg viewBox="0 0 14 14"><line x1="4" y1="4" x2="10" y2="10"/><line x1="10" y1="4" x2="4" y2="10"/></svg></button>
           </div>
-          <div class="tl-card-after">
-            <div class="tl-card-after-row"><div class="tl-card-after-label">Diversification</div><div class="tl-card-after-value positive">Improved +2%</div></div>
+          <div style="padding:2px 4px 6px 50px">
+            <div class="allocation-row"><span class="alloc-ticker">VTI</span><div class="alloc-bar-wrap"><div class="alloc-bar vti" style="width:50%"></div></div><span class="alloc-shares">~0.2 shares</span></div>
+            <div class="allocation-row"><span class="alloc-ticker">BND</span><div class="alloc-bar-wrap"><div class="alloc-bar bnd" style="width:30%"></div></div><span class="alloc-shares">~0.4 shares</span></div>
+            <div class="allocation-row"><span class="alloc-ticker">VXUS</span><div class="alloc-bar-wrap"><div class="alloc-bar vxus" style="width:20%"></div></div><span class="alloc-shares">~0.1 shares</span></div>
           </div>
-          <div class="tl-card-actions">
-            <button class="tl-btn ghost">Skip</button>
-            <button class="tl-btn primary">Confirm</button>
-          </div>
+        </div>
+        <button class="add-dest" onclick="addDest('dest-grow','agg')">
+          <svg viewBox="0 0 16 16"><line x1="8" y1="3" x2="8" y2="13"/><line x1="3" y1="8" x2="13" y2="8"/></svg>
+          Add destination
+        </button>
+
+        <div class="step-total">
+          <span class="step-total-label">Total</span>
+          <span class="step-total-value" id="total-grow">$500</span>
         </div>
       </div>
     </div>
 
     <!-- Summary -->
-    <div class="summary">
-      <div class="summary-label">Optimization Summary</div>
-      <div class="summary-row"><div class="summary-row-label">Recommendations</div><div class="summary-row-value">3</div></div>
-      <div class="summary-row"><div class="summary-row-label">Total allocated</div><div class="summary-row-value">$1,730</div></div>
-      <div class="summary-row"><div class="summary-row-label">Opt score</div><div class="summary-row-value">68 → 89</div></div>
-      <div class="summary-row"><div class="summary-row-label">Annual impact</div><div class="summary-row-value green">+$2,340</div></div>
+    <div class="timeline-step">
+      <div class="summary-section">
+        <div class="summary-title">Summary</div>
+        <div class="summary-row"><span class="label">Protect (Bills)</span><span class="value">$1,020</span></div>
+        <div class="summary-row"><span class="label">Prepare (Reserves)</span><span class="value">$650</span></div>
+        <div class="summary-row"><span class="label">Grow (Invest)</span><span class="value">$500</span></div>
+        <hr class="summary-divider">
+        <div class="summary-row total"><span class="label">Total Optimized</span><span class="value">$2,170</span></div>
+      </div>
     </div>
   </div>
+</div>
 
-  <div class="bb"><button class="bb-btn">Approve All · $1,730</button></div>
+<div class="bottom-bar">
+  <button class="approve-btn">Approve All</button>
+</div>
+
+<script>
+function selectSource(groupId, chip) {
+  const group = document.getElementById(groupId);
+  group.querySelectorAll('.source-chip').forEach(c => c.classList.remove('selected'));
+  chip.classList.add('selected');
+  updateAfterBalance(groupId);
+}
+
+function updateAfterBalance(groupId) {
+  const group = document.getElementById(groupId);
+  const selected = group.querySelector('.source-chip.selected');
+  if (!selected) return;
+  const balance = parseInt(selected.dataset.balance);
+  const step = group.closest('.timeline-step');
+  const destList = step.querySelector('.dest-list');
+  let total = 0;
+  destList.querySelectorAll('.dest-row').forEach(row => {
+    total += parseInt(row.dataset.amount || 0);
+  });
+  const totalEl = step.querySelector('.step-total-value');
+  if (totalEl) totalEl.textContent = '$' + total.toLocaleString();
+  const afterEl = step.querySelector('.step-after');
+  if (afterEl) {
+    const remaining = balance - total;
+    const name = selected.querySelector('.chip-name').textContent.replace(/ Checking| Savings| Cash/g, '');
+    afterEl.textContent = 'After: ' + name + ' $' + remaining.toLocaleString();
+  }
+}
+
+function removeDest(btn) {
+  const row = btn.closest('.dest-row');
+  const step = btn.closest('.timeline-step');
+  const groupId = step.querySelector('.source-chips').id;
+  row.style.transition = 'all 0.2s';
+  row.style.opacity = '0';
+  row.style.transform = 'translateX(-20px)';
+  setTimeout(() => row.remove(), 200);
+  setTimeout(() => updateAfterBalance(groupId), 250);
+}
+
+function addDest(listId, type) {
+  const list = document.getElementById(listId);
+  const step = list.closest('.timeline-step');
+  const groupId = step.querySelector('.source-chips').id;
+  const templates = {
+    bills: { icon: '⚡', cls: 'bills', name: 'New Bill', desc: 'Add description', amount: 0 },
+    emergency: { icon: '🛡️', cls: 'emergency', name: 'New Fund', desc: 'Set a goal', amount: 0 },
+    agg: { icon: '📈', cls: 'agg', name: 'New Portfolio', desc: 'Select assets', amount: 0 }
+  };
+  const t = templates[type] || templates.bills;
+  const row = document.createElement('div');
+  row.className = 'dest-row';
+  row.dataset.amount = '0';
+  row.innerHTML = `
+    <div class="dest-icon ${t.cls}">${t.icon}</div>
+    <div class="dest-info">
+      <div class="dest-name">${t.name}</div>
+      <div class="dest-desc">${t.desc}</div>
+    </div>
+    <div class="dest-amount">$0</div>
+    <button class="dest-remove" onclick="removeDest(this)"><svg viewBox="0 0 14 14"><line x1="4" y1="4" x2="10" y2="10"/><line x1="10" y1="4" x2="4" y2="10"/></svg></button>
+  `;
+  row.style.opacity = '0';
+  row.style.transform = 'translateY(-8px)';
+  list.appendChild(row);
+  requestAnimationFrame(() => {
+    row.style.transition = 'all 0.25s';
+    row.style.opacity = '1';
+    row.style.transform = 'translateY(0)';
+  });
+  updateAfterBalance(groupId);
+}
+</script>
 </body>
 </html>

@@ -16,61 +16,80 @@
     .nb-back svg{width:18px;height:18px;color:#1c1c1e}
     .nb-title{font-family:'IBM Plex Sans',sans-serif;font-size:17px;font-weight:700;color:#1c1c1e;flex:1}
     .nb-edit{padding:6px 14px;border-radius:10px;background:#fff;border:none;font-size:13px;font-weight:600;color:#227be2;box-shadow:0 1px 3px rgba(0,0,0,.06);cursor:pointer}
+    .nav-links{display:flex;gap:6px;padding:4px 20px 12px;background:#f2f2f7;overflow-x:auto;scrollbar-width:none;position:sticky;top:82px;z-index:98}
+    .nav-links::-webkit-scrollbar{display:none}
+    .nav-link{flex-shrink:0;padding:7px 14px;border-radius:20px;background:#fff;border:none;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:#6b7280;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.04);white-space:nowrap}
+    .nav-link.active{background:#227be2;color:#fff}
     .ct{padding:0 16px 160px}
     .hdr{padding:16px 4px 20px}
     .hdr-title{font-family:'IBM Plex Sans',sans-serif;font-size:22px;font-weight:700;color:#1c1c1e;margin-bottom:4px}
-    .hdr-sub{font-size:14px;color:#6b7280}
+    .hdr-sub{font-size:14px;color:#6b7280;line-height:1.4}
     .card{background:#fff;border-radius:20px;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,.04);overflow:hidden}
-    .card-hdr{padding:20px 20px 16px;border-bottom:0.5px solid rgba(0,0,0,.06)}
+    .card-hdr{padding:20px 20px 16px;border-bottom:.5px solid rgba(0,0,0,.06)}
     .card-badge{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:4px 10px;border-radius:6px;margin-bottom:10px}
     .card-badge.protect{background:#fef3c7;color:#c2790a}
     .card-badge.prepare{background:#e0efff;color:#1551a8}
     .card-badge.grow{background:#eefbf4;color:#166f47}
     .card-hdr-title{font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700;color:#1c1c1e;margin-bottom:2px}
     .card-hdr-desc{font-size:13px;color:#6b7280}
-    .card-source{display:flex;align-items:center;gap:12px;padding:14px 20px;background:#f8f9fa;margin:0}
-    .card-source-icon{width:36px;height:36px;border-radius:10px;background:#1c1c1e;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .card-source-icon svg{width:18px;height:18px;color:#5ba3e8}
-    .card-source-info{flex:1}
-    .card-source-label{font-size:10px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:.05em}
-    .card-source-name{font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600;color:#1c1c1e;margin-top:1px}
-    .card-source-bal{font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;color:#1c1c1e}
-    .card-source-sub{font-size:11px;color:#6b7280}
+    /* Source Account Selector */
+    .source-selector{padding:14px 20px;background:#f8f9fa;display:flex;flex-direction:column;gap:8px}
+    .source-label{font-size:10px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:.05em}
+    .source-chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+    .source-chips::-webkit-scrollbar{display:none}
+    .source-chip{display:flex;align-items:center;gap:8px;padding:8px 14px;background:#fff;border-radius:12px;border:1.5px solid rgba(0,0,0,.06);cursor:pointer;flex-shrink:0;transition:all .15s}
+    .source-chip.selected{border-color:#227be2;background:#f0f7ff}
+    .source-chip-icon{width:24px;height:24px;border-radius:6px;background:#1c1c1e;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .source-chip-icon svg{width:12px;height:12px;color:#5ba3e8}
+    .source-chip-name{font-size:13px;font-weight:600;color:#1c1c1e;white-space:nowrap}
+    .source-chip-bal{font-family:'IBM Plex Sans',sans-serif;font-size:12px;font-weight:600;color:#6b7280;white-space:nowrap}
     .card-body{padding:16px 20px 20px}
-    .dest-row{display:flex;align-items:center;gap:12px;padding:12px 0}
-    .dest-row+.dest-row{border-top:0.5px solid rgba(0,0,0,.06)}
-    .dest-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .dest-icon svg{width:16px;height:16px}
-    .dest-icon.protect{background:#fef3c7;color:#ef8a17}
-    .dest-icon.prepare{background:#e0efff;color:#227be2}
-    .dest-icon.grow{background:#eefbf4;color:#1b8b58}
+    .dest-section{margin-bottom:14px}
+    .dest-section-label{font-size:11px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px}
+    .dest-row{display:flex;align-items:center;gap:10px;padding:12px 14px;background:#f8f9fa;border-radius:12px;margin-bottom:6px}
+    .dest-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+    .dest-dot.protect{background:#ef8a17}
+    .dest-dot.prepare{background:#227be2}
+    .dest-dot.grow{background:#1b8b58}
     .dest-info{flex:1;min-width:0}
     .dest-name{font-size:14px;font-weight:600;color:#1c1c1e}
     .dest-sub{font-size:12px;color:#6b7280;margin-top:1px}
     .dest-amt-wrap{text-align:right;flex-shrink:0}
     .dest-amt{font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;color:#1c1c1e}
     .dest-edit{font-size:11px;font-weight:600;color:#227be2;background:none;border:none;cursor:pointer;padding:2px 4px}
-    .card-footer{padding:0 20px 18px;display:flex;gap:8px}
+    .dest-remove{width:24px;height:24px;border-radius:50%;background:#fee2e2;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+    .dest-remove svg{width:12px;height:12px;color:#be3e30}
+    .add-dest{display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;background:#fff;border-radius:10px;border:1.5px dashed #d1d5db;cursor:pointer;font-size:13px;font-weight:600;color:#6b7280}
+    .add-dest svg{width:14px;height:14px}
+    .card-after{margin-top:12px;padding:12px 14px;background:#f8f9fa;border-radius:12px}
+    .card-after-row{display:flex;justify-content:space-between;align-items:center;padding:3px 0;font-size:12px}
+    .card-after-label{color:#6b7280}
+    .card-after-value{font-family:'IBM Plex Sans',sans-serif;font-weight:600;color:#1c1c1e}
+    .card-after-value.positive{color:#1b8b58}
+    .card-after-value.warn{color:#ef8a17}
+    .card-after-value.info{color:#227be2}
+    .card-progress{height:3px;background:#e5e7eb;border-radius:2px;margin-top:8px;overflow:hidden}
+    .card-progress-fill{height:100%;border-radius:2px}
+    .card-actions{display:flex;gap:8px;padding:0 20px 18px}
     .cf-btn{flex:1;padding:10px;border-radius:10px;border:none;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;text-align:center}
     .cf-btn.primary{background:#227be2;color:#fff}
     .cf-btn.ghost{background:#f2f2f7;color:#1c1c1e}
-    .card-after{margin-top:12px;padding:12px 14px;background:#f8f9fa;border-radius:12px}
-    .card-after-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0}
-    .card-after-label{font-size:12px;color:#6b7280}
-    .card-after-value{font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#1c1c1e}
-    .card-after-value.positive{color:#1b8b58}
-    .card-after-value.warn{color:#ef8a17}
-    .card-progress{height:4px;background:#e5e7eb;border-radius:2px;margin-top:8px;overflow:hidden}
-    .card-progress-fill{height:100%;border-radius:2px}
-    .add-card{display:flex;align-items:center;justify-content:center;gap:8px;padding:16px;background:#fff;border-radius:16px;border:1.5px dashed #d1d5db;cursor:pointer;font-size:14px;font-weight:600;color:#6b7280;box-shadow:0 1px 3px rgba(0,0,0,.03)}
-    .add-card svg{width:18px;height:18px}
-    .summary{background:#1c1c1e;border-radius:20px;padding:24px;color:#fff;margin-top:24px}
+    /* Market status badge */
+    .market-badge{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:8px;font-size:12px;font-weight:600;margin-bottom:12px}
+    .market-badge.open{background:#eefbf4;color:#166f47}
+    .market-badge.closed{background:#f3f4f6;color:#6b7280}
+    .market-dot{width:7px;height:7px;border-radius:50%}
+    .market-dot.open{background:#1b8b58}
+    .market-dot.closed{background:#9ca3af}
+    .alloc-row{display:flex;justify-content:space-between;padding:8px 12px;background:#f8f9fa;border-radius:8px;font-size:12px;margin-bottom:4px}
+    .alloc-label{color:#6b7280}
+    .alloc-value{font-family:'IBM Plex Sans',sans-serif;font-weight:600;color:#1c1c1e}
+    .summary{background:#1c1c1e;border-radius:20px;padding:24px;color:#fff;margin-top:20px}
     .summary-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6b7280;margin-bottom:14px}
     .summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
     .summary-tile{padding:14px;background:rgba(255,255,255,.06);border-radius:12px}
     .summary-tile-label{font-size:11px;color:#6b7280;margin-bottom:4px}
     .summary-tile-value{font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700;color:#fff}
-    .summary-tile-sub{font-size:11px;margin-top:2px;color:#9ca3af}
     .summary-checks{margin-top:14px;display:flex;flex-direction:column;gap:8px}
     .summary-check{display:flex;align-items:center;gap:8px;font-size:14px;color:#d1d5db}
     .summary-check-dot{width:20px;height:20px;border-radius:50%;background:rgba(52,211,153,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -84,12 +103,20 @@
 </head>
 <body>
   <div class="sb"><span>9:41</span><div style="display:flex;gap:6px;align-items:center"><svg width="28" height="13" viewBox="0 0 28 13" fill="currentColor"><rect x="0" y=".5" width="23" height="12" rx="3" stroke="currentColor" stroke-width="1" fill="none"/><rect x="24" y="4" width="2.5" height="5" rx="1" fill="currentColor" opacity=".3"/><rect x="1.5" y="2" width="18" height="9" rx="1.5" fill="currentColor"/></svg></div></div>
-  <div class="nb"><button class="nb-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></button><div class="nb-title">Move Money</div><button class="nb-edit">Edit</button></div>
+  <div class="nb"><button class="nb-back" onclick="location.href='overview.html'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></button><div class="nb-title">Move Money</div><button class="nb-edit">Edit</button></div>
+  <div class="nav-links">
+    <button class="nav-link" onclick="location.href='overview.html'">Overview</button>
+    <button class="nav-link active">Workspace</button>
+    <button class="nav-link" onclick="location.href='move-money-2-timeline.html'">Timeline</button>
+    <button class="nav-link" onclick="location.href='move-money-3-flow.html'">Flow</button>
+    <button class="nav-link" onclick="location.href='move-money-4-advisor.html'">Advisor</button>
+    <button class="nav-link" onclick="location.href='move-money-5-wallet.html'">Wallet</button>
+  </div>
 
   <div class="ct">
     <div class="hdr">
       <div class="hdr-title">3 optimizations ready</div>
-      <div class="hdr-sub">Each card is independent. Edit amounts or skip any recommendation.</div>
+      <div class="hdr-sub">Each card is independent. Change source accounts, edit amounts, or skip any recommendation.</div>
     </div>
 
     <!-- CARD 1: PAY BILLS -->
@@ -99,74 +126,105 @@
         <div class="card-hdr-title">Reserve for upcoming bills</div>
         <div class="card-hdr-desc">Set aside money so bills are covered on time</div>
       </div>
-      <div class="card-source">
-        <div class="card-source-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
-        <div class="card-source-info"><div class="card-source-label">Move from</div><div class="card-source-name">Capital One Checking</div></div>
-        <div><div class="card-source-bal">$680</div><div class="card-source-sub">of $4,200</div></div>
+      <div class="source-selector">
+        <div class="source-label">Move from</div>
+        <div class="source-chips">
+          <div class="source-chip selected">
+            <div class="source-chip-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+            <div class="source-chip-name">Capital One Checking</div>
+            <div class="source-chip-bal">$4,200</div>
+          </div>
+          <div class="source-chip">
+            <div class="source-chip-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+            <div class="source-chip-name">Chase Checking</div>
+            <div class="source-chip-bal">$3,840</div>
+          </div>
+        </div>
       </div>
       <div class="card-body">
-        <div class="dest-row">
-          <div class="dest-icon protect"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
-          <div class="dest-info"><div class="dest-name">Electricity</div><div class="dest-sub">Due Jul 18</div></div>
-          <div class="dest-amt-wrap"><div class="dest-amt">$82</div><button class="dest-edit">Edit</button></div>
-        </div>
-        <div class="dest-row">
-          <div class="dest-icon protect"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
-          <div class="dest-info"><div class="dest-name">Rent</div><div class="dest-sub">Due Jul 25</div></div>
-          <div class="dest-amt-wrap"><div class="dest-amt">$320</div><button class="dest-edit">Edit</button></div>
-        </div>
-        <div class="dest-row">
-          <div class="dest-icon protect"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-          <div class="dest-info"><div class="dest-name">Car Insurance</div><div class="dest-sub">Due Jul 28</div></div>
-          <div class="dest-amt-wrap"><div class="dest-amt">$195</div><button class="dest-edit">Edit</button></div>
-        </div>
-        <div class="dest-row">
-          <div class="dest-icon protect"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
-          <div class="dest-info"><div class="dest-name">Netflix</div><div class="dest-sub">Due Jul 30</div></div>
-          <div class="dest-amt-wrap"><div class="dest-amt">$83</div><button class="dest-edit">Edit</button></div>
+        <div class="dest-section">
+          <div class="dest-section-label">Destinations</div>
+          <div class="dest-row">
+            <div class="dest-dot protect"></div>
+            <div class="dest-info"><div class="dest-name">Bills Account</div><div class="dest-sub">Electricity · Internet · Phone</div></div>
+            <div class="dest-amt-wrap"><div class="dest-amt">$620</div><button class="dest-edit">Edit</button></div>
+            <button class="dest-remove"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+          </div>
+          <div class="dest-row">
+            <div class="dest-dot protect"></div>
+            <div class="dest-info"><div class="dest-name">Property Tax Account</div><div class="dest-sub">Quarterly payment reserve</div></div>
+            <div class="dest-amt-wrap"><div class="dest-amt">$400</div><button class="dest-edit">Edit</button></div>
+            <button class="dest-remove"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+          </div>
+          <div class="add-dest">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add destination
+          </div>
         </div>
         <div class="card-after">
-          <div class="card-after-row"><div class="card-after-label">Total reserved</div><div class="card-after-value">$680</div></div>
-          <div class="card-after-row"><div class="card-after-label">Checking after</div><div class="card-after-value warn">$3,520</div></div>
-          <div class="card-after-row"><div class="card-after-label">Bills covered</div><div class="card-after-value positive">4 of 4 ✓</div></div>
+          <div class="card-after-row"><div class="card-after-label">Total reserved</div><div class="card-after-value">$1,020</div></div>
+          <div class="card-after-row"><div class="card-after-label">Checking after</div><div class="card-after-value warn">$3,180</div></div>
+          <div class="card-after-row"><div class="card-after-label">Bills covered</div><div class="card-after-value positive">All due dates ✓</div></div>
         </div>
       </div>
-      <div class="card-footer">
-        <button class="cf-btn ghost">Skip</button>
-        <button class="cf-btn primary">Confirm · $680</button>
-      </div>
+      <div class="card-actions"><button class="cf-btn ghost">Skip</button><button class="cf-btn primary">Confirm · $1,020</button></div>
     </div>
 
     <!-- CARD 2: RESERVE -->
     <div class="card">
       <div class="card-hdr">
         <div class="card-badge prepare">Prepare</div>
-        <div class="card-hdr-title">Build emergency reserve</div>
-        <div class="card-hdr-desc">Grow your 6-month safety net</div>
+        <div class="card-hdr-title">Build emergency reserves</div>
+        <div class="card-hdr-desc">Grow your safety net goals</div>
       </div>
-      <div class="card-source">
-        <div class="card-source-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
-        <div class="card-source-info"><div class="card-source-label">Move from</div><div class="card-source-name">Chase Savings</div></div>
-        <div><div class="card-source-bal">$400</div><div class="card-source-sub">of $12,650</div></div>
+      <div class="source-selector">
+        <div class="source-label">Move from</div>
+        <div class="source-chips">
+          <div class="source-chip selected">
+            <div class="source-chip-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+            <div class="source-chip-name">Chase Savings</div>
+            <div class="source-chip-bal">$12,650</div>
+          </div>
+          <div class="source-chip">
+            <div class="source-chip-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+            <div class="source-chip-name">Advizmo Cash</div>
+            <div class="source-chip-bal">$4,200</div>
+          </div>
+        </div>
       </div>
       <div class="card-body">
-        <div class="dest-row">
-          <div class="dest-icon prepare"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/></svg></div>
-          <div class="dest-info"><div class="dest-name">Emergency Reserve</div><div class="dest-sub">$8,400 → target $10,000</div></div>
-          <div class="dest-amt-wrap"><div class="dest-amt">$400</div><button class="dest-edit">Edit</button></div>
+        <div class="dest-section">
+          <div class="dest-section-label">Reserve Goals</div>
+          <div class="dest-row">
+            <div class="dest-dot prepare"></div>
+            <div class="dest-info"><div class="dest-name">Emergency Fund</div><div class="dest-sub">$8,400 → $10,000 target</div></div>
+            <div class="dest-amt-wrap"><div class="dest-amt">$300</div><button class="dest-edit">Edit</button></div>
+            <button class="dest-remove"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+          </div>
+          <div class="dest-row">
+            <div class="dest-dot prepare"></div>
+            <div class="dest-info"><div class="dest-name">Vacation Fund</div><div class="dest-sub">$2,100 → $3,000 target</div></div>
+            <div class="dest-amt-wrap"><div class="dest-amt">$200</div><button class="dest-edit">Edit</button></div>
+            <button class="dest-remove"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+          </div>
+          <div class="dest-row">
+            <div class="dest-dot prepare"></div>
+            <div class="dest-info"><div class="dest-name">Home Maintenance</div><div class="dest-sub">$800 → $5,000 target</div></div>
+            <div class="dest-amt-wrap"><div class="dest-amt">$150</div><button class="dest-edit">Edit</button></div>
+            <button class="dest-remove"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+          </div>
+          <div class="add-dest">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add reserve goal
+          </div>
         </div>
         <div class="card-after">
-          <div class="card-after-row"><div class="card-after-label">Current reserve</div><div class="card-after-value">$8,400</div></div>
-          <div class="card-after-row"><div class="card-after-label">After transfer</div><div class="card-after-value positive">$8,800</div></div>
-          <div class="card-after-row"><div class="card-after-label">Target</div><div class="card-after-value">$10,000</div></div>
-          <div class="card-progress"><div class="card-progress-fill" style="width:88%;background:linear-gradient(90deg,#227be2,#34d399)"></div></div>
-          <div class="card-after-row" style="margin-top:6px"><div class="card-after-label">Time to goal</div><div class="card-after-value" style="color:#227be2">~4 months</div></div>
+          <div class="card-after-row"><div class="card-after-label">Total allocated</div><div class="card-after-value">$650</div></div>
+          <div class="card-after-row"><div class="card-after-label">Emergency fund after</div><div class="card-after-value positive">$8,700</div></div>
+          <div class="card-progress"><div class="card-progress-fill" style="width:87%;background:linear-gradient(90deg,#227be2,#34d399)"></div></div>
         </div>
       </div>
-      <div class="card-footer">
-        <button class="cf-btn ghost">Skip</button>
-        <button class="cf-btn primary">Confirm · $400</button>
-      </div>
+      <div class="card-actions"><button class="cf-btn ghost">Skip</button><button class="cf-btn primary">Confirm · $650</button></div>
     </div>
 
     <!-- CARD 3: AUTO INVEST (MARKET OPEN) -->
@@ -174,37 +232,63 @@
       <div class="card-hdr">
         <div class="card-badge grow">Grow</div>
         <div class="card-hdr-title">Invest idle cash</div>
-        <div class="card-hdr-desc">Put money to work in the market today</div>
+        <div class="card-hdr-desc">Put money to work in the market</div>
       </div>
-      <div class="card-source">
-        <div class="card-source-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
-        <div class="card-source-info"><div class="card-source-label">Move from</div><div class="card-source-name">Advizmo Cash</div></div>
-        <div><div class="card-source-bal">$650</div><div class="card-source-sub">of $4,200</div></div>
+      <div class="source-selector">
+        <div class="source-label">Move from</div>
+        <div class="source-chips">
+          <div class="source-chip selected">
+            <div class="source-chip-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+            <div class="source-chip-name">Advizmo Cash</div>
+            <div class="source-chip-bal">$4,200</div>
+          </div>
+          <div class="source-chip">
+            <div class="source-chip-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+            <div class="source-chip-name">Chase Checking</div>
+            <div class="source-chip-bal">$3,840</div>
+          </div>
+        </div>
       </div>
       <div class="card-body">
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;padding:8px 12px;background:#eefbf4;border-radius:10px">
-          <div style="width:8px;height:8px;border-radius:50%;background:#1b8b58"></div>
-          <div style="font-size:13px;font-weight:600;color:#166f47">Market open · Purchasing today</div>
+        <div class="market-badge open"><div class="market-dot open"></div>Market open · Purchasing today</div>
+        <div class="dest-section">
+          <div class="dest-section-label">Investment Destinations</div>
+          <div class="dest-row">
+            <div class="dest-dot grow"></div>
+            <div class="dest-info"><div class="dest-name">Aggressive Portfolio</div><div class="dest-sub">VTI · VXUS · QQQ</div></div>
+            <div class="dest-amt-wrap"><div class="dest-amt">$250</div><button class="dest-edit">Edit</button></div>
+            <button class="dest-remove"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+          </div>
+          <div class="dest-row">
+            <div class="dest-dot grow"></div>
+            <div class="dest-info"><div class="dest-name">Dividend Portfolio</div><div class="dest-sub">VYM · SCHD · JEPI</div></div>
+            <div class="dest-amt-wrap"><div class="dest-amt">$150</div><button class="dest-edit">Edit</button></div>
+            <button class="dest-remove"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+          </div>
+          <div class="dest-row">
+            <div class="dest-dot grow"></div>
+            <div class="dest-info"><div class="dest-name">Kids Portfolio</div><div class="dest-sub">VTI · BND · VXUS</div></div>
+            <div class="dest-amt-wrap"><div class="dest-amt">$100</div><button class="dest-edit">Edit</button></div>
+            <button class="dest-remove"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+          </div>
+          <div class="add-dest">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add portfolio
+          </div>
         </div>
-        <div class="dest-row">
-          <div class="dest-icon grow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 7l-5-5-5 5"/></svg></div>
-          <div class="dest-info"><div class="dest-name">Balanced Growth Portfolio</div><div class="dest-sub">VTI · BND · VXUS</div></div>
-          <div class="dest-amt-wrap"><div class="dest-amt">$650</div><button class="dest-edit">Edit</button></div>
+        <div style="margin-top:8px">
+          <div class="dest-section-label">Estimated Purchases</div>
+          <div class="alloc-row"><div class="alloc-label">VTI · US Index · 60%</div><div class="alloc-value">$240 · ~1.24 shares</div></div>
+          <div class="alloc-row"><div class="alloc-label">BND · Bonds · 25%</div><div class="alloc-value">$100 · ~1.34 shares</div></div>
+          <div class="alloc-row"><div class="alloc-label">VXUS · Intl · 15%</div><div class="alloc-value">$60 · ~1.09 shares</div></div>
         </div>
-        <div style="margin-top:12px;display:flex;flex-direction:column;gap:6px">
-          <div style="display:flex;justify-content:space-between;padding:8px 12px;background:#f8f9fa;border-radius:8px;font-size:13px"><span style="color:#6b7280">VTI · US Index · 60%</span><span style="font-family:'IBM Plex Sans';font-weight:600">$390 · ~2.01 shares</span></div>
-          <div style="display:flex;justify-content:space-between;padding:8px 12px;background:#f8f9fa;border-radius:8px;font-size:13px"><span style="color:#6b7280">BND · Bonds · 25%</span><span style="font-family:'IBM Plex Sans';font-weight:600">$163 · ~2.18 shares</span></div>
-          <div style="display:flex;justify-content:space-between;padding:8px 12px;background:#f8f9fa;border-radius:8px;font-size:13px"><span style="color:#6b7280">VXUS · International · 15%</span><span style="font-family:'IBM Plex Sans';font-weight:600">$97 · ~1.76 shares</span></div>
-        </div>
-        <div class="card-after" style="margin-top:12px">
-          <div class="card-after-row"><div class="card-after-label">Diversification</div><div class="card-after-value positive">Improved +2%</div></div>
-          <div class="card-after-row"><div class="card-after-label">Portfolio value after</div><div class="card-after-value">$47,970</div></div>
+        <div class="card-after">
+          <div class="card-after-row"><div class="card-after-label">Total invested</div><div class="card-after-value">$500</div></div>
+          <div class="card-after-row"><div class="card-after-label">Execution</div><div class="card-after-value info">Today at market open</div></div>
+          <div class="card-after-row"><div class="card-after-label">Diversification</div><div class="card-after-value positive">Improved +3%</div></div>
         </div>
       </div>
-      <div class="card-footer">
-        <button class="cf-btn ghost">Skip</button>
-        <button class="cf-btn primary">Confirm · $650</button>
-      </div>
+      <div class="card-actions"><button class="cf-btn ghost">Skip</button><button class="cf-btn primary">Confirm · $500</button></div>
     </div>
 
     <!-- Summary -->
@@ -212,20 +296,20 @@
       <div class="summary-label">Today's Optimization</div>
       <div class="summary-grid">
         <div class="summary-tile"><div class="summary-tile-label">Recommendations</div><div class="summary-tile-value">3</div></div>
-        <div class="summary-tile"><div class="summary-tile-label">Total allocated</div><div class="summary-tile-value">$1,730</div></div>
-        <div class="summary-tile"><div class="summary-tile-label">Opt score</div><div class="summary-tile-value">68 → 89</div><div class="summary-tile-sub" style="color:#34d399">+21 points</div></div>
-        <div class="summary-tile"><div class="summary-tile-label">Annual impact</div><div class="summary-tile-value" style="color:#34d399">+$2,340</div></div>
+        <div class="summary-tile"><div class="summary-tile-label">Total allocated</div><div class="summary-tile-value">$2,170</div></div>
+        <div class="summary-tile"><div class="summary-tile-label">Opt score</div><div class="summary-tile-value">68 → 91</div><div style="font-size:11px;color:#34d399;margin-top:2px">+23 points</div></div>
+        <div class="summary-tile"><div class="summary-tile-label">Annual impact</div><div class="summary-tile-value" style="color:#34d399">+$2,840</div></div>
       </div>
       <div class="summary-checks">
         <div class="summary-check"><div class="summary-check-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>Bills protected</div>
-        <div class="summary-check"><div class="summary-check-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>Emergency fund improved</div>
-        <div class="summary-check"><div class="summary-check-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>Investment scheduled</div>
+        <div class="summary-check"><div class="summary-check-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>3 reserve goals funded</div>
+        <div class="summary-check"><div class="summary-check-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>3 portfolios invested</div>
       </div>
     </div>
   </div>
 
   <div class="bb">
-    <div class="bb-summary"><div class="bb-total-l">Total moving</div><div class="bb-total-v">$1,730</div></div>
+    <div class="bb-summary"><div class="bb-total-l">Total moving</div><div class="bb-total-v">$2,170</div></div>
     <button class="bb-btn">Approve All</button>
   </div>
 </body>
