@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Move Money — Money Flow</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #ffffff; color: #1c1c1e;
+      max-width: 430px; margin: 0 auto; min-height: 100vh;
+    }
+    .status-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 14px 24px 8px; font-size: 15px; font-weight: 600;
+      background: #ffffff; position: sticky; top: 0; z-index: 100;
+    }
+    .nav-bar {
+      display: flex; align-items: center; gap: 12px;
+      padding: 8px 20px 12px; background: #ffffff;
+      border-bottom: 0.5px solid rgba(0,0,0,0.06);
+      position: sticky; top: 44px; z-index: 99;
+    }
+    .nav-back {
+      width: 32px; height: 32px; border-radius: 50%; background: #f2f2f7;
+      display: flex; align-items: center; justify-content: center;
+      border: none; cursor: pointer; flex-shrink: 0;
+    }
+    .nav-back svg { width: 18px; height: 18px; color: #1c1c1e; }
+    .nav-title {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 17px; font-weight: 700; color: #1c1c1e;
+    }
+    .nav-action {
+      margin-left: auto; font-size: 14px; font-weight: 600;
+      color: #227be2; background: none; border: none; cursor: pointer;
+    }
+
+    .content { padding: 0 20px 140px; }
+
+    /* Flow Visualization */
+    .flow-visual {
+      padding: 24px 0;
+    }
+
+    /* Source Node */
+    .source-node {
+      background: #1c1c1e; border-radius: 20px; padding: 20px 24px;
+      color: #ffffff; display: flex; align-items: center; gap: 16px;
+      position: relative;
+    }
+    .source-icon {
+      width: 48px; height: 48px; border-radius: 14px;
+      background: rgba(255,255,255,0.08);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .source-icon svg { width: 24px; height: 24px; color: #5ba3e8; }
+    .source-info { flex: 1; }
+    .source-label {
+      font-size: 11px; font-weight: 600; color: #6b7280;
+      text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .source-name {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 18px; font-weight: 700; color: #ffffff; margin-top: 2px;
+    }
+    .source-amount-wrap { text-align: right; }
+    .source-amount {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 24px; font-weight: 700; color: #ffffff;
+    }
+    .source-sub { font-size: 12px; color: #6b7280; }
+
+    /* Flow Lines */
+    .flow-lines {
+      display: flex; justify-content: center; position: relative;
+      height: 60px; margin: 0 20px;
+    }
+    .flow-lines::before {
+      content: '';
+      position: absolute; top: 0; left: 50%;
+      width: 1px; height: 60px;
+      background: linear-gradient(to bottom, #1c1c1e 0%, #d1d5db 100%);
+    }
+    .flow-branch {
+      position: absolute; top: 28px;
+      height: 1px; background: #d1d5db;
+    }
+    .flow-branch-1 { left: 16.5%; width: 33.5%; }
+    .flow-branch-2 { left: 50%; width: 0; }
+    .flow-branch-3 { right: 16.5%; width: 33.5%; }
+    .flow-dot {
+      position: absolute; top: 24px;
+      width: 9px; height: 9px; border-radius: 50%;
+      border: 2px solid #ffffff;
+    }
+    .flow-dot-1 { left: calc(16.5% - 4px); }
+    .flow-dot-2 { left: calc(50% - 4px); }
+    .flow-dot-3 { right: calc(16.5% - 4px); }
+    .flow-dot.protect { background: #ef8a17; }
+    .flow-dot.prepare { background: #227be2; }
+    .flow-dot.grow { background: #1b8b58; }
+
+    /* Destination Nodes */
+    .dest-nodes {
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;
+    }
+    .dest-node {
+      border-radius: 16px; padding: 16px 12px;
+      text-align: center; border: 0.5px solid rgba(0,0,0,0.06);
+      cursor: pointer; transition: all 0.2s;
+      position: relative;
+    }
+    .dest-node:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+    .dest-node.protect { background: #fffbeb; }
+    .dest-node.prepare { background: #eff6ff; }
+    .dest-node.grow { background: #f0fdf4; }
+    .dest-node-icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 8px;
+    }
+    .dest-node-icon svg { width: 18px; height: 18px; }
+    .dest-node.protect .dest-node-icon { background: rgba(239,138,23,0.15); color: #ef8a17; }
+    .dest-node.prepare .dest-node-icon { background: rgba(34,123,226,0.15); color: #227be2; }
+    .dest-node.grow .dest-node-icon { background: rgba(27,139,88,0.15); color: #1b8b58; }
+    .dest-node-title {
+      font-size: 12px; font-weight: 600; color: #1c1c1e; margin-bottom: 4px;
+    }
+    .dest-node-amount {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 18px; font-weight: 700; color: #1c1c1e;
+    }
+    .dest-node-pct {
+      font-size: 11px; color: #6b7280; margin-top: 2px;
+    }
+
+    /* Breakdown Section */
+    .breakdown-section {
+      margin-top: 24px;
+    }
+    .breakdown-label {
+      font-size: 11px; font-weight: 600; color: #8e8e93;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      margin-bottom: 12px;
+    }
+
+    /* Breakdown Card */
+    .breakdown-card {
+      background: #f8f9fa; border-radius: 18px; padding: 20px;
+      margin-bottom: 10px;
+    }
+    .breakdown-header {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 14px;
+    }
+    .breakdown-icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .breakdown-icon svg { width: 18px; height: 18px; }
+    .breakdown-icon.protect { background: rgba(239,138,23,0.12); color: #ef8a17; }
+    .breakdown-icon.prepare { background: rgba(34,123,226,0.12); color: #227be2; }
+    .breakdown-icon.grow { background: rgba(27,139,88,0.12); color: #1b8b58; }
+    .breakdown-title {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 16px; font-weight: 600; color: #1c1c1e; flex: 1;
+    }
+    .breakdown-amount {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 18px; font-weight: 700; color: #1c1c1e;
+    }
+
+    .breakdown-items { display: flex; flex-direction: column; gap: 8px; }
+    .breakdown-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 14px; background: #ffffff; border-radius: 12px;
+    }
+    .breakdown-item-label { font-size: 14px; color: #3a3a3c; }
+    .breakdown-item-value {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px; font-weight: 600; color: #1c1c1e;
+    }
+    .breakdown-item-value.positive { color: #1b8b58; }
+    .breakdown-item-value.warn { color: #ef8a17; }
+
+    .breakdown-footer {
+      margin-top: 12px; padding-top: 12px;
+      border-top: 0.5px solid rgba(0,0,0,0.06);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .breakdown-footer-label { font-size: 13px; color: #6b7280; }
+    .breakdown-footer-value {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px; font-weight: 600; color: #1c1c1e;
+    }
+
+    /* Allocation Bar */
+    .alloc-bar {
+      height: 8px; background: #e5e7eb; border-radius: 4px;
+      overflow: hidden; display: flex; margin-top: 12px;
+    }
+    .alloc-seg { height: 100%; }
+    .alloc-seg.protect { background: #ef8a17; }
+    .alloc-seg.prepare { background: #227be2; }
+    .alloc-seg.grow { background: #1b8b58; }
+
+    /* Bottom Bar */
+    .bottom-bar {
+      position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+      width: 100%; max-width: 430px;
+      background: rgba(255,255,255,0.94);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-top: 0.5px solid rgba(0,0,0,0.08);
+      padding: 14px 20px 34px;
+    }
+    .bottom-btn {
+      width: 100%; padding: 16px; border-radius: 14px; border: none;
+      background: #227be2; color: #ffffff;
+      font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 600;
+      cursor: pointer; text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="status-bar">
+    <span>9:41</span>
+    <div style="display:flex;gap:6px;align-items:center;">
+      <svg width="28" height="13" viewBox="0 0 28 13" fill="currentColor"><rect x="0" y="0.5" width="23" height="12" rx="3" stroke="currentColor" stroke-width="1" fill="none"/><rect x="24" y="4" width="2.5" height="5" rx="1" fill="currentColor" opacity="0.3"/><rect x="1.5" y="2" width="18" height="9" rx="1.5" fill="currentColor"/></svg>
+    </div>
+  </div>
+
+  <div class="nav-bar">
+    <button class="nav-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <div class="nav-title">Move Money</div>
+    <button class="nav-action">Edit</button>
+  </div>
+
+  <div class="content">
+
+    <div class="flow-visual">
+      <!-- Source -->
+      <div class="source-node">
+        <div class="source-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+        </div>
+        <div class="source-info">
+          <div class="source-label">From</div>
+          <div class="source-name">Capital One Checking</div>
+        </div>
+        <div class="source-amount-wrap">
+          <div class="source-amount">$646</div>
+          <div class="source-sub">of $4,200</div>
+        </div>
+      </div>
+
+      <!-- Flow Lines -->
+      <div class="flow-lines">
+        <div class="flow-branch flow-branch-1"></div>
+        <div class="flow-branch flow-branch-3"></div>
+        <div class="flow-dot protect flow-dot-1"></div>
+        <div class="flow-dot prepare flow-dot-2"></div>
+        <div class="flow-dot grow flow-dot-3"></div>
+      </div>
+
+      <!-- Destination Nodes -->
+      <div class="dest-nodes">
+        <div class="dest-node protect">
+          <div class="dest-node-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div class="dest-node-title">Bills</div>
+          <div class="dest-node-amount">$182</div>
+          <div class="dest-node-pct">28%</div>
+        </div>
+        <div class="dest-node prepare">
+          <div class="dest-node-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/></svg>
+          </div>
+          <div class="dest-node-title">Reserve</div>
+          <div class="dest-node-amount">$250</div>
+          <div class="dest-node-pct">39%</div>
+        </div>
+        <div class="dest-node grow">
+          <div class="dest-node-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v20M17 7l-5-5-5 5"/></svg>
+          </div>
+          <div class="dest-node-title">Invest</div>
+          <div class="dest-node-amount">$214</div>
+          <div class="dest-node-pct">33%</div>
+        </div>
+      </div>
+
+      <!-- Allocation Bar -->
+      <div class="alloc-bar">
+        <div class="alloc-seg protect" style="width:28%"></div>
+        <div class="alloc-seg prepare" style="width:39%"></div>
+        <div class="alloc-seg grow" style="width:33%"></div>
+      </div>
+    </div>
+
+    <!-- Breakdown -->
+    <div class="breakdown-section">
+      <div class="breakdown-label">Breakdown</div>
+
+      <!-- Pay Bills -->
+      <div class="breakdown-card">
+        <div class="breakdown-header">
+          <div class="breakdown-icon protect">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div class="breakdown-title">Pay Bills</div>
+          <div class="breakdown-amount">$182</div>
+        </div>
+        <div class="breakdown-items">
+          <div class="breakdown-item">
+            <div class="breakdown-item-label">Electric Bill</div>
+            <div class="breakdown-item-value">Due Jul 18 · $62</div>
+          </div>
+          <div class="breakdown-item">
+            <div class="breakdown-item-label">Internet</div>
+            <div class="breakdown-item-value">Due Jul 20 · $79</div>
+          </div>
+          <div class="breakdown-item">
+            <div class="breakdown-item-label">Phone</div>
+            <div class="breakdown-item-value">Due Jul 22 · $41</div>
+          </div>
+        </div>
+        <div class="breakdown-footer">
+          <div class="breakdown-footer-label">Checking after</div>
+          <div class="breakdown-footer-value positive">$4,018</div>
+        </div>
+      </div>
+
+      <!-- Reserve -->
+      <div class="breakdown-card">
+        <div class="breakdown-header">
+          <div class="breakdown-icon prepare">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/></svg>
+          </div>
+          <div class="breakdown-title">Emergency Reserve</div>
+          <div class="breakdown-amount">$250</div>
+        </div>
+        <div class="breakdown-items">
+          <div class="breakdown-item">
+            <div class="breakdown-item-label">Current</div>
+            <div class="breakdown-item-value">$8,400</div>
+          </div>
+          <div class="breakdown-item">
+            <div class="breakdown-item-label">After transfer</div>
+            <div class="breakdown-item-value positive">$8,650</div>
+          </div>
+          <div class="breakdown-item">
+            <div class="breakdown-item-label">Target</div>
+            <div class="breakdown-item-value">$10,000</div>
+          </div>
+        </div>
+        <div class="breakdown-footer">
+          <div class="breakdown-footer-label">Time to goal</div>
+          <div class="breakdown-footer-value">~6 months</div>
+        </div>
+      </div>
+
+      <!-- Auto Invest -->
+      <div class="breakdown-card">
+        <div class="breakdown-header">
+          <div class="breakdown-icon grow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v20M17 7l-5-5-5 5"/></svg>
+          </div>
+          <div class="breakdown-title">Auto Invest</div>
+          <div class="breakdown-amount">$214</div>
+        </div>
+        <div class="breakdown-items">
+          <div class="breakdown-item">
+            <div class="breakdown-item-label">Market</div>
+            <div class="breakdown-item-value positive">Open</div>
+          </div>
+          <div class="breakdown-item">
+            <div class="breakdown-item-label">VTI (60%)</div>
+            <div class="breakdown-item-value">$128 · ~0.65 shares</div>
+          </div>
+          <div class="breakdown-item">
+            <div class="breakdown-item-label">BND (25%)</div>
+            <div class="breakdown-item-value">$54 · ~0.72 shares</div>
+          </div>
+          <div class="breakdown-item">
+            <div class="breakdown-item-label">VXUS (15%)</div>
+            <div class="breakdown-item-value">$32 · ~0.58 shares</div>
+          </div>
+        </div>
+        <div class="breakdown-footer">
+          <div class="breakdown-footer-label">Diversification</div>
+          <div class="breakdown-footer-value positive">Improved +2%</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="bottom-bar">
+    <button class="bottom-btn">Approve All · $646</button>
+  </div>
+
+</body>
+</html>
