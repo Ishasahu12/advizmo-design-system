@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Activity - Advisor Journal | Advizmo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+    body { font-family: 'Inter', sans-serif; background: #f2f2f7; color: #1c1c1e; }
+  </style>
+</head>
+<body>
+  <div style="max-width:430px;margin:0 auto;min-height:100vh;background:#fff;position:relative">
+
+    <!-- Status Bar -->
+    <div style="height:44px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 20px;font-size:15px;font-weight:600">
+      <span>9:41</span>
+      <div style="display:flex;align-items:center;gap:5px">
+        <svg width="17" height="12" viewBox="0 0 17 12"><path d="M1 4.5C3.5 1.5 7 0 8.5 0s5 1.5 7.5 4.5" stroke="#1c1c1e" stroke-width="1.5" fill="none"/><path d="M3 7c1.5-2 3.5-3 5.5-3s4 1 5.5 3" stroke="#1c1c1e" stroke-width="1.5" fill="none"/><circle cx="8.5" cy="10.5" r="1.5" fill="#1c1c1e"/></svg>
+        <svg width="16" height="12" viewBox="0 0 16 12"><rect x="0" y="3" width="3" height="9" rx="0.5" fill="#1c1c1e"/><rect x="4.5" y="2" width="3" height="10" rx="0.5" fill="#1c1c1e"/><rect x="9" y="0" width="3" height="12" rx="0.5" fill="#1c1c1e"/><rect x="13.5" y="1" width="3" height="11" rx="0.5" fill="#1c1c1e"/></svg>
+        <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0" y="0.5" width="22" height="11" rx="2" stroke="#1c1c1e" stroke-width="1" fill="none"/><rect x="23" y="3.5" width="2" height="5" rx="1" fill="#1c1c1e"/><rect x="1.5" y="2" width="18" height="8" rx="1" fill="#34c759"/></svg>
+      </div>
+    </div>
+
+    <!-- Navigation Header -->
+    <div style="display:flex;align-items:center;padding:8px 16px 10px;background:#fff;position:sticky;top:44px;z-index:99">
+      <button onclick="location.href='index.html'" style="width:36px;height:36px;border-radius:50%;background:rgba(120,120,128,0.08);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1c1c1e" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <div style="flex:1;text-align:center;font-family:'IBM Plex Sans',sans-serif;font-size:17px;font-weight:600;color:#1c1c1e">Activity</div>
+      <div style="width:36px"></div>
+    </div>
+
+    <!-- Segmented Nav -->
+    <div style="display:flex;gap:4px;padding:4px 20px 12px;background:#fff;overflow-x:auto;scrollbar-width:none;position:sticky;top:82px;z-index:98">
+      <button onclick="location.href='invest-overview-1-command.html'" style="flex-shrink:0;padding:8px 18px;border-radius:10px;background:transparent;border:none;font-family:Inter,sans-serif;font-size:13px;font-weight:600;color:#8e8e93;cursor:pointer;white-space:nowrap">Overview</button>
+      <button style="flex-shrink:0;padding:8px 18px;border-radius:10px;background:#1c1c1e;border:none;font-family:Inter,sans-serif;font-size:13px;font-weight:600;color:#fff;cursor:pointer;white-space:nowrap">Activity</button>
+      <button style="flex-shrink:0;padding:8px 18px;border-radius:10px;background:transparent;border:none;font-family:Inter,sans-serif;font-size:13px;font-weight:600;color:#8e8e93;cursor:pointer;white-space:nowrap">Documents</button>
+      <button style="flex-shrink:0;padding:8px 18px;border-radius:10px;background:transparent;border:none;font-family:Inter,sans-serif;font-size:13px;font-weight:600;color:#8e8e93;cursor:pointer;white-space:nowrap">How It's Calculated</button>
+    </div>
+
+    <!-- Search Bar -->
+    <div style="padding:0 20px 12px;background:#fff">
+      <div style="display:flex;align-items:center;gap:10px;background:rgba(120,120,128,0.08);border-radius:12px;padding:10px 14px">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8e8e93" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="text" placeholder="Search activity..." style="flex:1;border:none;background:transparent;font-family:Inter,sans-serif;font-size:15px;color:#1c1c1e;outline:none">
+      </div>
+    </div>
+
+    <!-- Filter Chips -->
+    <div style="padding:0 20px 16px;background:#fff;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none">
+      <button style="flex-shrink:0;padding:8px 16px;border-radius:20px;background:#1c1c1e;border:none;font-family:Inter,sans-serif;font-size:13px;font-weight:500;color:#fff;cursor:pointer">All</button>
+      <button style="flex-shrink:0;padding:8px 16px;border-radius:20px;background:rgba(120,120,128,0.08);border:none;font-family:Inter,sans-serif;font-size:13px;font-weight:500;color:#1c1c1e;cursor:pointer">Investments</button>
+      <button style="flex-shrink:0;padding:8px 16px;border-radius:20px;background:rgba(120,120,128,0.08);border:none;font-family:Inter,sans-serif;font-size:13px;font-weight:500;color:#1c1c1e;cursor:pointer">Deposits</button>
+      <button style="flex-shrink:0;padding:8px 16px;border-radius:20px;background:rgba(120,120,128,0.08);border:none;font-family:Inter,sans-serif;font-size:13px;font-weight:500;color:#1c1c1e;cursor:pointer">Dividends</button>
+      <button style="flex-shrink:0;padding:8px 16px;border-radius:20px;background:rgba(120,120,128,0.08);border:none;font-family:Inter,sans-serif;font-size:13px;font-weight:500;color:#1c1c1e;cursor:pointer">Tax Savings</button>
+      <button style="flex-shrink:0;padding:8px 16px;border-radius:20px;background:rgba(120,120,128,0.08);border:none;font-family:Inter,sans-serif;font-size:13px;font-weight:500;color:#1c1c1e;cursor:pointer">Rebalancing</button>
+    </div>
+
+    <!-- Advisor Header -->
+    <div style="padding:0 20px 20px;background:#fff">
+      <div style="background:linear-gradient(135deg,#f0f7ff 0%,#e8f4fd 100%);border-radius:16px;padding:20px;border:1px solid rgba(0,122,255,0.08)">
+        <div style="display:flex;align-items:flex-start;gap:14px">
+          <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#007aff 0%,#0055d4 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          </div>
+          <div style="flex:1">
+            <div style="font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600;color:#1c1c1e;margin-bottom:6px">Your Advizmo Activity Journal</div>
+            <div style="font-family:Inter,sans-serif;font-size:13px;line-height:1.5;color:#636366">Here's everything Advizmo has done for your investments. Every action is designed to help you build wealth steadily.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Activity Feed -->
+    <div style="padding:0 20px 100px;background:#fff">
+
+      <!-- TODAY Header -->
+      <div style="position:sticky;top:126px;z-index:10;padding:12px 0 8px;background:#fff">
+        <div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:0.5px">Today</div>
+      </div>
+
+      <!-- Activity 1: Auto Invest -->
+      <div style="background:#fff;border-radius:16px;border:1px solid rgba(0,0,0,0.06);margin-bottom:12px;overflow:hidden">
+        <div style="padding:16px">
+          <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px">
+            <!-- Avatar -->
+            <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#007aff 0%,#0055d4 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            </div>
+            <div style="flex:1">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+                <span style="font-family:Inter,sans-serif;font-size:12px;font-weight:500;color:#007aff;background:rgba(0,122,255,0.08);padding:2px 8px;border-radius:6px">Advizmo (Automated)</span>
+                <span style="font-family:Inter,sans-serif;font-size:12px;color:#8e8e93">2:30 PM</span>
+              </div>
+              <div style="font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:600;color:#1c1c1e;margin-bottom:2px">Invested $520 into Aggressive Portfolio</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700;color:#1c1c1e">$520</div>
+              <div style="display:inline-flex;align-items:center;gap:4px;background:rgba(52,199,89,0.1);padding:2px 8px;border-radius:6px;margin-top:4px">
+                <div style="width:6px;height:6px;border-radius:50%;background:#34c759"></div>
+                <span style="font-family:Inter,sans-serif;font-size:11px;font-weight:500;color:#34c759">Completed</span>
+              </div>
+            </div>
+          </div>
+          <!-- Why Narrative -->
+          <div style="border-left:3px solid #007aff;padding:12px 14px;background:rgba(0,122,255,0.03);border-radius:0 8px 8px 0;margin-bottom:12px">
+            <div style="font-family:Inter,sans-serif;font-size:13px;line-height:1.6;color:#636366;font-style:italic">"Your Auto Invest schedule was due. Markets were open, so I directed $520 into your growth portfolio."</div>
+          </div>
+          <!-- Impact Footer -->
+          <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(52,199,89,0.06);border-radius:10px">
+            <div style="width:20px;height:20px;border-radius:50%;background:rgba(52,199,89,0.15);display:flex;align-items:center;justify-content:center">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2.5" stroke-linecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+            </div>
+            <div style="font-family:Inter,sans-serif;font-size:13px;font-weight:500;color:#34c759">+0.4% expected annual return</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Activity 2: Dividend -->
+      <div style="background:#fff;border-radius:16px;border:1px solid rgba(0,0,0,0.06);margin-bottom:12px;overflow:hidden">
+        <div style="padding:16px">
+          <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px">
+            <!-- Avatar -->
+            <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#ff9500 0%,#ff6b00 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M6 12h12"/></svg>
+            </div>
+            <div style="flex:1">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+                <span style="font-family:Inter,sans-serif;font-size:12px;font-weight:500;color:#ff9500;background:rgba(255,149,0,0.08);padding:2px 8px;border-radius:6px">Market</span>
+                <span style="font-family:Inter,sans-serif;font-size:12px;color:#8e8e93">9:15 AM</span>
+              </div>
+              <div style="font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:600;color:#1c1c1e;margin-bottom:2px">$42.18 dividend from VTI</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700;color:#1c1c1e">$42.18</div>
+              <div style="display:inline-flex;align-items:center;gap:4px;background:rgba(52,199,89,0.1);padding:2px 8px;border-radius:6px;margin-top:4px">
+                <div style="width:6px;height:6px;border-radius:50%;background:#34c759"></div>
+                <span style="font-family:Inter,sans-serif;font-size:11px;font-weight:500;color:#34c759">Completed</span>
+              </div>
+            </div>
+          </div>
+          <!-- Why Narrative -->
+          <div style="border-left:3px solid #007aff;padding:12px 14px;background:rgba(0,122,255,0.03);border-radius:0 8px 8px 0;margin-bottom:12px">
+            <div style="font-family:Inter,sans-serif;font-size:13px;line-height:1.6;color:#636366;font-style:italic">"Your Vanguard Total Stock Market ETF paid its quarterly dividend. Reinvested automatically."</div>
+          </div>
+          <!-- Impact Footer -->
+          <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(52,199,89,0.06);border-radius:10px">
+            <div style="width:20px;height:20px;border-radius:50%;background:rgba(52,199,89,0.15);display:flex;align-items:center;justify-content:center">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2.5" stroke-linecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+            </div>
+            <div style="font-family:Inter,sans-serif;font-size:13px;font-weight:500;color:#34c759">Portfolio value increased</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- YESTERDAY Header -->
+      <div style="position:sticky;top:126px;z-index:10;padding:20px 0 8px;background:#fff">
+        <div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:0.5px">Yesterday</div>
+      </div>
+
+      <!-- Activity 3: Rebalancing -->
+      <div style="background:#fff;border-radius:16px;border:1px solid rgba(0,0,0,0.06);margin-bottom:12px;overflow:hidden">
+        <div style="padding:16px">
+          <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px">
+            <!-- Avatar -->
+            <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#5856d6 0%,#3634a3 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            </div>
+            <div style="flex:1">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+                <span style="font-family:Inter,sans-serif;font-size:12px;font-weight:500;color:#5856d6;background:rgba(88,86,214,0.08);padding:2px 8px;border-radius:6px">Advizmo (Automated)</span>
+                <span style="font-family:Inter,sans-serif;font-size:12px;color:#8e8e93">3:45 PM</span>
+              </div>
+              <div style="font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:600;color:#1c1c1e;margin-bottom:2px">Portfolio rebalanced</div>
+            </div>
+            <div style="text-align:right">
+              <div style="display:inline-flex;align-items:center;gap:4px;background:rgba(52,199,89,0.1);padding:2px 8px;border-radius:6px">
+                <div style="width:6px;height:6px;border-radius:50%;background:#34c759"></div>
+                <span style="font-family:Inter,sans-serif;font-size:11px;font-weight:500;color:#34c759">Completed</span>
+              </div>
+            </div>
+          </div>
+          <!-- Why Narrative -->
+          <div style="border-left:3px solid #007aff;padding:12px 14px;background:rgba(0,122,255,0.03);border-radius:0 8px 8px 0;margin-bottom:12px">
+            <div style="font-family:Inter,sans-serif;font-size:13px;line-height:1.6;color:#636366;font-style:italic">"US Stocks drifted to 62% (target: 58%). Sold a portion and redistributed to International and Bonds."</div>
+          </div>
+          <!-- Impact Footer -->
+          <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(52,199,89,0.06);border-radius:10px">
+            <div style="width:20px;height:20px;border-radius:50%;background:rgba(52,199,89,0.15);display:flex;align-items:center;justify-content:center">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2.5" stroke-linecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+            </div>
+            <div style="font-family:Inter,sans-serif;font-size:13px;font-weight:500;color:#34c759">Diversification 87% → 92%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Activity 4: Deposit -->
+      <div style="background:#fff;border-radius:16px;border:1px solid rgba(0,0,0,0.06);margin-bottom:12px;overflow:hidden">
+        <div style="padding:16px">
+          <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px">
+            <!-- Avatar -->
+            <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#34c759 0%,#248a3d 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6M23 11h-6"/></svg>
+            </div>
+            <div style="flex:1">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+                <span style="font-family:Inter,sans-serif;font-size:12px;font-weight:500;color:#34c759;background:rgba(52,199,89,0.08);padding:2px 8px;border-radius:6px">You</span>
+                <span style="font-family:Inter,sans-serif;font-size:12px;color:#8e8e93">10:00 AM</span>
+              </div>
+              <div style="font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:600;color:#1c1c1e;margin-bottom:2px">$500 added from Capital One Checking</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700;color:#1c1c1e">$500</div>
+              <div style="display:inline-flex;align-items:center;gap:4px;background:rgba(52,199,89,0.1);padding:2px 8px;border-radius:6px;margin-top:4px">
+                <div style="width:6px;height:6px;border-radius:50%;background:#34c759"></div>
+                <span style="font-family:Inter,sans-serif;font-size:11px;font-weight:500;color:#34c759">Completed</span>
+              </div>
+            </div>
+          </div>
+          <!-- Why Narrative -->
+          <div style="border-left:3px solid #007aff;padding:12px 14px;background:rgba(0,122,255,0.03);border-radius:0 8px 8px 0;margin-bottom:12px">
+            <div style="font-family:Inter,sans-serif;font-size:13px;line-height:1.6;color:#636366;font-style:italic">"You transferred $500 into Advizmo Cash. It'll be deployed in the next Auto Invest cycle."</div>
+          </div>
+          <!-- Impact Footer -->
+          <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(0,122,255,0.06);border-radius:10px">
+            <div style="width:20px;height:20px;border-radius:50%;background:rgba(0,122,255,0.15);display:flex;align-items:center;justify-content:center">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#007aff" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M6 12h12"/></svg>
+            </div>
+            <div style="font-family:Inter,sans-serif;font-size:13px;font-weight:500;color:#007aff">Ready for investment</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- THIS WEEK Header -->
+      <div style="position:sticky;top:126px;z-index:10;padding:20px 0 8px;background:#fff">
+        <div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:0.5px">This Week</div>
+      </div>
+
+      <!-- Activity 5: Tax-Loss Harvesting -->
+      <div style="background:#fff;border-radius:16px;border:1px solid rgba(0,0,0,0.06);margin-bottom:12px;overflow:hidden">
+        <div style="padding:16px">
+          <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px">
+            <!-- Avatar -->
+            <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#007aff 0%,#0055d4 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            </div>
+            <div style="flex:1">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+                <span style="font-family:Inter,sans-serif;font-size:12px;font-weight:500;color:#007aff;background:rgba(0,122,255,0.08);padding:2px 8px;border-radius:6px">Advizmo (Automated)</span>
+                <span style="font-family:Inter,sans-serif;font-size:12px;color:#8e8e93">Monday</span>
+              </div>
+              <div style="font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:600;color:#1c1c1e;margin-bottom:2px">Tax-loss harvesting completed</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700;color:#1c1c1e">$340</div>
+              <div style="display:inline-flex;align-items:center;gap:4px;background:rgba(52,199,89,0.1);padding:2px 8px;border-radius:6px;margin-top:4px">
+                <div style="width:6px;height:6px;border-radius:50%;background:#34c759"></div>
+                <span style="font-family:Inter,sans-serif;font-size:11px;font-weight:500;color:#34c759">Completed</span>
+              </div>
+            </div>
+          </div>
+          <!-- Why Narrative -->
+          <div style="border-left:3px solid #007aff;padding:12px 14px;background:rgba(0,122,255,0.03);border-radius:0 8px 8px 0;margin-bottom:12px">
+            <div style="font-family:Inter,sans-serif;font-size:13px;line-height:1.6;color:#636366;font-style:italic">"International ETF had an unrealized loss. Sold and bought similar fund to maintain exposure while capturing tax benefit."</div>
+          </div>
+          <!-- Impact Footer -->
+          <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(52,199,89,0.06);border-radius:10px">
+            <div style="width:20px;height:20px;border-radius:50%;background:rgba(52,199,89,0.15);display:flex;align-items:center;justify-content:center">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2.5" stroke-linecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+            </div>
+            <div style="font-family:Inter,sans-serif;font-size:13px;font-weight:500;color:#34c759">~$82 tax savings</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Activity 6: Auto Invest Increase -->
+      <div style="background:#fff;border-radius:16px;border:1px solid rgba(0,0,0,0.06);margin-bottom:12px;overflow:hidden">
+        <div style="padding:16px">
+          <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px">
+            <!-- Avatar -->
+            <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#34c759 0%,#248a3d 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6M23 11h-6"/></svg>
+            </div>
+            <div style="flex:1">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+                <span style="font-family:Inter,sans-serif;font-size:12px;font-weight:500;color:#34c759;background:rgba(52,199,89,0.08);padding:2px 8px;border-radius:6px">You</span>
+                <span style="font-family:Inter,sans-serif;font-size:12px;color:#8e8e93">Tuesday</span>
+              </div>
+              <div style="font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:600;color:#1c1c1e;margin-bottom:2px">Auto Invest increased to $500/mo</div>
+            </div>
+            <div style="text-align:right">
+              <div style="display:inline-flex;align-items:center;gap:4px;background:rgba(52,199,89,0.1);padding:2px 8px;border-radius:6px">
+                <div style="width:6px;height:6px;border-radius:50%;background:#34c759"></div>
+                <span style="font-family:Inter,sans-serif;font-size:11px;font-weight:500;color:#34c759">Completed</span>
+              </div>
+            </div>
+          </div>
+          <!-- Why Narrative -->
+          <div style="border-left:3px solid #007aff;padding:12px 14px;background:rgba(0,122,255,0.03);border-radius:0 8px 8px 0;margin-bottom:12px">
+            <div style="font-family:Inter,sans-serif;font-size:13px;line-height:1.6;color:#636366;font-style:italic">"You approved my recommendation. Projected to reach $100K by Dec 2027 — three months early."</div>
+          </div>
+          <!-- Impact Footer -->
+          <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(52,199,89,0.06);border-radius:10px">
+            <div style="width:20px;height:20px;border-radius:50%;background:rgba(52,199,89,0.15);display:flex;align-items:center;justify-content:center">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2.5" stroke-linecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+            </div>
+            <div style="font-family:Inter,sans-serif;font-size:13px;font-weight:500;color:#34c759">Goal 3 months sooner</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- THIS MONTH Header -->
+      <div style="position:sticky;top:126px;z-index:10;padding:20px 0 8px;background:#fff">
+        <div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:0.5px">This Month</div>
+      </div>
+
+      <!-- Activity 7: Vacation Fund -->
+      <div style="background:#fff;border-radius:16px;border:1px solid rgba(0,0,0,0.06);margin-bottom:12px;overflow:hidden">
+        <div style="padding:16px">
+          <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px">
+            <!-- Avatar -->
+            <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#ff9500 0%,#ff6b00 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <div style="flex:1">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+                <span style="font-family:Inter,sans-serif;font-size:12px;font-weight:500;color:#ff9500;background:rgba(255,149,0,0.08);padding:2px 8px;border-radius:6px">System</span>
+                <span style="font-family:Inter,sans-serif;font-size:12px;color:#8e8e93">Dec 15</span>
+              </div>
+              <div style="font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:600;color:#1c1c1e;margin-bottom:2px">Vacation Fund reached $3,000</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700;color:#1c1c1e">$3,000</div>
+              <div style="display:inline-flex;align-items:center;gap:4px;background:rgba(52,199,89,0.1);padding:2px 8px;border-radius:6px;margin-top:4px">
+                <div style="width:6px;height:6px;border-radius:50%;background:#34c759"></div>
+                <span style="font-family:Inter,sans-serif;font-size:11px;font-weight:500;color:#34c759">Completed</span>
+              </div>
+            </div>
+          </div>
+          <!-- Why Narrative -->
+          <div style="border-left:3px solid #007aff;padding:12px 14px;background:rgba(0,122,255,0.03);border-radius:0 8px 8px 0;margin-bottom:12px">
+            <div style="font-family:Inter,sans-serif;font-size:13px;line-height:1.6;color:#636366;font-style:italic">"Congratulations! Consider redirecting $200/mo to Auto Invest for more growth."</div>
+          </div>
+          <!-- Impact Footer -->
+          <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(52,199,89,0.06);border-radius:10px">
+            <div style="width:20px;height:20px;border-radius:50%;background:rgba(52,199,89,0.15);display:flex;align-items:center;justify-content:center">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2.5" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <div style="font-family:Inter,sans-serif;font-size:13px;font-weight:500;color:#34c759">Goal achieved</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Activity 8: Chase Connected -->
+      <div style="background:#fff;border-radius:16px;border:1px solid rgba(0,0,0,0.06);margin-bottom:12px;overflow:hidden">
+        <div style="padding:16px">
+          <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px">
+            <!-- Avatar -->
+            <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#34c759 0%,#248a3d 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6M23 11h-6"/></svg>
+            </div>
+            <div style="flex:1">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+                <span style="font-family:Inter,sans-serif;font-size:12px;font-weight:500;color:#34c759;background:rgba(52,199,89,0.08);padding:2px 8px;border-radius:6px">You</span>
+                <span style="font-family:Inter,sans-serif;font-size:12px;color:#8e8e93">Dec 10</span>
+              </div>
+              <div style="font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:600;color:#1c1c1e;margin-bottom:2px">Chase Savings connected</div>
+            </div>
+            <div style="text-align:right">
+              <div style="display:inline-flex;align-items:center;gap:4px;background:rgba(52,199,89,0.1);padding:2px 8px;border-radius:6px">
+                <div style="width:6px;height:6px;border-radius:50%;background:#34c759"></div>
+                <span style="font-family:Inter,sans-serif;font-size:11px;font-weight:500;color:#34c759">Completed</span>
+              </div>
+            </div>
+          </div>
+          <!-- Why Narrative -->
+          <div style="border-left:3px solid #007aff;padding:12px 14px;background:rgba(0,122,255,0.03);border-radius:0 8px 8px 0;margin-bottom:12px">
+            <div style="font-family:Inter,sans-serif;font-size:13px;line-height:1.6;color:#636366;font-style:italic">"With Chase linked, I can optimize across all your accounts."</div>
+          </div>
+          <!-- Impact Footer -->
+          <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(0,122,255,0.06);border-radius:10px">
+            <div style="width:20px;height:20px;border-radius:50%;background:rgba(0,122,255,0.15);display:flex;align-items:center;justify-content:center">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#007aff" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M6 12h12"/></svg>
+            </div>
+            <div style="font-family:Inter,sans-serif;font-size:13px;font-weight:500;color:#007aff">Full visibility</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- OLDER Header -->
+      <div style="position:sticky;top:126px;z-index:10;padding:20px 0 8px;background:#fff">
+        <div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:0.5px">Older</div>
+      </div>
+
+      <!-- Activity 9: Interest Earned -->
+      <div style="background:#fff;border-radius:16px;border:1px solid rgba(0,0,0,0.06);margin-bottom:12px;overflow:hidden">
+        <div style="padding:16px">
+          <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px">
+            <!-- Avatar -->
+            <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#ff9500 0%,#ff6b00 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M6 12h12"/></svg>
+            </div>
+            <div style="flex:1">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+                <span style="font-family:Inter,sans-serif;font-size:12px;font-weight:500;color:#ff9500;background:rgba(255,149,0,0.08);padding:2px 8px;border-radius:6px">System</span>
+                <span style="font-family:Inter,sans-serif;font-size:12px;color:#8e8e93">Nov 30</span>
+              </div>
+              <div style="font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:600;color:#1c1c1e;margin-bottom:2px">Interest earned $18.42</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700;color:#1c1c1e">$18.42</div>
+              <div style="display:inline-flex;align-items:center;gap:4px;background:rgba(52,199,89,0.1);padding:2px 8px;border-radius:6px;margin-top:4px">
+                <div style="width:6px;height:6px;border-radius:50%;background:#34c759"></div>
+                <span style="font-family:Inter,sans-serif;font-size:11px;font-weight:500;color:#34c759">Completed</span>
+              </div>
+            </div>
+          </div>
+          <!-- Why Narrative -->
+          <div style="border-left:3px solid #007aff;padding:12px 14px;background:rgba(0,122,255,0.03);border-radius:0 8px 8px 0;margin-bottom:12px">
+            <div style="font-family:Inter,sans-serif;font-size:13px;line-height:1.6;color:#636366;font-style:italic">"Advizmo Cash earned interest at 4.1% APY. Compounds automatically."</div>
+          </div>
+          <!-- Impact Footer -->
+          <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(52,199,89,0.06);border-radius:10px">
+            <div style="width:20px;height:20px;border-radius:50%;background:rgba(52,199,89,0.15);display:flex;align-items:center;justify-content:center">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2.5" stroke-linecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+            </div>
+            <div style="font-family:Inter,sans-serif;font-size:13px;font-weight:500;color:#34c759">Passive growth</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bottom Tab Bar -->
+    <div style="position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(255,255,255,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(0,0,0,0.08);padding:8px 0 28px;z-index:100">
+      <div style="display:flex;justify-content:space-around;align-items:center">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:2px;opacity:0.4">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1c1c1e" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          <span style="font-size:10px;font-weight:500;color:#1c1c1e">Home</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:2px;opacity:0.4">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1c1c1e" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <span style="font-size:10px;font-weight:500;color:#1c1c1e">Search</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+          <div style="width:24px;height:24px;border-radius:50%;background:#1c1c1e;display:flex;align-items:center;justify-content:center">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          </div>
+          <span style="font-size:10px;font-weight:600;color:#1c1c1e">Invest</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:2px;opacity:0.4">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1c1c1e" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          <span style="font-size:10px;font-weight:500;color:#1c1c1e">Goals</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:2px;opacity:0.4">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1c1c1e" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span style="font-size:10px;font-weight:500;color:#1c1c1e">Profile</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
