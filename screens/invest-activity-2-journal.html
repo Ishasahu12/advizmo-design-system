@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advizmo — Activity Journal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',sans-serif;background:#f2f2f7;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+  ::-webkit-scrollbar{display:none}
+  .journal-entry{background:#fff;border-radius:16px;padding:20px;margin:0 20px 12px;border-left:4px solid #34c759;transition:transform 0.2s}
+  .journal-entry:hover{transform:translateY(-1px)}
+  .journal-entry.scheduled{border-left-color:#007aff}
+  .entry-date-large{font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#8e8e93;letter-spacing:0.3px;margin-bottom:8px}
+  .entry-narrative{font-family:'Inter',sans-serif;font-size:15px;line-height:1.55;color:#3a3a3c;margin-bottom:16px}
+  .entry-meta{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+  .amount-badge{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:700;color:#1c1c1e;background:#f2f2f7;padding:6px 14px;border-radius:10px}
+  .status-pill{font-size:12px;font-weight:600;padding:5px 12px;border-radius:8px;background:#e8f5e9;color:#2e7d32}
+  .status-pill.scheduled{background:#e3f2fd;color:#1565c0}
+  .impact-tag{font-size:12px;font-weight:500;color:#8e8e93;padding:5px 12px;border-radius:8px;background:#f8f9fa}
+  .date-section{position:sticky;top:82px;z-index:50;padding:14px 20px 8px;background:#f2f2f7}
+  .date-label{font-family:'IBM Plex Sans',sans-serif;font-size:12px;font-weight:700;color:#8e8e93;text-transform:uppercase;letter-spacing:0.8px}
+  .date-sub{font-family:'Inter',sans-serif;font-size:13px;color:#aeaeb2;margin-top:2px}
+</style>
+</head>
+<body>
+
+<!-- Status Bar -->
+<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 20px 0;background:#fff">
+  <span style="font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600;color:#1c1c1e">9:41</span>
+  <div style="display:flex;align-items:center;gap:6px">
+    <svg width="17" height="12" viewBox="0 0 17 12" fill="none"><rect x="0" y="4" width="3" height="8" rx="1" fill="#1c1c1e"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="1" fill="#1c1c1e"/><rect x="9" y="1" width="3" height="11" rx="1" fill="#1c1c1e"/><rect x="13.5" y="0" width="3" height="12" rx="1" fill="#1c1c1e"/></svg>
+    <svg width="15" height="12" viewBox="0 0 15 12" fill="none"><path d="M7.5 2.5C5.8 2.5 4.2 3.2 3 4.4L1.6 3C3.2 1.4 5.3 0.5 7.5 0.5C9.7 0.5 11.8 1.4 13.4 3L12 4.4C10.8 3.2 9.2 2.5 7.5 2.5ZM7.5 6.5C6.5 6.5 5.6 6.9 4.9 7.6L3.5 6.2C4.6 5.1 6 4.5 7.5 4.5C9 4.5 10.4 5.1 11.5 6.2L10.1 7.6C9.4 6.9 8.5 6.5 7.5 6.5ZM7.5 10.5C7 10.5 6.5 10.3 6.2 9.9L7.5 8.5L8.8 9.9C8.5 10.3 8 10.5 7.5 10.5Z" fill="#1c1c1e"/></svg>
+    <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="#1c1c1e" stroke-opacity="0.35"/><rect x="2" y="2" width="18" height="8" rx="2" fill="#1c1c1e"/><path d="M23 4.5V8.5C23.8 8.2 24.5 7.2 24.5 6.5C24.5 5.8 23.8 4.8 23 4.5Z" fill="#1c1c1e" fill-opacity="0.4"/></svg>
+  </div>
+</div>
+
+<!-- Navigation Header -->
+<div style="display:flex;align-items:center;padding:8px 16px 10px;background:#fff;position:sticky;top:44px;z-index:99">
+  <button onclick="location.href='index.html'" style="width:36px;height:36px;border-radius:50%;background:rgba(120,120,128,0.08);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1c1c1e" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+  </button>
+  <div style="flex:1;text-align:center;font-family:'IBM Plex Sans',sans-serif;font-size:17px;font-weight:600;color:#1c1c1e">Activity</div>
+  <div style="width:36px"></div>
+</div>
+
+<!-- Segmented Nav -->
+<div style="display:flex;gap:4px;padding:4px 20px 12px;background:#fff;overflow-x:auto;scrollbar-width:none;position:sticky;top:82px;z-index:98">
+  <button onclick="location.href='invest-overview-1-command.html'" style="flex-shrink:0;padding:8px 18px;border-radius:10px;background:transparent;border:none;font-family:Inter,sans-serif;font-size:13px;font-weight:600;color:#8e8e93;cursor:pointer;white-space:nowrap">Overview</button>
+  <button style="flex-shrink:0;padding:8px 18px;border-radius:10px;background:#1c1c1e;border:none;font-family:Inter,sans-serif;font-size:13px;font-weight:600;color:#fff;cursor:pointer;white-space:nowrap">Activity</button>
+  <button style="flex-shrink:0;padding:8px 18px;border-radius:10px;background:transparent;border:none;font-family:Inter,sans-serif;font-size:13px;font-weight:600;color:#8e8e93;cursor:pointer;white-space:nowrap">Documents</button>
+  <button style="flex-shrink:0;padding:8px 18px;border-radius:10px;background:transparent;border:none;font-family:Inter,sans-serif;font-size:13px;font-weight:600;color:#8e8e93;cursor:pointer;white-space:nowrap">How It's Calculated</button>
+</div>
+
+<!-- Filter Chips -->
+<div style="padding:0 20px 12px;background:#fff;overflow-x:auto;scrollbar-width:none">
+  <div style="display:flex;gap:8px;white-space:nowrap">
+    <span style="padding:8px 16px;border-radius:20px;background:#1c1c1e;color:#fff;font-size:13px;font-weight:600;cursor:pointer">All</span>
+    <span style="padding:8px 16px;border-radius:20px;background:#f2f2f7;color:#3a3a3c;font-size:13px;font-weight:500;cursor:pointer">Investments</span>
+    <span style="padding:8px 16px;border-radius:20px;background:#f2f2f7;color:#3a3a3c;font-size:13px;font-weight:500;cursor:pointer">Money Movement</span>
+    <span style="padding:8px 16px;border-radius:20px;background:#f2f2f7;color:#3a3a3c;font-size:13px;font-weight:500;cursor:pointer">Dividends</span>
+    <span style="padding:8px 16px;border-radius:20px;background:#f2f2f7;color:#3a3a3c;font-size:13px;font-weight:500;cursor:pointer">Portfolio</span>
+    <span style="padding:8px 16px;border-radius:20px;background:#f2f2f7;color:#3a3a3c;font-size:13px;font-weight:500;cursor:pointer">Recommendations</span>
+    <span style="padding:8px 16px;border-radius:20px;background:#f2f2f7;color:#3a3a3c;font-size:13px;font-weight:500;cursor:pointer">Accounts</span>
+    <span style="padding:8px 16px;border-radius:20px;background:#f2f2f7;color:#3a3a3c;font-size:13px;font-weight:500;cursor:pointer">Tax</span>
+  </div>
+</div>
+
+<!-- Search -->
+<div style="padding:0 20px 12px;background:#fff">
+  <div style="display:flex;align-items:center;gap:8px;padding:10px 14px;background:#f8f9fa;border-radius:12px">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8e8e93" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M16 16l4 4"/></svg>
+    <input type="text" placeholder="Search your journal..." style="border:none;outline:none;font-family:Inter,sans-serif;font-size:15px;color:#1c1c1e;flex:1;background:transparent">
+  </div>
+</div>
+
+<!-- Journal Content -->
+<div style="max-width:430px;margin:0 auto;padding-bottom:40px">
+
+  <!-- TODAY -->
+  <div class="date-section">
+    <div class="date-label">Today</div>
+    <div class="date-sub">December 20, 2025</div>
+  </div>
+
+  <div class="journal-entry">
+    <div class="entry-narrative">Your money went to work today. <strong>$520</strong> was automatically invested into your Aggressive Portfolio — the one focused on long-term growth. The market was open, so Advizmo moved quickly. You're now earning potential returns on every dollar.</div>
+    <div class="entry-meta">
+      <span class="amount-badge">$520</span>
+      <span class="status-pill">Completed</span>
+      <span class="impact-tag">Annual return potential +0.4%</span>
+    </div>
+  </div>
+
+  <div class="journal-entry">
+    <div class="entry-narrative">Your investments paid you back. <strong>$42.18</strong> arrived from your VTI holdings — this is your share of profits from thousands of companies. It's been reinvested automatically to keep compounding.</div>
+    <div class="entry-meta">
+      <span class="amount-badge">$42.18</span>
+      <span class="status-pill">Completed</span>
+      <span class="impact-tag">Portfolio value increased</span>
+    </div>
+  </div>
+
+  <!-- YESTERDAY -->
+  <div class="date-section">
+    <div class="date-label">Yesterday</div>
+    <div class="date-sub">December 19, 2025</div>
+  </div>
+
+  <div class="journal-entry">
+    <div class="entry-narrative">Advizmo kept your portfolio balanced. While you were going about your day, it automatically rebalanced your investments — selling a bit of what grew too much and buying what was underweighted. Your diversification score went from 87% to 92%.</div>
+    <div class="entry-meta">
+      <span class="status-pill">Completed</span>
+      <span class="impact-tag">Diversification improved</span>
+    </div>
+  </div>
+
+  <div class="journal-entry">
+    <div class="entry-narrative">New money arrived. <strong>$500</strong> was transferred from your Capital One Checking into Advizmo Cash. It'll be invested in the next Auto Invest cycle — likely tomorrow when markets open.</div>
+    <div class="entry-meta">
+      <span class="amount-badge">$500</span>
+      <span class="status-pill">Completed</span>
+      <span class="impact-tag">Ready for next investment</span>
+    </div>
+  </div>
+
+  <!-- THIS WEEK -->
+  <div class="date-section">
+    <div class="date-label">This Week</div>
+    <div class="date-sub">December 15 – 20, 2025</div>
+  </div>
+
+  <div class="journal-entry">
+    <div class="entry-narrative">Advizmo found you <strong>$82</strong> in potential tax savings. It sold an international ETF at a loss (that's a good thing here) and immediately bought a similar one. You keep the same exposure but save on taxes.</div>
+    <div class="entry-meta">
+      <span class="amount-badge">$340 harvested</span>
+      <span class="status-pill">Completed</span>
+      <span class="impact-tag">~$82 tax savings</span>
+    </div>
+  </div>
+
+  <div class="journal-entry">
+    <div class="entry-narrative">You approved a smart change. Your Auto Invest increased from $400 to <strong>$500/month</strong>. At this pace, you'll hit $100K three months earlier than planned.</div>
+    <div class="entry-meta">
+      <span class="status-pill">Completed</span>
+      <span class="impact-tag">Goal reached 3 months sooner</span>
+    </div>
+  </div>
+
+  <div class="journal-entry">
+    <div class="entry-narrative">You updated your Emergency Fund goal to <strong>$10,000</strong>. You're at $8,700 — just $1,300 to go. Keep going.</div>
+    <div class="entry-meta">
+      <span class="status-pill">Completed</span>
+      <span class="impact-tag">87% complete</span>
+    </div>
+  </div>
+
+  <!-- THIS MONTH -->
+  <div class="date-section">
+    <div class="date-label">This Month</div>
+    <div class="date-sub">December 2025</div>
+  </div>
+
+  <div class="journal-entry">
+    <div class="entry-narrative">Congratulations — your Vacation Fund hit <strong>$3,000</strong>! That's the target you set. Advizmo suggests redirecting that $200/month to Auto Invest for even more growth.</div>
+    <div class="entry-meta">
+      <span class="amount-badge">$3,000</span>
+      <span class="status-pill">Completed</span>
+      <span class="impact-tag">Goal achieved</span>
+    </div>
+  </div>
+
+  <div class="journal-entry">
+    <div class="entry-narrative">Your Chase Savings account is now connected. Advizmo can see the full picture and optimize across all your accounts.</div>
+    <div class="entry-meta">
+      <span class="status-pill">Completed</span>
+      <span class="impact-tag">Full financial visibility</span>
+    </div>
+  </div>
+
+  <!-- EARLIER -->
+  <div class="date-section">
+    <div class="date-label">Earlier</div>
+    <div class="date-sub">November 2025</div>
+  </div>
+
+  <div class="journal-entry">
+    <div class="entry-narrative">Your Advizmo Cash earned <strong>$18.42</strong> in interest at 4.1% APY. It compounds automatically — no action needed from you.</div>
+    <div class="entry-meta">
+      <span class="amount-badge">$18.42</span>
+      <span class="status-pill">Completed</span>
+      <span class="impact-tag">Passive growth</span>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
