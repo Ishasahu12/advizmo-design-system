@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Financial Intelligence – Advizmo</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:#f8f9fa;font-family:'Inter',sans-serif;color:#1c1c1e;max-width:430px;margin:0 auto;min-height:100vh;padding-bottom:100px}
+.sb{height:44px;padding:14px 20px 0;display:flex;justify-content:space-between;align-items:center;background:#f8f9fa;position:sticky;top:0;z-index:100}
+.sbt{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600}
+.nh{display:flex;align-items:center;padding:8px 16px 10px;background:#f8f9fa;position:sticky;top:44px;z-index:99}
+.nh .back{width:36px;height:36px;border-radius:50%;background:rgba(120,120,128,.08);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.nh .back svg{width:18px;height:18px;fill:none;stroke:#1c1c1e;stroke-width:2.5;stroke-linecap:round}
+.nh .title{flex:1;text-align:center;font-family:'IBM Plex Sans',sans-serif;font-size:17px;font-weight:600}
+.snav{display:flex;gap:4px;padding:4px 20px 12px;background:#f8f9fa;overflow-x:auto;scrollbar-width:none;position:sticky;top:82px;z-index:98}
+.snav::-webkit-scrollbar{display:none}
+.snav button{flex-shrink:0;padding:8px 18px;border-radius:10px;border:none;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+.snav .on{background:#1c1c1e;color:#fff}.snav .off{background:transparent;color:#8e8e93}
+.ct{padding:0 20px}
+.hero{background:linear-gradient(135deg,#0f172a,#1e293b);border-radius:16px;padding:20px;color:#fff;margin:16px 0 20px}
+.hero-label{font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.hero-title{font-family:'IBM Plex Sans',sans-serif;font-size:20px;font-weight:700;color:#fff;line-height:1.3;margin-bottom:4px}
+.hero-sub{font-size:13px;color:#94a3b8}
+.gh{padding:16px 0 8px;font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:.06em}
+
+/* Interactive Card */
+.int-card{background:#fff;border-radius:14px;margin-bottom:10px;box-shadow:0 1px 2px rgba(0,0,0,.04);overflow:hidden;cursor:pointer}
+.int-card-header{padding:16px;display:flex;align-items:center;gap:12px}
+.int-card-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px}
+.int-card-icon.blue{background:#e0efff}
+.int-card-icon.green{background:#eefbf4}
+.int-card-icon.amber{background:#fef3c7}
+.int-card-icon.purple{background:#f3e8ff}
+.int-card-icon.rose{background:#fce7f3}
+.int-card-info{flex:1}
+.int-card-title{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600;color:#1c1c1e}
+.int-card-sub{font-size:12px;color:#8e8e93;margin-top:1px}
+.int-card-value{font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700;color:#1c1c1e;flex-shrink:0}
+.int-card-value.green{color:#166f47}
+.int-card-chevron{color:#c7c7cc;font-size:16px;flex-shrink:0;transition:transform .2s}
+.int-card.open .int-card-chevron{transform:rotate(90deg)}
+.int-card-body{padding:0 16px 16px;display:none}
+.int-card.open .int-card-body{display:block}
+.int-card-divider{height:1px;background:#f2f2f7;margin-bottom:12px}
+
+.calc-row{display:flex;align-items:center;justify-content:space-between;padding:6px 0}
+.calc-row+.calc-row{border-top:1px solid rgba(0,0,0,.03)}
+.calc-text{font-size:12px;color:#6b7280;flex:1}
+.calc-val{font-family:'IBM Plex Sans',sans-serif;font-size:12px;font-weight:600;color:#1c1c1e;flex-shrink:0;text-align:right}
+.calc-val.green{color:#166f47}
+.calc-val.amber{color:#c2790a}
+.calc-result{background:#eefbf4;border-radius:8px;padding:10px 12px;margin-top:10px;display:flex;justify-content:space-between;align-items:center}
+.calc-result-label{font-size:12px;color:#166f47;font-weight:600}
+.calc-result-value{font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:700;color:#166f47}
+
+.flow-mini{display:flex;align-items:center;gap:6px;margin:8px 0}
+.flow-mini-box{background:#f8f9fa;border-radius:6px;padding:6px 10px;font-size:11px;font-weight:600;color:#374151;text-align:center;flex:1}
+.flow-mini-arrow{color:#c7c7cc;font-size:12px;flex-shrink:0}
+
+.perf-bar-row{display:flex;align-items:center;gap:8px;margin:4px 0}
+.perf-bar-label{font-size:11px;color:#6b7280;width:70px;flex-shrink:0}
+.perf-bar-bg{flex:1;height:6px;background:#f2f2f7;border-radius:3px;overflow:hidden}
+.perf-bar-fill{height:100%;border-radius:3px}
+.perf-bar-value{font-family:'IBM Plex Sans',sans-serif;font-size:11px;font-weight:600;color:#1c1c1e;width:55px;text-align:right;flex-shrink:0}
+
+.impact-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.impact-item{background:#f8f9fa;border-radius:8px;padding:10px;text-align:center}
+.impact-icon{font-size:18px;margin-bottom:4px}
+.impact-label{font-size:10px;color:#8e8e93;margin-bottom:2px}
+.impact-val{font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:700;color:#1c1c1e}
+.impact-change{font-size:10px;color:#166f47;font-weight:600}
+</style>
+</head>
+<body>
+
+<div class="sb"><span class="sbt">9:41</span><div style="display:flex;gap:5px;align-items:center"><svg width="16" height="12" viewBox="0 0 16 12"><path d="M1 7.5c1.5-2 3.5-3 5.5-3s4 1 5.5 3" stroke="#1c1c1e" stroke-width="1.5" fill="none" stroke-linecap="round"/><circle cx="7" cy="12" r="1.2"/></svg><svg width="28" height="13" viewBox="0 0 28 13"><rect x="0" y=".5" width="23" height="12" rx="3" stroke="#1c1c1e" stroke-width="1" fill="none"/><rect x="24" y="4" width="2.5" height="5" rx="1" fill="#1c1c1e" opacity=".3"/><rect x="1.5" y="2" width="18" height="9" rx="1.5" fill="#1c1c1e"/></svg></div></div>
+
+<div class="nh">
+  <button class="back" onclick="location.href='index.html'"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+  <div class="title">Financial Intelligence</div>
+  <div style="width:36px"></div>
+</div>
+
+<div class="snav">
+  <button class="off" onclick="location.href='invest-overview-1-command.html'">Overview</button>
+  <button class="off" onclick="location.href='invest-activity-1-timeline.html'">Activity</button>
+  <button class="off" onclick="location.href='invest-documents-1-files.html'">Documents</button>
+  <button class="on">Math</button>
+</div>
+
+<div class="ct">
+
+  <div class="hero">
+    <div class="hero-label">Interactive Breakdown</div>
+    <div class="hero-title">Tap any card to see the math</div>
+    <div class="hero-sub">Complete transparency into every financial decision.</div>
+  </div>
+
+  <!-- Money Flow Card -->
+  <div class="gh">Money Flow</div>
+  <div class="int-card" onclick="this.classList.toggle('open')">
+    <div class="int-card-header">
+      <div class="int-card-icon blue">💸</div>
+      <div class="int-card-info"><div class="int-card-title">December Money Movement</div><div class="int-card-sub">Chase Checking → Investments & Reserve</div></div>
+      <div class="int-card-value">$720</div>
+      <div class="int-card-chevron">›</div>
+    </div>
+    <div class="int-card-body">
+      <div class="int-card-divider"></div>
+      <div class="flow-mini">
+        <div class="flow-mini-box">Chase Checking<br><span style="font-size:9px;color:#8e8e93">$1,200</span></div>
+        <div class="flow-mini-arrow">→</div>
+        <div class="flow-mini-box" style="background:#eefbf4;color:#166f47">Portfolio<br><span style="font-size:9px">$520</span></div>
+      </div>
+      <div class="flow-mini">
+        <div class="flow-mini-box">Chase Checking<br><span style="font-size:9px;color:#8e8e93">$1,200</span></div>
+        <div class="flow-mini-arrow">→</div>
+        <div class="flow-mini-box" style="background:#fef3c7;color:#c2790a">Reserve<br><span style="font-size:9px">$200</span></div>
+      </div>
+      <div class="calc-row"><div class="calc-text">Total Available</div><div class="calc-val">$1,200.00</div></div>
+      <div class="calc-row"><div class="calc-text">Total Moved</div><div class="calc-val green">$720.00</div></div>
+      <div class="calc-row"><div class="calc-text">Remaining in Checking</div><div class="calc-val">$480.00</div></div>
+    </div>
+  </div>
+
+  <!-- Recommendation Card -->
+  <div class="gh">Recommendation</div>
+  <div class="int-card" onclick="this.classList.toggle('open')">
+    <div class="int-card-header">
+      <div class="int-card-icon amber">🧮</div>
+      <div class="int-card-info"><div class="int-card-title">How $520 Was Calculated</div><div class="int-card-sub">Auto Invest recommendation logic</div></div>
+      <div class="int-card-value">$520</div>
+      <div class="int-card-chevron">›</div>
+    </div>
+    <div class="int-card-body">
+      <div class="int-card-divider"></div>
+      <div class="calc-row"><div class="calc-text">Checking Balance</div><div class="calc-val">$1,200.00</div></div>
+      <div class="calc-row"><div class="calc-text">− Upcoming Bills (3 days)</div><div class="calc-val amber">−$380.00</div></div>
+      <div class="calc-row"><div class="calc-text">− Reserve Auto-Save</div><div class="calc-val amber">−$200.00</div></div>
+      <div class="calc-row"><div class="calc-text">− Comfort Buffer</div><div class="calc-val amber">−$100.00</div></div>
+      <div class="calc-result"><div class="calc-result-label">Safe to Invest</div><div class="calc-result-value">$520.00</div></div>
+    </div>
+  </div>
+
+  <!-- Investment Allocation Card -->
+  <div class="gh">Investment Allocation</div>
+  <div class="int-card" onclick="this.classList.toggle('open')">
+    <div class="int-card-header">
+      <div class="int-card-icon purple">📊</div>
+      <div class="int-card-info"><div class="int-card-title">Where $520 Went</div><div class="int-card-sub">Aggressive Portfolio allocation</div></div>
+      <div class="int-card-value">$520</div>
+      <div class="int-card-chevron">›</div>
+    </div>
+    <div class="int-card-body">
+      <div class="int-card-divider"></div>
+      <div class="perf-bar-row"><div class="perf-bar-label">VTI (58%)</div><div class="perf-bar-bg"><div class="perf-bar-fill" style="width:58%;background:#1551a8"></div></div><div class="perf-bar-value">$301.60</div></div>
+      <div class="perf-bar-row"><div class="perf-bar-label">VXUS (18%)</div><div class="perf-bar-bg"><div class="perf-bar-fill" style="width:18%;background:#7c3aed"></div></div><div class="perf-bar-value">$93.60</div></div>
+      <div class="perf-bar-row"><div class="perf-bar-label">BND (14%)</div><div class="perf-bar-bg"><div class="perf-bar-fill" style="width:14%;background:#166f47"></div></div><div class="perf-bar-value">$72.80</div></div>
+      <div class="perf-bar-row"><div class="perf-bar-label">VNQ (10%)</div><div class="perf-bar-bg"><div class="perf-bar-fill" style="width:10%;background:#c2790a"></div></div><div class="perf-bar-value">$52.00</div></div>
+      <div class="calc-row"><div class="calc-text">Total Invested</div><div class="calc-val green"><strong>$520.00</strong></div></div>
+    </div>
+  </div>
+
+  <!-- Tax Savings Card -->
+  <div class="gh">Tax Savings</div>
+  <div class="int-card" onclick="this.classList.toggle('open')">
+    <div class="int-card-header">
+      <div class="int-card-icon green">🎁</div>
+      <div class="int-card-info"><div class="int-card-title">How $482 Was Saved</div><div class="int-card-sub">Tax optimization breakdown</div></div>
+      <div class="int-card-value green">$482</div>
+      <div class="int-card-chevron">›</div>
+    </div>
+    <div class="int-card-body">
+      <div class="int-card-divider"></div>
+      <div class="calc-row"><div class="calc-text">Tax-Loss Harvesting ($340 × 24%)</div><div class="calc-val green">$81.60</div></div>
+      <div class="calc-row"><div class="calc-text">Long-term Gains Benefit</div><div class="calc-val green">$216.00</div></div>
+      <div class="calc-row"><div class="calc-text">Qualified Dividend Savings</div><div class="calc-val green">$48.20</div></div>
+      <div class="calc-row"><div class="calc-text">Tax-Free Reinvestment Growth</div><div class="calc-val green">$136.20</div></div>
+      <div class="calc-result"><div class="calc-result-label">Total Tax Savings</div><div class="calc-result-value">$482.00</div></div>
+    </div>
+  </div>
+
+  <!-- Reserve Card -->
+  <div class="gh">Reserve</div>
+  <div class="int-card" onclick="this.classList.toggle('open')">
+    <div class="int-card-header">
+      <div class="int-card-icon rose">🛡️</div>
+      <div class="int-card-info"><div class="int-card-title">Emergency Fund Progress</div><div class="int-card-sub">3-month target: $9,600</div></div>
+      <div class="int-card-value">84%</div>
+      <div class="int-card-chevron">›</div>
+    </div>
+    <div class="int-card-body">
+      <div class="int-card-divider"></div>
+      <div class="calc-row"><div class="calc-text">Monthly Expenses</div><div class="calc-val">$3,200</div></div>
+      <div class="calc-row"><div class="calc-text">Target (3 months)</div><div class="calc-val">$9,600</div></div>
+      <div class="calc-row"><div class="calc-text">Current Balance</div><div class="calc-val">$8,120</div></div>
+      <div class="calc-row"><div class="calc-text">Monthly Auto-Save</div><div class="calc-val">$200</div></div>
+      <div class="calc-row"><div class="calc-text">Remaining</div><div class="calc-val amber">$1,480</div></div>
+      <div class="calc-row"><div class="calc-text">Projected Completion</div><div class="calc-val green">Mar 2025</div></div>
+    </div>
+  </div>
+
+  <!-- Performance Card -->
+  <div class="gh">Performance</div>
+  <div class="int-card" onclick="this.classList.toggle('open')">
+    <div class="int-card-header">
+      <div class="int-card-icon blue">📈</div>
+      <div class="int-card-info"><div class="int-card-title">Where Returns Came From</div><div class="int-card-sub">YTD Performance Attribution</div></div>
+      <div class="int-card-value green">+$4,230</div>
+      <div class="int-card-chevron">›</div>
+    </div>
+    <div class="int-card-body">
+      <div class="int-card-divider"></div>
+      <div class="perf-bar-row"><div class="perf-bar-label">Market</div><div class="perf-bar-bg"><div class="perf-bar-fill" style="width:67%;background:#1551a8"></div></div><div class="perf-bar-value" style="color:#166f47">+$2,840</div></div>
+      <div class="perf-bar-row"><div class="perf-bar-label">Dividends</div><div class="perf-bar-bg"><div class="perf-bar-fill" style="width:16%;background:#7c3aed"></div></div><div class="perf-bar-value" style="color:#166f47">+$680</div></div>
+      <div class="perf-bar-row"><div class="perf-bar-label">Interest</div><div class="perf-bar-bg"><div class="perf-bar-fill" style="width:8%;background:#166f47"></div></div><div class="perf-bar-value" style="color:#166f47">+$320</div></div>
+      <div class="perf-bar-row"><div class="perf-bar-label">Rebalancing</div><div class="perf-bar-bg"><div class="perf-bar-fill" style="width:4%;background:#c2790a"></div></div><div class="perf-bar-value" style="color:#166f47">+$190</div></div>
+      <div class="perf-bar-row"><div class="perf-bar-label">Cash Opt.</div><div class="perf-bar-bg"><div class="perf-bar-fill" style="width:5%;background:#be185d"></div></div><div class="perf-bar-value" style="color:#166f47">+$200</div></div>
+      <div class="calc-row"><div class="calc-text">Total Return</div><div class="calc-val green"><strong>+$4,230 (11.0%)</strong></div></div>
+    </div>
+  </div>
+
+  <!-- Action Impact Card -->
+  <div class="gh">Action Impact</div>
+  <div class="int-card" onclick="this.classList.toggle('open')">
+    <div class="int-card-header">
+      <div class="int-card-icon green">✅</div>
+      <div class="int-card-info"><div class="int-card-title">Measurable Outcomes</div><div class="int-card-sub">Q4 2024 Results</div></div>
+      <div class="int-card-value green">5/5</div>
+      <div class="int-card-chevron">›</div>
+    </div>
+    <div class="int-card-body">
+      <div class="int-card-divider"></div>
+      <div class="impact-grid">
+        <div class="impact-item"><div class="impact-icon">📊</div><div class="impact-label">Health Score</div><div class="impact-val">90</div><div class="impact-change">from 82</div></div>
+        <div class="impact-item"><div class="impact-icon">📈</div><div class="impact-label">Annual Return</div><div class="impact-val">$4,230</div><div class="impact-change">+11.0%</div></div>
+        <div class="impact-item"><div class="impact-icon">🛡️</div><div class="impact-label">Emergency Fund</div><div class="impact-val">84%</div><div class="impact-change">from 68%</div></div>
+        <div class="impact-item"><div class="impact-icon">💰</div><div class="impact-label">Bills Covered</div><div class="impact-val">100%</div><div class="impact-change">All reserved</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+document.querySelectorAll('.int-card').forEach(c=>{
+  c.addEventListener('click',function(){
+    this.classList.toggle('open')
+  })
+});
+</script>
+</body>
+</html>
