@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Documents – Advizmo</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:#f8f9fa;font-family:'Inter',sans-serif;color:#1c1c1e;max-width:430px;margin:0 auto;min-height:100vh;padding-bottom:100px}
+.sb{height:44px;padding:14px 20px 0;display:flex;justify-content:space-between;align-items:center;background:#f8f9fa;position:sticky;top:0;z-index:100}
+.sbt{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600}
+.nh{display:flex;align-items:center;padding:8px 16px 10px;background:#f8f9fa;position:sticky;top:44px;z-index:99}
+.nh .back{width:36px;height:36px;border-radius:50%;background:rgba(120,120,128,.08);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.nh .back svg{width:18px;height:18px;fill:none;stroke:#1c1c1e;stroke-width:2.5;stroke-linecap:round}
+.nh .title{flex:1;text-align:center;font-family:'IBM Plex Sans',sans-serif;font-size:17px;font-weight:600}
+.snav{display:flex;gap:4px;padding:4px 20px 12px;background:#f8f9fa;overflow-x:auto;scrollbar-width:none;position:sticky;top:82px;z-index:98}
+.snav::-webkit-scrollbar{display:none}
+.snav button{flex-shrink:0;padding:8px 18px;border-radius:10px;border:none;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+.snav .on{background:#1c1c1e;color:#fff}.snav .off{background:transparent;color:#8e8e93}
+.filters{display:flex;gap:6px;padding:0 20px 12px;background:#f8f9fa;overflow-x:auto;scrollbar-width:none}
+.filters::-webkit-scrollbar{display:none}
+.filters button{flex-shrink:0;padding:7px 14px;border-radius:20px;border:1px solid rgba(0,0,0,.08);font-family:'Inter',sans-serif;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
+.filters .on{background:#1c1c1e;color:#fff;border-color:#1c1c1e}.filters .off{background:#fff;color:#6b7280}
+.search{padding:0 20px 16px;background:#f8f9fa}
+.search-in{display:flex;align-items:center;gap:8px;padding:10px 14px;background:#fff;border-radius:12px;border:1px solid rgba(0,0,0,.06)}
+.search-in svg{width:16px;height:16px;flex-shrink:0}
+.search-in input{border:none;outline:none;font-family:'Inter',sans-serif;font-size:15px;color:#1c1c1e;flex:1;background:transparent}
+.ct{padding:0 20px}
+.tax-hero{background:linear-gradient(135deg,#1c1c1e,#2d2d30);border-radius:16px;padding:20px;margin-bottom:20px;color:#fff}
+.tax-hero-label{font-size:11px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.tax-hero-value{font-family:'IBM Plex Sans',sans-serif;font-size:32px;font-weight:700;color:#fff}
+.tax-hero-sub{font-size:13px;color:#9ca3af;margin-top:4px}
+.tax-hero-row{display:flex;gap:12px;margin-top:16px}
+.tax-hero-stat{flex:1;background:rgba(255,255,255,.08);border-radius:10px;padding:12px}
+.tax-hero-stat-val{font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700;color:#fff}
+.tax-hero-stat-label{font-size:11px;color:#9ca3af;margin-top:2px}
+.year-label{padding:12px 0 6px;font-family:'IBM Plex Sans',sans-serif;font-size:22px;font-weight:700;color:#1c1c1e}
+.month-label{padding:10px 0 6px;font-size:13px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:.04em}
+.tl-wrap{position:relative;padding-left:24px}
+.tl-wrap::before{content:'';position:absolute;left:7px;top:8px;bottom:8px;width:2px;background:#e5e7eb;border-radius:1px}
+.tl-item{position:relative;padding:10px 0 10px 0}
+.tl-dot{position:absolute;left:-20px;top:14px;width:10px;height:10px;border-radius:50%;border:2px solid #e5e7eb;background:#fff;z-index:1}
+.tl-dot.stmt{border-color:#1551a8;background:#e0efff}
+.tl-dot.tax{border-color:#c2790a;background:#fef3c7}
+.tl-dot.report{border-color:#7c3aed;background:#f3e8ff}
+.tl-dot.conf{border-color:#166f47;background:#eefbf4}
+.tl-dot.port{border-color:#be185d;background:#fce7f3}
+.tl-card{background:#fff;border-radius:12px;padding:14px;box-shadow:0 1px 2px rgba(0,0,0,.04);cursor:pointer;transition:all .15s}
+.tl-card:active{transform:scale(.98)}
+.tl-top{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.tl-tag{padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.tl-tag.stmt{background:#e0efff;color:#1551a8}
+.tl-tag.tax{background:#fef3c7;color:#c2790a}
+.tl-tag.report{background:#f3e8ff;color:#7c3aed}
+.tl-tag.conf{background:#eefbf4;color:#166f47}
+.tl-tag.port{background:#fce7f3;color:#be185d}
+.tl-date{font-size:11px;color:#8e8e93;margin-left:auto}
+.tl-title{font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600;color:#1c1c1e;margin-bottom:2px}
+.tl-desc{font-size:12px;color:#6b7280;line-height:1.4}
+.tl-actions{display:flex;gap:6px;margin-top:8px}
+.tl-btn{padding:5px 10px;border-radius:6px;border:1px solid rgba(0,0,0,.08);background:#fff;font-size:11px;font-weight:600;color:#6b7280;cursor:pointer;display:flex;align-items:center;gap:4px}
+.tl-btn svg{width:12px;height:12px}
+</style>
+</head>
+<body>
+
+<div class="sb"><span class="sbt">9:41</span><div style="display:flex;gap:5px;align-items:center"><svg width="16" height="12" viewBox="0 0 16 12"><path d="M1 7.5c1.5-2 3.5-3 5.5-3s4 1 5.5 3" stroke="#1c1c1e" stroke-width="1.5" fill="none" stroke-linecap="round"/><circle cx="7" cy="12" r="1.2"/></svg><svg width="28" height="13" viewBox="0 0 28 13"><rect x="0" y=".5" width="23" height="12" rx="3" stroke="#1c1c1e" stroke-width="1" fill="none"/><rect x="24" y="4" width="2.5" height="5" rx="1" fill="#1c1c1e" opacity=".3"/><rect x="1.5" y="2" width="18" height="9" rx="1.5" fill="#1c1c1e"/></svg></div></div>
+
+<div class="nh">
+  <button class="back" onclick="location.href='index.html'"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+  <div class="title">Documents</div>
+  <div style="width:36px"></div>
+</div>
+
+<div class="snav">
+  <button class="off" onclick="location.href='invest-overview-1-command.html'">Overview</button>
+  <button class="off" onclick="location.href='invest-activity-1-timeline.html'">Activity</button>
+  <button class="on">Documents</button>
+  <button class="off">How It's Calculated</button>
+</div>
+
+<div class="filters">
+  <button class="on">All</button><button class="off">Statements</button><button class="off">Tax</button><button class="off">Reports</button><button class="off">Confirmations</button><button class="off">Recent</button>
+</div>
+
+<div class="search">
+  <div class="search-in">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#8e8e93" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M16 16l4 4"/></svg>
+    <input type="text" placeholder="Search by name, year, or document type...">
+  </div>
+</div>
+
+<div class="ct">
+
+  <!-- Tax Savings Hero -->
+  <div class="tax-hero">
+    <div class="tax-hero-label">Estimated Tax Savings</div>
+    <div class="tax-hero-value">$482</div>
+    <div class="tax-hero-sub">Updated yesterday</div>
+    <div class="tax-hero-row">
+      <div class="tax-hero-stat"><div class="tax-hero-stat-val">3</div><div class="tax-hero-stat-label">Tax Docs Ready</div></div>
+      <div class="tax-hero-stat"><div class="tax-hero-stat-val">$340</div><div class="tax-hero-stat-label">Harvested Last Month</div></div>
+    </div>
+  </div>
+
+  <!-- 2025 -->
+  <div class="year-label">2025</div>
+  <div class="month-label">January</div>
+  <div class="tl-wrap">
+    <div class="tl-item">
+      <div class="tl-dot tax"></div>
+      <div class="tl-card">
+        <div class="tl-top"><span class="tl-tag tax">Tax</span><span class="tl-date">Jan 31</span></div>
+        <div class="tl-title">1099 Consolidated Statement</div>
+        <div class="tl-desc">Official tax document with dividends, interest, and gains for the 2024 tax year.</div>
+        <div class="tl-actions"><button class="tl-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Preview</button><button class="tl-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Download</button></div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot tax"></div>
+      <div class="tl-card">
+        <div class="tl-top"><span class="tl-tag tax">Tax</span><span class="tl-date">Jan 15</span></div>
+        <div class="tl-title">Tax-Loss Harvesting Summary</div>
+        <div class="tl-desc">Complete record of tax-loss harvesting transactions and estimated savings.</div>
+        <div class="tl-actions"><button class="tl-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Preview</button><button class="tl-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Download</button></div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot tax"></div>
+      <div class="tl-card">
+        <div class="tl-top"><span class="tl-tag tax">Tax</span><span class="tl-date">Jan 15</span></div>
+        <div class="tl-title">Capital Gains Report</div>
+        <div class="tl-desc">Realized and unrealized gains and losses summary for tax filing.</div>
+        <div class="tl-actions"><button class="tl-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Preview</button><button class="tl-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Download</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2024 -->
+  <div class="year-label">2024</div>
+  <div class="month-label">December</div>
+  <div class="tl-wrap">
+    <div class="tl-item">
+      <div class="tl-dot stmt"></div>
+      <div class="tl-card">
+        <div class="tl-top"><span class="tl-tag stmt">Statement</span><span class="tl-date">Dec 31</span></div>
+        <div class="tl-title">December 2024 Statement</div>
+        <div class="tl-desc">Monthly portfolio summary with holdings, transactions, and performance.</div>
+        <div class="tl-actions"><button class="tl-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Preview</button><button class="tl-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Download</button></div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot report"></div>
+      <div class="tl-card">
+        <div class="tl-top"><span class="tl-tag report">Report</span><span class="tl-date">Dec 31</span></div>
+        <div class="tl-title">2024 Year-End Summary</div>
+        <div class="tl-desc">Comprehensive annual overview of your entire investment journey this year.</div>
+        <div class="tl-actions"><button class="tl-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Preview</button><button class="tl-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Download</button></div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot conf"></div>
+      <div class="tl-card">
+        <div class="tl-top"><span class="tl-tag conf">Confirmation</span><span class="tl-date">Dec 30</span></div>
+        <div class="tl-title">Auto Invest Confirmation</div>
+        <div class="tl-desc">$520 invested into your Aggressive Portfolio. VTI, VXUS, BND purchased.</div>
+        <div class="tl-actions"><button class="tl-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Preview</button><button class="tl-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Download</button></div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot conf"></div>
+      <div class="tl-card">
+        <div class="tl-top"><span class="tl-tag conf">Confirmation</span><span class="tl-date">Dec 29</span></div>
+        <div class="tl-title">Rebalancing Confirmation</div>
+        <div class="tl-desc">Portfolio rebalanced — US Stocks returned to 58% target allocation.</div>
+        <div class="tl-actions"><button class="tl-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Preview</button><button class="tl-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Download</button></div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot report"></div>
+      <div class="tl-card">
+        <div class="tl-top"><span class="tl-tag report">Report</span><span class="tl-date">Dec 15</span></div>
+        <div class="tl-title">Portfolio Risk Analysis</div>
+        <div class="tl-desc">Detailed risk assessment and volatility analysis of your holdings.</div>
+        <div class="tl-actions"><button class="tl-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Preview</button><button class="tl-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Download</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="month-label">November</div>
+  <div class="tl-wrap">
+    <div class="tl-item">
+      <div class="tl-dot stmt"></div>
+      <div class="tl-card">
+        <div class="tl-top"><span class="tl-tag stmt">Statement</span><span class="tl-date">Nov 30</span></div>
+        <div class="tl-title">November 2024 Statement</div>
+        <div class="tl-desc">Monthly portfolio summary with performance breakdown and dividend info.</div>
+        <div class="tl-actions"><button class="tl-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Preview</button><button class="tl-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Download</button></div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot report"></div>
+      <div class="tl-card">
+        <div class="tl-top"><span class="tl-tag report">Report</span><span class="tl-date">Nov 15</span></div>
+        <div class="tl-title">Investment Strategy Review</div>
+        <div class="tl-desc">Review of your current strategy and recommended adjustments for 2025.</div>
+        <div class="tl-actions"><button class="tl-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Preview</button><button class="tl-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Download</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="month-label">October</div>
+  <div class="tl-wrap">
+    <div class="tl-item">
+      <div class="tl-dot stmt"></div>
+      <div class="tl-card">
+        <div class="tl-top"><span class="tl-tag stmt">Statement</span><span class="tl-date">Oct 31</span></div>
+        <div class="tl-title">October 2024 Statement</div>
+        <div class="tl-desc">Monthly portfolio summary with all transactions and holdings.</div>
+        <div class="tl-actions"><button class="tl-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Preview</button><button class="tl-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Download</button></div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot port"></div>
+      <div class="tl-card">
+        <div class="tl-top"><span class="tl-tag port">Portfolio</span><span class="tl-date">Oct 15</span></div>
+        <div class="tl-title">Portfolio Allocation Report</div>
+        <div class="tl-desc">Current allocation breakdown with target vs actual comparisons.</div>
+        <div class="tl-actions"><button class="tl-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Preview</button><button class="tl-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Download</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="month-label">September</div>
+  <div class="tl-wrap">
+    <div class="tl-item">
+      <div class="tl-dot stmt"></div>
+      <div class="tl-card">
+        <div class="tl-top"><span class="tl-tag stmt">Statement</span><span class="tl-date">Sep 30</span></div>
+        <div class="tl-title">Q3 2024 Quarterly Report</div>
+        <div class="tl-desc">Quarterly portfolio performance, allocation analysis, and dividend summary.</div>
+        <div class="tl-actions"><button class="tl-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Preview</button><button class="tl-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Download</button></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+document.querySelectorAll('.filters button').forEach(b=>b.addEventListener('click',function(){this.classList.toggle('on');this.classList.toggle('off')}));
+</script>
+</body>
+</html>
