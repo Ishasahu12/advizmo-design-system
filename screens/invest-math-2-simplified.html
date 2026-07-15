@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>How It's Calculated – Advizmo</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:#f8f9fa;font-family:'Inter',sans-serif;color:#1c1c1e;max-width:430px;margin:0 auto;min-height:100vh;padding-bottom:100px}
+.sb{height:44px;padding:14px 20px 0;display:flex;justify-content:space-between;align-items:center;background:#f8f9fa;position:sticky;top:0;z-index:100}
+.sbt{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600}
+.nh{display:flex;align-items:center;padding:8px 16px 10px;background:#f8f9fa;position:sticky;top:44px;z-index:99}
+.nh .back{width:36px;height:36px;border-radius:50%;background:rgba(120,120,128,.08);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.nh .back svg{width:18px;height:18px;fill:none;stroke:#1c1c1e;stroke-width:2.5;stroke-linecap:round}
+.nh .title{flex:1;text-align:center;font-family:'IBM Plex Sans',sans-serif;font-size:17px;font-weight:600}
+.snav{display:flex;gap:4px;padding:4px 20px 12px;background:#f8f9fa;overflow-x:auto;scrollbar-width:none;position:sticky;top:82px;z-index:98}
+.snav::-webkit-scrollbar{display:none}
+.snav button{flex-shrink:0;padding:8px 18px;border-radius:10px;border:none;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+.snav .on{background:#1c1c1e;color:#fff}.snav .off{background:transparent;color:#8e8e93}
+.ct{padding:0 20px}
+.greeting{text-align:center;padding:20px 0 8px}
+.greeting h2{font-family:'IBM Plex Sans',sans-serif;font-size:24px;font-weight:700;color:#1c1c1e;margin-bottom:4px}
+.greeting p{font-size:14px;color:#8e8e93;line-height:1.4}
+.concept-card{background:#fff;border-radius:16px;padding:20px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.concept-emoji{font-size:36px;margin-bottom:12px}
+.concept-title{font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:600;color:#1c1c1e;margin-bottom:4px}
+.concept-subtitle{font-size:13px;color:#8e8e93;margin-bottom:14px}
+.concept-body{font-size:14px;color:#6b7280;line-height:1.6}
+.visual-row{display:flex;gap:6px;margin:14px 0;overflow-x:auto;scrollbar-width:none}
+.visual-row::-webkit-scrollbar{display:none}
+.visual-pill{flex-shrink:0;display:flex;align-items:center;gap:6px;background:#f8f9fa;border-radius:10px;padding:10px 14px}
+.visual-pill-icon{font-size:20px}
+.visual-pill-text{font-size:12px;font-weight:600;color:#374151}
+.visual-pill-sub{font-size:10px;color:#8e8e93}
+.visual-arrow{flex-shrink:0;display:flex;align-items:center;color:#c7c7cc;font-size:18px}
+.analogy{background:linear-gradient(135deg,#eff6ff,#f0f7ff);border-radius:12px;padding:14px;margin:12px 0}
+.analogy-label{font-size:10px;font-weight:700;color:#1551a8;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+.analogy-text{font-size:13px;color:#374151;line-height:1.5}
+.before-after{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+.ba-item{background:#f8f9fa;border-radius:10px;padding:14px;text-align:center}
+.ba-label{font-size:10px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+.ba-icon{font-size:28px;margin-bottom:6px}
+.ba-text{font-size:13px;font-weight:600;color:#374151}
+.ba-sub{font-size:11px;color:#8e8e93;margin-top:2px}
+.key-point{background:#eefbf4;border-radius:10px;padding:12px 14px;margin:12px 0;display:flex;align-items:center;gap:8px}
+.key-point-icon{font-size:18px;flex-shrink:0}
+.key-point-text{font-size:13px;color:#166f47;font-weight:500;line-height:1.4}
+</style>
+</head>
+<body>
+
+<div class="sb"><span class="sbt">9:41</span><div style="display:flex;gap:5px;align-items:center"><svg width="16" height="12" viewBox="0 0 16 12"><path d="M1 7.5c1.5-2 3.5-3 5.5-3s4 1 5.5 3" stroke="#1c1c1e" stroke-width="1.5" fill="none" stroke-linecap="round"/><circle cx="7" cy="12" r="1.2"/></svg><svg width="28" height="13" viewBox="0 0 28 13"><rect x="0" y=".5" width="23" height="12" rx="3" stroke="#1c1c1e" stroke-width="1" fill="none"/><rect x="24" y="4" width="2.5" height="5" rx="1" fill="#1c1c1e" opacity=".3"/><rect x="1.5" y="2" width="18" height="9" rx="1.5" fill="#1c1c1e"/></svg></div></div>
+
+<div class="nh">
+  <button class="back" onclick="location.href='index.html'"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+  <div class="title">How It's Calculated</div>
+  <div style="width:36px"></div>
+</div>
+
+<div class="snav">
+  <button class="off" onclick="location.href='invest-overview-1-command.html'">Overview</button>
+  <button class="off" onclick="location.href='invest-activity-1-timeline.html'">Activity</button>
+  <button class="off" onclick="location.href='invest-documents-1-files.html'">Documents</button>
+  <button class="on">How It's Calculated</button>
+</div>
+
+<div class="ct">
+
+  <div class="greeting">
+    <h2>Let's break it down</h2>
+    <p>Here's how Advizmo makes decisions about your money — explained simply.</p>
+  </div>
+
+  <!-- Portfolio -->
+  <div class="concept-card">
+    <div class="concept-emoji">🎯</div>
+    <div class="concept-title">Why this portfolio?</div>
+    <div class="concept-subtitle">It's like picking the right outfit for the weather</div>
+    <div class="concept-body">Would you wear a winter coat to the beach? No. Similarly, your investments should match your situation.</div>
+    <div class="before-after">
+      <div class="ba-item"><div class="ba-label">If you hate risk</div><div class="ba-icon">🛡️</div><div class="ba-text">Conservative</div><div class="ba-sub">More bonds, less drama</div></div>
+      <div class="ba-item"><div class="ba-label">If you want growth</div><div class="ba-icon">🚀</div><div class="ba-text">Aggressive</div><div class="ba-sub">More stocks, more upside</div></div>
+    </div>
+    <div class="analogy">
+      <div class="analogy-label">Think of it like this</div>
+      <div class="analogy-text">A conservative portfolio is like driving the speed limit. An aggressive one is like taking the highway. Both get you there — one is just faster with more bumps.</div>
+    </div>
+  </div>
+
+  <!-- Allocation -->
+  <div class="concept-card">
+    <div class="concept-emoji">🍕</div>
+    <div class="concept-title">How we split your money</div>
+    <div class="concept-subtitle">It's like slicing a pizza</div>
+    <div class="concept-body">Your money is split into different slices. Each slice does a different job.</div>
+    <div class="visual-row">
+      <div class="visual-pill"><div class="visual-pill-icon">🇺🇸</div><div><div class="visual-pill-text">58% Stocks</div><div class="visual-pill-sub">Grows your money</div></div></div>
+      <div class="visual-arrow">+</div>
+      <div class="visual-pill"><div class="visual-pill-icon">🌍</div><div><div class="visual-pill-text">18% Global</div><div class="visual-pill-sub">Balances it out</div></div></div>
+      <div class="visual-arrow">+</div>
+      <div class="visual-pill"><div class="visual-pill-icon">🏦</div><div><div class="visual-pill-text">14% Bonds</div><div class="visual-pill-sub">Keeps it safe</div></div></div>
+    </div>
+    <div class="key-point"><div class="key-point-icon">💡</div><div class="key-point-text">No single slice is too big. If stocks drop, bonds help cushion the fall.</div></div>
+  </div>
+
+  <!-- Rebalancing -->
+  <div class="concept-card">
+    <div class="concept-emoji">⚖️</div>
+    <div class="concept-title">Why we rebalance</div>
+    <div class="concept-subtitle">It's like trimming a garden</div>
+    <div class="concept-body">Plants grow at different speeds. If you don't trim, some take over. Same with investments.</div>
+    <div class="visual-row">
+      <div class="visual-pill"><div class="visual-pill-icon">📈</div><div><div class="visual-pill-text">Stocks grow fast</div><div class="visual-pill-sub">58% → 62%</div></div></div>
+      <div class="visual-arrow">→</div>
+      <div class="visual-pill"><div class="visual-pill-icon">✂️</div><div><div class="visual-pill-text">Trim back</div><div class="visual-pill-sub">Sell a little</div></div></div>
+      <div class="visual-arrow">→</div>
+      <div class="visual-pill"><div class="visual-pill-icon">⚖️</div><div><div class="visual-pill-text">Back to 58%</div><div class="visual-pill-sub">Balanced again</div></div></div>
+    </div>
+    <div class="analogy">
+      <div class="analogy-label">Think of it like this</div>
+      <div class="analogy-text">Your portfolio is a balanced diet. If you only eat pizza for a month, you need to add vegetables back. Rebalancing is your financial nutritionist.</div>
+    </div>
+  </div>
+
+  <!-- Auto Invest -->
+  <div class="concept-card">
+    <div class="concept-emoji">🤖</div>
+    <div class="concept-title">How Auto Invest works</div>
+    <div class="concept-subtitle">It's like a subscription, but for building wealth</div>
+    <div class="concept-body">You pick an amount. We invest it automatically on a schedule you choose.</div>
+    <div class="visual-row">
+      <div class="visual-pill"><div class="visual-pill-icon">📅</div><div><div class="visual-pill-text">Every Friday</div><div class="visual-pill-sub">Your schedule</div></div></div>
+      <div class="visual-arrow">→</div>
+      <div class="visual-pill"><div class="visual-pill-icon">💰</div><div><div class="visual-pill-text">$520 invested</div><div class="visual-pill-sub">At market open</div></div></div>
+      <div class="visual-arrow">→</div>
+      <div class="visual-pill"><div class="visual-pill-icon">✅</div><div><div class="visual-pill-text">Done!</div><div class="visual-pill-sub">Shares in your account</div></div></div>
+    </div>
+    <div class="key-point"><div class="key-point-icon">💡</div><div class="key-point-text">We invest at market open (9:30 AM ET) for the fairest prices. No hidden timing tricks.</div></div>
+  </div>
+
+  <!-- Tax -->
+  <div class="concept-card">
+    <div class="concept-emoji">🎁</div>
+    <div class="concept-title">How we save you on taxes</div>
+    <div class="concept-subtitle">It's like a rebate on your investments</div>
+    <div class="concept-body">When your investments lose value temporarily, we turn that loss into a tax benefit.</div>
+    <div class="visual-row">
+      <div class="visual-pill"><div class="visual-pill-icon">📉</div><div><div class="visual-pill-text">Investment drops</div><div class="visual-pill-sub">-$340 temporarily</div></div></div>
+      <div class="visual-arrow">→</div>
+      <div class="visual-pill"><div class="visual-pill-icon">🔄</div><div><div class="visual-pill-text">We swap it</div><div class="visual-pill-sub">Same exposure</div></div></div>
+      <div class="visual-arrow">→</div>
+      <div class="visual-pill"><div class="visual-pill-icon">💵</div><div><div class="visual-pill-text">Save $82</div><div class="visual-pill-sub">On your taxes</div></div></div>
+    </div>
+    <div class="analogy">
+      <div class="analogy-label">Think of it like this</div>
+      <div class="analogy-text">Imagine you bought a shirt at full price, then it went on sale. You return it, get your money back, and buy it again at the lower price. You still have the same shirt — you just saved money. That's tax-loss harvesting.</div>
+    </div>
+  </div>
+
+  <!-- Emergency Reserves -->
+  <div class="concept-card">
+    <div class="concept-emoji">🛡️</div>
+    <div class="concept-title">Why we keep some cash aside</div>
+    <div class="concept-subtitle">It's like a rainy day fund</div>
+    <div class="concept-body">We never invest all your money. Some stays liquid for emergencies and bills.</div>
+    <div class="visual-row">
+      <div class="visual-pill"><div class="visual-pill-icon">🏠</div><div><div class="visual-pill-text">Emergency Fund</div><div class="visual-pill-sub">3-6 months expenses</div></div></div>
+      <div class="visual-pill"><div class="visual-pill-icon">📄</div><div><div class="visual-pill-text">Bill Money</div><div class="visual-pill-sub">Upcoming payments</div></div></div>
+      <div class="visual-pill"><div class="visual-pill-icon">📈</div><div><div class="visual-pill-text">Investable</div><div class="visual-pill-sub">Grows your wealth</div></div></div>
+    </div>
+    <div class="key-point"><div class="key-point-icon">💡</div><div class="key-point-text">Your emergency cash earns 4.1% APY while it waits — that's 8x more than a typical savings account.</div></div>
+  </div>
+
+  <!-- Summary -->
+  <div class="concept-card" style="background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff">
+    <div class="concept-emoji">🧠</div>
+    <div class="concept-title" style="color:#fff">The big picture</div>
+    <div class="concept-subtitle" style="color:#94a3b8">Advizmo handles the complexity so you don't have to</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px">
+      <div style="background:rgba(255,255,255,.08);border-radius:10px;padding:12px;text-align:center"><div style="font-size:20px;margin-bottom:4px">🎯</div><div style="font-size:12px;font-weight:600;color:#fff">Right portfolio</div><div style="font-size:10px;color:#94a3b8">Matched to you</div></div>
+      <div style="background:rgba(255,255,255,.08);border-radius:10px;padding:12px;text-align:center"><div style="font-size:20px;margin-bottom:4px">⚖️</div><div style="font-size:12px;font-weight:600;color:#fff">Always balanced</div><div style="font-size:10px;color:#94a3b8">Auto-rebalanced</div></div>
+      <div style="background:rgba(255,255,255,.08);border-radius:10px;padding:12px;text-align:center"><div style="font-size:20px;margin-bottom:4px">🤖</div><div style="font-size:12px;font-weight:600;color:#fff">Automated</div><div style="font-size:10px;color:#94a3b8">Set and forget</div></div>
+      <div style="background:rgba(255,255,255,.08);border-radius:10px;padding:12px;text-align:center"><div style="font-size:20px;margin-bottom:4px">🎁</div><div style="font-size:12px;font-weight:600;color:#fff">Tax optimized</div><div style="font-size:10px;color:#94a3b8">Keep more</div></div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

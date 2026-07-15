@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>How It's Calculated – Advizmo</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:#f8f9fa;font-family:'Inter',sans-serif;color:#1c1c1e;max-width:430px;margin:0 auto;min-height:100vh;padding-bottom:100px}
+.sb{height:44px;padding:14px 20px 0;display:flex;justify-content:space-between;align-items:center;background:#f8f9fa;position:sticky;top:0;z-index:100}
+.sbt{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600}
+.nh{display:flex;align-items:center;padding:8px 16px 10px;background:#f8f9fa;position:sticky;top:44px;z-index:99}
+.nh .back{width:36px;height:36px;border-radius:50%;background:rgba(120,120,128,.08);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.nh .back svg{width:18px;height:18px;fill:none;stroke:#1c1c1e;stroke-width:2.5;stroke-linecap:round}
+.nh .title{flex:1;text-align:center;font-family:'IBM Plex Sans',sans-serif;font-size:17px;font-weight:600}
+.snav{display:flex;gap:4px;padding:4px 20px 12px;background:#f8f9fa;overflow-x:auto;scrollbar-width:none;position:sticky;top:82px;z-index:98}
+.snav::-webkit-scrollbar{display:none}
+.snav button{flex-shrink:0;padding:8px 18px;border-radius:10px;border:none;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+.snav .on{background:#1c1c1e;color:#fff}.snav .off{background:transparent;color:#8e8e93}
+.ct{padding:0 20px}
+.hero-card{background:linear-gradient(135deg,#0f172a,#1e293b);border-radius:16px;padding:24px;color:#fff;margin:16px 0 20px}
+.hero-label{font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.hero-title{font-family:'IBM Plex Sans',sans-serif;font-size:22px;font-weight:700;color:#fff;line-height:1.3;margin-bottom:8px}
+.hero-desc{font-size:14px;color:#94a3b8;line-height:1.5}
+.section-label{font-size:12px;font-weight:700;color:#8e8e93;text-transform:uppercase;letter-spacing:.06em;margin:20px 0 10px}
+.tree-section{margin-bottom:24px}
+.tree-card{background:#fff;border-radius:14px;padding:16px;box-shadow:0 1px 2px rgba(0,0,0,.04);margin-bottom:8px}
+.tree-question{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600;color:#1c1c1e;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.tree-question-icon{width:24px;height:24px;border-radius:50%;background:#1c1c1e;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.tree-answer{font-size:13px;color:#6b7280;line-height:1.5}
+.tree-branches{display:flex;flex-direction:column;gap:6px;margin:10px 0}
+.tree-branch{display:flex;align-items:flex-start;gap:10px;padding:10px;background:#f8f9fa;border-radius:10px}
+.tree-branch-marker{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.tree-branch-marker.yes{background:#166f47}
+.tree-branch-marker.no{background:#c2790a}
+.tree-branch-marker.always{background:#1551a8}
+.tree-branch-text{font-size:12px;color:#374151;line-height:1.4}
+.tree-branch-text strong{color:#1c1c1e}
+.tree-connector{width:2px;height:12px;background:#e5e7eb;margin-left:11px}
+.tree-node{display:flex;align-items:center;gap:10px;padding:12px 14px;background:#fff;border-radius:12px;border:2px solid #e5e7eb;margin:6px 0}
+.tree-node.active{border-color:#1551a8;background:#f0f7ff}
+.tree-node-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px}
+.tree-node-icon.blue{background:#e0efff}
+.tree-node-icon.green{background:#eefbf4}
+.tree-node-icon.amber{background:#fef3c7}
+.tree-node-text{font-size:13px;color:#374151;line-height:1.4}
+.tree-node-text strong{color:#1c1c1e;display:block;margin-bottom:2px}
+.tree-flow{display:flex;flex-direction:column;align-items:center;gap:4px;margin:10px 0}
+.tree-flow-arrow{color:#c7c7cc;font-size:14px}
+.tree-result{background:#eefbf4;border-radius:10px;padding:12px 14px;margin:8px 0;text-align:center}
+.tree-result-text{font-size:13px;color:#166f47;font-weight:600}
+.tree-result-sub{font-size:11px;color:#166f47;opacity:.7;margin-top:2px}
+.process-row{display:flex;align-items:center;gap:6px;margin:8px 0;overflow-x:auto;scrollbar-width:none}
+.process-row::-webkit-scrollbar{display:none}
+.process-chip{flex-shrink:0;padding:8px 12px;border-radius:8px;background:#f8f9fa;font-size:11px;font-weight:600;color:#374151;text-align:center}
+.process-chip.active{background:#1c1c1e;color:#fff}
+.process-arrow{flex-shrink:0;color:#c7c7cc;font-size:12px}
+</style>
+</head>
+<body>
+
+<div class="sb"><span class="sbt">9:41</span><div style="display:flex;gap:5px;align-items:center"><svg width="16" height="12" viewBox="0 0 16 12"><path d="M1 7.5c1.5-2 3.5-3 5.5-3s4 1 5.5 3" stroke="#1c1c1e" stroke-width="1.5" fill="none" stroke-linecap="round"/><circle cx="7" cy="12" r="1.2"/></svg><svg width="28" height="13" viewBox="0 0 28 13"><rect x="0" y=".5" width="23" height="12" rx="3" stroke="#1c1c1e" stroke-width="1" fill="none"/><rect x="24" y="4" width="2.5" height="5" rx="1" fill="#1c1c1e" opacity=".3"/><rect x="1.5" y="2" width="18" height="9" rx="1.5" fill="#1c1c1e"/></svg></div></div>
+
+<div class="nh">
+  <button class="back" onclick="location.href='index.html'"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+  <div class="title">How It's Calculated</div>
+  <div style="width:36px"></div>
+</div>
+
+<div class="snav">
+  <button class="off" onclick="location.href='invest-overview-1-command.html'">Overview</button>
+  <button class="off" onclick="location.href='invest-activity-1-timeline.html'">Activity</button>
+  <button class="off" onclick="location.href='invest-documents-1-files.html'">Documents</button>
+  <button class="on">How It's Calculated</button>
+</div>
+
+<div class="ct">
+
+  <div class="hero-card">
+    <div class="hero-label">Decision Tree</div>
+    <div class="hero-title">How Advizmo decides what to do with your money</div>
+    <div class="hero-desc">Every decision follows a clear, logical path. Here's exactly how we think through each one.</div>
+  </div>
+
+  <!-- Decision 1: Portfolio Selection -->
+  <div class="section-label">Portfolio Selection</div>
+  <div class="tree-section">
+    <div class="tree-card">
+      <div class="tree-question"><div class="tree-question-icon">1</div>How do we choose your portfolio?</div>
+      <div class="tree-connector"></div>
+      <div class="tree-node active">
+        <div class="tree-node-icon">🎯</div>
+        <div class="tree-node-text"><strong>What's your risk tolerance?</strong>We ask how you feel about losing money temporarily</div>
+      </div>
+      <div class="tree-branches">
+        <div class="tree-branch"><div class="tree-branch-marker yes"></div><div class="tree-branch-text"><strong>Low tolerance:</strong> Conservative portfolio — more bonds, less volatility</div></div>
+        <div class="tree-branch"><div class="tree-branch-marker always"></div><div class="tree-branch-text"><strong>Medium:</strong> Balanced portfolio — mix of stocks and bonds</div></div>
+        <div class="tree-branch"><div class="tree-branch-marker no"></div><div class="tree-branch-text"><strong>High tolerance:</strong> Aggressive portfolio — mostly stocks, more growth</div></div>
+      </div>
+      <div class="tree-connector"></div>
+      <div class="tree-node">
+        <div class="tree-node-icon">📅</div>
+        <div class="tree-node-text"><strong>When will you need this money?</strong>Time horizon affects how much risk we take</div>
+      </div>
+      <div class="tree-connector"></div>
+      <div class="tree-result">
+        <div class="tree-result-text">→ Portfolio matched to your situation</div>
+        <div class="tree-result-sub">Unique to you, reviewed quarterly</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Decision 2: Allocation -->
+  <div class="section-label">Allocation Decisions</div>
+  <div class="tree-section">
+    <div class="tree-card">
+      <div class="tree-question"><div class="tree-question-icon">2</div>How do we split your money?</div>
+      <div class="tree-connector"></div>
+      <div class="tree-node active">
+        <div class="tree-node-icon">📊</div>
+        <div class="tree-node-text"><strong>What's your risk score?</strong>Higher risk = more stocks, lower = more bonds</div>
+      </div>
+      <div class="process-row">
+        <div class="process-chip">Risk 1-3<br><span style="font-weight:400;font-size:10px">80% Bonds</span></div>
+        <div class="process-arrow">→</div>
+        <div class="process-chip">Risk 4-6<br><span style="font-weight:400;font-size:10px">60% Stocks</span></div>
+        <div class="process-arrow">→</div>
+        <div class="process-chip active">Risk 7-10<br><span style="font-weight:400;font-size:10px">85% Stocks</span></div>
+      </div>
+      <div class="tree-connector"></div>
+      <div class="tree-node">
+        <div class="tree-node-icon">🌍</div>
+        <div class="tree-node-text"><strong>Global diversification</strong>We split stocks between US and International to reduce single-country risk</div>
+      </div>
+      <div class="tree-connector"></div>
+      <div class="tree-result">
+        <div class="tree-result-text">→ Custom allocation created</div>
+        <div class="tree-result-sub">VTI, VXUS, BND, and more</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Decision 3: Rebalancing -->
+  <div class="section-label">Rebalancing Triggers</div>
+  <div class="tree-section">
+    <div class="tree-card">
+      <div class="tree-question"><div class="tree-question-icon">3</div>When do we rebalance?</div>
+      <div class="tree-connector"></div>
+      <div class="tree-node active">
+        <div class="tree-node-icon">📈</div>
+        <div class="tree-node-text"><strong>Has any asset class drifted more than 5% from target?</strong>We monitor your allocation daily</div>
+      </div>
+      <div class="tree-branches">
+        <div class="tree-branch"><div class="tree-branch-marker yes"></div><div class="tree-branch-text"><strong>Yes, drifted 5%+:</strong>Rebalance immediately — sell overperforming, buy underperforming</div></div>
+        <div class="tree-branch"><div class="tree-branch-marker no"></div><div class="tree-branch-text"><strong>No, within 5%:</strong>Stay the course — no action needed</div></div>
+      </div>
+      <div class="tree-connector"></div>
+      <div class="tree-result">
+        <div class="tree-result-text">→ Portfolio back to target allocation</div>
+        <div class="tree-result-sub">Risk stays consistent, returns optimized</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Decision 4: Auto Invest Timing -->
+  <div class="section-label">Auto Invest Timing</div>
+  <div class="tree-section">
+    <div class="tree-card">
+      <div class="tree-question"><div class="tree-question-icon">4</div>When do we invest your money?</div>
+      <div class="tree-connector"></div>
+      <div class="tree-node active">
+        <div class="tree-node-icon">🕐</div>
+        <div class="tree-node-text"><strong>Is the stock market open?</strong>US markets trade 9:30 AM – 4:00 PM ET, Mon-Fri</div>
+      </div>
+      <div class="tree-branches">
+        <div class="tree-branch"><div class="tree-branch-marker yes"></div><div class="tree-branch-text"><strong>Market open:</strong>Invest immediately at current market prices</div></div>
+        <div class="tree-branch"><div class="tree-branch-marker no"></div><div class="tree-branch-text"><strong>Market closed:</strong>Schedule for next market open — no after-hours trading</div></div>
+      </div>
+      <div class="tree-connector"></div>
+      <div class="tree-node">
+        <div class="tree-node-icon">💵</div>
+        <div class="tree-node-text"><strong>Do you have enough cash?</strong>We check your available balance before investing</div>
+      </div>
+      <div class="tree-connector"></div>
+      <div class="tree-result">
+        <div class="tree-result-text">→ Shares purchased at fair market price</div>
+        <div class="tree-result-sub">Confirmation sent to your Activity feed</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Decision 5: Tax Optimization -->
+  <div class="section-label">Tax Optimization</div>
+  <div class="tree-section">
+    <div class="tree-card">
+      <div class="tree-question"><div class="tree-question-icon">5</div>How do we save you on taxes?</div>
+      <div class="tree-connector"></div>
+      <div class="tree-node active">
+        <div class="tree-node-icon">📉</div>
+        <div class="tree-node-text"><strong>Are any investments at a loss?</strong>We scan your portfolio daily for harvesting opportunities</div>
+      </div>
+      <div class="tree-branches">
+        <div class="tree-branch"><div class="tree-branch-marker yes"></div><div class="tree-branch-text"><strong>Loss found (>$100):</strong>Harvest the loss — sell and replace with similar fund</div></div>
+        <div class="tree-branch"><div class="tree-branch-marker no"></div><div class="tree-branch-text"><strong>No loss:</strong>Wait for next opportunity — no forced action</div></div>
+      </div>
+      <div class="tree-connector"></div>
+      <div class="tree-node">
+        <div class="tree-node-icon">🔄</div>
+        <div class="tree-node-text"><strong>Wash sale check</strong>We ensure we don't buy the same fund within 30 days</div>
+      </div>
+      <div class="tree-connector"></div>
+      <div class="tree-result">
+        <div class="tree-result-text">→ Tax savings harvested, same exposure maintained</div>
+        <div class="tree-result-sub">Estimated $482 saved this year</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Decision 6: Cash Management -->
+  <div class="section-label">Cash Management</div>
+  <div class="tree-section">
+    <div class="tree-card">
+      <div class="tree-question"><div class="tree-question-icon">6</div>What happens to idle cash?</div>
+      <div class="tree-connector"></div>
+      <div class="tree-node active">
+        <div class="tree-node-icon">💰</div>
+        <div class="tree-node-text"><strong>How much cash do you have?</strong>We separate money by purpose</div>
+      </div>
+      <div class="tree-branches">
+        <div class="tree-branch"><div class="tree-branch-marker always"></div><div class="tree-branch-text"><strong>Emergency fund:</strong>3-6 months expenses — always accessible, never invested</div></div>
+        <div class="tree-branch"><div class="tree-branch-marker always"></div><div class="tree-branch-text"><strong>Bill buffer:</strong>Upcoming bills — kept liquid until due</div></div>
+        <div class="tree-branch"><div class="tree-branch-marker always"></div><div class="tree-branch-text"><strong>Investable:</strong>Everything above thresholds — goes to work for you</div></div>
+      </div>
+      <div class="tree-connector"></div>
+      <div class="tree-result">
+        <div class="tree-result-text">→ Cash earning 4.1% APY while idle</div>
+        <div class="tree-result-sub">8x more than typical savings accounts</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

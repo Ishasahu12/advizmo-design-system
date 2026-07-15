@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>How It's Calculated – Advizmo</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:#f8f9fa;font-family:'Inter',sans-serif;color:#1c1c1e;max-width:430px;margin:0 auto;min-height:100vh;padding-bottom:100px}
+.sb{height:44px;padding:14px 20px 0;display:flex;justify-content:space-between;align-items:center;background:#f8f9fa;position:sticky;top:0;z-index:100}
+.sbt{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600}
+.nh{display:flex;align-items:center;padding:8px 16px 10px;background:#f8f9fa;position:sticky;top:44px;z-index:99}
+.nh .back{width:36px;height:36px;border-radius:50%;background:rgba(120,120,128,.08);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.nh .back svg{width:18px;height:18px;fill:none;stroke:#1c1c1e;stroke-width:2.5;stroke-linecap:round}
+.nh .title{flex:1;text-align:center;font-family:'IBM Plex Sans',sans-serif;font-size:17px;font-weight:600}
+.snav{display:flex;gap:4px;padding:4px 20px 12px;background:#f8f9fa;overflow-x:auto;scrollbar-width:none;position:sticky;top:82px;z-index:98}
+.snav::-webkit-scrollbar{display:none}
+.snav button{flex-shrink:0;padding:8px 18px;border-radius:10px;border:none;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+.snav .on{background:#1c1c1e;color:#fff}.snav .off{background:transparent;color:#8e8e93}
+.ct{padding:0 20px}
+.advisor-intro{display:flex;gap:12px;align-items:flex-start;margin:16px 0 20px;padding:16px;background:#fff;border-radius:14px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.advisor-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#1e293b,#334155);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.advisor-avatar svg{width:22px;height:22px;color:#fff}
+.advisor-intro-text h2{font-family:'IBM Plex Sans',sans-serif;font-size:17px;font-weight:600;color:#1c1c1e;margin-bottom:2px}
+.advisor-intro-text p{font-size:13px;color:#6b7280;line-height:1.4}
+.qa-section{margin-bottom:16px}
+.qa-card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.04);margin-bottom:8px}
+.qa-question{padding:16px;display:flex;align-items:center;gap:10px;cursor:pointer}
+.qa-q-icon{width:28px;height:28px;border-radius:8px;background:#1c1c1e;color:#fff;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:700;flex-shrink:0}
+.qa-q-text{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600;color:#1c1c1e;line-height:1.3}
+.qa-answer{padding:0 16px 16px}
+.qa-a-label{font-size:10px;font-weight:700;color:#1551a8;text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px}
+.qa-a-text{font-size:13px;color:#6b7280;line-height:1.6}
+.qa-a-text strong{color:#1c1c1e}
+.qa-visual{background:#f8f9fa;border-radius:10px;padding:12px;margin:10px 0}
+.qa-visual-row{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.qa-visual-row:last-child{margin-bottom:0}
+.qa-visual-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.qa-visual-dot.blue{background:#1551a8}
+.qa-visual-dot.green{background:#166f47}
+.qa-visual-dot.amber{background:#c2790a}
+.qa-visual-dot.rose{background:#be185d}
+.qa-visual-text{font-size:12px;color:#374151;line-height:1.4}
+.qa-highlight{background:#eefbf4;border-radius:8px;padding:10px 12px;margin:8px 0;display:flex;align-items:center;gap:8px}
+.qa-highlight svg{width:14px;height:14px;color:#166f47;flex-shrink:0}
+.qa-highlight-text{font-size:12px;color:#166f47;font-weight:500}
+.qa-example{background:linear-gradient(135deg,#eff6ff,#f0f7ff);border-radius:8px;padding:10px 12px;margin:8px 0}
+.qa-example-label{font-size:10px;font-weight:600;color:#1551a8;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
+.qa-example-text{font-size:12px;color:#374151;line-height:1.4}
+</style>
+</head>
+<body>
+
+<div class="sb"><span class="sbt">9:41</span><div style="display:flex;gap:5px;align-items:center"><svg width="16" height="12" viewBox="0 0 16 12"><path d="M1 7.5c1.5-2 3.5-3 5.5-3s4 1 5.5 3" stroke="#1c1c1e" stroke-width="1.5" fill="none" stroke-linecap="round"/><circle cx="7" cy="12" r="1.2"/></svg><svg width="28" height="13" viewBox="0 0 28 13"><rect x="0" y=".5" width="23" height="12" rx="3" stroke="#1c1c1e" stroke-width="1" fill="none"/><rect x="24" y="4" width="2.5" height="5" rx="1" fill="#1c1c1e" opacity=".3"/><rect x="1.5" y="2" width="18" height="9" rx="1.5" fill="#1c1c1e"/></svg></div></div>
+
+<div class="nh">
+  <button class="back" onclick="location.href='index.html'"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+  <div class="title">How It's Calculated</div>
+  <div style="width:36px"></div>
+</div>
+
+<div class="snav">
+  <button class="off" onclick="location.href='invest-overview-1-command.html'">Overview</button>
+  <button class="off" onclick="location.href='invest-activity-1-timeline.html'">Activity</button>
+  <button class="off" onclick="location.href='invest-documents-1-files.html'">Documents</button>
+  <button class="on">How It's Calculated</button>
+</div>
+
+<div class="ct">
+
+  <!-- Advisor Intro -->
+  <div class="advisor-intro">
+    <div class="advisor-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+    <div class="advisor-intro-text">
+      <h2>Questions? I've got answers.</h2>
+      <p>Here are the most common things people ask about how Advizmo manages their money.</p>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="qa-section">
+    <div class="qa-card">
+      <div class="qa-question">
+        <div class="qa-q-icon">Q</div>
+        <div class="qa-q-text">Why did you pick this portfolio for me?</div>
+      </div>
+      <div class="qa-answer">
+        <div class="qa-a-label">Answer</div>
+        <div class="qa-a-text">We matched your portfolio to your <strong>risk tolerance</strong> and <strong>time horizon</strong>. When you signed up, we asked how you'd feel if your portfolio dropped 20% in a month. Your answer told us exactly how much volatility you can handle.</div>
+        <div class="qa-visual">
+          <div class="qa-visual-row"><div class="qa-visual-dot blue"></div><div class="qa-visual-text"><strong>You said:</strong> "I'd be uncomfortable but wouldn't sell"</div></div>
+          <div class="qa-visual-row"><div class="qa-visual-dot green"></div><div class="qa-visual-text"><strong>We chose:</strong> Balanced portfolio — 60% stocks, 40% bonds</div></div>
+          <div class="qa-visual-row"><div class="qa-visual-dot amber"></div><div class="qa-visual-text"><strong>Why:</strong> Enough growth to build wealth, enough stability to sleep well</div></div>
+        </div>
+        <div class="qa-example">
+          <div class="qa-example-label">Your situation</div>
+          <div class="qa-example-text">28 years old, investing for retirement, comfortable with moderate ups and downs. This portfolio is designed to grow steadily over 30+ years.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="qa-section">
+    <div class="qa-card">
+      <div class="qa-question">
+        <div class="qa-q-icon">Q</div>
+        <div class="qa-q-text">Why do you rebalance my portfolio?</div>
+      </div>
+      <div class="qa-answer">
+        <div class="qa-a-label">Answer</div>
+        <div class="qa-a-text">Because <strong>markets change your allocation without your permission</strong>. If stocks go up faster than bonds, you end up with more risk than you signed up for. Rebalancing keeps you on track.</div>
+        <div class="qa-visual">
+          <div class="qa-visual-row"><div class="qa-visual-dot amber"></div><div class="qa-visual-text"><strong>Last month:</strong> US Stocks drifted from 58% to 62%</div></div>
+          <div class="qa-visual-row"><div class="qa-visual-dot blue"></div><div class="qa-visual-text"><strong>What we did:</strong> Sold 4% of US Stocks, bought International and Bonds</div></div>
+          <div class="qa-visual-row"><div class="qa-visual-dot green"></div><div class="qa-visual-text"><strong>Result:</strong> Back to 58% target. Same risk level as before.</div></div>
+        </div>
+        <div class="qa-highlight">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
+          <div class="qa-highlight-text">Rebalancing often improves returns while reducing risk — it's a win-win.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="qa-section">
+    <div class="qa-card">
+      <div class="qa-question">
+        <div class="qa-q-icon">Q</div>
+        <div class="qa-q-text">Why don't you invest my money immediately?</div>
+      </div>
+      <div class="qa-answer">
+        <div class="qa-a-label">Answer</div>
+        <div class="qa-a-text">Because we want you to get the <strong>best possible price</strong>. When the market is closed, prices aren't real — they're estimates. We wait until market open so you get actual market prices.</div>
+        <div class="qa-visual">
+          <div class="qa-visual-row"><div class="qa-visual-dot amber"></div><div class="qa-visual-text"><strong>After hours:</strong> Prices can be unreliable, spreads are wider</div></div>
+          <div class="qa-visual-row"><div class="qa-visual-dot blue"></div><div class="qa-visual-text"><strong>Market open:</strong> 9:30 AM ET — real prices, real trading</div></div>
+          <div class="qa-visual-row"><div class="qa-visual-dot green"></div><div class="qa-visual-text"><strong>What happens:</strong> We buy at the best available price within the first 30 minutes</div></div>
+        </div>
+        <div class="qa-example">
+          <div class="qa-example-label">Example</div>
+          <div class="qa-example-text">Your $520 Auto Invest was scheduled for Friday at 3 PM. Since markets were closed, we invested it Monday at 9:30 AM when markets opened. You got fair prices, not estimates.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="qa-section">
+    <div class="qa-card">
+      <div class="qa-question">
+        <div class="qa-q-icon">Q</div>
+        <div class="qa-q-text">How does tax-loss harvesting actually save me money?</div>
+      </div>
+      <div class="qa-answer">
+        <div class="qa-a-label">Answer</div>
+        <div class="qa-a-text">When an investment drops in value, we sell it and immediately buy a similar (not identical) fund. This <strong>locks in a loss</strong> that reduces your taxes — while you keep the same market exposure.</div>
+        <div class="qa-visual">
+          <div class="qa-visual-row"><div class="qa-visual-dot amber"></div><div class="qa-visual-text"><strong>Step 1:</strong> International ETF dropped $340</div></div>
+          <div class="qa-visual-row"><div class="qa-visual-dot blue"></div><div class="qa-visual-text"><strong>Step 2:</strong> Sell it, buy a similar international fund</div></div>
+          <div class="qa-visual-row"><div class="qa-visual-dot green"></div><div class="qa-visual-text"><strong>Step 3:</strong> $340 loss reduces your taxable income</div></div>
+          <div class="qa-visual-row"><div class="qa-visual-dot rose"></div><div class="qa-visual-text"><strong>Step 4:</strong> Estimated tax savings: $82</div></div>
+        </div>
+        <div class="qa-highlight">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
+          <div class="qa-highlight-text">You still own international stocks — just a different fund. Same exposure, lower taxes.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="qa-section">
+    <div class="qa-card">
+      <div class="qa-question">
+        <div class="qa-q-icon">Q</div>
+        <div class="qa-q-text">Why don't you invest all my cash?</div>
+      </div>
+      <div class="qa-answer">
+        <div class="qa-a-label">Answer</div>
+        <div class="qa-a-text">Because <strong>life happens</strong>. We keep a buffer for emergencies and upcoming bills. This way you never have to sell investments at a bad time to cover unexpected expenses.</div>
+        <div class="qa-visual">
+          <div class="qa-visual-row"><div class="qa-visual-dot rose"></div><div class="qa-visual-text"><strong>Emergency reserve:</strong> 3-6 months of expenses — always liquid</div></div>
+          <div class="qa-visual-row"><div class="qa-visual-dot amber"></div><div class="qa-visual-text"><strong>Bill buffer:</strong> Upcoming payments — kept until due</div></div>
+          <div class="qa-visual-row"><div class="qa-visual-dot green"></div><div class="qa-visual-text"><strong>Investable:</strong> Everything else — goes to work for you</div></div>
+        </div>
+        <div class="qa-example">
+          <div class="qa-example-label">The math</div>
+          <div class="qa-example-text">Your idle cash earns 4.1% APY. That's $410/year on $10,000 — while it waits to be invested or used for emergencies. Much better than a regular savings account at 0.5%.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="qa-section">
+    <div class="qa-card">
+      <div class="qa-question">
+        <div class="qa-q-icon">Q</div>
+        <div class="qa-q-text">How do I know you're not charging hidden fees?</div>
+      </div>
+      <div class="qa-answer">
+        <div class="qa-a-label">Answer</div>
+        <div class="qa-a-text">We're <strong>completely transparent</strong>. Every fee is shown in your account. We use low-cost index funds with expense ratios as low as 0.03%. Here's what you actually pay:</div>
+        <div class="qa-visual">
+          <div class="qa-visual-row"><div class="qa-visual-dot green"></div><div class="qa-visual-text"><strong>Advizmo fee:</strong> Included in your subscription</div></div>
+          <div class="qa-visual-row"><div class="qa-visual-dot green"></div><div class="qa-visual-text"><strong>ETF expense ratios:</strong> 0.03% – 0.10% annually</div></div>
+          <div class="qa-visual-row"><div class="qa-visual-dot green"></div><div class="qa-visual-text"><strong>Trading commissions:</strong> $0</div></div>
+          <div class="qa-visual-row"><div class="qa-visual-dot green"></div><div class="qa-visual-text"><strong>Account fees:</strong> $0</div></div>
+        </div>
+        <div class="qa-highlight">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
+          <div class="qa-highlight-text">On $10,000 invested, you pay approximately $5-10 per year in fund fees. That's it.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
