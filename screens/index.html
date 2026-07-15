@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advizmo Design System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
+    body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:#f8f9fa;color:#1c1c1e;min-height:100vh}
+    .hero{background:linear-gradient(135deg,#0f172a 0%,#1e293b 50%,#0f172a 100%);padding:60px 32px 48px;color:#fff;text-align:center}
+    .hero-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;background:rgba(255,255,255,.08);font-size:12px;font-weight:600;color:#94a3b8;margin-bottom:20px;letter-spacing:.04em}
+    .hero-badge-dot{width:6px;height:6px;border-radius:50%;background:#22d3ee}
+    .hero h1{font-family:'IBM Plex Sans',sans-serif;font-size:36px;font-weight:700;letter-spacing:-.03em;line-height:1.15;margin-bottom:8px}
+    .hero p{font-size:16px;color:#94a3b8;line-height:1.5;max-width:480px;margin:0 auto}
+    .hero-stats{display:flex;justify-content:center;gap:32px;margin-top:28px}
+    .hero-stat{text-align:center}
+    .hero-stat-value{font-family:'IBM Plex Sans',sans-serif;font-size:24px;font-weight:700;color:#fff}
+    .hero-stat-label{font-size:12px;color:#64748b;margin-top:2px}
+    .container{max-width:960px;margin:0 auto;padding:40px 24px 80px}
+    .section{margin-bottom:40px}
+    .section-header{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+    .section-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
+    .section-icon.overview{background:#eefbf4;color:#166f47}
+    .section-icon.move{background:#e0efff;color:#1551a8}
+    .section-icon.review{background:#fef3c7;color:#c2790a}
+    .section-icon.invest{background:#f3e8ff;color:#7c3aed}
+    .section-title{font-family:'IBM Plex Sans',sans-serif;font-size:20px;font-weight:700;color:#1c1c1e}
+    .section-count{font-size:12px;font-weight:600;color:#8e8e93;background:#e5e7eb;padding:3px 10px;border-radius:12px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+    .card{background:#fff;border-radius:16px;padding:20px;text-decoration:none;color:inherit;border:1px solid rgba(0,0,0,.04);transition:all .2s;position:relative;overflow:hidden}
+    .card:hover{box-shadow:0 8px 24px rgba(0,0,0,.08);transform:translateY(-2px)}
+    .card-badge{display:inline-flex;padding:4px 10px;border-radius:8px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
+    .card-badge.concept{background:#e0efff;color:#1551a8}
+    .card-badge.main{background:#eefbf4;color:#166f47}
+    .card-title{font-family:'IBM Plex Sans',sans-serif;font-size:17px;font-weight:600;color:#1c1c1e;margin-bottom:4px;line-height:1.3}
+    .card-desc{font-size:13px;color:#6b7280;line-height:1.45}
+    .card-arrow{position:absolute;top:20px;right:20px;width:28px;height:28px;border-radius:50%;background:#f2f2f7;display:flex;align-items:center;justify-content:center;transition:all .2s}
+    .card:hover .card-arrow{background:#227be2;color:#fff}
+    .card-arrow svg{width:14px;height:14px;color:#8e8e93}
+    .card:hover .card-arrow svg{color:#fff}
+    .divider{height:1px;background:#e5e7eb;margin:40px 0}
+    .footer{text-align:center;padding:24px;font-size:13px;color:#8e8e93}
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="hero-badge"><div class="hero-badge-dot"></div>Design System</div>
+    <h1>Advizmo</h1>
+    <p>Fintech design system for intelligent money management. 16 screens across 4 experiences.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-value">16</div><div class="hero-stat-label">Screens</div></div>
+      <div class="hero-stat"><div class="hero-stat-value">4</div><div class="hero-stat-label">Experiences</div></div>
+      <div class="hero-stat"><div class="hero-stat-value">5</div><div class="hero-stat-label">Concepts Each</div></div>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- OVERVIEW -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon overview">🏠</div>
+        <div class="section-title">Overview</div>
+        <div class="section-count">1 screen</div>
+      </div>
+      <div class="grid">
+        <a href="overview.html" class="card">
+          <div class="card-badge main">Main</div>
+          <div class="card-title">Money Optimization Center</div>
+          <div class="card-desc">Home screen with optimization score, opportunities, money flow, accounts, portfolio, and spending.</div>
+          <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </a>
+      </div>
+    </div>
+
+    <!-- MOVE MONEY -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon move">💸</div>
+        <div class="section-title">Move Money</div>
+        <div class="section-count">5 concepts</div>
+      </div>
+      <div class="grid">
+        <a href="move-money-1-workspace.html" class="card">
+          <div class="card-badge concept">Concept 1</div>
+          <div class="card-title">Financial Workspace</div>
+          <div class="card-desc">Modular cards with editable source accounts, multiple destinations, add/remove functionality.</div>
+          <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </a>
+        <a href="move-money-2-timeline.html" class="card">
+          <div class="card-badge concept">Concept 2</div>
+          <div class="card-title">Optimization Timeline</div>
+          <div class="card-desc">Sequential timeline layout showing each optimization as a step with numbered dots.</div>
+          <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </a>
+        <a href="move-money-3-flow.html" class="card">
+          <div class="card-badge concept">Concept 3</div>
+          <div class="card-title">Money Flow Builder</div>
+          <div class="card-desc">Visual flow diagrams showing money moving from source to destinations with connectors.</div>
+          <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </a>
+        <a href="move-money-4-advisor.html" class="card">
+          <div class="card-badge concept">Concept 4</div>
+          <div class="card-title">Advisor Review</div>
+          <div class="card-desc">Premium advisor-style with personalized notes, progress tracking, and reviewed badges.</div>
+          <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </a>
+        <a href="move-money-5-wallet.html" class="card">
+          <div class="card-badge concept">Concept 5</div>
+          <div class="card-title">Apple Wallet Inspired</div>
+          <div class="card-desc">Ultra-minimal with dark gradient card headers, large typography, native iOS feel.</div>
+          <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </a>
+      </div>
+    </div>
+
+    <!-- REVIEW CHANGES -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon review">✅</div>
+        <div class="section-title">Review Changes</div>
+        <div class="section-count">5 concepts</div>
+      </div>
+      <div class="grid">
+        <a href="review-changes-1-executive.html" class="card">
+          <div class="card-badge concept">Concept 1</div>
+          <div class="card-title">Executive Financial Summary</div>
+          <div class="card-desc">Apple Pay confirmation feel. Dark hero card, stat tiles, clean read-only summary.</div>
+          <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </a>
+        <a href="review-changes-2-advisor.html" class="card">
+          <div class="card-badge concept">Concept 2</div>
+          <div class="card-title">Financial Advisor Review</div>
+          <div class="card-desc">Personalized advisor note with avatar, progress bar, and reviewed badges on each card.</div>
+          <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </a>
+        <a href="review-changes-3-timeline.html" class="card">
+          <div class="card-badge concept">Concept 3</div>
+          <div class="card-title">Optimization Timeline</div>
+          <div class="card-desc">Sequential decisions shown as a timeline with colored dots and checkmarks.</div>
+          <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </a>
+        <a href="review-changes-4-outcome.html" class="card">
+          <div class="card-badge concept">Concept 4</div>
+          <div class="card-title">Outcome Focused</div>
+          <div class="card-desc">Prioritizes what improves (health score 78→84) rather than where money moves.</div>
+          <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </a>
+        <a href="review-changes-5-wallet.html" class="card">
+          <div class="card-badge concept">Concept 5</div>
+          <div class="card-title">Apple Wallet Inspired</div>
+          <div class="card-desc">Extremely minimal with large financial values, wallet-style cards, generous whitespace.</div>
+          <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </a>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- INVEST -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon invest">📈</div>
+        <div class="section-title">Invest Overview</div>
+        <div class="section-count">5 concepts</div>
+      </div>
+      <div class="grid">
+        <a href="invest-overview-1-dashboard.html" class="card">
+          <div class="card-badge concept">Concept 1</div>
+          <div class="card-title">Portfolio Dashboard</div>
+          <div class="card-desc">Large portfolio value, beautiful performance chart, simple allocation, recent activity.</div>
+          <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </a>
+        <a href="invest-overview-2-story.html" class="card">
+          <div class="card-badge concept">Concept 2</div>
+          <div class="card-title">Financial Story</div>
+          <div class="card-desc">Narrative flow: Portfolio → Growth → Allocation → Insights → Next recommendation.</div>
+          <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </a>
+        <a href="invest-overview-3-stocks.html" class="card">
+          <div class="card-badge concept">Concept 3</div>
+          <div class="card-title">Apple Stocks Inspired</div>
+          <div class="card-desc">Minimal, elegant, large chart, typography-driven hierarchy, very little decoration.</div>
+          <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </a>
+        <a href="invest-overview-4-advisor.html" class="card">
+          <div class="card-badge concept">Concept 4</div>
+          <div class="card-title">Wealth Advisor</div>
+          <div class="card-desc">Private wealth management feel. Focus on confidence, long-term investing, minimal noise.</div>
+          <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </a>
+        <a href="invest-overview-5-working.html" class="card">
+          <div class="card-badge concept">Concept 5</div>
+          <div class="card-title">Money Working For You</div>
+          <div class="card-desc">Emphasizes how money is working today, what it earned, where it's invested.</div>
+          <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">Advizmo Design System · 16 Screens · Apple HIG · IBM Plex Sans + Inter</div>
+
+</body>
+</html>

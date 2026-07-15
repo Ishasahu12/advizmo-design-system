@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Invest Overview — Concept 5: Money Working For You</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:'Inter',sans-serif;
+    background:#e5e5ea;
+    display:flex;
+    justify-content:center;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+  .device{
+    width:100%;max-width:430px;min-height:100vh;
+    background:#f8f9fa;
+    position:relative;
+    overflow-x:hidden;
+    padding-bottom:34px;
+  }
+  .status-bar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:12px 24px 10px;
+    background:#f8f9fa;
+    position:sticky;top:0;z-index:100;
+  }
+  .status-bar .time{font-family:'Inter',sans-serif;font-size:15px;font-weight:600;color:#1c1c1e}
+  .status-bar .icons{display:flex;align-items:center;gap:5px}
+  .status-bar .icons svg{display:block}
+
+  .nav-header{
+    display:flex;align-items:center;padding:8px 16px 10px;
+    background:#f8f9fa;position:sticky;top:44px;z-index:99;
+  }
+  .nav-header button{
+    width:36px;height:36px;border-radius:50%;
+    background:rgba(120,120,128,0.08);border:none;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;flex-shrink:0;
+  }
+  .nav-header .title{
+    flex:1;text-align:center;
+    font-family:'IBM Plex Sans',sans-serif;font-size:17px;
+    font-weight:600;color:#1c1c1e;
+  }
+  .nav-header .spacer{width:36px}
+
+  .segmented-nav{
+    display:flex;gap:4px;padding:4px 20px 12px;
+    background:#f8f9fa;overflow-x:auto;
+    scrollbar-width:none;position:sticky;top:82px;z-index:98;
+  }
+  .segmented-nav::-webkit-scrollbar{display:none}
+  .segmented-nav button{
+    flex-shrink:0;padding:8px 18px;border-radius:10px;
+    border:none;font-family:'Inter',sans-serif;font-size:13px;
+    font-weight:600;cursor:pointer;white-space:nowrap;
+    transition:background 0.2s,color 0.2s;
+  }
+  .segmented-nav button.active{background:#1c1c1e;color:#fff}
+  .segmented-nav button:not(.active){background:transparent;color:#8e8e93}
+
+  .content{padding:0 20px;display:flex;flex-direction:column;gap:20px;padding-top:8px}
+
+  .hero{
+    background:linear-gradient(135deg,#0a7a3e 0%,#0d9952 40%,#10b981 100%);
+    border-radius:20px;padding:28px 24px;color:#fff;
+    position:relative;overflow:hidden;
+  }
+  .hero::before{
+    content:'';position:absolute;top:-40px;right:-30px;
+    width:140px;height:140px;border-radius:50%;
+    background:rgba(255,255,255,0.08);
+  }
+  .hero::after{
+    content:'';position:absolute;bottom:-20px;left:-20px;
+    width:100px;height:100px;border-radius:50%;
+    background:rgba(255,255,255,0.05);
+  }
+  .hero-label{
+    font-family:'Inter',sans-serif;font-size:13px;font-weight:500;
+    color:rgba(255,255,255,0.7);text-transform:uppercase;
+    letter-spacing:0.5px;margin-bottom:6px;
+  }
+  .hero-amount{
+    font-family:'IBM Plex Sans',sans-serif;font-size:44px;
+    font-weight:700;line-height:1.1;margin-bottom:4px;
+  }
+  .hero-sub{
+    font-family:'Inter',sans-serif;font-size:15px;
+    color:rgba(255,255,255,0.85);
+  }
+  .hero-stats{
+    display:flex;gap:16px;margin-top:18px;
+    padding-top:16px;border-top:1px solid rgba(255,255,255,0.15);
+  }
+  .hero-stat{flex:1}
+  .hero-stat-label{font-size:11px;color:rgba(255,255,255,0.6);margin-bottom:3px}
+  .hero-stat-value{
+    font-family:'IBM Plex Sans',sans-serif;font-size:17px;
+    font-weight:600;
+  }
+
+  .section-header{
+    display:flex;align-items:center;justify-content:space-between;
+    margin-bottom:12px;
+  }
+  .section-title{
+    font-family:'IBM Plex Sans',sans-serif;font-size:18px;
+    font-weight:700;color:#1c1c1e;
+  }
+  .section-link{
+    font-size:13px;font-weight:600;color:#007aff;cursor:pointer;
+    background:none;border:none;font-family:'Inter',sans-serif;
+  }
+
+  .passive-card{
+    background:#fff;border-radius:16px;padding:20px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.04);
+  }
+  .passive-hero{
+    display:flex;align-items:center;gap:14px;margin-bottom:18px;
+  }
+  .passive-icon{
+    width:48px;height:48px;border-radius:14px;
+    background:linear-gradient(135deg,#fef3c7,#fde68a);
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+  }
+  .passive-icon svg{width:24px;height:24px}
+  .passive-hero-text{}
+  .passive-hero-label{font-size:13px;color:#8e8e93;margin-bottom:2px}
+  .passive-hero-amount{
+    font-family:'IBM Plex Sans',sans-serif;font-size:28px;
+    font-weight:700;color:#1c1c1e;
+  }
+  .passive-hero-period{font-size:14px;color:#8e8e93;margin-left:4px}
+  .passive-grid{display:flex;gap:10px}
+  .passive-item{
+    flex:1;background:#f8f9fa;border-radius:12px;padding:14px 12px;
+    text-align:center;
+  }
+  .passive-item-icon{
+    width:32px;height:32px;border-radius:10px;margin:0 auto 8px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .passive-item-icon.green{background:rgba(16,185,129,0.1)}
+  .passive-item-icon.blue{background:rgba(0,122,255,0.1)}
+  .passive-item-icon.amber{background:rgba(255,159,10,0.1)}
+  .passive-item-value{
+    font-family:'IBM Plex Sans',sans-serif;font-size:16px;
+    font-weight:700;color:#1c1c1e;margin-bottom:2px;
+  }
+  .passive-item-label{font-size:11px;color:#8e8e93}
+
+  .alloc-card{
+    background:#fff;border-radius:16px;padding:20px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.04);
+  }
+  .alloc-bar{
+    height:8px;border-radius:4px;background:#f2f2f7;
+    display:flex;overflow:hidden;margin-bottom:18px;
+  }
+  .alloc-bar-seg{height:100%;transition:width 0.3s}
+  .alloc-items{display:flex;flex-direction:column;gap:10px}
+  .alloc-row{
+    display:flex;align-items:center;gap:12px;
+  }
+  .alloc-dot{
+    width:10px;height:10px;border-radius:3px;flex-shrink:0;
+  }
+  .alloc-info{flex:1;display:flex;align-items:center;justify-content:space-between}
+  .alloc-name{font-size:14px;font-weight:500;color:#1c1c1e}
+  .alloc-right{display:flex;align-items:center;gap:10px}
+  .alloc-pct{
+    font-family:'IBM Plex Sans',sans-serif;font-size:14px;
+    font-weight:600;color:#1c1c1e;
+  }
+  .alloc-val{font-size:13px;color:#8e8e93}
+
+  .manage-card{
+    background:#fff;border-radius:16px;padding:20px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.04);
+  }
+  .manage-badge{
+    display:inline-flex;align-items:center;gap:6px;
+    background:linear-gradient(135deg,#ede9fe,#ddd6fe);
+    border-radius:10px;padding:6px 12px;margin-bottom:14px;
+  }
+  .manage-badge-text{font-size:12px;font-weight:600;color:#7c3aed}
+  .manage-desc{
+    font-size:14px;color:#636366;line-height:1.5;margin-bottom:16px;
+  }
+  .manage-features{display:flex;flex-direction:column;gap:12px}
+  .manage-feature{
+    display:flex;align-items:flex-start;gap:12px;
+    padding:14px;background:#f8f9fa;border-radius:12px;
+  }
+  .manage-feature-icon{
+    width:36px;height:36px;border-radius:10px;
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+  }
+  .manage-feature-icon.auto{background:rgba(0,122,255,0.1)}
+  .manage-feature-icon.rebal{background:rgba(88,86,214,0.1)}
+  .manage-feature-icon.tax{background:rgba(16,185,129,0.1)}
+  .manage-feature-text{}
+  .manage-feature-title{font-size:14px;font-weight:600;color:#1c1c1e;margin-bottom:2px}
+  .manage-feature-desc{font-size:12px;color:#8e8e93;line-height:1.4}
+
+  .activity-card{
+    background:#fff;border-radius:16px;padding:20px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.04);
+  }
+  .activity-list{display:flex;flex-direction:column;gap:0}
+  .activity-item{
+    display:flex;align-items:flex-start;gap:12px;
+    padding:14px 0;
+  }
+  .activity-item:not(:last-child){border-bottom:1px solid #f2f2f7}
+  .activity-icon{
+    width:36px;height:36px;border-radius:10px;
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+  }
+  .activity-icon.auto-invest{background:rgba(0,122,255,0.1)}
+  .activity-icon.dividend{background:rgba(255,159,10,0.1)}
+  .activity-icon.rebalance{background:rgba(88,86,214,0.1)}
+  .activity-icon.deposit{background:rgba(16,185,129,0.1)}
+  .activity-body{flex:1;min-width:0}
+  .activity-title{font-size:14px;font-weight:500;color:#1c1c1e;margin-bottom:2px}
+  .activity-time{font-size:12px;color:#8e8e93}
+  .activity-amount{
+    font-family:'IBM Plex Sans',sans-serif;font-size:14px;
+    font-weight:600;color:#1c1c1e;flex-shrink:0;text-align:right;
+  }
+  .activity-amount.green{color:#0a7a3e}
+
+  .total-row{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:4px 0;
+  }
+  .total-label{font-size:14px;color:#636366}
+  .total-value{
+    font-family:'IBM Plex Sans',sans-serif;font-size:15px;
+    font-weight:600;color:#1c1c1e;
+  }
+
+  .footer-note{
+    text-align:center;font-size:12px;color:#aeaeb2;
+    padding:8px 20px 0;line-height:1.5;
+  }
+</style>
+</head>
+<body>
+<div class="device">
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span class="time">9:41</span>
+    <span class="icons">
+      <svg width="17" height="12" viewBox="0 0 17 12" fill="#1c1c1e"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/><rect x="13.5" y="0" width="3" height="12" rx="1"/></svg>
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="none" stroke="#1c1c1e" stroke-width="1.2"><path d="M1 4.5C3.5 1.5 12.5 1.5 15 4.5" stroke-linecap="round"/><path d="M3.5 7C5.5 5 10.5 5 12.5 7" stroke-linecap="round"/><circle cx="8" cy="10" r="1.2" fill="#1c1c1e" stroke="none"/></svg>
+      <svg width="27" height="13" viewBox="0 0 27 13" fill="none"><rect x="0.5" y="0.5" width="22" height="12" rx="3.5" stroke="#1c1c1e" stroke-opacity="0.35"/><rect x="2" y="2" width="18" height="9" rx="2" fill="#1c1c1e"/><path d="M24 4.5v4a2 2 0 000-4z" fill="#1c1c1e" opacity="0.4"/></svg>
+    </span>
+  </div>
+
+  <!-- Navigation Header -->
+  <div class="nav-header">
+    <button onclick="location.href='index.html'">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1c1c1e" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <div class="title">Invest</div>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- Segmented Nav -->
+  <div class="segmented-nav">
+    <button class="active">Overview</button>
+    <button>Activity</button>
+    <button>Documents</button>
+    <button>How It's Calculated</button>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+
+    <!-- Hero -->
+    <div class="hero">
+      <div class="hero-label">Today's Performance</div>
+      <div class="hero-amount">+$342</div>
+      <div class="hero-sub">Your money earned 0.73% today</div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-label">Total Return</div>
+          <div class="hero-stat-value">+$8,940</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-label">Portfolio Value</div>
+          <div class="hero-stat-value">$47,320</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- How It's Working -->
+    <div>
+      <div class="section-header">
+        <div class="section-title">How it's working</div>
+        <button class="section-link">See all</button>
+      </div>
+      <div class="passive-card">
+        <div class="passive-hero">
+          <div class="passive-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          </div>
+          <div class="passive-hero-text">
+            <div class="passive-hero-label">Monthly Passive Income</div>
+            <div><span class="passive-hero-amount">$127</span><span class="passive-hero-period">/month</span></div>
+          </div>
+        </div>
+        <div class="passive-grid">
+          <div class="passive-item">
+            <div class="passive-item-icon green">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0a7a3e" stroke-width="2" stroke-linecap="round"><path d="M12 2v20M17 7l-5-5-5 5"/></svg>
+            </div>
+            <div class="passive-item-value">$500</div>
+            <div class="passive-item-label">Auto-invested</div>
+          </div>
+          <div class="passive-item">
+            <div class="passive-item-icon amber">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>
+            </div>
+            <div class="passive-item-value">$42</div>
+            <div class="passive-item-label">Dividends</div>
+          </div>
+          <div class="passive-item">
+            <div class="passive-item-icon blue">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#007aff" stroke-width="2" stroke-linecap="round"><path d="M4 12h16M12 4l8 8-8 8"/></svg>
+            </div>
+            <div class="passive-item-value">2×</div>
+            <div class="passive-item-label">Rebalanced</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Where It's Invested -->
+    <div>
+      <div class="section-header">
+        <div class="section-title">Where it's invested</div>
+        <button class="section-link">Details</button>
+      </div>
+      <div class="alloc-card">
+        <div class="alloc-bar">
+          <div class="alloc-bar-seg" style="width:58%;background:#1c1c1e"></div>
+          <div class="alloc-bar-seg" style="width:18%;background:#007aff"></div>
+          <div class="alloc-bar-seg" style="width:14%;background:#8e8e93"></div>
+          <div class="alloc-bar-seg" style="width:10%;background:#d1d1d6"></div>
+        </div>
+        <div class="alloc-items">
+          <div class="alloc-row">
+            <div class="alloc-dot" style="background:#1c1c1e"></div>
+            <div class="alloc-info">
+              <span class="alloc-name">US Stocks</span>
+              <div class="alloc-right">
+                <span class="alloc-pct">58%</span>
+                <span class="alloc-val">$27,446</span>
+              </div>
+            </div>
+          </div>
+          <div class="alloc-row">
+            <div class="alloc-dot" style="background:#007aff"></div>
+            <div class="alloc-info">
+              <span class="alloc-name">International</span>
+              <div class="alloc-right">
+                <span class="alloc-pct">18%</span>
+                <span class="alloc-val">$8,518</span>
+              </div>
+            </div>
+          </div>
+          <div class="alloc-row">
+            <div class="alloc-dot" style="background:#8e8e93"></div>
+            <div class="alloc-info">
+              <span class="alloc-name">Bonds</span>
+              <div class="alloc-right">
+                <span class="alloc-pct">14%</span>
+                <span class="alloc-val">$6,625</span>
+              </div>
+            </div>
+          </div>
+          <div class="alloc-row">
+            <div class="alloc-dot" style="background:#d1d1d6"></div>
+            <div class="alloc-info">
+              <span class="alloc-name">Cash</span>
+              <div class="alloc-right">
+                <span class="alloc-pct">10%</span>
+                <span class="alloc-val">$4,732</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- How Advizmo Manages It -->
+    <div>
+      <div class="section-header">
+        <div class="section-title">How Advizmo manages it</div>
+      </div>
+      <div class="manage-card">
+        <div class="manage-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2.5" stroke-linecap="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <span class="manage-badge-text">Growth · Moderate Risk</span>
+        </div>
+        <div class="manage-desc">
+          Advizmo automatically manages your portfolio based on your risk profile and goals. No trading decisions needed — we handle everything.
+        </div>
+        <div class="manage-features">
+          <div class="manage-feature">
+            <div class="manage-feature-icon auto">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#007aff" stroke-width="2" stroke-linecap="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+            </div>
+            <div class="manage-feature-text">
+              <div class="manage-feature-title">Auto-invest</div>
+              <div class="manage-feature-desc">Deposits are automatically invested into your portfolio allocation</div>
+            </div>
+          </div>
+          <div class="manage-feature">
+            <div class="manage-feature-icon rebal">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5856d6" stroke-width="2" stroke-linecap="round"><path d="M21 12a9 9 0 11-6.22-8.56"/><path d="M21 3v5h-5"/></svg>
+            </div>
+            <div class="manage-feature-text">
+              <div class="manage-feature-title">Smart Rebalancing</div>
+              <div class="manage-feature-desc">Your portfolio stays on target — rebalanced 2× this month automatically</div>
+            </div>
+          </div>
+          <div class="manage-feature">
+            <div class="manage-feature-icon tax">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0a7a3e" stroke-width="2" stroke-linecap="round"><path d="M9 12l2 2 4-4"/><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <div class="manage-feature-text">
+              <div class="manage-feature-title">Tax-Loss Harvesting</div>
+              <div class="manage-feature-desc">We automatically offset losses to minimize your tax burden</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div>
+      <div class="section-header">
+        <div class="section-title">Recent activity</div>
+        <button class="section-link">See all</button>
+      </div>
+      <div class="activity-card">
+        <div class="activity-list">
+          <div class="activity-item">
+            <div class="activity-icon auto-invest">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#007aff" stroke-width="2" stroke-linecap="round"><path d="M12 2v20M17 7l-5-5-5 5"/></svg>
+            </div>
+            <div class="activity-body">
+              <div class="activity-title">Auto-invest</div>
+              <div class="activity-time">Today, 9:00 AM</div>
+            </div>
+            <div class="activity-amount green">+$500</div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-icon dividend">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/></svg>
+            </div>
+            <div class="activity-body">
+              <div class="activity-title">Dividend payment</div>
+              <div class="activity-time">Jul 10, 2026</div>
+            </div>
+            <div class="activity-amount green">+$42</div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-icon rebalance">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5856d6" stroke-width="2" stroke-linecap="round"><path d="M21 12a9 9 0 11-6.22-8.56"/><path d="M21 3v5h-5"/></svg>
+            </div>
+            <div class="activity-body">
+              <div class="activity-title">Portfolio rebalanced</div>
+              <div class="activity-time">Jul 8, 2026</div>
+            </div>
+            <div class="activity-amount" style="color:#8e8e93">—</div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-icon deposit">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0a7a3e" stroke-width="2" stroke-linecap="round"><path d="M12 2v20M17 7l-5-5-5 5"/></svg>
+            </div>
+            <div class="activity-body">
+              <div class="activity-title">Deposit</div>
+              <div class="activity-time">Jul 5, 2026</div>
+            </div>
+            <div class="activity-amount green">+$500</div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-icon dividend">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/></svg>
+            </div>
+            <div class="activity-body">
+              <div class="activity-title">Dividend payment</div>
+              <div class="activity-time">Jun 10, 2026</div>
+            </div>
+            <div class="activity-amount green">+$38</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary Row -->
+    <div class="passive-card">
+      <div class="total-row">
+        <span class="total-label">Total return</span>
+        <span class="total-value" style="color:#0a7a3e">+$8,940 (+23.3%)</span>
+      </div>
+      <div class="total-row" style="margin-top:8px">
+        <span class="total-label">Annual passive income</span>
+        <span class="total-value">$1,524</span>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      Returns are not guaranteed. Past performance does not guarantee future results.<br>
+      Advisory services provided by Advizmo, Inc.
+    </div>
+
+  </div>
+
+</div>
+</body>
+</html>
