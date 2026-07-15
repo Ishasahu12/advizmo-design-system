@@ -2,264 +2,889 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Financial Intelligence – Advizmo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advizmo — Money Flow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{background:#f8f9fa;font-family:'Inter',sans-serif;color:#1c1c1e;max-width:430px;margin:0 auto;min-height:100vh;padding-bottom:100px}
-.sb{height:44px;padding:14px 20px 0;display:flex;justify-content:space-between;align-items:center;background:#f8f9fa;position:sticky;top:0;z-index:100}
-.sbt{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600}
-.nh{display:flex;align-items:center;padding:8px 16px 10px;background:#f8f9fa;position:sticky;top:44px;z-index:99}
-.nh .back{width:36px;height:36px;border-radius:50%;background:rgba(120,120,128,.08);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer}
-.nh .back svg{width:18px;height:18px;fill:none;stroke:#1c1c1e;stroke-width:2.5;stroke-linecap:round}
-.nh .title{flex:1;text-align:center;font-family:'IBM Plex Sans',sans-serif;font-size:17px;font-weight:600}
-.snav{display:flex;gap:4px;padding:4px 20px 12px;background:#f8f9fa;overflow-x:auto;scrollbar-width:none;position:sticky;top:82px;z-index:98}
-.snav::-webkit-scrollbar{display:none}
-.snav button{flex-shrink:0;padding:8px 18px;border-radius:10px;border:none;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
-.snav .on{background:#1c1c1e;color:#fff}.snav .off{background:transparent;color:#8e8e93}
-.ct{padding:0 20px}
-.hero{background:linear-gradient(135deg,#0f172a,#1e293b);border-radius:16px;padding:20px;color:#fff;margin:16px 0 20px}
-.hero-label{font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
-.hero-title{font-family:'IBM Plex Sans',sans-serif;font-size:20px;font-weight:700;color:#fff;line-height:1.3;margin-bottom:4px}
-.hero-sub{font-size:13px;color:#94a3b8}
-.gh{padding:16px 0 8px;font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:.06em}
-.card{background:#fff;border-radius:14px;padding:16px;margin-bottom:10px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
-.card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.card-title{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600;color:#1c1c1e}
-.card-badge{padding:3px 8px;border-radius:6px;font-size:10px;font-weight:700}
-.card-badge.green{background:#eefbf4;color:#166f47}
-.card-badge.blue{background:#e0efff;color:#1551a8}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --green:#166f47;--green-light:#e8f5ee;--green-dark:#0f5232;
+    --amber:#c2790a;--amber-light:#fef3e0;
+    --bg:#f8f9fa;--card:#ffffff;--border:#e5e7eb;
+    --text:#1a1a2e;--text-secondary:#6b7280;--text-muted:#9ca3af;
+    --radius:16px;--radius-sm:12px;--radius-xs:8px;
+    --shadow:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+    --shadow-lg:0 4px 12px rgba(0,0,0,.08);
+    --font-body:'IBM Plex Sans','Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+    --font-display:'Inter','IBM Plex Sans',-apple-system,BlinkMacSystemFont,sans-serif;
+  }
+  html{font-size:16px;-webkit-font-smoothing:antialiased}
+  body{font-family:var(--font-body);background:#eef0f2;min-height:100vh;display:flex;justify-content:center;color:var(--text)}
+  .phone{width:100%;max-width:430px;background:var(--bg);min-height:100vh;position:relative;overflow-x:hidden;padding-bottom:32px}
 
-/* Sankey-style flow */
-.sankey{position:relative;padding:8px 0}
-.sankey-source{display:flex;align-items:center;gap:10px;padding:12px;background:#f8f9fa;border-radius:10px;margin-bottom:6px}
-.sankey-source-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-.sankey-source-icon.chase{background:#e0efff;color:#1551a8}
-.sankey-source-icon.div{background:#eefbf4;color:#166f47}
-.sankey-source-icon.int{background:#f3e8ff;color:#7c3aed}
-.sankey-source-info{flex:1}
-.sankey-source-name{font-size:13px;font-weight:600;color:#1c1c1e}
-.sankey-source-amt{font-family:'IBM Plex Sans',sans-serif;font-size:12px;color:#8e8e93}
-.sankey-pipe{display:flex;align-items:center;justify-content:center;margin:4px 0;position:relative}
-.sankey-pipe-line{width:2px;height:20px;background:#e5e7eb}
-.sankey-pipe-branches{display:flex;gap:4px;width:100%}
-.sankey-branch{flex:1;display:flex;flex-direction:column;align-items:center}
-.sankey-branch-line{width:2px;height:12px;background:#e5e7eb}
-.sankey-branch-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.sankey-branch-dot.blue{background:#1551a8}
-.sankey-branch-dot.green{background:#166f47}
-.sankey-branch-dot.purple{background:#7c3aed}
-.sankey-branch-dot.amber{background:#c2790a}
-.sankey-dest{display:flex;align-items:center;gap:10px;padding:12px;background:#fff;border:1px solid rgba(0,0,0,.06);border-radius:10px;margin-bottom:6px}
-.sankey-dest-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-.sankey-dest-icon.port{background:#e0efff;color:#1551a8}
-.sankey-dest-icon.res{background:#fef3c7;color:#c2790a}
-.sankey-dest-icon.bill{background:#fce7f3;color:#be185d}
-.sankey-dest-icon.inv{background:#eefbf4;color:#166f47}
-.sankey-dest-info{flex:1}
-.sankey-dest-name{font-size:13px;font-weight:600;color:#1c1c1e}
-.sankey-dest-amt{font-family:'IBM Plex Sans',sans-serif;font-size:12px;color:#166f47;font-weight:600}
-.sankey-dest-sub{font-size:10px;color:#8e8e93}
+  /* ── Header / Nav ── */
+  .topbar{position:sticky;top:0;z-index:100;background:rgba(248,249,250,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:12px 16px 0}
+  .topbar-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+  .back-btn{display:inline-flex;align-items:center;gap:4px;font-size:.8125rem;font-weight:500;color:var(--text-secondary);text-decoration:none;border:none;background:none;cursor:pointer;padding:4px 0}
+  .back-btn svg{width:18px;height:18px}
+  .topbar-title{font-family:var(--font-display);font-size:1rem;font-weight:600;color:var(--text)}
+  .topbar-badge{font-size:.6875rem;font-weight:600;color:var(--green);background:var(--green-light);padding:3px 8px;border-radius:20px}
 
-.flow-total{display:flex;align-items:center;justify-content:space-between;padding:12px;background:#f8f9fa;border-radius:10px;margin-top:8px}
-.flow-total-label{font-size:13px;color:#6b7280}
-.flow-total-value{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:700;color:#1c1c1e}
+  .seg-nav{display:flex;background:#e5e7eb;border-radius:var(--radius-xs);padding:3px;gap:2px}
+  .seg-nav a{flex:1;text-align:center;padding:7px 4px;font-size:.75rem;font-weight:500;color:var(--text-secondary);border-radius:6px;text-decoration:none;transition:all .2s}
+  .seg-nav a.active{background:var(--card);color:var(--text);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.08)}
 
-.calc-tree{padding:4px 0}
-.calc-node{display:flex;align-items:center;gap:8px;padding:8px 0}
-.calc-indent{width:20px;flex-shrink:0;display:flex;justify-content:center}
-.calc-indent-dot{width:4px;height:4px;border-radius:50%;background:#c7c7cc}
-.calc-indent-line{width:1px;height:16px;background:#e5e7eb;position:relative}
-.calc-node-text{font-size:12px;color:#6b7280;flex:1}
-.calc-node-value{font-family:'IBM Plex Sans',sans-serif;font-size:12px;font-weight:600;color:#1c1c1e;flex-shrink:0}
-.calc-node-value.green{color:#166f47}
-.calc-node-value.amber{color:#c2790a}
-.calc-node-result{background:#eefbf4;border-radius:8px;padding:10px 12px;margin:8px 0}
-.calc-node-result-text{font-size:13px;color:#166f47;font-weight:600}
+  /* ── Cards ── */
+  .section{padding:16px}
+  .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+  .card-header{display:flex;align-items:center;justify-content:space-between;padding:16px 16px 12px}
+  .card-label{font-size:.8125rem;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.04em}
+  .card-badge{font-size:.6875rem;font-weight:500;padding:3px 8px;border-radius:20px}
+  .card-badge.green{color:var(--green);background:var(--green-light)}
+  .card-badge.amber{color:var(--amber);background:var(--amber-light)}
+  .card-body{padding:0 16px 16px}
 
-.perf-ring{width:120px;height:120px;margin:0 auto 16px;position:relative}
-.perf-ring svg{width:120px;height:120px}
-.perf-ring-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
-.perf-ring-value{font-family:'IBM Plex Sans',sans-serif;font-size:24px;font-weight:700;color:#1c1c1e}
-.perf-ring-label{font-size:10px;color:#8e8e93}
+  /* ── Tappable ── */
+  .tap{cursor:pointer;border-bottom:1.5px dashed var(--border);transition:all .15s;-webkit-tap-highlight-color:transparent}
+  .tap:hover{border-color:var(--green);background:var(--green-light);border-radius:4px}
+  .tap:active{transform:scale(.97)}
 
-.perf-breakdown{display:flex;flex-direction:column;gap:6px}
-.perf-row{display:flex;align-items:center;gap:8px}
-.perf-bar-bg{flex:1;height:6px;background:#f2f2f7;border-radius:3px;overflow:hidden}
-.perf-bar-fill{height:100%;border-radius:3px}
-.perf-row-label{font-size:11px;color:#6b7280;width:80px;flex-shrink:0}
-.perf-row-value{font-family:'IBM Plex Sans',sans-serif;font-size:11px;font-weight:600;color:#1c1c1e;width:60px;text-align:right;flex-shrink:0}
+  /* ── Tooltip ── */
+  .tooltip-wrap{position:relative;display:inline-block}
+  .tooltip{display:none;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--text);color:#fff;font-size:.6875rem;font-weight:500;padding:6px 10px;border-radius:8px;white-space:nowrap;z-index:50;pointer-events:none}
+  .tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--text)}
+  .tooltip-wrap.show .tooltip{display:block}
+
+  /* ═══════════════════════════════════
+     SECTION 1 — MONEY FLOW (HERO)
+  ═══════════════════════════════════ */
+  .flow-hero{position:relative;background:linear-gradient(135deg,#0f2e1c 0%,#166f47 50%,#1a8a5a 100%);border-radius:var(--radius);margin:16px;padding:20px 16px;color:#fff;overflow:hidden}
+  .flow-hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+  .flow-hero-title{font-family:var(--font-display);font-size:1.125rem;font-weight:700;margin-bottom:4px;position:relative}
+  .flow-hero-sub{font-size:.75rem;opacity:.75;margin-bottom:20px;position:relative}
+  .flow-hero-label{font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;opacity:.5;margin-bottom:8px;position:relative}
+
+  /* Flow Map */
+  .flow-map{position:relative;display:flex;gap:0;min-height:220px;justify-content:space-between;padding:0 4px}
+  .flow-col{display:flex;flex-direction:column;justify-content:center;gap:12px;z-index:2}
+  .flow-col.source{flex:0 0 90px}
+  .flow-col.mid{flex:0 0 100px;align-items:center}
+  .flow-col.dest{flex:1}
+
+  .flow-node{background:rgba(255,255,255,.12);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.18);border-radius:var(--radius-xs);padding:10px 12px;cursor:pointer;transition:all .2s;position:relative}
+  .flow-node:hover{background:rgba(255,255,255,.22);transform:scale(1.04)}
+  .flow-node:active{transform:scale(.96)}
+  .flow-node-label{font-size:.6875rem;font-weight:600;opacity:.85}
+  .flow-node-value{font-family:var(--font-display);font-size:1rem;font-weight:700;margin-top:2px}
+  .flow-node-icon{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;margin-bottom:6px;font-size:.8125rem}
+  .flow-node.source-node{border-color:rgba(255,255,255,.3)}
+  .flow-node.dest-node{border-color:rgba(255,255,255,.2)}
+  .flow-node .dest-bar{height:3px;border-radius:2px;margin-top:6px}
+  .flow-node .dest-bar.green{background:var(--green)}
+  .flow-node .dest-bar.amber{background:var(--amber)}
+  .flow-node .dest-bar.white{background:rgba(255,255,255,.5)}
+  .flow-node .dest-bar.blue{background:#60a5fa}
+
+  /* Flow connector lines via SVG */
+  .flow-connectors{position:absolute;inset:0;z-index:1;pointer-events:none}
+  .flow-connectors line{stroke:rgba(255,255,255,.25);stroke-width:2;stroke-dasharray:6 4}
+  .flow-connectors .flow-line-active{stroke:rgba(255,255,255,.45);stroke-width:2.5;stroke-dasharray:none;stroke-linecap:round}
+  .flow-connectors .flow-pulse{animation:flowPulse 2.5s ease-in-out infinite}
+  @keyframes flowPulse{
+    0%{stroke-dashoffset:0;stroke-dasharray:12 6}
+    50%{stroke-dashoffset:-18}
+    100%{stroke-dashoffset:-36;stroke-dasharray:12 6}
+  }
+
+  /* Animated particles on lines */
+  .flow-particle{position:absolute;width:6px;height:6px;background:#fff;border-radius:50%;z-index:3;opacity:0;filter:blur(0.5px)}
+  .flow-particle.animate{animation:flowParticle 2.2s ease-in-out infinite}
+  @keyframes flowParticle{
+    0%{opacity:0;transform:translate(0,0)}
+    10%{opacity:1}
+    90%{opacity:1}
+    100%{opacity:0;transform:translate(var(--dx),var(--dy))}
+  }
+
+  /* Flow breakdown strip */
+  .flow-breakdown{display:flex;gap:6px;margin-top:16px;position:relative;flex-wrap:wrap}
+  .flow-chip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:5px 10px;font-size:.6875rem;display:flex;align-items:center;gap:5px;cursor:pointer;transition:all .15s}
+  .flow-chip:hover{background:rgba(255,255,255,.2)}
+  .flow-chip-dot{width:8px;height:8px;border-radius:50%}
+  .flow-chip-dot.c1{background:#166f47}
+  .flow-chip-dot.c2{background:#c2790a}
+  .flow-chip-dot.c3{background:#60a5fa}
+  .flow-chip-dot.c4{background:rgba(255,255,255,.7)}
+  .flow-chip span{font-weight:600}
+
+  /* ═══════════════════════════════════
+     SECTION 2 — RECOMMENDATION
+  ═══════════════════════════════════ */
+  .calc-tree{display:flex;flex-direction:column;gap:0;padding:0}
+  .calc-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border)}
+  .calc-row:last-child{border-bottom:none}
+  .calc-row.total{border-bottom:none;padding-top:14px}
+  .calc-left{display:flex;align-items:center;gap:8px}
+  .calc-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .calc-dot.income{background:var(--green)}
+  .calc-dot.reserve{background:#60a5fa}
+  .calc-dot.invest{background:var(--amber)}
+  .calc-dot.bills{background:#ef4444}
+  .calc-dot.comfort{background:#a78bfa}
+  .calc-name{font-size:.8125rem;font-weight:500;color:var(--text)}
+  .calc-operator{font-size:.75rem;font-weight:600;color:var(--text-muted);margin-left:4px}
+  .calc-value{font-family:var(--font-display);font-size:.9375rem;font-weight:700;color:var(--text);cursor:pointer;border-bottom:1.5px dashed var(--border);transition:all .15s}
+  .calc-value:hover{border-color:var(--green);background:var(--green-light);border-radius:4px}
+  .calc-equals{font-size:1.125rem;font-weight:700;color:var(--text-muted);padding:0 4px}
+  .calc-total-value{font-family:var(--font-display);font-size:1.125rem;font-weight:700;color:var(--green);cursor:pointer;border-bottom:1.5px dashed var(--border);transition:all .15s}
+  .calc-total-value:hover{border-color:var(--green);background:var(--green-light);border-radius:4px}
+  .calc-visual{display:flex;align-items:center;gap:4px;margin-top:8px;padding:8px 0}
+  .calc-bar{height:6px;border-radius:3px;transition:width .6s ease}
+
+  /* ═══════════════════════════════════
+     SECTION 3 — PORTFOLIO
+  ═══════════════════════════════════ */
+  .portfolio-summary{display:flex;justify-content:space-between;align-items:flex-end;padding:0 16px 12px}
+  .portfolio-total{font-family:var(--font-display);font-size:1.5rem;font-weight:700}
+  .portfolio-gain{font-size:.8125rem;font-weight:600;color:var(--green);background:var(--green-light);padding:3px 8px;border-radius:20px}
+
+  .holding{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+  .holding:last-child{border-bottom:none}
+  .holding-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8125rem;color:#fff;flex-shrink:0}
+  .holding-icon.vti{background:#2563eb}
+  .holding-icon.vxus{background:#7c3aed}
+  .holding-icon.bnd{background:#059669}
+  .holding-icon.gold{background:#d97706}
+  .holding-icon.cash-h{background:#6b7280}
+  .holding-info{flex:1;min-width:0}
+  .holding-name{font-size:.8125rem;font-weight:600}
+  .holding-detail{font-size:.6875rem;color:var(--text-secondary);margin-top:1px}
+  .holding-right{text-align:right;flex-shrink:0}
+  .holding-value{font-family:var(--font-display);font-size:.875rem;font-weight:700}
+  .holding-pct{font-size:.6875rem;color:var(--text-secondary)}
+  .holding-change{font-size:.6875rem;font-weight:600}
+  .holding-change.up{color:var(--green)}
+  .holding-change.down{color:#ef4444}
+
+  .portfolio-mini-bar{height:6px;border-radius:3px;display:flex;overflow:hidden;margin-top:12px}
+  .portfolio-mini-bar div{height:100%;transition:width .6s ease}
+
+  /* ═══════════════════════════════════
+     SECTION 4 — ACTION IMPACT
+  ═══════════════════════════════════ */
+  .impact-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .impact-cell{background:var(--bg);border-radius:var(--radius-xs);padding:12px;cursor:pointer;transition:all .15s}
+  .impact-cell:hover{background:var(--green-light)}
+  .impact-cell:active{transform:scale(.96)}
+  .impact-label{font-size:.6875rem;color:var(--text-secondary);font-weight:500;margin-bottom:4px}
+  .impact-before{font-size:.8125rem;color:var(--text-muted);text-decoration:line-through}
+  .impact-after{font-family:var(--font-display);font-size:1.0625rem;font-weight:700;color:var(--text)}
+  .impact-arrow{font-size:.6875rem;color:var(--green);font-weight:600;margin-top:2px}
+  .impact-cell.highlight{border:1.5px solid var(--green);background:var(--green-light)}
+
+  /* ═══════════════════════════════════
+     SECTION 5 — TAX SAVINGS
+  ═══════════════════════════════════ */
+  .tax-level{border:1px solid var(--border);border-radius:var(--radius-xs);margin-bottom:8px;overflow:hidden;transition:all .3s}
+  .tax-level:last-child{margin-bottom:0}
+  .tax-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;cursor:pointer;transition:background .15s}
+  .tax-header:hover{background:var(--bg)}
+  .tax-header-left{display:flex;align-items:center;gap:10px}
+  .tax-header-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem}
+  .tax-header-icon.l1{background:#e0f2fe;color:#0284c7}
+  .tax-header-icon.l2{background:#fef3c7;color:#d97706}
+  .tax-header-icon.l3{background:#ede9fe;color:#7c3aed}
+  .tax-header-title{font-size:.8125rem;font-weight:600}
+  .tax-header-value{font-family:var(--font-display);font-size:.875rem;font-weight:700;color:var(--green)}
+  .tax-chevron{width:18px;height:18px;color:var(--text-muted);transition:transform .25s;flex-shrink:0}
+  .tax-level.open .tax-chevron{transform:rotate(180deg)}
+  .tax-detail{max-height:0;overflow:hidden;transition:max-height .35s ease}
+  .tax-level.open .tax-detail{max-height:200px}
+  .tax-detail-inner{padding:0 14px 14px;font-size:.75rem;color:var(--text-secondary);line-height:1.6;border-top:1px solid var(--border);padding-top:10px}
+  .tax-detail-inner strong{color:var(--text);font-weight:600}
+
+  /* ═══════════════════════════════════
+     SECTION 6 — INVESTMENT EXECUTION
+  ═══════════════════════════════════ */
+  .exec-status{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--border)}
+  .exec-status:last-child{border-bottom:none}
+  .exec-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+  .exec-dot.open{background:var(--green);box-shadow:0 0 6px rgba(22,111,71,.4)}
+  .exec-dot.closed{background:var(--text-muted)}
+  .exec-dot.pending{background:var(--amber);box-shadow:0 0 6px rgba(194,121,10,.4);animation:execPulse 1.5s infinite}
+  @keyframes execPulse{0%,100%{opacity:1}50%{opacity:.5}}
+  .exec-info{flex:1}
+  .exec-label{font-size:.8125rem;font-weight:600}
+  .exec-time{font-size:.6875rem;color:var(--text-secondary)}
+  .exec-amount{font-family:var(--font-display);font-size:.875rem;font-weight:700;cursor:pointer;border-bottom:1.5px dashed var(--border);transition:all .15s}
+  .exec-amount:hover{border-color:var(--green);background:var(--green-light);border-radius:4px}
+
+  .exec-timeline{display:flex;align-items:center;gap:0;margin-top:12px;padding:0 4px}
+  .exec-tick{display:flex;flex-direction:column;align-items:center;flex:1}
+  .exec-tick-dot{width:12px;height:12px;border-radius:50%;border:2px solid var(--border);background:#fff;position:relative;z-index:2}
+  .exec-tick-dot.done{border-color:var(--green);background:var(--green)}
+  .exec-tick-dot.active{border-color:var(--amber);background:var(--amber);box-shadow:0 0 8px rgba(194,121,10,.4)}
+  .exec-tick-line{flex:1;height:2px;background:var(--border);margin:0 -6px;position:relative;z-index:1}
+  .exec-tick-line.done{background:var(--green)}
+  .exec-tick-label{font-size:.5625rem;color:var(--text-muted);margin-top:6px;text-align:center;font-weight:500}
+
+  /* ═══════════════════════════════════
+     SECTION 7 — INTERACTIVE BREAKDOWNS
+  ═══════════════════════════════════ */
+  .breakdown-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .breakdown-tile{background:var(--bg);border-radius:var(--radius-xs);padding:14px 12px;cursor:pointer;transition:all .2s;border:1.5px solid transparent}
+  .breakdown-tile:hover{border-color:var(--green);background:var(--green-light)}
+  .breakdown-tile:active{transform:scale(.96)}
+  .breakdown-tile-icon{font-size:1.125rem;margin-bottom:6px}
+  .breakdown-tile-label{font-size:.6875rem;color:var(--text-secondary);font-weight:500;margin-bottom:2px}
+  .breakdown-tile-value{font-family:var(--font-display);font-size:1.0625rem;font-weight:700}
+  .breakdown-tile-sub{font-size:.625rem;color:var(--text-muted);margin-top:3px}
+  .breakdown-tile.span-full{grid-column:1/-1}
+
+  /* Modal overlay */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:999;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
+  .modal-overlay.show{display:flex}
+  .modal-sheet{background:var(--card);border-radius:var(--radius) var(--radius) 0 0;width:100%;max-width:430px;max-height:70vh;padding:24px 20px 32px;overflow-y:auto;animation:slideUp .3s ease}
+  @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+  .modal-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 16px}
+  .modal-title{font-family:var(--font-display);font-size:1rem;font-weight:700;margin-bottom:12px}
+  .modal-body{font-size:.8125rem;color:var(--text-secondary);line-height:1.7}
+  .modal-body strong{color:var(--text);font-weight:600}
+  .modal-body .detail-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)}
+  .modal-body .detail-row:last-child{border-bottom:none}
+  .modal-close{width:100%;margin-top:16px;padding:12px;border:none;background:var(--bg);border-radius:var(--radius-xs);font-size:.875rem;font-weight:600;cursor:pointer;transition:background .15s}
+  .modal-close:hover{background:var(--border)}
+
+  /* Footer spacer */
+  .footer-spacer{height:20px}
+
+  /* Utilities */
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+  .flex-between{display:flex;align-items:center;justify-content:space-between}
 </style>
 </head>
 <body>
 
-<div class="sb"><span class="sbt">9:41</span><div style="display:flex;gap:5px;align-items:center"><svg width="16" height="12" viewBox="0 0 16 12"><path d="M1 7.5c1.5-2 3.5-3 5.5-3s4 1 5.5 3" stroke="#1c1c1e" stroke-width="1.5" fill="none" stroke-linecap="round"/><circle cx="7" cy="12" r="1.2"/></svg><svg width="28" height="13" viewBox="0 0 28 13"><rect x="0" y=".5" width="23" height="12" rx="3" stroke="#1c1c1e" stroke-width="1" fill="none"/><rect x="24" y="4" width="2.5" height="5" rx="1" fill="#1c1c1e" opacity=".3"/><rect x="1.5" y="2" width="18" height="9" rx="1.5" fill="#1c1c1e"/></svg></div></div>
+<div class="phone" id="app">
 
-<div class="nh">
-  <button class="back" onclick="location.href='index.html'"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
-  <div class="title">Financial Intelligence</div>
-  <div style="width:36px"></div>
+  <!-- ══════════ TOP BAR ══════════ -->
+  <header class="topbar">
+    <div class="topbar-row">
+      <a href="../index.html" class="back-btn" aria-label="Back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        Back
+      </a>
+      <span class="topbar-title">Invest Math</span>
+      <span class="topbar-badge">Concept 2</span>
+    </div>
+    <nav class="seg-nav" aria-label="Screen navigation">
+      <a href="#">Overview</a>
+      <a href="#">Activity</a>
+      <a href="#">Documents</a>
+      <a href="invest-math-2-flow.html" class="active">Math</a>
+    </nav>
+  </header>
+
+  <!-- ══════════ 1. MONEY FLOW (HERO) ══════════ -->
+  <section class="section" aria-label="Money Flow">
+    <div class="flow-hero" id="flowHero">
+      <div class="flow-hero-label">Money Flow</div>
+      <div class="flow-hero-title">$2,400 Monthly Allocation</div>
+      <div class="flow-hero-sub">Capital One checking → Advizmo accounts</div>
+
+      <div class="flow-map" id="flowMap">
+        <!-- SVG Connector Lines -->
+        <svg class="flow-connectors" id="flowSvg" preserveAspectRatio="none"></svg>
+
+        <!-- SOURCE -->
+        <div class="flow-col source">
+          <div class="flow-node source-node" id="node-source" data-tip="Direct deposit from employer. Arrives 1st of each month.">
+            <div class="flow-node-icon">🏦</div>
+            <div class="flow-node-label">Capital One</div>
+            <div class="flow-node-value" data-tap="source-total">$2,400</div>
+          </div>
+        </div>
+
+        <!-- DESTINATIONS -->
+        <div class="flow-col dest">
+          <div class="flow-node dest-node" data-dest="reserve" data-tip="Emergency fund. Targets 3 months of expenses. Current: $1,800 / $6,000 goal.">
+            <div class="flow-node-label">Reserve</div>
+            <div class="flow-node-value" data-tap="reserve-amt">$200</div>
+            <div class="dest-bar green" style="width:30%"></div>
+          </div>
+          <div class="flow-node dest-node" data-dest="invest" data-tip="Auto-invested into VTI, VXUS, BND. Dollar-cost averaging on market open days.">
+            <div class="flow-node-label">Auto Invest</div>
+            <div class="flow-node-value" data-tap="invest-amt">$520</div>
+            <div class="dest-bar amber" style="width:55%"></div>
+          </div>
+          <div class="flow-node dest-node" data-dest="bills" data-tip="Rent, utilities, subscriptions, insurance. Auto-pay on 5th & 15th.">
+            <div class="flow-node-label">Bills</div>
+            <div class="flow-node-value" data-tap="bills-amt">$1,350</div>
+            <div class="dest-bar blue" style="width:80%"></div>
+          </div>
+          <div class="flow-node dest-node" data-dest="comfort" data-tip="Discretionary spending. Dining, shopping, entertainment.">
+            <div class="flow-node-label">Comfort</div>
+            <div class="flow-node-value" data-tap="comfort-amt">$330</div>
+            <div class="dest-bar white" style="width:25%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Breakdown chips -->
+      <div class="flow-breakdown">
+        <div class="flow-chip tap" data-modal="reserve-detail">
+          <span class="flow-chip-dot c1"></span>
+          Reserve <span>$200</span>
+        </div>
+        <div class="flow-chip tap" data-modal="invest-detail">
+          <span class="flow-chip-dot c2"></span>
+          Invest <span>$520</span>
+        </div>
+        <div class="flow-chip tap" data-modal="bills-detail">
+          <span class="flow-chip-dot c3"></span>
+          Bills <span>$1,350</span>
+        </div>
+        <div class="flow-chip tap" data-modal="comfort-detail">
+          <span class="flow-chip-dot c4"></span>
+          Comfort <span>$330</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 2. RECOMMENDATION BREAKDOWN ══════════ -->
+  <section class="section" aria-label="Recommendation Breakdown">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-label">Recommendation Breakdown</span>
+        <span class="card-badge green">Math Checked</span>
+      </div>
+      <div class="card-body">
+        <div class="calc-tree">
+          <div class="calc-row">
+            <div class="calc-left">
+              <span class="calc-dot income"></span>
+              <span class="calc-name">Monthly Balance</span>
+            </div>
+            <span class="calc-value tap" data-modal="balance-detail">$2,400</span>
+          </div>
+          <div class="calc-row">
+            <div class="calc-left">
+              <span class="calc-dot reserve"></span>
+              <span class="calc-name">Reserve</span>
+              <span class="calc-operator">−</span>
+            </div>
+            <span class="calc-value tap" data-modal="reserve-detail">−$200</span>
+          </div>
+          <div class="calc-row">
+            <div class="calc-left">
+              <span class="calc-dot invest"></span>
+              <span class="calc-name">Auto Invest</span>
+              <span class="calc-operator">−</span>
+            </div>
+            <span class="calc-value tap" data-modal="invest-detail">−$520</span>
+          </div>
+          <div class="calc-row">
+            <div class="calc-left">
+              <span class="calc-dot bills"></span>
+              <span class="calc-name">Bills & Fixed</span>
+              <span class="calc-operator">−</span>
+            </div>
+            <span class="calc-value tap" data-modal="bills-detail">−$1,350</span>
+          </div>
+          <div class="calc-row total">
+            <div class="calc-left">
+              <span class="calc-dot comfort"></span>
+              <span class="calc-name"><strong>Comfort / Discretionary</strong></span>
+            </div>
+            <span class="calc-total-value tap" data-modal="comfort-detail">$330</span>
+          </div>
+        </div>
+        <!-- Visual bar breakdown -->
+        <div class="calc-visual">
+          <div class="calc-bar" style="width:8.3%;background:#60a5fa;border-radius:3px 0 0 3px" data-tip="Reserve 8%"></div>
+          <div class="calc-bar" style="width:21.7%;background:var(--amber)" data-tip="Invest 22%"></div>
+          <div class="calc-bar" style="width:56.2%;background:#ef4444" data-tip="Bills 56%"></div>
+          <div class="calc-bar" style="width:13.8%;background:#a78bfa;border-radius:0 3px 3px 0" data-tip="Comfort 14%"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 3. PORTFOLIO BREAKDOWN ══════════ -->
+  <section class="section" aria-label="Portfolio Breakdown">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-label">Portfolio Breakdown</span>
+        <span class="card-badge green">+11.0% YTD</span>
+      </div>
+      <div class="portfolio-summary">
+        <div class="portfolio-total tap" data-modal="portfolio-total">$42,850</div>
+        <div class="portfolio-gain tap" data-modal="portfolio-gain">+$4,230</div>
+      </div>
+      <div class="card-body" style="padding-top:0">
+        <div class="holding tap" data-modal="holding-vti">
+          <div class="holding-icon vti">VT</div>
+          <div class="holding-info">
+            <div class="holding-name">Vanguard Total Stock</div>
+            <div class="holding-detail">220 shares @ $138.42</div>
+          </div>
+          <div class="holding-right">
+            <div class="holding-value">$30,452</div>
+            <div class="holding-pct">71.1%</div>
+            <div class="holding-change up">+12.4%</div>
+          </div>
+        </div>
+        <div class="holding tap" data-modal="holding-vxus">
+          <div class="holding-icon vxus">VX</div>
+          <div class="holding-info">
+            <div class="holding-name">Vanguard Intl Stock</div>
+            <div class="holding-detail">165 shares @ $52.18</div>
+          </div>
+          <div class="holding-right">
+            <div class="holding-value">$8,610</div>
+            <div class="holding-pct">20.1%</div>
+            <div class="holding-change up">+8.2%</div>
+          </div>
+        </div>
+        <div class="holding tap" data-modal="holding-bnd">
+          <div class="holding-icon bnd">BN</div>
+          <div class="holding-info">
+            <div class="holding-name">Vanguard Total Bond</div>
+            <div class="holding-detail">74 shares @ $71.47</div>
+          </div>
+          <div class="holding-right">
+            <div class="holding-value">$5,289</div>
+            <div class="holding-pct">12.3%</div>
+            <div class="holding-change up">+4.1%</div>
+          </div>
+        </div>
+        <div class="holding" style="opacity:.5">
+          <div class="holding-icon cash-h">CA</div>
+          <div class="holding-info">
+            <div class="holding-name">Cash (Settled)</div>
+            <div class="holding-detail">Awaiting deployment</div>
+          </div>
+          <div class="holding-right">
+            <div class="holding-value">$1,499</div>
+            <div class="holding-pct">3.5%</div>
+            <div class="holding-change" style="color:var(--text-muted)">—</div>
+          </div>
+        </div>
+        <div class="portfolio-mini-bar">
+          <div style="width:71.1%;background:#2563eb"></div>
+          <div style="width:20.1%;background:#7c3aed"></div>
+          <div style="width:12.3%;background:#059669"></div>
+          <div style="width:3.5%;background:#9ca3af"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 4. ACTION IMPACT ══════════ -->
+  <section class="section" aria-label="Action Impact">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-label">Action Impact</span>
+        <span class="card-badge green">Projected</span>
+      </div>
+      <div class="card-body">
+        <div class="impact-grid">
+          <div class="impact-cell tap" data-modal="impact-portfolio">
+            <div class="impact-label">Portfolio Value (12mo)</div>
+            <div class="impact-before">$42,850</div>
+            <div class="impact-after">$51,420</div>
+            <div class="impact-arrow">↑ $8,570</div>
+          </div>
+          <div class="impact-cell tap" data-modal="impact-reserve">
+            <div class="impact-label">Emergency Reserve</div>
+            <div class="impact-before">$1,800</div>
+            <div class="impact-after">$4,200</div>
+            <div class="impact-arrow">↑ $2,400</div>
+          </div>
+          <div class="impact-cell highlight tap" data-modal="impact-networth">
+            <div class="impact-label">Net Worth</div>
+            <div class="impact-before">$52,350</div>
+            <div class="impact-after">$67,870</div>
+            <div class="impact-arrow">↑ $15,520</div>
+          </div>
+          <div class="impact-cell tap" data-modal="impact-tax">
+            <div class="impact-label">Annual Tax Saved</div>
+            <div class="impact-before">$0</div>
+            <div class="impact-after">$5,784</div>
+            <div class="impact-arrow">↑ $5,784</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 5. TAX SAVINGS ══════════ -->
+  <section class="section" aria-label="Tax Savings">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-label">Tax Savings</span>
+        <span class="card-badge green">$482 Saved</span>
+      </div>
+      <div class="card-body">
+        <div class="tax-level open" data-accordion>
+          <div class="tax-header" data-accordion-trigger>
+            <div class="tax-header-left">
+              <div class="tax-header-icon l1">📊</div>
+              <div>
+                <div class="tax-header-title">Level 1 — Automatic Deductions</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div class="tax-header-value">$186</div>
+              <svg class="tax-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+          </div>
+          <div class="tax-detail">
+            <div class="tax-detail-inner">
+              <div class="detail-row"><span>401(k) Employer Match</span><strong>$120/mo</strong></div>
+              <div class="detail-row"><span>Health Insurance Pre-tax</span><strong>$66/mo</strong></div>
+              <div style="margin-top:8px;font-size:.6875rem">These reduce your taxable income automatically each pay period. No action required.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tax-level" data-accordion>
+          <div class="tax-header" data-accordion-trigger>
+            <div class="tax-header-left">
+              <div class="tax-header-icon l2">💹</div>
+              <div>
+                <div class="tax-header-title">Level 2 — Investment Tax Efficiency</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div class="tax-header-value">$214</div>
+              <svg class="tax-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+          </div>
+          <div class="tax-detail">
+            <div class="tax-detail-inner">
+              <div class="detail-row"><span>Tax-Loss Harvesting</span><strong>$98</strong></div>
+              <div class="detail-row"><span>Asset Location (bonds in IRA)</span><strong>$62</strong></div>
+              <div class="detail-row"><span>Long-Term Cap Gains Rate</span><strong>$54</strong></div>
+              <div style="margin-top:8px;font-size:.6875rem">Advizmo automatically tax-loss harvests when losses exceed $200 and optimizes asset location.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tax-level" data-accordion>
+          <div class="tax-header" data-accordion-trigger>
+            <div class="tax-header-left">
+              <div class="tax-header-icon l3">🎯</div>
+              <div>
+                <div class="tax-header-title">Level 3 — Strategic Savings</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div class="tax-header-value">$82</div>
+              <svg class="tax-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+          </div>
+          <div class="tax-detail">
+            <div class="tax-detail-inner">
+              <div class="detail-row"><span>Roth Conversion Ladder Timing</span><strong>$48</strong></div>
+              <div class="detail-row"><span>HSA Max Contribution</span><strong>$34</strong></div>
+              <div style="margin-top:8px;font-size:.6875rem">Strategic moves based on your income bracket. Advizmo recommends optimal timing each quarter.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 6. INVESTMENT EXECUTION ══════════ -->
+  <section class="section" aria-label="Investment Execution">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-label">Investment Execution</span>
+        <span class="card-badge amber">Market Open</span>
+      </div>
+      <div class="card-body">
+        <div class="exec-status">
+          <span class="exec-dot open"></span>
+          <div class="exec-info">
+            <div class="exec-label">VTI — Vanguard Total Stock</div>
+            <div class="exec-time">Order placed 9:32 AM · Filled</div>
+          </div>
+          <span class="exec-amount tap" data-modal="exec-vti">$264</span>
+        </div>
+        <div class="exec-status">
+          <span class="exec-dot pending"></span>
+          <div class="exec-info">
+            <div class="exec-label">VXUS — Vanguard Intl</div>
+            <div class="exec-time">Queued · Executes at 4:00 PM ET</div>
+          </div>
+          <span class="exec-amount tap" data-modal="exec-vxus">$156</span>
+        </div>
+        <div class="exec-status">
+          <span class="exec-dot pending"></span>
+          <div class="exec-info">
+            <div class="exec-label">BND — Vanguard Bond</div>
+            <div class="exec-time">Queued · Executes at 4:00 PM ET</div>
+          </div>
+          <span class="exec-amount tap" data-modal="exec-bnd">$100</span>
+        </div>
+
+        <!-- Timeline -->
+        <div class="exec-timeline">
+          <div class="exec-tick">
+            <div class="exec-tick-dot done"></div>
+            <div class="exec-tick-label">Deposit<br>Received</div>
+          </div>
+          <div class="exec-tick-line done"></div>
+          <div class="exec-tick">
+            <div class="exec-tick-dot done"></div>
+            <div class="exec-tick-label">Reserve<br>Allocated</div>
+          </div>
+          <div class="exec-tick-line done"></div>
+          <div class="exec-tick">
+            <div class="exec-tick-dot active"></div>
+            <div class="exec-tick-label">Market<br>Orders</div>
+          </div>
+          <div class="exec-tick-line"></div>
+          <div class="exec-tick">
+            <div class="exec-tick-dot"></div>
+            <div class="exec-tick-label">Filled<br>Complete</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 7. INTERACTIVE BREAKDOWNS ══════════ -->
+  <section class="section" aria-label="Interactive Breakdowns">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-label">Quick Actions</span>
+        <span class="card-badge green">Tap Any</span>
+      </div>
+      <div class="card-body">
+        <div class="breakdown-grid">
+          <div class="breakdown-tile tap" data-modal="bd-invest">
+            <div class="breakdown-tile-icon">📈</div>
+            <div class="breakdown-tile-label">Auto Invest</div>
+            <div class="breakdown-tile-value" data-tap="invest-amt">$520</div>
+            <div class="breakdown-tile-sub">21.7% of income</div>
+          </div>
+          <div class="breakdown-tile tap" data-modal="bd-reserve">
+            <div class="breakdown-tile-icon">🛡️</div>
+            <div class="breakdown-tile-label">Emergency Reserve</div>
+            <div class="breakdown-tile-value" data-tap="reserve-amt">$200</div>
+            <div class="breakdown-tile-sub">30% to goal</div>
+          </div>
+          <div class="breakdown-tile tap" data-modal="bd-portfolio">
+            <div class="breakdown-tile-icon">💼</div>
+            <div class="breakdown-tile-label">Portfolio</div>
+            <div class="breakdown-tile-value" data-tap="portfolio-total">$42,850</div>
+            <div class="breakdown-tile-sub">+$4,230 YTD</div>
+          </div>
+          <div class="breakdown-tile tap" data-modal="bd-tax">
+            <div class="breakdown-tile-icon">🧾</div>
+            <div class="breakdown-tile-label">Tax Saved</div>
+            <div class="breakdown-tile-value" data-tap="tax-total">$482</div>
+            <div class="breakdown-tile-sub">3 strategies</div>
+          </div>
+          <div class="breakdown-tile tap" data-modal="bd-bills">
+            <div class="breakdown-tile-icon">📋</div>
+            <div class="breakdown-tile-label">Fixed Bills</div>
+            <div class="breakdown-tile-value" data-tap="bills-amt">$1,350</div>
+            <div class="breakdown-tile-sub">56.2% of income</div>
+          </div>
+          <div class="breakdown-tile tap" data-modal="bd-comfort">
+            <div class="breakdown-tile-icon">☕</div>
+            <div class="breakdown-tile-label">Comfort Fund</div>
+            <div class="breakdown-tile-value" data-tap="comfort-amt">$330</div>
+            <div class="breakdown-tile-sub">13.8% of income</div>
+          </div>
+          <div class="breakdown-tile span-full tap" data-modal="bd-schedule">
+            <div style="display:flex;align-items:center;gap:12px">
+              <div style="font-size:1.25rem">📅</div>
+              <div>
+                <div class="breakdown-tile-label">Next Allocation</div>
+                <div class="breakdown-tile-value">Aug 1, 2026</div>
+                <div class="breakdown-tile-sub">17 days away · $2,400 expected</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer-spacer"></div>
 </div>
 
-<div class="snav">
-  <button class="off" onclick="location.href='invest-overview-1-command.html'">Overview</button>
-  <button class="off" onclick="location.href='invest-activity-1-timeline.html'">Activity</button>
-  <button class="off" onclick="location.href='invest-documents-1-files.html'">Documents</button>
-  <button class="on">Math</button>
+<!-- ══════════ MODAL ══════════ -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <h3 class="modal-title" id="modalTitle">Detail</h3>
+    <div class="modal-body" id="modalBody"></div>
+    <button class="modal-close" id="modalClose">Close</button>
+  </div>
 </div>
 
-<div class="ct">
+<script>
+(function(){
+  /* ── Tooltip on tap ── */
+  document.querySelectorAll('[data-tip]').forEach(el=>{
+    el.addEventListener('click',function(e){
+      document.querySelectorAll('.tooltip-wrap.show').forEach(t=>t.classList.remove('show'));
+      const tipText=this.getAttribute('data-tip');
+      if(!tipText)return;
+      let wrap=this.closest('.tooltip-wrap');
+      if(!wrap){
+        wrap=document.createElement('span');
+        wrap.className='tooltip-wrap';
+        this.parentNode.insertBefore(wrap,this);
+        wrap.appendChild(this);
+        const tip=document.createElement('span');
+        tip.className='tooltip';
+        tip.textContent=tipText;
+        wrap.appendChild(tip);
+      }
+      wrap.classList.toggle('show');
+      setTimeout(()=>wrap.classList.remove('show'),4000);
+    });
+  });
 
-  <div class="hero">
-    <div class="hero-label">Money Flow</div>
-    <div class="hero-title">Track every dollar</div>
-    <div class="hero-sub">Visual map of where your money came from and where it went.</div>
-  </div>
+  /* ── Accordion ── */
+  document.querySelectorAll('[data-accordion-trigger]').forEach(trigger=>{
+    trigger.addEventListener('click',()=>{
+      const level=trigger.closest('[data-accordion]');
+      level.classList.toggle('open');
+    });
+  });
 
-  <!-- Money Flow Map -->
-  <div class="gh">Money Movement — December 2024</div>
-  <div class="card">
-    <div class="card-head"><div class="card-title">Flow Map</div><div class="card-badge green">$720 Total Moved</div></div>
+  /* ── Modal content map ── */
+  const modalData={
+    'source-total':{title:'Capital One — Direct Deposit',body:'<div class="detail-row"><span>Source</span><strong>Employer Payroll</strong></div><div class="detail-row"><span>Amount</span><strong>$2,400</strong></div><div class="detail-row"><span>Frequency</span><strong>Monthly (1st)</strong></div><div class="detail-row"><span>Account</span><strong>Capital One 360</strong></div><div style="margin-top:12px;font-size:.75rem;color:#6b7280">This is your net take-home pay after taxes, insurance, and 401(k) contributions.</div>'},
+    'reserve-amt':{title:'Emergency Reserve',body:'<div class="detail-row"><span>Monthly Allocation</span><strong>$200</strong></div><div class="detail-row"><span>Current Balance</span><strong>$1,800</strong></div><div class="detail-row"><span>Goal</span><strong>$6,000 (3 mo expenses)</strong></div><div class="detail-row"><span>Progress</span><strong>30%</strong></div><div class="detail-row"><span>APY</span><strong>4.25%</strong></div><div style="margin-top:12px;font-size:.75rem;color:#6b7280">Automatically transfers on the 1st. High-yield savings at Marcus by Goldman Sachs.</div>'},
+    'invest-amt':{title:'Auto Invest Allocation',body:'<div class="detail-row"><span>Monthly Amount</span><strong>$520</strong></div><div class="detail-row"><span>VTI (Total US)</span><strong>$264 (51%)</strong></div><div class="detail-row"><span>VXUS (Intl)</span><strong>$156 (30%)</strong></div><div class="detail-row"><span>BND (Bonds)</span><strong>$100 (19%)</strong></div><div class="detail-row"><span>Strategy</span><strong>DCA · Market Open</strong></div><div style="margin-top:12px;font-size:.75rem;color:#6b7280">Dollar-cost averaging. Orders placed on 1st business day of each month.</div>'},
+    'bills-amt':{title:'Fixed Bills & Expenses',body:'<div class="detail-row"><span>Rent</span><strong>$1,100</strong></div><div class="detail-row"><span>Utilities</span><strong>$120</strong></div><div class="detail-row"><span>Insurance</span><strong>$85</strong></div><div class="detail-row"><span>Subscriptions</span><strong>$45</strong></div><div class="detail-row"><span>Total</span><strong>$1,350</strong></div><div style="margin-top:12px;font-size:.75rem;color:#6b7280">Auto-pay enabled for all fixed expenses. Reviewed quarterly for savings opportunities.</div>'},
+    'comfort-amt':{title:'Comfort / Discretionary Fund',body:'<div class="detail-row"><span>Monthly Budget</span><strong>$330</strong></div><div class="detail-row"><span>Dining</span><strong>$120</strong></div><div class="detail-row"><span>Shopping</span><strong>$80</strong></div><div class="detail-row"><span>Entertainment</span><strong>$70</strong></div><div class="detail-row"><span>Misc</span><strong>$60</strong></div><div style="margin-top:12px;font-size:.75rem;color:#6b7280">Flexible spending. No restrictions — this is your quality-of-life budget.</div>'},
+    'portfolio-total':{title:'Total Portfolio Value',body:'<div class="detail-row"><span>Current Value</span><strong>$42,850</strong></div><div class="detail-row"><span>Total Invested</span><strong>$38,620</strong></div><div class="detail-row"><span>All-Time Gain</span><strong>+$4,230 (+11.0%)</strong></div><div class="detail-row"><span>Dividend Yield</span><strong>1.8% ($771/yr)</strong></div><div style="margin-top:12px;font-size:.75rem;color:#6b7280">Diversified index fund portfolio. Rebalanced quarterly. Tax-efficient placement.</div>'},
+    'portfolio-gain':{title:'Year-to-Date Performance',body:'<div class="detail-row"><span>YTD Return</span><strong>+$4,230</strong></div><div class="detail-row"><span>Percentage</span><strong>+11.0%</strong></div><div class="detail-row"><span>Benchmark (S&P 500)</span><strong>+10.2%</strong></div><div class="detail-row"><span>Alpha</span><strong>+0.8%</strong></div><div style="margin-top:12px;font-size:.75rem;color:#6b7280">Outperforming benchmark by 0.8% through tax-loss harvesting and optimal asset location.</div>'},
+    'holding-vti':{title:'Vanguard Total Stock Market ETF',body:'<div class="detail-row"><span>Shares</span><strong>220</strong></div><div class="detail-row"><span>Avg Cost</span><strong>$125.40</strong></div><div class="detail-row"><span>Current Price</span><strong>$138.42</strong></div><div class="detail-row"><span>Value</span><strong>$30,452</strong></div><div class="detail-row"><span>Gain</span><strong>+$2,864 (+10.4%)</strong></div><div class="detail-row"><span>Dividend (YTD)</span><strong>+$420</strong></div>'},
+    'holding-vxus':{title:'Vanguard Total Intl Stock ETF',body:'<div class="detail-row"><span>Shares</span><strong>165</strong></div><div class="detail-row"><span>Avg Cost</span><strong>$48.20</strong></div><div class="detail-row"><span>Current Price</span><strong>$52.18</strong></div><div class="detail-row"><span>Value</span><strong>$8,610</strong></div><div class="detail-row"><span>Gain</span><strong>+$657 (+8.2%)</strong></div>'},
+    'holding-bnd':{title:'Vanguard Total Bond Market ETF',body:'<div class="detail-row"><span>Shares</span><strong>74</strong></div><div class="detail-row"><span>Avg Cost</span><strong>$68.67</strong></div><div class="detail-row"><span>Current Price</span><strong>$71.47</strong></div><div class="detail-row"><span>Value</span><strong>$5,289</strong></div><div class="detail-row"><span>Gain</span><strong>+$207 (+4.1%)</strong></div>'},
+    'balance-detail':{title:'Monthly Balance Calculation',body:'<div class="detail-row"><span>Gross Pay</span><strong>$3,200</strong></div><div class="detail-row"><span>Federal Tax</span><strong>−$480</strong></div><div class="detail-row"><span>State Tax</span><strong>−$160</strong></div><div class="detail-row"><span>FICA</span><strong>−$120</strong></div><div class="detail-row"><span>401(k) Match</span><strong>−$40</strong></div><div class="detail-row"><span style="font-weight:600">Net Take-Home</span><strong>$2,400</strong></div>'},
+    'invest-detail':{title:'Auto Invest Breakdown',body:'<div class="detail-row"><span>Total Monthly</span><strong>$520</strong></div><div class="detail-row"><span>VTI (US Total)</span><strong>$264</strong></div><div class="detail-row"><span>VXUS (Intl)</span><strong>$156</strong></div><div class="detail-row"><span>BND (Bonds)</span><strong>$100</strong></div><div class="detail-row"><span>Allocation Date</span><strong>1st Business Day</strong></div>'},
+    'reserve-detail':{title:'Emergency Reserve Detail',body:'<div class="detail-row"><span>Monthly</span><strong>$200</strong></div><div class="detail-row"><span>Current</span><strong>$1,800</strong></div><div class="detail-row"><span>Goal</span><strong>$6,000</strong></div><div class="detail-row"><span>ETA to Goal</span><strong>21 months</strong></div><div class="detail-row"><span>Account</span><strong>Marcus HYSA</strong></div>'},
+    'bills-detail':{title:'Fixed Bills Detail',body:'<div class="detail-row"><span>Rent</span><strong>$1,100</strong></div><div class="detail-row"><span>Electric + Gas</span><strong>$85</strong></div><div class="detail-row"><span>Internet</span><strong>$35</strong></div><div class="detail-row"><span>Phone</span><strong>$50</strong></div><div class="detail-row"><span>Renter Insurance</span><strong>$35</strong></div><div class="detail-row"><span>Gym</span><strong>$25</strong></div><div class="detail-row"><span>Streaming</span><strong>$20</strong></div>'},
+    'comfort-detail':{title:'Comfort Fund Detail',body:'<div class="detail-row"><span>Monthly Budget</span><strong>$330</strong></div><div class="detail-row"><span>Spent This Month</span><strong>$187</strong></div><div class="detail-row"><span>Remaining</span><strong>$143</strong></div><div class="detail-row"><span>Daily Budget</span><strong>$10.65</strong></div>'},
+    'exec-vti':{title:'VTI Order Details',body:'<div class="detail-row"><span>Status</span><strong>Filled ✓</strong></div><div class="detail-row"><span>Shares</span><strong>1.91</strong></div><div class="detail-row"><span>Price</strong><strong>$138.42</strong></div><div class="detail-row"><span>Total</span><strong>$264.38</strong></div><div class="detail-row"><span>Time</span><strong>9:32 AM ET</strong></div>'},
+    'exec-vxus':{title:'VXUS Order Details',body:'<div class="detail-row"><span>Status</span><strong>Queued</strong></div><div class="detail-row"><span>Shares</span><strong>~2.99</strong></div><div class="detail-row"><span>Est. Price</span><strong>$52.18</strong></div><div class="detail-row"><span>Est. Total</span><strong>$156.02</strong></div><div class="detail-row"><span>Exec Time</span><strong>4:00 PM ET</strong></div>'},
+    'exec-bnd':{title:'BND Order Details',body:'<div class="detail-row"><span>Status</span><strong>Queued</strong></div><div class="detail-row"><span>Shares</span><strong>~1.40</strong></div><div class="detail-row"><span>Est. Price</span><strong>$71.47</strong></div><div class="detail-row"><span>Est. Total</span><strong>$100.06</strong></div><div class="detail-row"><span>Exec Time</span><strong>4:00 PM ET</strong></div>'},
+    'impact-portfolio':{title:'Portfolio Projection (12mo)',body:'<div class="detail-row"><span>Current</span><strong>$42,850</strong></div><div class="detail-row"><span>Monthly Contributions</span><strong>$6,240/yr</strong></div><div class="detail-row"><span>Projected Growth (8%)</span><strong>+$3,428</strong></div><div class="detail-row"><span>Dividends</span><strong>+$771</strong></div><div class="detail-row"><span style="font-weight:600">Projected Value</span><strong>$51,420</strong></div>'},
+    'impact-reserve':{title:'Emergency Reserve Projection',body:'<div class="detail-row"><span>Current</span><strong>$1,800</strong></div><div class="detail-row"><span>Monthly</span><strong>+$200</strong></div><div class="detail-row"><span>Interest (4.25% APY)</span><strong>+$102</strong></div><div class="detail-row"><span style="font-weight:600">12-Month Total</span><strong>$4,200</strong></div>'},
+    'impact-networth':{title:'Net Worth Projection',body:'<div class="detail-row"><span>Current Net Worth</span><strong>$52,350</strong></div><div class="detail-row"><span>Portfolio Growth</span><strong>+$8,570</strong></div><div class="detail-row"><span>Reserve Growth</span><strong>+$2,400</strong></div><div class="detail-row"><span>Debt Paydown</span><strong>+$4,550</strong></div><div class="detail-row"><span style="font-weight:600">Projected Net Worth</span><strong>$67,870</strong></div>'},
+    'impact-tax':{title:'Annual Tax Savings',body:'<div class="detail-row"><span>401(k) Deduction</span><strong>$2,160</strong></div><div class="detail-row"><span>Tax-Loss Harvesting</span><strong>$1,176</strong></div><div class="detail-row"><span>Asset Location</span><strong>$1,344</strong></div><div class="detail-row"><span>Roth Conversion</span><strong>$1,104</strong></div><div class="detail-row"><span style="font-weight:600">Total Annual Savings</span><strong>$5,784</strong></div>'},
+    'bd-invest':{title:'Auto Invest Summary',body:'<div class="detail-row"><span>Monthly</span><strong>$520</strong></div><div class="detail-row"><span>Annual</span><strong>$6,240</strong></div><div class="detail-row"><span>Allocation</span><strong>DCA Monthly</strong></div><div class="detail-row"><span>Next Order</span><strong>Aug 1, 2026</strong></div>'},
+    'bd-reserve':{title:'Reserve Summary',body:'<div class="detail-row"><span>Monthly</span><strong>$200</strong></div><div class="detail-row"><span>Current</span><strong>$1,800</strong></div><div class="detail-row"><span>Goal</span><strong>$6,000</strong></div><div class="detail-row"><span>Progress</span><strong>30%</strong></div>'},
+    'bd-portfolio':{title:'Portfolio Summary',body:'<div class="detail-row"><span>Value</span><strong>$42,850</strong></div><div class="detail-row"><span>YTD Return</span><strong>+$4,230</strong></div><div class="detail-row"><span>Holdings</span><strong>4 positions</strong></div><div class="detail-row"><span>Allocation</span><strong>71/20/12/7</strong></div>'},
+    'bd-tax':{title:'Tax Savings Summary',body:'<div class="detail-row"><span>Monthly Saved</span><strong>$482</strong></div><div class="detail-row"><span>Annual Projected</span><strong>$5,784</strong></div><div class="detail-row"><span>Strategies</span><strong>3 levels</strong></div><div class="detail-row"><span>Effective Rate</span><strong>22%</strong></div>'},
+    'bd-bills':{title:'Fixed Bills Summary',body:'<div class="detail-row"><span>Monthly</span><strong>$1,350</strong></div><div class="detail-row"><span>Annual</span><strong>$16,200</strong></div><div class="detail-row"><span>% of Income</span><strong>56.2%</strong></div><div class="detail-row"><span>Auto-Pay</span><strong>Enabled</strong></div>'},
+    'bd-comfort':{title:'Comfort Fund Summary',body:'<div class="detail-row"><span>Monthly</span><strong>$330</strong></div><div class="detail-row"><span>Remaining</span><strong>$143</strong></div><div class="detail-row"><span>Daily Budget</span><strong>$10.65</strong></div><div class="detail-row"><span>% of Income</span><strong>13.8%</strong></div>'},
+    'bd-schedule':{title:'Next Allocation Schedule',body:'<div class="detail-row"><span>Date</span><strong>Aug 1, 2026</strong></div><div class="detail-row"><span>Days Away</span><strong>17</strong></div><div class="detail-row"><span>Expected Deposit</span><strong>$2,400</strong></div><div class="detail-row"><span>Reserve</span><strong>$200</strong></div><div class="detail-row"><span>Invest</span><strong>$520</strong></div><div class="detail-row"><span>Bills</span><strong>$1,350</strong></div><div class="detail-row"><span>Comfort</span><strong>$330</strong></div>'},
+    'tax-total':{title:'Tax Savings Detail',body:'<div class="detail-row"><span>Level 1 — Auto Deductions</span><strong>$186</strong></div><div class="detail-row"><span>Level 2 — Tax Efficiency</span><strong>$214</strong></div><div class="detail-row"><span>Level 3 — Strategic</span><strong>$82</strong></div><div class="detail-row"><span style="font-weight:600">Total</span><strong>$482/mo</strong></div>'},
+  };
 
-    <!-- Source 1 -->
-    <div class="sankey-source">
-      <div class="sankey-source-icon chase">🏦</div>
-      <div class="sankey-source-info">
-        <div class="sankey-source-name">Chase Checking</div>
-        <div class="sankey-source-amt">$1,200 available → $720 moved</div>
-      </div>
-    </div>
-    <div class="sankey-pipe">
-      <div class="sankey-pipe-branches">
-        <div class="sankey-branch"><div class="sankey-branch-line"></div><div class="sankey-branch-dot blue"></div></div>
-        <div class="sankey-branch"><div class="sankey-branch-line"></div><div class="sankey-branch-dot green"></div></div>
-      </div>
-    </div>
+  /* ── Modal logic ── */
+  const overlay=document.getElementById('modalOverlay');
+  const titleEl=document.getElementById('modalTitle');
+  const bodyEl=document.getElementById('modalBody');
+  const closeBtn=document.getElementById('modalClose');
 
-    <!-- Destinations -->
-    <div class="sankey-dest">
-      <div class="sankey-dest-icon port">📈</div>
-      <div class="sankey-dest-info">
-        <div class="sankey-dest-name">Aggressive Portfolio</div>
-        <div class="sankey-dest-amt">$520 invested</div>
-        <div class="sankey-dest-sub">VTI $302 · VXUS $94 · BND $72 · VNQ $52</div>
-      </div>
-    </div>
-    <div class="sankey-dest">
-      <div class="sankey-dest-icon res">🛡️</div>
-      <div class="sankey-dest-info">
-        <div class="sankey-dest-name">Emergency Reserve</div>
-        <div class="sankey-dest-amt">$200 saved</div>
-        <div class="sankey-dest-sub">Earning 4.1% APY · 84% to goal</div>
-      </div>
-    </div>
+  function openModal(key){
+    const d=modalData[key];
+    if(!d)return;
+    titleEl.textContent=d.title;
+    bodyEl.innerHTML=d.body;
+    overlay.classList.add('show');
+    document.body.style.overflow='hidden';
+  }
+  function closeModal(){
+    overlay.classList.remove('show');
+    document.body.style.overflow='';
+  }
 
-    <div class="flow-total">
-      <div class="flow-total-label">From Chase Checking</div>
-      <div class="flow-total-value">$720 / $1,200</div>
-    </div>
-  </div>
+  document.addEventListener('click',e=>{
+    const trigger=e.target.closest('[data-modal]');
+    if(trigger){
+      e.preventDefault();
+      openModal(trigger.getAttribute('data-modal'));
+      return;
+    }
+    if(e.target===overlay||e.target===closeBtn){closeModal();}
+  });
+  closeBtn.addEventListener('click',closeModal);
 
-  <!-- Source 2: Dividends -->
-  <div class="card">
-    <div class="card-head"><div class="card-title">Dividend Flow</div><div class="card-badge blue">Auto-Reinvested</div></div>
-    <div class="sankey-source">
-      <div class="sankey-source-icon div">💰</div>
-      <div class="sankey-source-info">
-        <div class="sankey-source-name">VTI Dividends</div>
-        <div class="sankey-source-amt">$42.18 earned Dec 15</div>
-      </div>
-    </div>
-    <div class="sankey-pipe">
-      <div class="sankey-pipe-branches">
-        <div class="sankey-branch"><div class="sankey-branch-line"></div><div class="sankey-branch-dot green"></div></div>
-      </div>
-    </div>
-    <div class="sankey-dest">
-      <div class="sankey-dest-icon inv">🔄</div>
-      <div class="sankey-dest-info">
-        <div class="sankey-dest-name">Reinvested into VTI</div>
-        <div class="sankey-dest-amt">0.21 shares bought</div>
-        <div class="sankey-dest-sub">At $198.42/share · Market open execution</div>
-      </div>
-    </div>
-  </div>
+  /* ── Draw flow connector lines ── */
+  function drawFlowLines(){
+    const svg=document.getElementById('flowSvg');
+    const map=document.getElementById('flowMap');
+    if(!svg||!map)return;
+    svg.innerHTML='';
+    const source=document.getElementById('node-source');
+    if(!source)return;
+    const sRect=source.getBoundingClientRect();
+    const mRect=map.getBoundingClientRect();
+    const sx=sRect.right-mRect.left;
+    const sy=sRect.top+sRect.height/2-mRect.top;
 
-  <!-- Recommendation Calculation -->
-  <div class="gh">How $520 Was Calculated</div>
-  <div class="card">
-    <div class="card-head"><div class="card-title">Calculation Tree</div><div class="card-badge amber">Auto Invest</div></div>
-    <div class="calc-tree">
-      <div class="calc-node"><div class="calc-indent"></div><div class="calc-node-text">Checking Balance</div><div class="calc-node-value">$1,200.00</div></div>
-      <div class="calc-node"><div class="calc-indent"><div class="calc-indent-dot"></div></div><div class="calc-node-text">− Upcoming Bills (3 days)</div><div class="calc-node-value amber">−$380.00</div></div>
-      <div class="calc-node"><div class="calc-indent"><div class="calc-indent-dot"></div></div><div class="calc-node-text">− Reserve Goal (3 months)</div><div class="calc-node-value amber">−$200.00</div></div>
-      <div class="calc-node"><div class="calc-indent"><div class="calc-indent-dot"></div></div><div class="calc-node-text">− Comfort Zone Buffer</div><div class="calc-node-value amber">−$100.00</div></div>
-      <div class="calc-node"><div class="calc-indent"></div><div class="calc-node-text"><strong>= Safe Remaining Balance</strong></div><div class="calc-node-value"><strong>$520.00</strong></div></div>
-    </div>
-    <div class="calc-node-result">
-      <div class="calc-node-result-text">→ $520 invested into Aggressive Portfolio</div>
-    </div>
-  </div>
+    document.querySelectorAll('.flow-node.dest-node').forEach(dest=>{
+      const dRect=dest.getBoundingClientRect();
+      const dx=dRect.left-mRect.left;
+      const dy=dRect.top+dRect.height/2-mRect.top;
 
-  <!-- Investment Allocation -->
-  <div class="gh">Investment Breakdown</div>
-  <div class="card">
-    <div class="card-head"><div class="card-title">Where $520 went</div><div class="card-badge blue">Dec 30</div></div>
-    <div class="perf-breakdown">
-      <div class="perf-row"><div class="perf-row-label">VTI (58%)</div><div class="perf-bar-bg"><div class="perf-bar-fill" style="width:58%;background:#1551a8"></div></div><div class="perf-row-value">$301.60</div></div>
-      <div class="perf-row"><div class="perf-row-label">VXUS (18%)</div><div class="perf-bar-bg"><div class="perf-bar-fill" style="width:18%;background:#7c3aed"></div></div><div class="perf-row-value">$93.60</div></div>
-      <div class="perf-row"><div class="perf-row-label">BND (14%)</div><div class="perf-bar-bg"><div class="perf-bar-fill" style="width:14%;background:#166f47"></div></div><div class="perf-row-value">$72.80</div></div>
-      <div class="perf-row"><div class="perf-row-label">VNQ (10%)</div><div class="perf-bar-bg"><div class="perf-bar-fill" style="width:10%;background:#c2790a"></div></div><div class="perf-row-value">$52.00</div></div>
-    </div>
-    <div class="flow-total">
-      <div class="flow-total-label">Total Invested</div>
-      <div class="flow-total-value">$520.00</div>
-    </div>
-  </div>
+      const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+      line.setAttribute('x1',sx);
+      line.setAttribute('y1',sy);
+      line.setAttribute('x2',dx);
+      line.setAttribute('y2',dy);
+      line.classList.add('flow-line-active','flow-pulse');
+      svg.appendChild(line);
+    });
+  }
+  drawFlowLines();
+  window.addEventListener('resize',drawFlowLines);
 
-  <!-- Tax Savings Flow -->
-  <div class="gh">Tax Savings Calculation</div>
-  <div class="card">
-    <div class="card-head"><div class="card-title">How $482 was saved</div><div class="card-badge green">Verified</div></div>
-    <div class="calc-tree">
-      <div class="calc-node"><div class="calc-indent"></div><div class="calc-node-text">Tax-Loss Harvesting (VXUS)</div><div class="calc-node-value green">$340.00</div></div>
-      <div class="calc-node"><div class="calc-indent"><div class="calc-indent-dot"></div></div><div class="calc-node-text">× Tax Rate (24%)</div><div class="calc-node-value">= $81.60</div></div>
-      <div class="calc-node"><div class="calc-indent"></div><div class="calc-node-text">Long-term Capital Gains Benefit</div><div class="calc-node-value green">$216.00</div></div>
-      <div class="calc-node"><div class="calc-indent"><div class="calc-indent-dot"></div></div><div class="calc-node-text">15% vs 24% on $2,400 gains</div><div class="calc-node-value">= $216.00</div></div>
-      <div class="calc-node"><div class="calc-indent"></div><div class="calc-node-text">Qualified Dividend Savings</div><div class="calc-node-value green">$48.20</div></div>
-      <div class="calc-node"><div class="calc-indent"></div><div class="calc-node-text">Tax-Free Reinvestment Growth</div><div class="calc-node-value green">$136.20</div></div>
-    </div>
-    <div class="calc-node-result">
-      <div class="calc-node-result-text">→ Total Estimated Tax Savings: $482.00</div>
-    </div>
-  </div>
+  /* ── Flow particle animation ── */
+  function spawnParticles(){
+    const map=document.getElementById('flowMap');
+    const source=document.getElementById('node-source');
+    if(!map||!source)return;
+    const sRect=source.getBoundingClientRect();
+    const mRect=map.getBoundingClientRect();
+    const sx=sRect.right-mRect.left;
+    const sy=sRect.top+sRect.height/2-mRect.top;
 
-  <!-- Performance Attribution -->
-  <div class="gh">Where Returns Came From</div>
-  <div class="card">
-    <div class="card-head"><div class="card-title">Performance Attribution</div><div class="card-badge blue">YTD +$4,230</div></div>
-    <div class="perf-breakdown">
-      <div class="perf-row"><div class="perf-row-label">Market</div><div class="perf-bar-bg"><div class="perf-bar-fill" style="width:67%;background:#1551a8"></div></div><div class="perf-row-value" style="color:#166f47">+$2,840</div></div>
-      <div class="perf-row"><div class="perf-row-label">Dividends</div><div class="perf-bar-bg"><div class="perf-bar-fill" style="width:16%;background:#7c3aed"></div></div><div class="perf-row-value" style="color:#166f47">+$680</div></div>
-      <div class="perf-row"><div class="perf-row-label">Interest</div><div class="perf-bar-bg"><div class="perf-bar-fill" style="width:8%;background:#166f47"></div></div><div class="perf-row-value" style="color:#166f47">+$320</div></div>
-      <div class="perf-row"><div class="perf-row-label">Rebalancing</div><div class="perf-bar-bg"><div class="perf-bar-fill" style="width:4%;background:#c2790a"></div></div><div class="perf-row-value" style="color:#166f47">+$190</div></div>
-      <div class="perf-row"><div class="perf-row-label">Cash Opt.</div><div class="perf-bar-bg"><div class="perf-bar-fill" style="width:5%;background:#be185d"></div></div><div class="perf-row-value" style="color:#166f47">+$200</div></div>
-    </div>
-  </div>
-
-  <!-- Action Impact -->
-  <div class="gh">Action Impact</div>
-  <div class="card">
-    <div class="card-head"><div class="card-title">Measurable outcomes</div><div class="card-badge green">This Quarter</div></div>
-    <div class="calc-row" style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(0,0,0,.04)"><div style="font-size:13px;color:#6b7280">Financial Health</div><div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:700;color:#166f47">82 → 90</div></div>
-    <div class="calc-row" style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(0,0,0,.04)"><div style="font-size:13px;color:#6b7280">Projected Annual Return</div><div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:700;color:#166f47">+$4,230</div></div>
-    <div class="calc-row" style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(0,0,0,.04)"><div style="font-size:13px;color:#6b7280">Emergency Fund</div><div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:700;color:#166f47">68% → 84%</div></div>
-    <div class="calc-row" style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(0,0,0,.04)"><div style="font-size:13px;color:#6b7280">Bills Covered</div><div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:700;color:#166f47">100%</div></div>
-    <div class="calc-row" style="display:flex;justify-content:space-between;padding:8px 0"><div style="font-size:13px;color:#6b7280">Tax Efficiency</div><div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:700;color:#166f47">+$482</div></div>
-  </div>
-
-</div>
-
+    document.querySelectorAll('.flow-node.dest-node').forEach(dest=>{
+      const dRect=dest.getBoundingClientRect();
+      const dx=dRect.left-mRect.left-sx;
+      const dy=dRect.top+dRect.height/2-mRect.top-sy;
+      const p=document.createElement('div');
+      p.className='flow-particle';
+      p.style.left=sx+'px';
+      p.style.top=sy+'px';
+      p.style.setProperty('--dx',dx+'px');
+      p.style.setProperty('--dy',dy+'px');
+      map.appendChild(p);
+      setTimeout(()=>p.classList.add('animate'),50);
+      setTimeout(()=>p.remove(),2300);
+    });
+  }
+  setInterval(spawnParticles,2600);
+  setTimeout(spawnParticles,600);
+})();
+</script>
 </body>
 </html>
