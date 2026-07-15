@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Activity – Advizmo</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:#f8f9fa;font-family:'Inter',sans-serif;color:#1c1c1e;max-width:430px;margin:0 auto;min-height:100vh;padding-bottom:100px}
+.sb{height:44px;padding:14px 20px 0;display:flex;justify-content:space-between;align-items:center;background:#f8f9fa;position:sticky;top:0;z-index:100}
+.sbt{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600}
+.nh{display:flex;align-items:center;padding:8px 16px 10px;background:#f8f9fa;position:sticky;top:44px;z-index:99}
+.nh .back{width:36px;height:36px;border-radius:50%;background:rgba(120,120,128,.08);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.nh .back svg{width:18px;height:18px;fill:none;stroke:#1c1c1e;stroke-width:2.5;stroke-linecap:round}
+.nh .title{flex:1;text-align:center;font-family:'IBM Plex Sans',sans-serif;font-size:17px;font-weight:600}
+.snav{display:flex;gap:4px;padding:4px 20px 12px;background:#f8f9fa;overflow-x:auto;scrollbar-width:none;position:sticky;top:82px;z-index:98}
+.snav::-webkit-scrollbar{display:none}
+.snav button{flex-shrink:0;padding:8px 18px;border-radius:10px;border:none;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+.snav .on{background:#1c1c1e;color:#fff}.snav .off{background:transparent;color:#8e8e93}
+.filters{display:flex;gap:6px;padding:0 20px 12px;background:#f8f9fa;overflow-x:auto;scrollbar-width:none}
+.filters::-webkit-scrollbar{display:none}
+.filters button{flex-shrink:0;padding:7px 14px;border-radius:20px;border:1px solid rgba(0,0,0,.08);font-family:'Inter',sans-serif;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
+.filters .on{background:#1c1c1e;color:#fff;border-color:#1c1c1e}.filters .off{background:#fff;color:#6b7280}
+.search{padding:0 20px 16px;background:#f8f9fa}
+.search-in{display:flex;align-items:center;gap:8px;padding:10px 14px;background:#fff;border-radius:12px;border:1px solid rgba(0,0,0,.06)}
+.search-in svg{width:16px;height:16px;flex-shrink:0}
+.search-in input{border:none;outline:none;font-family:'Inter',sans-serif;font-size:15px;color:#1c1c1e;flex:1;background:transparent}
+.ct{padding:0 20px}
+.gh{position:sticky;top:140px;z-index:10;padding:12px 0 8px;background:#f8f9fa;font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:.06em}
+.activity-group{margin-bottom:16px}
+.act-card{background:#fff;border-radius:16px;padding:16px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,.04);cursor:pointer;transition:all .15s}
+.act-card:active{transform:scale(.98)}
+.act-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.act-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.act-icon svg{width:18px;height:18px}
+.act-icon.auto{background:#e0efff;color:#1551a8}
+.act-icon.div{background:#eefbf4;color:#166f47}
+.act-icon.rebal{background:#f3e8ff;color:#7c3aed}
+.act-icon.goal{background:#fef3c7;color:#c2790a}
+.act-icon.tax{background:#eefbf4;color:#166f47}
+.act-info{flex:1;min-width:0}
+.act-type{font-size:10px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px}
+.act-title{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600;color:#1c1c1e;line-height:1.3}
+.act-desc{font-size:13px;color:#6b7280;line-height:1.4;margin-top:4px}
+.act-meta{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:1px solid rgba(0,0,0,.04)}
+.act-left{display:flex;align-items:center;gap:8px}
+.act-time{font-size:12px;color:#8e8e93}
+.act-amt{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600;color:#1c1c1e}
+.act-st{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:600}
+.act-st.done{background:#eefbf4;color:#166f47}.act-st.sched{background:#e0efff;color:#1551a8}
+.act-ch{color:#c7c7cc;font-size:18px;position:absolute;right:16px;top:16px}
+.insight-card{background:linear-gradient(135deg,#eff6ff,#f0f7ff);border-radius:12px;padding:14px;margin-top:8px;display:flex;gap:10px;align-items:flex-start}
+.insight-icon{width:24px;height:24px;border-radius:6px;background:#e0efff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.insight-icon svg{width:14px;height:14px;color:#1551a8}
+.insight-text{font-size:12px;color:#374151;line-height:1.5}
+.insight-label{font-size:10px;font-weight:600;color:#1551a8;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
+</style>
+</head>
+<body>
+
+<div class="sb"><span class="sbt">9:41</span><div style="display:flex;gap:5px;align-items:center"><svg width="16" height="12" viewBox="0 0 16 12" fill="#1c1c1e"><path d="M1 7.5c1.5-2 3.5-3 5.5-3s4 1 5.5 3" stroke="#1c1c1e" stroke-width="1.5" fill="none" stroke-linecap="round"/><circle cx="7" cy="12" r="1.2"/></svg><svg width="28" height="13" viewBox="0 0 28 13" fill="#1c1c1e"><rect x="0" y=".5" width="23" height="12" rx="3" stroke="#1c1c1e" stroke-width="1" fill="none"/><rect x="24" y="4" width="2.5" height="5" rx="1" fill="#1c1c1e" opacity=".3"/><rect x="1.5" y="2" width="18" height="9" rx="1.5" fill="#1c1c1e"/></svg></div></div>
+
+<div class="nh">
+  <button class="back" onclick="location.href='index.html'"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+  <div class="title">Activity</div>
+  <div style="width:36px"></div>
+</div>
+
+<div class="snav">
+  <button class="off" onclick="location.href='invest-overview-1-command.html'">Overview</button>
+  <button class="on">Activity</button>
+  <button class="off">Documents</button>
+  <button class="off">How It's Calculated</button>
+</div>
+
+<div class="filters">
+  <button class="on">All</button><button class="off">Auto Invest</button><button class="off">Portfolio</button><button class="off">Dividends</button><button class="off">Rebalancing</button><button class="off">Tax</button>
+</div>
+
+<div class="search">
+  <div class="search-in">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#8e8e93" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M16 16l4 4"/></svg>
+    <input type="text" placeholder="Search investments...">
+  </div>
+</div>
+
+<div class="ct">
+  <div class="gh">Today</div>
+  <div class="activity-group">
+    <div class="act-card" style="position:relative">
+      <div class="act-top">
+        <div class="act-icon auto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+        <div class="act-info">
+          <div class="act-type">Auto Invest</div>
+          <div class="act-title">Auto Invest Completed</div>
+          <div class="act-desc">$520 invested into your Aggressive Portfolio. VTI, VXUS, and BND purchased at market open.</div>
+        </div>
+      </div>
+      <div class="act-meta">
+        <div class="act-left"><span class="act-time">2:30 PM</span><span class="act-amt">$520</span></div>
+        <span class="act-st done">Completed</span>
+      </div>
+      <div class="insight-card">
+        <div class="insight-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></div>
+        <div><div class="insight-label">Why this matters</div><div class="insight-text">Regular investing through market ups and downs historically produces better long-term results than trying to time the market.</div></div>
+      </div>
+      <span class="act-ch">›</span>
+    </div>
+
+    <div class="act-card" style="position:relative">
+      <div class="act-top">
+        <div class="act-icon div"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+        <div class="act-info">
+          <div class="act-type">Dividend</div>
+          <div class="act-title">Dividend Received</div>
+          <div class="act-desc">$42.18 dividend from VTI. Automatically reinvested into additional shares.</div>
+        </div>
+      </div>
+      <div class="act-meta">
+        <div class="act-left"><span class="act-time">9:15 AM</span><span class="act-amt">$42.18</span></div>
+        <span class="act-st done">Completed</span>
+      </div>
+      <div class="insight-card">
+        <div class="insight-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></div>
+        <div><div class="insight-label">Why this matters</div><div class="insight-text">Dividends represent real profits from the companies you own. Reinvesting them creates a powerful compounding cycle.</div></div>
+      </div>
+      <span class="act-ch">›</span>
+    </div>
+  </div>
+
+  <div class="gh">Yesterday</div>
+  <div class="activity-group">
+    <div class="act-card" style="position:relative">
+      <div class="act-top">
+        <div class="act-icon rebal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+        <div class="act-info">
+          <div class="act-type">Rebalancing</div>
+          <div class="act-title">Portfolio Rebalanced</div>
+          <div class="act-desc">US Stocks drifted to 62% — back to 58% target. International and Bonds increased.</div>
+        </div>
+      </div>
+      <div class="act-meta">
+        <div class="act-left"><span class="act-time">3:45 PM</span></div>
+        <span class="act-st done">Completed</span>
+      </div>
+      <div class="insight-card">
+        <div class="insight-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></div>
+        <div><div class="insight-label">Why this matters</div><div class="insight-text">Rebalancing reduces risk by preventing any single investment from becoming too large. Your portfolio stays aligned with your goals.</div></div>
+      </div>
+      <span class="act-ch">›</span>
+    </div>
+
+    <div class="act-card" style="position:relative">
+      <div class="act-top">
+        <div class="act-icon auto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+        <div class="act-info">
+          <div class="act-type">Auto Invest</div>
+          <div class="act-title">Recurring Investment Executed</div>
+          <div class="act-desc">$500 invested into your Dividend Portfolio. SCHD and VYM purchased.</div>
+        </div>
+      </div>
+      <div class="act-meta">
+        <div class="act-left"><span class="act-time">10:00 AM</span><span class="act-amt">$500</span></div>
+        <span class="act-st done">Completed</span>
+      </div>
+      <div class="insight-card">
+        <div class="insight-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></div>
+        <div><div class="insight-label">Why this matters</div><div class="insight-text">Consistent investing builds wealth steadily. Your $500/month at current returns could grow to $78,000+ in 10 years.</div></div>
+      </div>
+      <span class="act-ch">›</span>
+    </div>
+  </div>
+
+  <div class="gh">This Week</div>
+  <div class="activity-group">
+    <div class="act-card" style="position:relative">
+      <div class="act-top">
+        <div class="act-icon tax"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 6v6l4 2"/></svg></div>
+        <div class="act-info">
+          <div class="act-type">Tax</div>
+          <div class="act-title">Tax-Loss Harvesting Completed</div>
+          <div class="act-desc">$340 in tax losses harvested from International ETF. Replaced with similar fund.</div>
+        </div>
+      </div>
+      <div class="act-meta">
+        <div class="act-left"><span class="act-time">Monday</span><span class="act-amt">$340</span></div>
+        <span class="act-st done">Completed</span>
+      </div>
+      <div class="insight-card">
+        <div class="insight-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></div>
+        <div><div class="insight-label">Why this matters</div><div class="insight-text">Tax-loss harvesting turns investment losses into tax savings. You keep the same market exposure while reducing your tax bill.</div></div>
+      </div>
+      <span class="act-ch">›</span>
+    </div>
+
+    <div class="act-card" style="position:relative">
+      <div class="act-top">
+        <div class="act-icon goal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
+        <div class="act-info">
+          <div class="act-type">Goal</div>
+          <div class="act-title">Investment Goal Reached</div>
+          <div class="act-desc">Your aggressive portfolio allocation hit $25,000. Milestone achieved.</div>
+        </div>
+      </div>
+      <div class="act-meta">
+        <div class="act-left"><span class="act-time">Tuesday</span><span class="act-amt">$25,000</span></div>
+        <span class="act-st done">Completed</span>
+      </div>
+      <div class="insight-card">
+        <div class="insight-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></div>
+        <div><div class="insight-label">Why this matters</div><div class="insight-text">Hitting this milestone means your growth foundation is solid. Consider whether to diversify into other areas.</div></div>
+      </div>
+      <span class="act-ch">›</span>
+    </div>
+  </div>
+
+  <div class="gh">This Month</div>
+  <div class="activity-group">
+    <div class="act-card" style="position:relative">
+      <div class="act-top">
+        <div class="act-icon rebal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+        <div class="act-info">
+          <div class="act-type">Portfolio</div>
+          <div class="act-title">Allocation Updated</div>
+          <div class="act-desc">International allocation increased from 15% to 18% for better global diversification.</div>
+        </div>
+      </div>
+      <div class="act-meta">
+        <div class="act-left"><span class="act-time">Dec 8</span></div>
+        <span class="act-st done">Completed</span>
+      </div>
+      <div class="insight-card">
+        <div class="insight-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></div>
+        <div><div class="insight-label">Why this matters</div><div class="insight-text">International diversification reduces reliance on any single economy. When US markets dip, international holdings can provide stability.</div></div>
+      </div>
+      <span class="act-ch">›</span>
+    </div>
+
+    <div class="act-card" style="position:relative">
+      <div class="act-top">
+        <div class="act-icon div"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+        <div class="act-info">
+          <div class="act-type">Dividend</div>
+          <div class="act-title">Dividend Reinvested</div>
+          <div class="act-desc">$38.50 dividend from SCHD reinvested into 0.42 additional shares.</div>
+        </div>
+      </div>
+      <div class="act-meta">
+        <div class="act-left"><span class="act-time">Dec 5</span><span class="act-amt">$38.50</span></div>
+        <span class="act-st done">Completed</span>
+      </div>
+      <div class="insight-card">
+        <div class="insight-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></div>
+        <div><div class="insight-label">Why this matters</div><div class="insight-text">SCHD focuses on dividend-growing companies. Reinvesting compounds your income stream over time.</div></div>
+      </div>
+      <span class="act-ch">›</span>
+    </div>
+
+    <div class="act-card" style="position:relative">
+      <div class="act-top">
+        <div class="act-icon tax"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 6v6l4 2"/></svg></div>
+        <div class="act-info">
+          <div class="act-type">Tax</div>
+          <div class="act-title">Estimated Tax Savings Updated</div>
+          <div class="act-desc">Annual tax savings estimate updated to $1,240 from tax-loss harvesting.</div>
+        </div>
+      </div>
+      <div class="act-meta">
+        <div class="act-left"><span class="act-time">Dec 1</span><span class="act-amt">$1,240</span></div>
+        <span class="act-st done">Completed</span>
+      </div>
+      <div class="insight-card">
+        <div class="insight-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></div>
+        <div><div class="insight-label">Why this matters</div><div class="insight-text">Tax efficiency means more of your returns stay invested. $1,240 in savings compounds significantly over 20 years.</div></div>
+      </div>
+      <span class="act-ch">›</span>
+    </div>
+  </div>
+
+  <div class="gh">Earlier</div>
+  <div class="activity-group">
+    <div class="act-card" style="position:relative">
+      <div class="act-top">
+        <div class="act-icon div"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+        <div class="act-info">
+          <div class="act-type">Dividend</div>
+          <div class="act-title">Quarterly Dividends Received</div>
+          <div class="act-desc">$124.80 in quarterly dividends from your portfolio. All reinvested automatically.</div>
+        </div>
+      </div>
+      <div class="act-meta">
+        <div class="act-left"><span class="act-time">Nov 30</span><span class="act-amt">$124.80</span></div>
+        <span class="act-st done">Completed</span>
+      </div>
+      <span class="act-ch">›</span>
+    </div>
+
+    <div class="act-card" style="position:relative">
+      <div class="act-top">
+        <div class="act-icon div"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+        <div class="act-info">
+          <div class="act-type">Interest</div>
+          <div class="act-title">Interest Earned</div>
+          <div class="act-desc">$18.42 interest earned on cash holdings at 4.1% APY.</div>
+        </div>
+      </div>
+      <div class="act-meta">
+        <div class="act-left"><span class="act-time">Nov 30</span><span class="act-amt">$18.42</span></div>
+        <span class="act-st done">Completed</span>
+      </div>
+      <span class="act-ch">›</span>
+    </div>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.filters button').forEach(b=>b.addEventListener('click',function(){this.classList.toggle('on');this.classList.toggle('off')}));
+</script>
+</body>
+</html>

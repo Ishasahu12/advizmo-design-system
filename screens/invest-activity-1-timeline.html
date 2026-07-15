@@ -17,49 +17,53 @@ body{background:#f8f9fa;font-family:'Inter',sans-serif;color:#1c1c1e;max-width:4
 .snav{display:flex;gap:4px;padding:4px 20px 12px;background:#f8f9fa;overflow-x:auto;scrollbar-width:none;position:sticky;top:82px;z-index:98}
 .snav::-webkit-scrollbar{display:none}
 .snav button{flex-shrink:0;padding:8px 18px;border-radius:10px;border:none;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
-.snav .active{background:#1c1c1e;color:#fff}
-.snav .inactive{background:transparent;color:#8e8e93}
+.snav .on{background:#1c1c1e;color:#fff}
+.snav .off{background:transparent;color:#8e8e93}
 .filters{display:flex;gap:6px;padding:0 20px 12px;background:#f8f9fa;overflow-x:auto;scrollbar-width:none}
 .filters::-webkit-scrollbar{display:none}
 .filters button{flex-shrink:0;padding:7px 14px;border-radius:20px;border:1px solid rgba(0,0,0,.08);font-family:'Inter',sans-serif;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
-.filters .active{background:#1c1c1e;color:#fff;border-color:#1c1c1e}
-.filters .inactive{background:#fff;color:#6b7280}
+.filters .on{background:#1c1c1e;color:#fff;border-color:#1c1c1e}
+.filters .off{background:#fff;color:#6b7280}
 .search{padding:0 20px 16px;background:#f8f9fa}
-.search-inner{display:flex;align-items:center;gap:8px;padding:10px 14px;background:#fff;border-radius:12px;border:1px solid rgba(0,0,0,.06)}
-.search-inner svg{width:16px;height:16px;flex-shrink:0}
-.search-inner input{border:none;outline:none;font-family:'Inter',sans-serif;font-size:15px;color:#1c1c1e;flex:1;background:transparent}
-.content{padding:0 20px}
-.group-header{position:sticky;top:140px;z-index:10;padding:12px 0 8px;background:#f8f9fa;font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:.06em}
-.timeline{position:relative;padding-left:28px}
-.timeline::before{content:'';position:absolute;left:9px;top:0;bottom:0;width:2px;background:#e5e7eb;border-radius:1px}
-.activity-card{position:relative;background:#fff;border-radius:16px;padding:16px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,.04);cursor:pointer;transition:all .15s}
-.activity-card:active{transform:scale(.98)}
-.dot{position:absolute;left:-23px;top:20px;width:12px;height:12px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 2px #e5e7eb}
-.dot.completed{background:#34c759;box-shadow:0 0 0 2px #34c759}
-.dot.scheduled{background:#007aff;box-shadow:0 0 0 2px #007aff}
-.dot.needs{background:#ff9500;box-shadow:0 0 0 2px #ff9500}
-.card-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
-.card-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.card-icon svg{width:18px;height:18px}
-.card-icon.money{background:#eefbf4;color:#166f47}
-.card-icon.invest{background:#e0efff;color:#1551a8}
-.card-icon.portfolio{background:#f3e8ff;color:#7c3aed}
-.card-icon.goal{background:#fef3c7;color:#c2790a}
-.card-icon.account{background:#e0efff;color:#1551a8}
-.card-icon.tax{background:#eefbf4;color:#166f47}
-.card-icon.recommend{background:#fef3c7;color:#c2790a}
-.card-info{flex:1;min-width:0}
-.card-type{font-size:10px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px}
-.card-title{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600;color:#1c1c1e;line-height:1.3}
-.card-desc{font-size:13px;color:#6b7280;line-height:1.4;margin-top:4px}
-.card-meta{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:1px solid rgba(0,0,0,.04)}
-.card-left{display:flex;align-items:center;gap:8px}
-.card-time{font-size:12px;color:#8e8e93}
-.card-amount{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600;color:#1c1c1e}
-.card-status{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:600}
-.card-status.completed{background:#eefbf4;color:#166f47}
-.card-impact{font-size:12px;color:#166f47;font-weight:500;margin-top:6px}
-.card-chevron{color:#c7c7cc;font-size:18px;flex-shrink:0}
+.search-in{display:flex;align-items:center;gap:8px;padding:10px 14px;background:#fff;border-radius:12px;border:1px solid rgba(0,0,0,.06)}
+.search-in svg{width:16px;height:16px;flex-shrink:0}
+.search-in input{border:none;outline:none;font-family:'Inter',sans-serif;font-size:15px;color:#1c1c1e;flex:1;background:transparent}
+.ct{padding:0 20px}
+.gh{position:sticky;top:140px;z-index:10;padding:12px 0 8px;background:#f8f9fa;font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:.06em}
+.tl{position:relative;padding-left:28px;margin-bottom:8px}
+.tl::before{content:'';position:absolute;left:9px;top:0;bottom:0;width:2px;background:#e5e7eb;border-radius:1px}
+.ac{position:relative;background:#fff;border-radius:16px;padding:16px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,.04);cursor:pointer;transition:all .15s}
+.ac:active{transform:scale(.98)}
+.dot{position:absolute;left:-23px;top:20px;width:12px;height:12px;border-radius:50%;border:2px solid #fff}
+.dot.done{background:#34c759;box-shadow:0 0 0 2px #34c759}
+.dot.sched{background:#007aff;box-shadow:0 0 0 2px #007aff}
+.dot.warn{background:#ff9500;box-shadow:0 0 0 2px #ff9500}
+.dot.fail{background:#ff3b30;box-shadow:0 0 0 2px #ff3b30}
+.ct-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.ct-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ct-icon svg{width:18px;height:18px}
+.ct-icon.auto{background:#e0efff;color:#1551a8}
+.ct-icon.div{background:#eefbf4;color:#166f47}
+.ct-icon.rebal{background:#f3e8ff;color:#7c3aed}
+.ct-icon.goal{background:#fef3c7;color:#c2790a}
+.ct-icon.tax{background:#eefbf4;color:#166f47}
+.ct-icon.port{background:#e0efff;color:#1551a8}
+.ct-icon.stmt{background:#f2f2f7;color:#6b7280}
+.ct-info{flex:1;min-width:0}
+.ct-type{font-size:10px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px}
+.ct-title{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600;color:#1c1c1e;line-height:1.3}
+.ct-desc{font-size:13px;color:#6b7280;line-height:1.4;margin-top:4px}
+.ct-meta{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:1px solid rgba(0,0,0,.04)}
+.ct-left{display:flex;align-items:center;gap:8px}
+.ct-time{font-size:12px;color:#8e8e93}
+.ct-amt{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600;color:#1c1c1e}
+.ct-st{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:600}
+.ct-st.done{background:#eefbf4;color:#166f47}
+.ct-st.sched{background:#e0efff;color:#1551a8}
+.ct-st.warn{background:#fef3c7;color:#c2790a}
+.ct-st.fail{background:#fee2e2;color:#be3e30}
+.ct-imp{font-size:12px;color:#166f47;font-weight:500;margin-top:6px}
+.ct-ch{color:#c7c7cc;font-size:18px;position:absolute;right:16px;top:20px}
 </style>
 </head>
 <body>
@@ -73,302 +77,284 @@ body{background:#f8f9fa;font-family:'Inter',sans-serif;color:#1c1c1e;max-width:4
 </div>
 
 <div class="snav">
-  <button class="inactive" onclick="location.href='invest-overview-1-command.html'">Overview</button>
-  <button class="active">Activity</button>
-  <button class="inactive">Documents</button>
-  <button class="inactive">How It's Calculated</button>
+  <button class="off" onclick="location.href='invest-overview-1-command.html'">Overview</button>
+  <button class="on">Activity</button>
+  <button class="off">Documents</button>
+  <button class="off">How It's Calculated</button>
 </div>
 
 <div class="filters">
-  <button class="active">All</button>
-  <button class="inactive">Money</button>
-  <button class="inactive">Investments</button>
-  <button class="inactive">Recommendations</button>
-  <button class="inactive">Portfolio</button>
-  <button class="inactive">Goals</button>
-  <button class="inactive">Tax</button>
+  <button class="on">All</button>
+  <button class="off">Auto Invest</button>
+  <button class="off">Portfolio</button>
+  <button class="off">Dividends</button>
+  <button class="off">Rebalancing</button>
+  <button class="off">Goals</button>
+  <button class="off">Tax</button>
 </div>
 
 <div class="search">
-  <div class="search-inner">
+  <div class="search-in">
     <svg viewBox="0 0 24 24" fill="none" stroke="#8e8e93" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M16 16l4 4"/></svg>
-    <input type="text" placeholder="Search activities...">
+    <input type="text" placeholder="Search investments...">
   </div>
 </div>
 
-<div class="content">
+<div class="ct">
 
-  <div class="group-header">Today</div>
-  <div class="timeline">
-    <div class="activity-card">
-      <div class="dot completed"></div>
-      <div class="card-top">
-        <div class="card-icon invest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
-        <div class="card-info">
-          <div class="card-type">Investment Activity</div>
-          <div class="card-title">Auto Invest Executed</div>
-          <div class="card-desc">Advizmo invested $520 into your Aggressive Portfolio as part of your monthly schedule.</div>
+  <div class="gh">Today</div>
+  <div class="tl">
+    <div class="ac">
+      <div class="dot done"></div>
+      <div class="ct-top">
+        <div class="ct-icon auto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+        <div class="ct-info">
+          <div class="ct-type">Auto Invest</div>
+          <div class="ct-title">Auto Invest Completed</div>
+          <div class="ct-desc">$520 invested into your Aggressive Portfolio. VTI, VXUS, and BND purchased at market open.</div>
         </div>
       </div>
-      <div class="card-meta">
-        <div class="card-left">
-          <span class="card-time">2:30 PM</span>
-          <span class="card-amount">$520</span>
-        </div>
-        <span class="card-status completed">Completed</span>
+      <div class="ct-meta">
+        <div class="ct-left"><span class="ct-time">2:30 PM</span><span class="ct-amt">$520</span></div>
+        <span class="ct-st done">Completed</span>
       </div>
-      <div class="card-impact">Expected annual return +0.4%</div>
-      <span class="card-chevron">›</span>
+      <div class="ct-imp">Expected annual return +0.4%</div>
+      <span class="ct-ch">›</span>
     </div>
 
-    <div class="activity-card">
-      <div class="dot completed"></div>
-      <div class="card-top">
-        <div class="card-icon money"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
-        <div class="card-info">
-          <div class="card-type">Investment Activity</div>
-          <div class="card-title">Dividend Received</div>
-          <div class="card-desc">Your VTI holdings paid $42.18 in dividends. This has been reinvested automatically.</div>
+    <div class="ac">
+      <div class="dot done"></div>
+      <div class="ct-top">
+        <div class="ct-icon div"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+        <div class="ct-info">
+          <div class="ct-type">Dividend</div>
+          <div class="ct-title">Dividend Received</div>
+          <div class="ct-desc">$42.18 dividend from VTI (Vanguard Total Stock Market ETF). Automatically reinvested.</div>
         </div>
       </div>
-      <div class="card-meta">
-        <div class="card-left">
-          <span class="card-time">9:15 AM</span>
-          <span class="card-amount">$42.18</span>
-        </div>
-        <span class="card-status completed">Completed</span>
+      <div class="ct-meta">
+        <div class="ct-left"><span class="ct-time">9:15 AM</span><span class="ct-amt">$42.18</span></div>
+        <span class="ct-st done">Completed</span>
       </div>
-      <div class="card-impact">Portfolio value increased</div>
-      <span class="card-chevron">›</span>
+      <div class="ct-imp">Portfolio value increased</div>
+      <span class="ct-ch">›</span>
     </div>
   </div>
 
-  <div class="group-header">Yesterday</div>
-  <div class="timeline">
-    <div class="activity-card">
-      <div class="dot completed"></div>
-      <div class="card-top">
-        <div class="card-icon portfolio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
-        <div class="card-info">
-          <div class="card-type">Portfolio Activity</div>
-          <div class="card-title">Portfolio Rebalanced</div>
-          <div class="card-desc">Your portfolio was automatically rebalanced. US Stocks drifted to 62% — now back to 58%.</div>
+  <div class="gh">Yesterday</div>
+  <div class="tl">
+    <div class="ac">
+      <div class="dot done"></div>
+      <div class="ct-top">
+        <div class="ct-icon rebal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+        <div class="ct-info">
+          <div class="ct-type">Rebalancing</div>
+          <div class="ct-title">Portfolio Rebalanced</div>
+          <div class="ct-desc">Your portfolio was automatically rebalanced. US Stocks drifted to 62% — back to 58% target.</div>
         </div>
       </div>
-      <div class="card-meta">
-        <div class="card-left">
-          <span class="card-time">3:45 PM</span>
-        </div>
-        <span class="card-status completed">Completed</span>
+      <div class="ct-meta">
+        <div class="ct-left"><span class="ct-time">3:45 PM</span></div>
+        <span class="ct-st done">Completed</span>
       </div>
-      <div class="card-impact">Diversification 87% → 92%</div>
-      <span class="card-chevron">›</span>
+      <div class="ct-imp">Diversification 87% → 92%</div>
+      <span class="ct-ch">›</span>
     </div>
 
-    <div class="activity-card">
-      <div class="dot completed"></div>
-      <div class="card-top">
-        <div class="card-icon money"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7-7 7 7"/></svg></div>
-        <div class="card-info">
-          <div class="card-type">Money Movement</div>
-          <div class="card-title">Money Added</div>
-          <div class="card-desc">$500 was transferred from Capital One Checking to Advizmo Cash.</div>
+    <div class="ac">
+      <div class="dot done"></div>
+      <div class="ct-top">
+        <div class="ct-icon auto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+        <div class="ct-info">
+          <div class="ct-type">Auto Invest</div>
+          <div class="ct-title">Recurring Investment Executed</div>
+          <div class="ct-desc">$500 invested into your Dividend Portfolio. SCHD and VYM purchased.</div>
         </div>
       </div>
-      <div class="card-meta">
-        <div class="card-left">
-          <span class="card-time">10:00 AM</span>
-          <span class="card-amount">$500</span>
-        </div>
-        <span class="card-status completed">Completed</span>
+      <div class="ct-meta">
+        <div class="ct-left"><span class="ct-time">10:00 AM</span><span class="ct-amt">$500</span></div>
+        <span class="ct-st done">Completed</span>
       </div>
-      <div class="card-impact">Available for next Auto Invest cycle</div>
-      <span class="card-chevron">›</span>
+      <div class="ct-imp">Monthly contribution on track</div>
+      <span class="ct-ch">›</span>
     </div>
   </div>
 
-  <div class="group-header">This Week</div>
-  <div class="timeline">
-    <div class="activity-card">
-      <div class="dot completed"></div>
-      <div class="card-top">
-        <div class="card-icon tax"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 6v6l4 2"/></svg></div>
-        <div class="card-info">
-          <div class="card-type">Tax Activity</div>
-          <div class="card-title">Tax-Loss Harvesting Completed</div>
-          <div class="card-desc">Advizmo harvested $340 in tax losses from your International ETF and reinvested in a similar fund.</div>
+  <div class="gh">This Week</div>
+  <div class="tl">
+    <div class="ac">
+      <div class="dot done"></div>
+      <div class="ct-top">
+        <div class="ct-icon tax"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 6v6l4 2"/></svg></div>
+        <div class="ct-info">
+          <div class="ct-type">Tax</div>
+          <div class="ct-title">Tax-Loss Harvesting Completed</div>
+          <div class="ct-desc">$340 in tax losses harvested from International ETF. Replaced with similar fund to maintain exposure.</div>
         </div>
       </div>
-      <div class="card-meta">
-        <div class="card-left">
-          <span class="card-time">Monday</span>
-          <span class="card-amount">$340</span>
-        </div>
-        <span class="card-status completed">Completed</span>
+      <div class="ct-meta">
+        <div class="ct-left"><span class="ct-time">Monday</span><span class="ct-amt">$340</span></div>
+        <span class="ct-st done">Completed</span>
       </div>
-      <div class="card-impact">Estimated tax savings ~$82</div>
-      <span class="card-chevron">›</span>
+      <div class="ct-imp">Estimated tax savings ~$82</div>
+      <span class="ct-ch">›</span>
     </div>
 
-    <div class="activity-card">
-      <div class="dot completed"></div>
-      <div class="card-top">
-        <div class="card-icon recommend"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></div>
-        <div class="card-info">
-          <div class="card-type">Recommendation</div>
-          <div class="card-title">Recommendation Accepted</div>
-          <div class="card-desc">You approved increasing Auto Invest from $400 to $500 per month.</div>
+    <div class="ac">
+      <div class="dot done"></div>
+      <div class="ct-top">
+        <div class="ct-icon goal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
+        <div class="ct-info">
+          <div class="ct-type">Goal</div>
+          <div class="ct-title">Investment Goal Reached</div>
+          <div class="ct-desc">Your aggressive portfolio allocation target of $25,000 has been reached.</div>
         </div>
       </div>
-      <div class="card-meta">
-        <div class="card-left">
-          <span class="card-time">Tuesday</span>
-        </div>
-        <span class="card-status completed">Completed</span>
+      <div class="ct-meta">
+        <div class="ct-left"><span class="ct-time">Tuesday</span><span class="ct-amt">$25,000</span></div>
+        <span class="ct-st done">Completed</span>
       </div>
-      <div class="card-impact">Goal reached 3 months earlier</div>
-      <span class="card-chevron">›</span>
+      <div class="ct-imp">Consider increasing diversification</div>
+      <span class="ct-ch">›</span>
     </div>
 
-    <div class="activity-card">
-      <div class="dot completed"></div>
-      <div class="card-top">
-        <div class="card-icon goal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
-        <div class="card-info">
-          <div class="card-type">Goal Activity</div>
-          <div class="card-title">Goal Updated</div>
-          <div class="card-desc">Emergency Fund target updated from $8,000 to $10,000.</div>
+    <div class="ac">
+      <div class="dot sched"></div>
+      <div class="ct-top">
+        <div class="ct-icon auto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+        <div class="ct-info">
+          <div class="ct-type">Auto Invest</div>
+          <div class="ct-title">Auto Invest Scheduled</div>
+          <div class="ct-desc">$520 scheduled for your Aggressive Portfolio. Will execute at next market open.</div>
         </div>
       </div>
-      <div class="card-meta">
-        <div class="card-left">
-          <span class="card-time">Wednesday</span>
-        </div>
-        <span class="card-status completed">Completed</span>
+      <div class="ct-meta">
+        <div class="ct-left"><span class="ct-time">Wednesday</span><span class="ct-amt">$520</span></div>
+        <span class="ct-st sched">Scheduled</span>
       </div>
-      <div class="card-impact">87% complete</div>
-      <span class="card-chevron">›</span>
+      <div class="ct-imp">Next execution: Tomorrow 9:30 AM</div>
+      <span class="ct-ch">›</span>
     </div>
   </div>
 
-  <div class="group-header">This Month</div>
-  <div class="timeline">
-    <div class="activity-card">
-      <div class="dot completed"></div>
-      <div class="card-top">
-        <div class="card-icon goal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
-        <div class="card-info">
-          <div class="card-type">Goal Activity</div>
-          <div class="card-title">Goal Completed</div>
-          <div class="card-desc">Vacation Fund reached $3,000 target! Consider redirecting $200/month to Auto Invest.</div>
+  <div class="gh">This Month</div>
+  <div class="tl">
+    <div class="ac">
+      <div class="dot done"></div>
+      <div class="ct-top">
+        <div class="ct-icon port"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+        <div class="ct-info">
+          <div class="ct-type">Portfolio</div>
+          <div class="ct-title">Allocation Updated</div>
+          <div class="ct-desc">International allocation increased from 15% to 18%. Better global diversification.</div>
         </div>
       </div>
-      <div class="card-meta">
-        <div class="card-left">
-          <span class="card-time">Dec 15</span>
-          <span class="card-amount">$3,000</span>
-        </div>
-        <span class="card-status completed">Completed</span>
+      <div class="ct-meta">
+        <div class="ct-left"><span class="ct-time">Dec 8</span></div>
+        <span class="ct-st done">Completed</span>
       </div>
-      <div class="card-impact">Redirect $200/mo to growth</div>
-      <span class="card-chevron">›</span>
+      <div class="ct-imp">Global exposure improved</div>
+      <span class="ct-ch">›</span>
     </div>
 
-    <div class="activity-card">
-      <div class="dot completed"></div>
-      <div class="card-top">
-        <div class="card-icon account"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
-        <div class="card-info">
-          <div class="card-type">Account Activity</div>
-          <div class="card-title">Bank Connected</div>
-          <div class="card-desc">Chase Savings account linked to Advizmo. Full financial visibility enabled.</div>
+    <div class="ac">
+      <div class="dot done"></div>
+      <div class="ct-top">
+        <div class="ct-icon div"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+        <div class="ct-info">
+          <div class="ct-type">Dividend</div>
+          <div class="ct-title">Dividend Reinvested</div>
+          <div class="ct-desc">$38.50 dividend from SCHD reinvested into 0.42 additional shares.</div>
         </div>
       </div>
-      <div class="card-meta">
-        <div class="card-left">
-          <span class="card-time">Dec 10</span>
-        </div>
-        <span class="card-status completed">Completed</span>
+      <div class="ct-meta">
+        <div class="ct-left"><span class="ct-time">Dec 5</span><span class="ct-amt">$38.50</span></div>
+        <span class="ct-st done">Completed</span>
       </div>
-      <div class="card-impact">Optimize across all accounts</div>
-      <span class="card-chevron">›</span>
+      <div class="ct-imp">Compounding automatically</div>
+      <span class="ct-ch">›</span>
     </div>
 
-    <div class="activity-card">
-      <div class="dot completed"></div>
-      <div class="card-top">
-        <div class="card-icon portfolio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
-        <div class="card-info">
-          <div class="card-type">Portfolio Activity</div>
-          <div class="card-title">Allocation Changed</div>
-          <div class="card-desc">International allocation increased from 15% to 18% for better global diversification.</div>
+    <div class="ac">
+      <div class="dot done"></div>
+      <div class="ct-top">
+        <div class="ct-icon tax"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 6v6l4 2"/></svg></div>
+        <div class="ct-info">
+          <div class="ct-type">Tax</div>
+          <div class="ct-title">Estimated Tax Savings Updated</div>
+          <div class="ct-desc">Your estimated annual tax savings from tax-loss harvesting updated to $1,240.</div>
         </div>
       </div>
-      <div class="card-meta">
-        <div class="card-left">
-          <span class="card-time">Dec 8</span>
-        </div>
-        <span class="card-status completed">Completed</span>
+      <div class="ct-meta">
+        <div class="ct-left"><span class="ct-time">Dec 1</span><span class="ct-amt">$1,240</span></div>
+        <span class="ct-st done">Completed</span>
       </div>
-      <div class="card-impact">Global exposure improved</div>
-      <span class="card-chevron">›</span>
+      <div class="ct-imp">Year-to-date tax efficiency</div>
+      <span class="ct-ch">›</span>
     </div>
   </div>
 
-  <div class="group-header">Older</div>
-  <div class="timeline">
-    <div class="activity-card">
-      <div class="dot completed"></div>
-      <div class="card-top">
-        <div class="card-icon money"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
-        <div class="card-info">
-          <div class="card-type">Money Movement</div>
-          <div class="card-title">Interest Earned</div>
-          <div class="card-desc">Advizmo Cash earned $18.42 in interest at 4.1% APY. Compounds automatically.</div>
+  <div class="gh">Earlier</div>
+  <div class="tl">
+    <div class="ac">
+      <div class="dot done"></div>
+      <div class="ct-top">
+        <div class="ct-icon div"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+        <div class="ct-info">
+          <div class="ct-type">Dividend</div>
+          <div class="ct-title">Dividend Received</div>
+          <div class="ct-desc">$124.80 in quarterly dividends from your portfolio. All reinvested automatically.</div>
         </div>
       </div>
-      <div class="card-meta">
-        <div class="card-left">
-          <span class="card-time">Nov 30</span>
-          <span class="card-amount">$18.42</span>
-        </div>
-        <span class="card-status completed">Completed</span>
+      <div class="ct-meta">
+        <div class="ct-left"><span class="ct-time">Nov 30</span><span class="ct-amt">$124.80</span></div>
+        <span class="ct-st done">Completed</span>
       </div>
-      <div class="card-impact">Passive growth</div>
-      <span class="card-chevron">›</span>
+      <div class="ct-imp">Quarterly income reinvested</div>
+      <span class="ct-ch">›</span>
     </div>
 
-    <div class="activity-card">
-      <div class="dot completed"></div>
-      <div class="card-top">
-        <div class="card-icon money"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
-        <div class="card-info">
-          <div class="card-type">Money Movement</div>
-          <div class="card-title">Money Reserved</div>
-          <div class="card-desc">$200 set aside for quarterly property tax payment due February 15.</div>
+    <div class="ac">
+      <div class="dot done"></div>
+      <div class="ct-top">
+        <div class="ct-icon div"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+        <div class="ct-info">
+          <div class="ct-type">Interest</div>
+          <div class="ct-title">Interest Earned</div>
+          <div class="ct-desc">$18.42 interest earned on cash holdings at 4.1% APY.</div>
         </div>
       </div>
-      <div class="card-meta">
-        <div class="card-left">
-          <span class="card-time">Nov 28</span>
-          <span class="card-amount">$200</span>
-        </div>
-        <span class="card-status completed">Completed</span>
+      <div class="ct-meta">
+        <div class="ct-left"><span class="ct-time">Nov 30</span><span class="ct-amt">$18.42</span></div>
+        <span class="ct-st done">Completed</span>
       </div>
-      <div class="card-impact">Due February 15</div>
-      <span class="card-chevron">›</span>
+      <div class="ct-imp">Passive income growing</div>
+      <span class="ct-ch">›</span>
+    </div>
+
+    <div class="ac">
+      <div class="dot done"></div>
+      <div class="ct-top">
+        <div class="ct-icon stmt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+        <div class="ct-info">
+          <div class="ct-type">Statement</div>
+          <div class="ct-title">Investment Statement Generated</div>
+          <div class="ct-desc">Your November investment statement is ready. Tap to view performance details.</div>
+        </div>
+      </div>
+      <div class="ct-meta">
+        <div class="ct-left"><span class="ct-time">Nov 28</span></div>
+        <span class="ct-st done">Completed</span>
+      </div>
+      <div class="ct-imp">Available in Documents</div>
+      <span class="ct-ch">›</span>
     </div>
   </div>
 
 </div>
 
 <script>
-document.querySelectorAll('.filters button').forEach(btn=>{
-  btn.addEventListener('click',function(){
-    this.classList.toggle('active');
-    this.classList.toggle('inactive');
-  });
-});
+document.querySelectorAll('.filters button').forEach(b=>b.addEventListener('click',function(){this.classList.toggle('on');this.classList.toggle('off')}));
 </script>
 </body>
 </html>

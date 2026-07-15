@@ -3,38 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Advizmo — Activity Journal</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<title>Invest Activity — Portfolio Journal</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{font-family:'Inter',sans-serif;background:#f2f2f7;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-  ::-webkit-scrollbar{display:none}
-  .journal-entry{background:#fff;border-radius:16px;padding:20px;margin:0 20px 12px;border-left:4px solid #34c759;transition:transform 0.2s}
-  .journal-entry:hover{transform:translateY(-1px)}
-  .journal-entry.scheduled{border-left-color:#007aff}
-  .entry-date-large{font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#8e8e93;letter-spacing:0.3px;margin-bottom:8px}
-  .entry-narrative{font-family:'Inter',sans-serif;font-size:15px;line-height:1.55;color:#3a3a3c;margin-bottom:16px}
-  .entry-meta{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
-  .amount-badge{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:700;color:#1c1c1e;background:#f2f2f7;padding:6px 14px;border-radius:10px}
-  .status-pill{font-size:12px;font-weight:600;padding:5px 12px;border-radius:8px;background:#e8f5e9;color:#2e7d32}
-  .status-pill.scheduled{background:#e3f2fd;color:#1565c0}
-  .impact-tag{font-size:12px;font-weight:500;color:#8e8e93;padding:5px 12px;border-radius:8px;background:#f8f9fa}
-  .date-section{position:sticky;top:82px;z-index:50;padding:14px 20px 8px;background:#f2f2f7}
-  .date-label{font-family:'IBM Plex Sans',sans-serif;font-size:12px;font-weight:700;color:#8e8e93;text-transform:uppercase;letter-spacing:0.8px}
-  .date-sub{font-family:'Inter',sans-serif;font-size:13px;color:#aeaeb2;margin-top:2px}
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+  body { font-family: 'Inter', sans-serif; background: #f2f2f7; color: #1c1c1e; max-width: 430px; margin: 0 auto; min-height: 100vh; position: relative; }
 </style>
 </head>
 <body>
 
 <!-- Status Bar -->
-<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 20px 0;background:#fff">
-  <span style="font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600;color:#1c1c1e">9:41</span>
+<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 20px 6px;background:#fff;position:sticky;top:0;z-index:100">
+  <span style="font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600;color:#1c1c1e">9:41</span>
   <div style="display:flex;align-items:center;gap:6px">
-    <svg width="17" height="12" viewBox="0 0 17 12" fill="none"><rect x="0" y="4" width="3" height="8" rx="1" fill="#1c1c1e"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="1" fill="#1c1c1e"/><rect x="9" y="1" width="3" height="11" rx="1" fill="#1c1c1e"/><rect x="13.5" y="0" width="3" height="12" rx="1" fill="#1c1c1e"/></svg>
-    <svg width="15" height="12" viewBox="0 0 15 12" fill="none"><path d="M7.5 2.5C5.8 2.5 4.2 3.2 3 4.4L1.6 3C3.2 1.4 5.3 0.5 7.5 0.5C9.7 0.5 11.8 1.4 13.4 3L12 4.4C10.8 3.2 9.2 2.5 7.5 2.5ZM7.5 6.5C6.5 6.5 5.6 6.9 4.9 7.6L3.5 6.2C4.6 5.1 6 4.5 7.5 4.5C9 4.5 10.4 5.1 11.5 6.2L10.1 7.6C9.4 6.9 8.5 6.5 7.5 6.5ZM7.5 10.5C7 10.5 6.5 10.3 6.2 9.9L7.5 8.5L8.8 9.9C8.5 10.3 8 10.5 7.5 10.5Z" fill="#1c1c1e"/></svg>
-    <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="#1c1c1e" stroke-opacity="0.35"/><rect x="2" y="2" width="18" height="8" rx="2" fill="#1c1c1e"/><path d="M23 4.5V8.5C23.8 8.2 24.5 7.2 24.5 6.5C24.5 5.8 23.8 4.8 23 4.5Z" fill="#1c1c1e" fill-opacity="0.4"/></svg>
+    <svg width="17" height="12" viewBox="0 0 17 12" fill="#1c1c1e"><rect x="0" y="6" width="3" height="6" rx="1"/><rect x="4.5" y="4" width="3" height="8" rx="1"/><rect x="9" y="1.5" width="3" height="10.5" rx="1"/><rect x="13.5" y="0" width="3" height="12" rx="1"/></svg>
+    <svg width="16" height="12" viewBox="0 0 16 12" fill="#1c1c1e"><path d="M8 3.6C9.8 3.6 11.4 4.3 12.6 5.4L14.1 3.9C12.5 2.3 10.4 1.4 8 1.4C5.6 1.4 3.5 2.3 1.9 3.9L3.4 5.4C4.6 4.3 6.2 3.6 8 3.6ZM8 6.8C9 6.8 9.9 7.2 10.6 7.8L12.1 6.3C11 5.3 9.6 4.6 8 4.6C6.4 4.6 5 5.3 3.9 6.3L5.4 7.8C6.1 7.2 7 6.8 8 6.8ZM8 10C8.6 10 9.1 10.2 9.5 10.6L8 12L6.5 10.6C6.9 10.2 7.4 10 8 10Z"/></svg>
+    <svg width="25" height="12" viewBox="0 0 25 12" fill="#1c1c1e"><rect x="0" y="1" width="22" height="10" rx="2" stroke="#1c1c1e" stroke-width="1" fill="none"/><rect x="22.5" y="4" width="2" height="4" rx="1" fill="#1c1c1e"/><rect x="1.5" y="2.5" width="17" height="7" rx="1" fill="#1c1c1e"/></svg>
   </div>
 </div>
 
@@ -55,144 +39,359 @@
   <button style="flex-shrink:0;padding:8px 18px;border-radius:10px;background:transparent;border:none;font-family:Inter,sans-serif;font-size:13px;font-weight:600;color:#8e8e93;cursor:pointer;white-space:nowrap">How It's Calculated</button>
 </div>
 
-<!-- Filter Chips -->
-<div style="padding:0 20px 12px;background:#fff;overflow-x:auto;scrollbar-width:none">
-  <div style="display:flex;gap:8px;white-space:nowrap">
-    <span style="padding:8px 16px;border-radius:20px;background:#1c1c1e;color:#fff;font-size:13px;font-weight:600;cursor:pointer">All</span>
-    <span style="padding:8px 16px;border-radius:20px;background:#f2f2f7;color:#3a3a3c;font-size:13px;font-weight:500;cursor:pointer">Investments</span>
-    <span style="padding:8px 16px;border-radius:20px;background:#f2f2f7;color:#3a3a3c;font-size:13px;font-weight:500;cursor:pointer">Money Movement</span>
-    <span style="padding:8px 16px;border-radius:20px;background:#f2f2f7;color:#3a3a3c;font-size:13px;font-weight:500;cursor:pointer">Dividends</span>
-    <span style="padding:8px 16px;border-radius:20px;background:#f2f2f7;color:#3a3a3c;font-size:13px;font-weight:500;cursor:pointer">Portfolio</span>
-    <span style="padding:8px 16px;border-radius:20px;background:#f2f2f7;color:#3a3a3c;font-size:13px;font-weight:500;cursor:pointer">Recommendations</span>
-    <span style="padding:8px 16px;border-radius:20px;background:#f2f2f7;color:#3a3a3c;font-size:13px;font-weight:500;cursor:pointer">Accounts</span>
-    <span style="padding:8px 16px;border-radius:20px;background:#f2f2f7;color:#3a3a3c;font-size:13px;font-weight:500;cursor:pointer">Tax</span>
-  </div>
+<!-- Filters -->
+<div style="display:flex;gap:6px;padding:4px 20px 14px;background:#fff;overflow-x:auto;scrollbar-width:none">
+  <button style="flex-shrink:0;padding:7px 16px;border-radius:20px;background:#1c1c1e;border:none;font-family:Inter,sans-serif;font-size:12.5px;font-weight:600;color:#fff;cursor:pointer">All</button>
+  <button style="flex-shrink:0;padding:7px 16px;border-radius:20px;background:rgba(120,120,128,0.08);border:none;font-family:Inter,sans-serif;font-size:12.5px;font-weight:500;color:#636366;cursor:pointer">Auto Invest</button>
+  <button style="flex-shrink:0;padding:7px 16px;border-radius:20px;background:rgba(120,120,128,0.08);border:none;font-family:Inter,sans-serif;font-size:12.5px;font-weight:500;color:#636366;cursor:pointer">Portfolio</button>
+  <button style="flex-shrink:0;padding:7px 16px;border-radius:20px;background:rgba(120,120,128,0.08);border:none;font-family:Inter,sans-serif;font-size:12.5px;font-weight:500;color:#636366;cursor:pointer">Dividends</button>
+  <button style="flex-shrink:0;padding:7px 16px;border-radius:20px;background:rgba(120,120,128,0.08);border:none;font-family:Inter,sans-serif;font-size:12.5px;font-weight:500;color:#636366;cursor:pointer">Rebalancing</button>
+  <button style="flex-shrink:0;padding:7px 16px;border-radius:20px;background:rgba(120,120,128,0.08);border:none;font-family:Inter,sans-serif;font-size:12.5px;font-weight:500;color:#636366;cursor:pointer">Goals</button>
+  <button style="flex-shrink:0;padding:7px 16px;border-radius:20px;background:rgba(120,120,128,0.08);border:none;font-family:Inter,sans-serif;font-size:12.5px;font-weight:500;color:#636366;cursor:pointer">Tax</button>
 </div>
 
-<!-- Search -->
-<div style="padding:0 20px 12px;background:#fff">
-  <div style="display:flex;align-items:center;gap:8px;padding:10px 14px;background:#f8f9fa;border-radius:12px">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8e8e93" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M16 16l4 4"/></svg>
-    <input type="text" placeholder="Search your journal..." style="border:none;outline:none;font-family:Inter,sans-serif;font-size:15px;color:#1c1c1e;flex:1;background:transparent">
+<!-- Search Bar -->
+<div style="padding:0 20px 16px;background:#fff">
+  <div style="display:flex;align-items:center;gap:8px;padding:10px 14px;background:rgba(120,120,128,0.08);border-radius:12px">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8e8e93" stroke-width="2.5" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="7"/><path d="M17 17l4 4"/></svg>
+    <input type="text" placeholder="Search activity..." style="border:none;background:transparent;font-family:Inter,sans-serif;font-size:15px;color:#1c1c1e;width:100%;outline:none">
   </div>
 </div>
 
 <!-- Journal Content -->
-<div style="max-width:430px;margin:0 auto;padding-bottom:40px">
+<div style="padding:0 20px 100px;background:#fff;min-height:100vh">
 
-  <!-- TODAY -->
-  <div class="date-section">
-    <div class="date-label">Today</div>
-    <div class="date-sub">December 20, 2025</div>
+  <!-- TODAY Header -->
+  <div style="position:sticky;top:124px;z-index:10;padding:12px 0 8px;background:#fff">
+    <div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:0.5px">Today</div>
   </div>
 
-  <div class="journal-entry">
-    <div class="entry-narrative">Your money went to work today. <strong>$520</strong> was automatically invested into your Aggressive Portfolio — the one focused on long-term growth. The market was open, so Advizmo moved quickly. You're now earning potential returns on every dollar.</div>
-    <div class="entry-meta">
-      <span class="amount-badge">$520</span>
-      <span class="status-pill">Completed</span>
-      <span class="impact-tag">Annual return potential +0.4%</span>
+  <!-- Entry 1: Auto Invest Completed -->
+  <div style="border-left:3px solid #34c759;border-radius:12px;background:#f9fafb;padding:16px 16px 14px;margin-bottom:10px">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:32px;height:32px;border-radius:8px;background:rgba(52,199,89,0.1);display:flex;align-items:center;justify-content:center">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2.5" stroke-linecap="round"><path d="M12 2v20M2 12h20"/></svg>
+        </div>
+        <div>
+          <div style="font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600;color:#1c1c1e">Auto Invest Completed</div>
+          <div style="font-size:12px;color:#8e8e93;margin-top:1px">2:30 PM</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+        <div style="font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:700;color:#1c1c1e">$520</div>
+        <div style="display:inline-flex;padding:3px 8px;border-radius:6px;background:rgba(52,199,89,0.1)">
+          <span style="font-family:'IBM Plex Sans',sans-serif;font-size:11px;font-weight:600;color:#34c759">Completed</span>
+        </div>
+      </div>
+    </div>
+    <p style="font-family:Inter,sans-serif;font-size:14px;line-height:1.55;color:#3a3a3c;margin-bottom:10px">$520 was invested into your Aggressive Portfolio at market open. VTI, VXUS, and BND purchased according to your allocation. This keeps your growth strategy on track.</p>
+    <div style="display:flex;align-items:center;gap:6px;padding:6px 10px;background:rgba(52,199,89,0.06);border-radius:8px">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2.5" stroke-linecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      <span style="font-family:'IBM Plex Sans',sans-serif;font-size:12px;font-weight:500;color:#34c759">Impact: +0.4% expected annual return</span>
     </div>
   </div>
 
-  <div class="journal-entry">
-    <div class="entry-narrative">Your investments paid you back. <strong>$42.18</strong> arrived from your VTI holdings — this is your share of profits from thousands of companies. It's been reinvested automatically to keep compounding.</div>
-    <div class="entry-meta">
-      <span class="amount-badge">$42.18</span>
-      <span class="status-pill">Completed</span>
-      <span class="impact-tag">Portfolio value increased</span>
+  <!-- Entry 2: Dividend Received -->
+  <div style="border-left:3px solid #34c759;border-radius:12px;background:#f9fafb;padding:16px 16px 14px;margin-bottom:10px">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:32px;height:32px;border-radius:8px;background:rgba(52,199,89,0.1);display:flex;align-items:center;justify-content:center">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 100 4h4a2 2 0 110 4H8M12 6v2m0 8v2"/></svg>
+        </div>
+        <div>
+          <div style="font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600;color:#1c1c1e">Dividend Received</div>
+          <div style="font-size:12px;color:#8e8e93;margin-top:1px">9:15 AM</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+        <div style="font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:700;color:#1c1c1e">$42.18</div>
+        <div style="display:inline-flex;padding:3px 8px;border-radius:6px;background:rgba(52,199,89,0.1)">
+          <span style="font-family:'IBM Plex Sans',sans-serif;font-size:11px;font-weight:600;color:#34c759">Completed</span>
+        </div>
+      </div>
+    </div>
+    <p style="font-family:Inter,sans-serif;font-size:14px;line-height:1.55;color:#3a3a3c;margin-bottom:10px">$42.18 arrived from your VTI holdings — your share of profits from thousands of American companies. It's been reinvested automatically to keep compounding.</p>
+    <div style="display:flex;align-items:center;gap:6px;padding:6px 10px;background:rgba(52,199,89,0.06);border-radius:8px">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2.5" stroke-linecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      <span style="font-family:'IBM Plex Sans',sans-serif;font-size:12px;font-weight:500;color:#34c759">Impact: Portfolio value increased</span>
     </div>
   </div>
 
-  <!-- YESTERDAY -->
-  <div class="date-section">
-    <div class="date-label">Yesterday</div>
-    <div class="date-sub">December 19, 2025</div>
+  <!-- YESTERDAY Header -->
+  <div style="position:sticky;top:124px;z-index:10;padding:16px 0 8px;margin-top:6px;background:#fff">
+    <div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:0.5px">Yesterday</div>
   </div>
 
-  <div class="journal-entry">
-    <div class="entry-narrative">Advizmo kept your portfolio balanced. While you were going about your day, it automatically rebalanced your investments — selling a bit of what grew too much and buying what was underweighted. Your diversification score went from 87% to 92%.</div>
-    <div class="entry-meta">
-      <span class="status-pill">Completed</span>
-      <span class="impact-tag">Diversification improved</span>
+  <!-- Entry 3: Portfolio Rebalanced -->
+  <div style="border-left:3px solid #34c759;border-radius:12px;background:#f9fafb;padding:16px 16px 14px;margin-bottom:10px">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:32px;height:32px;border-radius:8px;background:rgba(52,199,89,0.1);display:flex;align-items:center;justify-content:center">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2.5" stroke-linecap="round"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>
+        </div>
+        <div>
+          <div style="font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600;color:#1c1c1e">Portfolio Rebalanced</div>
+          <div style="font-size:12px;color:#8e8e93;margin-top:1px">3:45 PM</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+        <div style="display:inline-flex;padding:3px 8px;border-radius:6px;background:rgba(52,199,89,0.1)">
+          <span style="font-family:'IBM Plex Sans',sans-serif;font-size:11px;font-weight:600;color:#34c759">Completed</span>
+        </div>
+      </div>
+    </div>
+    <p style="font-family:Inter,sans-serif;font-size:14px;line-height:1.55;color:#3a3a3c;margin-bottom:10px">Your US Stocks had drifted above target. Advizmo sold a small portion and redistributed to International and Bonds. Your diversification improved from 87% to 92%.</p>
+    <div style="display:flex;align-items:center;gap:6px;padding:6px 10px;background:rgba(52,199,89,0.06);border-radius:8px">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2.5" stroke-linecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      <span style="font-family:'IBM Plex Sans',sans-serif;font-size:12px;font-weight:500;color:#34c759">Impact: Risk alignment restored</span>
     </div>
   </div>
 
-  <div class="journal-entry">
-    <div class="entry-narrative">New money arrived. <strong>$500</strong> was transferred from your Capital One Checking into Advizmo Cash. It'll be invested in the next Auto Invest cycle — likely tomorrow when markets open.</div>
-    <div class="entry-meta">
-      <span class="amount-badge">$500</span>
-      <span class="status-pill">Completed</span>
-      <span class="impact-tag">Ready for next investment</span>
+  <!-- Entry 4: Recurring Investment Executed -->
+  <div style="border-left:3px solid #34c759;border-radius:12px;background:#f9fafb;padding:16px 16px 14px;margin-bottom:10px">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:32px;height:32px;border-radius:8px;background:rgba(52,199,89,0.1);display:flex;align-items:center;justify-content:center">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2.5" stroke-linecap="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
+        </div>
+        <div>
+          <div style="font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600;color:#1c1c1e">Recurring Investment Executed</div>
+          <div style="font-size:12px;color:#8e8e93;margin-top:1px">10:00 AM</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+        <div style="font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:700;color:#1c1c1e">$500</div>
+        <div style="display:inline-flex;padding:3px 8px;border-radius:6px;background:rgba(52,199,89,0.1)">
+          <span style="font-family:'IBM Plex Sans',sans-serif;font-size:11px;font-weight:600;color:#34c759">Completed</span>
+        </div>
+      </div>
+    </div>
+    <p style="font-family:Inter,sans-serif;font-size:14px;line-height:1.55;color:#3a3a3c;margin-bottom:10px">$500 was automatically invested into your Dividend Portfolio. SCHD and VYM purchased. Your passive income stream continues to grow.</p>
+    <div style="display:flex;align-items:center;gap:6px;padding:6px 10px;background:rgba(52,199,89,0.06);border-radius:8px">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2.5" stroke-linecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      <span style="font-family:'IBM Plex Sans',sans-serif;font-size:12px;font-weight:500;color:#34c759">Impact: Monthly contribution on track</span>
     </div>
   </div>
 
-  <!-- THIS WEEK -->
-  <div class="date-section">
-    <div class="date-label">This Week</div>
-    <div class="date-sub">December 15 – 20, 2025</div>
+  <!-- THIS WEEK Header -->
+  <div style="position:sticky;top:124px;z-index:10;padding:16px 0 8px;margin-top:6px;background:#fff">
+    <div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:0.5px">This Week</div>
   </div>
 
-  <div class="journal-entry">
-    <div class="entry-narrative">Advizmo found you <strong>$82</strong> in potential tax savings. It sold an international ETF at a loss (that's a good thing here) and immediately bought a similar one. You keep the same exposure but save on taxes.</div>
-    <div class="entry-meta">
-      <span class="amount-badge">$340 harvested</span>
-      <span class="status-pill">Completed</span>
-      <span class="impact-tag">~$82 tax savings</span>
+  <!-- Entry 5: Tax-Loss Harvesting -->
+  <div style="border-left:3px solid #34c759;border-radius:12px;background:#f9fafb;padding:16px 16px 14px;margin-bottom:10px">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:32px;height:32px;border-radius:8px;background:rgba(52,199,89,0.1);display:flex;align-items:center;justify-content:center">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2.5" stroke-linecap="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        </div>
+        <div>
+          <div style="font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600;color:#1c1c1e">Tax-Loss Harvesting</div>
+          <div style="font-size:12px;color:#8e8e93;margin-top:1px">Monday</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+        <div style="font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:700;color:#1c1c1e">$340 harvested</div>
+        <div style="display:inline-flex;padding:3px 8px;border-radius:6px;background:rgba(52,199,89,0.1)">
+          <span style="font-family:'IBM Plex Sans',sans-serif;font-size:11px;font-weight:600;color:#34c759">Completed</span>
+        </div>
+      </div>
+    </div>
+    <p style="font-family:Inter,sans-serif;font-size:14px;line-height:1.55;color:#3a3a3c;margin-bottom:10px">Advizmo found a tax opportunity. Your International ETF had an unrealized loss. It was sold and replaced with a similar fund — same exposure, $82 in estimated tax savings.</p>
+    <div style="display:flex;align-items:center;gap:6px;padding:6px 10px;background:rgba(52,199,89,0.06);border-radius:8px">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2.5" stroke-linecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      <span style="font-family:'IBM Plex Sans',sans-serif;font-size:12px;font-weight:500;color:#34c759">Impact: ~$82 tax savings</span>
     </div>
   </div>
 
-  <div class="journal-entry">
-    <div class="entry-narrative">You approved a smart change. Your Auto Invest increased from $400 to <strong>$500/month</strong>. At this pace, you'll hit $100K three months earlier than planned.</div>
-    <div class="entry-meta">
-      <span class="status-pill">Completed</span>
-      <span class="impact-tag">Goal reached 3 months sooner</span>
+  <!-- Entry 6: Investment Goal Reached -->
+  <div style="border-left:3px solid #34c759;border-radius:12px;background:#f9fafb;padding:16px 16px 14px;margin-bottom:10px">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:32px;height:32px;border-radius:8px;background:rgba(52,199,89,0.1);display:flex;align-items:center;justify-content:center">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 12l2 2 4-4"/></svg>
+        </div>
+        <div>
+          <div style="font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600;color:#1c1c1e">Investment Goal Reached</div>
+          <div style="font-size:12px;color:#8e8e93;margin-top:1px">Tuesday</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+        <div style="font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:700;color:#1c1c1e">$25,000</div>
+        <div style="display:inline-flex;padding:3px 8px;border-radius:6px;background:rgba(52,199,89,0.1)">
+          <span style="font-family:'IBM Plex Sans',sans-serif;font-size:11px;font-weight:600;color:#34c759">Completed</span>
+        </div>
+      </div>
+    </div>
+    <p style="font-family:Inter,sans-serif;font-size:14px;line-height:1.55;color:#3a3a3c;margin-bottom:10px">Your aggressive portfolio allocation hit $25,000! This milestone means you've built a solid growth foundation. Consider diversifying into other areas.</p>
+    <div style="display:flex;align-items:center;gap:6px;padding:6px 10px;background:rgba(52,199,89,0.06);border-radius:8px">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2.5" stroke-linecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      <span style="font-family:'IBM Plex Sans',sans-serif;font-size:12px;font-weight:500;color:#34c759">Impact: Milestone achieved</span>
     </div>
   </div>
 
-  <div class="journal-entry">
-    <div class="entry-narrative">You updated your Emergency Fund goal to <strong>$10,000</strong>. You're at $8,700 — just $1,300 to go. Keep going.</div>
-    <div class="entry-meta">
-      <span class="status-pill">Completed</span>
-      <span class="impact-tag">87% complete</span>
+  <!-- Entry 7: Auto Invest Scheduled -->
+  <div style="border-left:3px solid #007aff;border-radius:12px;background:#f0f7ff;padding:16px 16px 14px;margin-bottom:10px">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:32px;height:32px;border-radius:8px;background:rgba(0,122,255,0.1);display:flex;align-items:center;justify-content:center">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#007aff" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+        <div>
+          <div style="font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600;color:#1c1c1e">Auto Invest Scheduled</div>
+          <div style="font-size:12px;color:#8e8e93;margin-top:1px">Wednesday</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+        <div style="font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:700;color:#1c1c1e">$520</div>
+        <div style="display:inline-flex;padding:3px 8px;border-radius:6px;background:rgba(0,122,255,0.1)">
+          <span style="font-family:'IBM Plex Sans',sans-serif;font-size:11px;font-weight:600;color:#007aff">Scheduled</span>
+        </div>
+      </div>
+    </div>
+    <p style="font-family:Inter,sans-serif;font-size:14px;line-height:1.55;color:#3a3a3c;margin-bottom:10px">$520 has been queued for your Aggressive Portfolio. It will execute at the next market open automatically.</p>
+    <div style="display:flex;align-items:center;gap:6px;padding:6px 10px;background:rgba(0,122,255,0.06);border-radius:8px">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#007aff" stroke-width="2.5" stroke-linecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      <span style="font-family:'IBM Plex Sans',sans-serif;font-size:12px;font-weight:500;color:#007aff">Impact: Next: Tomorrow 9:30 AM</span>
     </div>
   </div>
 
-  <!-- THIS MONTH -->
-  <div class="date-section">
-    <div class="date-label">This Month</div>
-    <div class="date-sub">December 2025</div>
+  <!-- THIS MONTH Header -->
+  <div style="position:sticky;top:124px;z-index:10;padding:16px 0 8px;margin-top:6px;background:#fff">
+    <div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:0.5px">This Month</div>
   </div>
 
-  <div class="journal-entry">
-    <div class="entry-narrative">Congratulations — your Vacation Fund hit <strong>$3,000</strong>! That's the target you set. Advizmo suggests redirecting that $200/month to Auto Invest for even more growth.</div>
-    <div class="entry-meta">
-      <span class="amount-badge">$3,000</span>
-      <span class="status-pill">Completed</span>
-      <span class="impact-tag">Goal achieved</span>
+  <!-- Entry 8: Allocation Updated -->
+  <div style="border-left:3px solid #34c759;border-radius:12px;background:#f9fafb;padding:16px 16px 14px;margin-bottom:10px">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:32px;height:32px;border-radius:8px;background:rgba(52,199,89,0.1);display:flex;align-items:center;justify-content:center">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2.5" stroke-linecap="round"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path d="M9 12l2 2 4-4"/></svg>
+        </div>
+        <div>
+          <div style="font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600;color:#1c1c1e">Allocation Updated</div>
+          <div style="font-size:12px;color:#8e8e93;margin-top:1px">Dec 8</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+        <div style="display:inline-flex;padding:3px 8px;border-radius:6px;background:rgba(52,199,89,0.1)">
+          <span style="font-family:'IBM Plex Sans',sans-serif;font-size:11px;font-weight:600;color:#34c759">Completed</span>
+        </div>
+      </div>
+    </div>
+    <p style="font-family:Inter,sans-serif;font-size:14px;line-height:1.55;color:#3a3a3c;margin-bottom:10px">International allocation increased from 15% to 18%. This gives you better global diversification and reduces US-market concentration risk.</p>
+    <div style="display:flex;align-items:center;gap:6px;padding:6px 10px;background:rgba(52,199,89,0.06);border-radius:8px">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2.5" stroke-linecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      <span style="font-family:'IBM Plex Sans',sans-serif;font-size:12px;font-weight:500;color:#34c759">Impact: Global exposure improved</span>
     </div>
   </div>
 
-  <div class="journal-entry">
-    <div class="entry-narrative">Your Chase Savings account is now connected. Advizmo can see the full picture and optimize across all your accounts.</div>
-    <div class="entry-meta">
-      <span class="status-pill">Completed</span>
-      <span class="impact-tag">Full financial visibility</span>
+  <!-- Entry 9: Dividend Reinvested -->
+  <div style="border-left:3px solid #34c759;border-radius:12px;background:#f9fafb;padding:16px 16px 14px;margin-bottom:10px">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:32px;height:32px;border-radius:8px;background:rgba(52,199,89,0.1);display:flex;align-items:center;justify-content:center">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2.5" stroke-linecap="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        </div>
+        <div>
+          <div style="font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600;color:#1c1c1e">Dividend Reinvested</div>
+          <div style="font-size:12px;color:#8e8e93;margin-top:1px">Dec 5</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+        <div style="font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:700;color:#1c1c1e">$38.50</div>
+        <div style="display:inline-flex;padding:3px 8px;border-radius:6px;background:rgba(52,199,89,0.1)">
+          <span style="font-family:'IBM Plex Sans',sans-serif;font-size:11px;font-weight:600;color:#34c759">Completed</span>
+        </div>
+      </div>
+    </div>
+    <p style="font-family:Inter,sans-serif;font-size:14px;line-height:1.55;color:#3a3a3c;margin-bottom:10px">$38.50 dividend from SCHD was reinvested into 0.42 additional shares. Your dividend income continues to compound.</p>
+    <div style="display:flex;align-items:center;gap:6px;padding:6px 10px;background:rgba(52,199,89,0.06);border-radius:8px">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2.5" stroke-linecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      <span style="font-family:'IBM Plex Sans',sans-serif;font-size:12px;font-weight:500;color:#34c759">Impact: Compounding automatically</span>
     </div>
   </div>
 
-  <!-- EARLIER -->
-  <div class="date-section">
-    <div class="date-label">Earlier</div>
-    <div class="date-sub">November 2025</div>
+  <!-- Entry 10: Tax Savings Updated -->
+  <div style="border-left:3px solid #34c759;border-radius:12px;background:#f9fafb;padding:16px 16px 14px;margin-bottom:10px">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:32px;height:32px;border-radius:8px;background:rgba(52,199,89,0.1);display:flex;align-items:center;justify-content:center">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2.5" stroke-linecap="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        </div>
+        <div>
+          <div style="font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600;color:#1c1c1e">Tax Savings Updated</div>
+          <div style="font-size:12px;color:#8e8e93;margin-top:1px">Dec 1</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+        <div style="font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:700;color:#1c1c1e">$1,240</div>
+        <div style="display:inline-flex;padding:3px 8px;border-radius:6px;background:rgba(52,199,89,0.1)">
+          <span style="font-family:'IBM Plex Sans',sans-serif;font-size:11px;font-weight:600;color:#34c759">Completed</span>
+        </div>
+      </div>
+    </div>
+    <p style="font-family:Inter,sans-serif;font-size:14px;line-height:1.55;color:#3a3a3c;margin-bottom:10px">Your estimated annual tax savings from tax-loss harvesting has been updated to $1,240. This is money that stays in your portfolio.</p>
+    <div style="display:flex;align-items:center;gap:6px;padding:6px 10px;background:rgba(52,199,89,0.06);border-radius:8px">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2.5" stroke-linecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      <span style="font-family:'IBM Plex Sans',sans-serif;font-size:12px;font-weight:500;color:#34c759">Impact: Year-to-date tax efficiency</span>
+    </div>
   </div>
 
-  <div class="journal-entry">
-    <div class="entry-narrative">Your Advizmo Cash earned <strong>$18.42</strong> in interest at 4.1% APY. It compounds automatically — no action needed from you.</div>
-    <div class="entry-meta">
-      <span class="amount-badge">$18.42</span>
-      <span class="status-pill">Completed</span>
-      <span class="impact-tag">Passive growth</span>
+  <!-- OLDER Header -->
+  <div style="position:sticky;top:124px;z-index:10;padding:16px 0 8px;margin-top:6px;background:#fff">
+    <div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:0.5px">Older</div>
+  </div>
+
+  <!-- Entry 11: Quarterly Dividends -->
+  <div style="border-left:3px solid #34c759;border-radius:12px;background:#f9fafb;padding:16px 16px 14px;margin-bottom:10px">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:32px;height:32px;border-radius:8px;background:rgba(52,199,89,0.1);display:flex;align-items:center;justify-content:center">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 100 4h4a2 2 0 110 4H8M12 6v2m0 8v2"/></svg>
+        </div>
+        <div>
+          <div style="font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600;color:#1c1c1e">Quarterly Dividends</div>
+          <div style="font-size:12px;color:#8e8e93;margin-top:1px">Nov 30</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+        <div style="font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:700;color:#1c1c1e">$124.80</div>
+        <div style="display:inline-flex;padding:3px 8px;border-radius:6px;background:rgba(52,199,89,0.1)">
+          <span style="font-family:'IBM Plex Sans',sans-serif;font-size:11px;font-weight:600;color:#34c759">Completed</span>
+        </div>
+      </div>
+    </div>
+    <p style="font-family:Inter,sans-serif;font-size:14px;line-height:1.55;color:#3a3a3c;margin-bottom:10px">$124.80 in quarterly dividends from your portfolio. All reinvested automatically. Your investments are generating real income.</p>
+    <div style="display:flex;align-items:center;gap:6px;padding:6px 10px;background:rgba(52,199,89,0.06);border-radius:8px">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2.5" stroke-linecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      <span style="font-family:'IBM Plex Sans',sans-serif;font-size:12px;font-weight:500;color:#34c759">Impact: Quarterly income reinvested</span>
+    </div>
+  </div>
+
+  <!-- Entry 12: Investment Statement -->
+  <div style="border-left:3px solid #34c759;border-radius:12px;background:#f9fafb;padding:16px 16px 14px;margin-bottom:10px">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:32px;height:32px;border-radius:8px;background:rgba(52,199,89,0.1);display:flex;align-items:center;justify-content:center">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2.5" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+        </div>
+        <div>
+          <div style="font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600;color:#1c1c1e">Investment Statement</div>
+          <div style="font-size:12px;color:#8e8e93;margin-top:1px">Nov 28</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+        <div style="display:inline-flex;padding:3px 8px;border-radius:6px;background:rgba(52,199,89,0.1)">
+          <span style="font-family:'IBM Plex Sans',sans-serif;font-size:11px;font-weight:600;color:#34c759">Completed</span>
+        </div>
+      </div>
+    </div>
+    <p style="font-family:Inter,sans-serif;font-size:14px;line-height:1.55;color:#3a3a3c;margin-bottom:10px">Your November investment statement is ready. It shows how your portfolio performed and where your money is working.</p>
+    <div style="display:flex;align-items:center;gap:6px;padding:6px 10px;background:rgba(52,199,89,0.06);border-radius:8px">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2.5" stroke-linecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      <span style="font-family:'IBM Plex Sans',sans-serif;font-size:12px;font-weight:500;color:#34c759">Impact: Available in Documents</span>
     </div>
   </div>
 
