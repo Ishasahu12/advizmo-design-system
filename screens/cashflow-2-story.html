@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Advizmo — Cash Flow: Money Story</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+    html { font-size: 16px; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f8f9fa;
+      color: #1c1c1e;
+      max-width: 430px;
+      margin: 0 auto;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .status-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 14px 24px 8px; font-size: 15px; font-weight: 600;
+      background: #ffffff; position: sticky; top: 0; z-index: 100;
+    }
+
+    .nav-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 8px 20px 12px; background: #ffffff;
+      border-bottom: 0.5px solid rgba(0,0,0,0.06);
+      position: sticky; top: 44px; z-index: 99;
+    }
+    .nav-title {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 17px; font-weight: 700; color: #1c1c1e;
+    }
+    .nav-actions { display: flex; gap: 16px; align-items: center; }
+    .nav-actions svg { width: 22px; height: 22px; color: #1c1c1e; cursor: pointer; }
+    .nav-back { display: flex; align-items: center; gap: 4px; text-decoration: none; color: #166f47; font-size: 15px; font-weight: 600; }
+
+    .nav-links {
+      display: flex; gap: 6px; padding: 4px 20px 12px; background: #ffffff;
+      overflow-x: auto; scrollbar-width: none; position: sticky; top: 82px; z-index: 98;
+    }
+    .nav-links::-webkit-scrollbar { display: none; }
+    .nav-link {
+      flex-shrink: 0; padding: 7px 14px; border-radius: 20px;
+      background: #f2f2f7; border: none; font-family: 'Inter', sans-serif;
+      font-size: 12px; font-weight: 600; color: #6b7280; cursor: pointer; white-space: nowrap;
+    }
+    .nav-link.active { background: #166f47; color: #fff; }
+
+    .content { padding: 0 20px 100px; }
+
+    .story-hero {
+      margin-top: 20px;
+      background: #1c1c1e;
+      border-radius: 24px;
+      padding: 28px 24px;
+      color: #ffffff;
+      position: relative;
+      overflow: hidden;
+    }
+    .story-hero::before {
+      content: '';
+      position: absolute; top: -40px; right: -40px;
+      width: 140px; height: 140px;
+      background: rgba(22,111,71,0.15);
+      border-radius: 50%;
+    }
+    .story-hero::after {
+      content: '';
+      position: absolute; bottom: -30px; left: -30px;
+      width: 100px; height: 100px;
+      background: rgba(22,111,71,0.08);
+      border-radius: 50%;
+    }
+    .story-hero-chapter {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: #6b7280; margin-bottom: 6px;
+      position: relative; z-index: 1;
+    }
+    .story-hero-title {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 26px; font-weight: 700; line-height: 1.2;
+      margin-bottom: 16px; position: relative; z-index: 1;
+    }
+    .story-hero-flow {
+      display: flex; align-items: center; gap: 8px;
+      position: relative; z-index: 1; margin-bottom: 20px;
+    }
+    .story-flow-item {
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+    }
+    .story-flow-label { font-size: 10px; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.04em; }
+    .story-flow-value {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 20px; font-weight: 700;
+    }
+    .story-flow-value.income { color: #34d399; }
+    .story-flow-value.expense { color: #fb923c; }
+    .story-flow-value.net { color: #ffffff; }
+    .story-flow-arrow { font-size: 18px; color: #4b5563; margin-bottom: 14px; }
+    .story-flow-divider { width: 1px; height: 40px; background: rgba(255,255,255,0.1); margin-bottom: 14px; }
+
+    .story-hero-narrative {
+      font-size: 14px; color: #9ca3af; line-height: 1.5;
+      position: relative; z-index: 1;
+      padding: 14px 16px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 12px;
+      border-left: 3px solid #166f47;
+    }
+    .story-hero-narrative strong { color: #34d399; }
+
+    .story-connector {
+      display: flex; align-items: center; justify-content: center;
+      padding: 12px 0;
+    }
+    .story-connector-line {
+      width: 2px; height: 28px; background: linear-gradient(180deg, rgba(22,111,71,0.3), rgba(22,111,71,0.05));
+      border-radius: 1px;
+    }
+
+    .section-label {
+      font-size: 11px; font-weight: 700; color: #8e8e93;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      margin: 24px 0 12px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .section-label-num {
+      width: 20px; height: 20px; border-radius: 50%;
+      background: #166f47; color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700;
+    }
+    .section-link {
+      margin-left: auto; font-size: 12px; font-weight: 600;
+      color: #166f47; text-decoration: none; display: flex; align-items: center; gap: 3px;
+    }
+    .section-link svg { width: 12px; height: 12px; }
+
+    .story-card {
+      background: #ffffff; border-radius: 18px;
+      border: 0.5px solid rgba(0,0,0,0.06);
+      overflow: hidden;
+    }
+    .story-card-header {
+      padding: 18px 20px 0;
+    }
+    .story-card-title {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 17px; font-weight: 600; color: #1c1c1e; margin-bottom: 2px;
+    }
+    .story-card-sub {
+      font-size: 13px; color: #6b7280;
+    }
+    .story-card-body { padding: 16px 20px 20px; }
+
+    .income-expense-bars { display: flex; flex-direction: column; gap: 14px; }
+    .ie-bar-row { display: flex; align-items: center; gap: 12px; }
+    .ie-bar-label {
+      font-size: 13px; font-weight: 500; color: #6b7280;
+      width: 70px; flex-shrink: 0;
+    }
+    .ie-bar-track {
+      flex: 1; height: 28px; background: #f2f2f7;
+      border-radius: 8px; overflow: hidden; position: relative;
+    }
+    .ie-bar-fill {
+      height: 100%; border-radius: 8px;
+      position: absolute; top: 0; left: 0;
+    }
+    .ie-bar-fill.income { background: linear-gradient(90deg, #166f47, #22a86a); }
+    .ie-bar-fill.expense { background: linear-gradient(90deg, #c2790a, #f59e0b); }
+    .ie-bar-amount {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px; font-weight: 700;
+      width: 72px; text-align: right; flex-shrink: 0;
+    }
+    .ie-bar-amount.income { color: #166f47; }
+    .ie-bar-amount.expense { color: #c2790a; }
+    .ie-vs-divider {
+      display: flex; align-items: center; gap: 10px;
+      margin: 4px 0;
+    }
+    .ie-vs-line { flex: 1; height: 1px; background: rgba(0,0,0,0.06); }
+    .ie-vs-text {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 11px; font-weight: 700; color: #8e8e93;
+      text-transform: uppercase; letter-spacing: 0.06em;
+    }
+
+    .net-worth-row {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .net-worth-big {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 36px; font-weight: 700; color: #1c1c1e; line-height: 1;
+    }
+    .net-worth-change {
+      text-align: right;
+    }
+    .net-worth-change-val {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 16px; font-weight: 700; color: #166f47;
+    }
+    .net-worth-change-label { font-size: 11px; color: #8e8e93; }
+    .net-worth-breakdown {
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;
+    }
+    .nw-stat {
+      background: #f8f9fa; border-radius: 12px; padding: 14px 12px; text-align: center;
+    }
+    .nw-stat-value {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 16px; font-weight: 700; color: #1c1c1e;
+    }
+    .nw-stat-label { font-size: 11px; color: #8e8e93; margin-top: 2px; }
+    .nw-stat-value.up { color: #166f47; }
+
+    .budget-progress-wrap { margin-bottom: 14px; }
+    .budget-progress-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 8px;
+    }
+    .budget-progress-label { font-size: 14px; color: #6b7280; }
+    .budget-progress-pct {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px; font-weight: 700; color: #166f47;
+    }
+    .budget-progress-bar {
+      height: 10px; background: #e5e7eb; border-radius: 5px;
+      overflow: hidden;
+    }
+    .budget-progress-fill {
+      height: 100%; border-radius: 5px;
+      background: linear-gradient(90deg, #166f47, #22a86a);
+      transition: width 1s ease;
+    }
+    .budget-progress-footer {
+      display: flex; justify-content: space-between; margin-top: 6px;
+      font-size: 12px; color: #8e8e93;
+    }
+    .budget-remaining {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 16px; background: #f8f9fa; border-radius: 12px;
+      margin-top: 14px;
+    }
+    .budget-remaining-label { font-size: 13px; color: #6b7280; }
+    .budget-remaining-value {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 18px; font-weight: 700; color: #166f47;
+    }
+    .budget-attention {
+      margin-top: 12px;
+    }
+    .budget-attention-title {
+      font-size: 12px; font-weight: 600; color: #c2790a; margin-bottom: 8px;
+    }
+    .budget-attention-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 12px; background: #fffbeb; border-radius: 10px;
+      margin-bottom: 6px;
+    }
+    .budget-att-cat { font-size: 13px; font-weight: 500; color: #1c1c1e; }
+    .budget-att-val {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 13px; font-weight: 700; color: #c2790a;
+    }
+
+    .spending-top {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .spending-total {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 32px; font-weight: 700; color: #1c1c1e; line-height: 1;
+    }
+    .spending-subtitle { font-size: 13px; color: #8e8e93; margin-top: 4px; }
+    .spending-detail-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 0;
+    }
+    .spending-detail-row + .spending-detail-row { border-top: 0.5px solid rgba(0,0,0,0.06); }
+    .spending-detail-left { display: flex; align-items: center; gap: 10px; }
+    .spending-detail-icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+    }
+    .spending-detail-icon.housing { background: #eefbf4; }
+    .spending-detail-icon.food { background: #fef3c7; }
+    .spending-detail-label { font-size: 14px; font-weight: 500; color: #1c1c1e; }
+    .spending-detail-sub { font-size: 12px; color: #8e8e93; }
+    .spending-detail-amount {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 15px; font-weight: 600; color: #1c1c1e;
+    }
+
+    .forecast-hero {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .forecast-projected {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 32px; font-weight: 700; color: #1c1c1e; line-height: 1;
+    }
+    .forecast-surplus {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 16px; font-weight: 700; color: #166f47;
+      background: #eefbf4; padding: 6px 12px; border-radius: 10px;
+    }
+    .forecast-bars { display: flex; flex-direction: column; gap: 12px; }
+    .forecast-bar-row { display: flex; align-items: center; gap: 10px; }
+    .forecast-bar-label { font-size: 13px; color: #6b7280; width: 80px; flex-shrink: 0; }
+    .forecast-bar-track { flex: 1; height: 22px; background: #f2f2f7; border-radius: 6px; overflow: hidden; position: relative; }
+    .forecast-bar-fill { height: 100%; border-radius: 6px; position: absolute; top: 0; left: 0; }
+    .forecast-bar-fill.income { background: linear-gradient(90deg, #166f47, #22a86a); }
+    .forecast-bar-fill.bills { background: linear-gradient(90deg, #c2790a, #f59e0b); }
+    .forecast-bar-val {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 13px; font-weight: 600; width: 60px; text-align: right; flex-shrink: 0;
+    }
+    .forecast-bar-val.income { color: #166f47; }
+    .forecast-bar-val.bills { color: #c2790a; }
+    .forecast-month {
+      margin-top: 14px; padding-top: 14px;
+      border-top: 0.5px solid rgba(0,0,0,0.06);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .forecast-month-label { font-size: 13px; color: #8e8e93; }
+    .forecast-month-val {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px; font-weight: 600; color: #1c1c1e;
+    }
+
+    .ai-insight {
+      background: linear-gradient(135deg, #1c1c1e 0%, #2d3748 100%);
+      border-radius: 18px;
+      padding: 20px;
+      color: #ffffff;
+      position: relative;
+      overflow: hidden;
+    }
+    .ai-insight::before {
+      content: '';
+      position: absolute; top: -20px; right: -20px;
+      width: 80px; height: 80px;
+      background: rgba(22,111,71,0.2);
+      border-radius: 50%;
+    }
+    .ai-insight-header {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 12px; position: relative; z-index: 1;
+    }
+    .ai-insight-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 10px; border-radius: 8px;
+      background: rgba(22,111,71,0.2); font-size: 11px;
+      font-weight: 700; color: #34d399; text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .ai-insight-badge-dot { width: 5px; height: 5px; border-radius: 50%; background: #34d399; }
+    .ai-insight-text {
+      font-size: 15px; line-height: 1.5; color: #d1d5db;
+      position: relative; z-index: 1;
+    }
+    .ai-insight-text strong { color: #fb923c; }
+    .ai-insight-cta {
+      margin-top: 14px; position: relative; z-index: 1;
+    }
+    .ai-insight-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 10px 16px; border-radius: 12px;
+      background: rgba(255,255,255,0.08); border: none;
+      font-family: 'Inter', sans-serif; font-size: 13px;
+      font-weight: 600; color: #ffffff; cursor: pointer;
+    }
+    .ai-insight-btn svg { width: 14px; height: 14px; }
+
+    .quick-actions {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+    }
+    .qa-card {
+      background: #ffffff; border-radius: 16px;
+      border: 0.5px solid rgba(0,0,0,0.06);
+      padding: 18px 16px;
+      display: flex; flex-direction: column; align-items: center;
+      gap: 8px; text-decoration: none; color: inherit;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .qa-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.06); transform: translateY(-1px); }
+    .qa-icon {
+      width: 44px; height: 44px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .qa-icon svg { width: 22px; height: 22px; }
+    .qa-icon.budget { background: #fef3c7; color: #c2790a; }
+    .qa-icon.spending { background: #e0efff; color: #1551a8; }
+    .qa-icon.move { background: #eefbf4; color: #166f47; }
+    .qa-icon.networth { background: #f3e8ff; color: #7c3aed; }
+    .qa-label { font-size: 13px; font-weight: 600; color: #1c1c1e; text-align: center; }
+
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+      width: 100%; max-width: 430px;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-top: 0.5px solid rgba(0,0,0,0.1);
+      display: flex; justify-content: space-around; align-items: flex-start;
+      padding: 10px 8px 34px;
+    }
+    .bottom-nav-item {
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
+      min-width: 60px; cursor: pointer;
+    }
+    .bottom-nav-item svg { width: 24px; height: 24px; color: #8e8e93; }
+    .bottom-nav-item.active svg { color: #166f47; }
+    .bottom-nav-label { font-size: 10px; font-weight: 500; color: #8e8e93; }
+    .bottom-nav-item.active .bottom-nav-label { color: #166f47; font-weight: 600; }
+  </style>
+</head>
+<body>
+
+  <div class="status-bar">
+    <span>9:41</span>
+    <div style="display:flex;gap:6px;align-items:center;">
+      <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><path d="M1 7.5c1.5-2 3.5-3 5.5-3s4 1 5.5 3" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/><circle cx="7" cy="12" r="1.2"/></svg>
+      <svg width="28" height="13" viewBox="0 0 28 13" fill="currentColor"><rect x="0" y="0.5" width="23" height="12" rx="3" stroke="currentColor" stroke-width="1" fill="none"/><rect x="24" y="4" width="2.5" height="5" rx="1" fill="currentColor" opacity="0.3"/><rect x="1.5" y="2" width="18" height="9" rx="1.5" fill="currentColor"/></svg>
+    </div>
+  </div>
+
+  <div class="nav-bar">
+    <a href="index.html" class="nav-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="18" height="18"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Back
+    </a>
+    <div class="nav-title">Cash Flow</div>
+    <div class="nav-actions">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M16 16l4 4"/></svg>
+    </div>
+  </div>
+
+  <div class="nav-links">
+    <button class="nav-link" onclick="location.href='#'">Overview</button>
+    <button class="nav-link" onclick="location.href='#'">Spending</button>
+    <button class="nav-link" onclick="location.href='#'">Budget</button>
+    <button class="nav-link" onclick="location.href='#'">Net Worth</button>
+    <button class="nav-link active" onclick="location.href='#'">Cash Flow</button>
+  </div>
+
+  <div class="content">
+
+    <!-- STORY HERO: Chapter 1 — Your Monthly Cash Flow -->
+    <div class="story-hero">
+      <div class="story-hero-chapter">Chapter 1</div>
+      <div class="story-hero-title">Your Money This Month</div>
+      <div class="story-hero-flow">
+        <div class="story-flow-item">
+          <div class="story-flow-label">Income</div>
+          <div class="story-flow-value income">$8,450</div>
+        </div>
+        <div class="story-flow-arrow">→</div>
+        <div class="story-flow-item">
+          <div class="story-flow-label">Expenses</div>
+          <div class="story-flow-value expense">$6,120</div>
+        </div>
+        <div class="story-flow-divider"></div>
+        <div class="story-flow-item">
+          <div class="story-flow-label">Net</div>
+          <div class="story-flow-value net">+$2,330</div>
+        </div>
+      </div>
+      <div class="story-hero-narrative">
+        You earned <strong>$8,450</strong> this month and spent <strong>$6,120</strong>. After everything, you kept <strong>$2,330</strong>. That's money working toward your goals.
+      </div>
+    </div>
+
+    <div class="story-connector"><div class="story-connector-line"></div></div>
+
+    <!-- SECTION 2: Income vs Expenses -->
+    <div class="section-label">
+      <div class="section-label-num">2</div>
+      Income vs Expenses
+      <a href="#" class="section-link">
+        Details
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+      </a>
+    </div>
+    <div class="story-card">
+      <div class="story-card-header">
+        <div class="story-card-title">How your money splits</div>
+        <div class="story-card-sub">Income vs spending, visualized</div>
+      </div>
+      <div class="story-card-body">
+        <div class="income-expense-bars">
+          <div class="ie-bar-row">
+            <div class="ie-bar-label">Income</div>
+            <div class="ie-bar-track">
+              <div class="ie-bar-fill income" style="width: 100%;"></div>
+            </div>
+            <div class="ie-bar-amount income">$8,450</div>
+          </div>
+          <div class="ie-vs-divider">
+            <div class="ie-vs-line"></div>
+            <div class="ie-vs-text">vs</div>
+            <div class="ie-vs-line"></div>
+          </div>
+          <div class="ie-bar-row">
+            <div class="ie-bar-label">Expenses</div>
+            <div class="ie-bar-track">
+              <div class="ie-bar-fill expense" style="width: 72%;"></div>
+            </div>
+            <div class="ie-bar-amount expense">$6,120</div>
+          </div>
+        </div>
+        <div style="margin-top:16px;padding:12px 16px;background:#f8f9fa;border-radius:12px;display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:13px;color:#6b7280;">You kept</span>
+          <span style="font-family:'IBM Plex Sans';font-size:16px;font-weight:700;color:#166f47;">28% of income</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="story-connector"><div class="story-connector-line"></div></div>
+
+    <!-- SECTION 3: Net Worth Snapshot -->
+    <div class="section-label">
+      <div class="section-label-num">3</div>
+      Net Worth Snapshot
+      <a href="#" class="section-link">
+        View Net Worth
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+      </a>
+    </div>
+    <div class="story-card">
+      <div class="story-card-body">
+        <div class="net-worth-row">
+          <div>
+            <div class="net-worth-big">$124,850</div>
+          </div>
+          <div class="net-worth-change">
+            <div class="net-worth-change-val">+$2,330</div>
+            <div class="net-worth-change-label">this month</div>
+          </div>
+        </div>
+        <div class="net-worth-breakdown">
+          <div class="nw-stat">
+            <div class="nw-stat-value up">+$2,330</div>
+            <div class="nw-stat-label">Monthly</div>
+          </div>
+          <div class="nw-stat">
+            <div class="nw-stat-value up">+$18,200</div>
+            <div class="nw-stat-label">Annual</div>
+          </div>
+          <div class="nw-stat">
+            <div class="nw-stat-value">14.6%</div>
+            <div class="nw-stat-label">Growth</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="story-connector"><div class="story-connector-line"></div></div>
+
+    <!-- SECTION 4: Budget Snapshot -->
+    <div class="section-label">
+      <div class="section-label-num">4</div>
+      Budget Snapshot
+      <a href="#" class="section-link">
+        View Budget
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+      </a>
+    </div>
+    <div class="story-card">
+      <div class="story-card-body">
+        <div class="budget-progress-wrap">
+          <div class="budget-progress-header">
+            <div class="budget-progress-label">$5,740 of $6,500</div>
+            <div class="budget-progress-pct">88%</div>
+          </div>
+          <div class="budget-progress-bar">
+            <div class="budget-progress-fill" style="width: 88%;"></div>
+          </div>
+          <div class="budget-progress-footer">
+            <span>$760 budget</span>
+            <span>16 days left</span>
+          </div>
+        </div>
+        <div class="budget-remaining">
+          <div class="budget-remaining-label">Remaining this month</div>
+          <div class="budget-remaining-value">$380</div>
+        </div>
+        <div class="budget-attention">
+          <div class="budget-attention-title">Needs attention</div>
+          <div class="budget-attention-item">
+            <span class="budget-att-cat">Dining Out</span>
+            <span class="budget-att-val">92% used</span>
+          </div>
+          <div class="budget-attention-item">
+            <span class="budget-att-cat">Entertainment</span>
+            <span class="budget-att-val">87% used</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="story-connector"><div class="story-connector-line"></div></div>
+
+    <!-- SECTION 5: Spending Snapshot -->
+    <div class="section-label">
+      <div class="section-label-num">5</div>
+      Spending Snapshot
+      <a href="#" class="section-link">
+        View Spending
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+      </a>
+    </div>
+    <div class="story-card">
+      <div class="story-card-body">
+        <div class="spending-top">
+          <div>
+            <div class="spending-total">$6,120</div>
+            <div class="spending-subtitle">Total spent this month</div>
+          </div>
+        </div>
+        <div class="spending-detail-row">
+          <div class="spending-detail-left">
+            <div class="spending-detail-icon housing">🏠</div>
+            <div>
+              <div class="spending-detail-label">Housing</div>
+              <div class="spending-detail-sub">Largest category</div>
+            </div>
+          </div>
+          <div class="spending-detail-amount">$2,100</div>
+        </div>
+        <div class="spending-detail-row">
+          <div class="spending-detail-left">
+            <div class="spending-detail-icon food">🛒</div>
+            <div>
+              <div class="spending-detail-label">Whole Foods</div>
+              <div class="spending-detail-sub">Top merchant</div>
+            </div>
+          </div>
+          <div class="spending-detail-amount">$420</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="story-connector"><div class="story-connector-line"></div></div>
+
+    <!-- SECTION 6: Cash Flow Forecast -->
+    <div class="section-label">
+      <div class="section-label-num">6</div>
+      Cash Flow Forecast
+      <a href="#" class="section-link">
+        Full Forecast
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+      </a>
+    </div>
+    <div class="story-card">
+      <div class="story-card-body">
+        <div class="forecast-hero">
+          <div>
+            <div class="forecast-projected">$128,700</div>
+            <div style="font-size:13px;color:#8e8e93;margin-top:4px;">Projected balance</div>
+          </div>
+          <div class="forecast-surplus">+$350 surplus</div>
+        </div>
+        <div class="forecast-bars">
+          <div class="forecast-bar-row">
+            <div class="forecast-bar-label">Income</div>
+            <div class="forecast-bar-track">
+              <div class="forecast-bar-fill income" style="width: 100%;"></div>
+            </div>
+            <div class="forecast-bar-val income">$4,200</div>
+          </div>
+          <div class="forecast-bar-row">
+            <div class="forecast-bar-label">Bills</div>
+            <div class="forecast-bar-track">
+              <div class="forecast-bar-fill bills" style="width: 92%;"></div>
+            </div>
+            <div class="forecast-bar-val bills">$3,850</div>
+          </div>
+        </div>
+        <div class="forecast-month">
+          <div class="forecast-month-label">After bills, you keep</div>
+          <div class="forecast-month-val" style="color:#166f47;">+$350</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="story-connector"><div class="story-connector-line"></div></div>
+
+    <!-- SECTION 7: AI Financial Insight -->
+    <div class="section-label">
+      <div class="section-label-num">7</div>
+      AI Insight
+    </div>
+    <div class="ai-insight">
+      <div class="ai-insight-header">
+        <div class="ai-insight-badge">
+          <div class="ai-insight-badge-dot"></div>
+          AI Insight
+        </div>
+      </div>
+      <div class="ai-insight-text">
+        <strong>Dining spending increased 12%</strong> this month compared to your 3-month average. You spent $680 on restaurants vs. $607 typical. Consider this for next month's budget.
+      </div>
+      <div class="ai-insight-cta">
+        <button class="ai-insight-btn">
+          View spending breakdown
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="story-connector"><div class="story-connector-line"></div></div>
+
+    <!-- SECTION 8: Quick Actions -->
+    <div class="section-label">
+      <div class="section-label-num">8</div>
+      Quick Actions
+    </div>
+    <div class="quick-actions">
+      <a href="#" class="qa-card">
+        <div class="qa-icon budget">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 10h20"/></svg>
+        </div>
+        <div class="qa-label">Review Budget</div>
+      </a>
+      <a href="#" class="qa-card">
+        <div class="qa-icon spending">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <div class="qa-label">View Spending</div>
+      </a>
+      <a href="#" class="qa-card">
+        <div class="qa-icon move">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+        <div class="qa-label">Move Money</div>
+      </a>
+      <a href="#" class="qa-card">
+        <div class="qa-icon networth">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <div class="qa-label">View Net Worth</div>
+      </a>
+    </div>
+
+  </div>
+
+  <div class="bottom-nav">
+    <div class="bottom-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span class="bottom-nav-label">Overview</span>
+    </div>
+    <div class="bottom-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      <span class="bottom-nav-label">Invest</span>
+    </div>
+    <div class="bottom-nav-item active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <span class="bottom-nav-label">Cash Flow</span>
+    </div>
+    <div class="bottom-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span class="bottom-nav-label">Profile</span>
+    </div>
+  </div>
+
+</body>
+</html>

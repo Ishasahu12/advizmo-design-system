@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cash Flow Overview — Advizmo</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #166f47;
+    --green-light: #e8f5ee;
+    --amber: #c2790a;
+    --amber-light: #fef3e0;
+    --bg: #f8f9fa;
+    --card: #ffffff;
+    --text: #1d1d1f;
+    --text-secondary: #6e6e73;
+    --text-tertiary: #aeaeb2;
+    --border: rgba(0,0,0,0.06);
+    --shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.03);
+    --shadow-hover: 0 2px 8px rgba(0,0,0,0.06), 0 8px 24px rgba(0,0,0,0.05);
+    --radius: 16px;
+    --radius-sm: 12px;
+    --max-w: 430px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.5;
+  }
+
+  .phone-frame {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    min-height: 100vh;
+    background: var(--bg);
+  }
+
+  /* Status Bar */
+  .status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 24px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .status-bar-icons { display: flex; gap: 6px; align-items: center; }
+
+  /* Navigation */
+  .nav-header {
+    display: flex;
+    align-items: center;
+    padding: 4px 20px 12px;
+    gap: 12px;
+  }
+  .back-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--green);
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .back-btn:hover { opacity: 0.7; }
+  .back-btn svg { width: 18px; height: 18px; }
+
+  .nav-title-area {
+    flex: 1;
+    text-align: center;
+  }
+  .nav-title-area h1 {
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+  }
+
+  .segmented-nav {
+    display: flex;
+    gap: 2px;
+    padding: 4px 20px 16px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .segmented-nav::-webkit-scrollbar { display: none; }
+  .segment-nav-btn {
+    flex-shrink: 0;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 20px;
+    background: transparent;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-family: inherit;
+    white-space: nowrap;
+  }
+  .segment-nav-btn.active {
+    background: var(--text);
+    color: #fff;
+  }
+  .segment-nav-btn:not(.active):hover {
+    background: rgba(0,0,0,0.05);
+  }
+
+  /* Main Content */
+  .content { padding: 0 20px 40px; }
+
+  /* Hero Card - Monthly Cash Flow */
+  .hero-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 36px 28px 32px;
+    box-shadow: var(--shadow);
+    margin-bottom: 12px;
+    text-align: center;
+  }
+  .hero-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .hero-amount {
+    font-size: 56px;
+    font-weight: 700;
+    letter-spacing: -2.5px;
+    color: var(--green);
+    line-height: 1.05;
+    margin-bottom: 6px;
+  }
+  .hero-period {
+    font-size: 14px;
+    color: var(--text-tertiary);
+    margin-bottom: 28px;
+  }
+  .hero-split {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+  }
+  .hero-split-item {
+    text-align: center;
+  }
+  .hero-split-label {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: 4px;
+  }
+  .hero-split-value {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+  }
+  .hero-split-value.income { color: var(--green); }
+  .hero-split-value.expense { color: var(--amber); }
+
+  /* Chart Card */
+  .chart-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+    margin-bottom: 12px;
+  }
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+  }
+  .card-link {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--green);
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .card-link:hover { opacity: 0.7; }
+
+  /* Area Chart */
+  .area-chart {
+    width: 100%;
+    height: 180px;
+    position: relative;
+  }
+  .area-chart canvas {
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  /* Stat Cards Row */
+  .stat-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .stat-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 22px 20px;
+    box-shadow: var(--shadow);
+  }
+  .stat-card-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: 10px;
+  }
+  .stat-card-value {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    line-height: 1.05;
+    margin-bottom: 10px;
+  }
+  .stat-card-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .stat-card-meta span {
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+  .stat-card-meta .positive { color: var(--green); font-weight: 500; }
+  .stat-card-meta .negative { color: var(--amber); font-weight: 500; }
+
+  .stat-card-link {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--green);
+    text-decoration: none;
+  }
+  .stat-card-link:hover { opacity: 0.7; }
+
+  /* Full Width Card */
+  .full-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+    margin-bottom: 12px;
+  }
+  .full-card-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: 10px;
+  }
+  .full-card-value {
+    font-size: 38px;
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    margin-bottom: 14px;
+  }
+
+  /* Budget Bar */
+  .budget-bar-track {
+    width: 100%;
+    height: 8px;
+    background: #f0f0f0;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .budget-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 1s ease;
+  }
+  .budget-bar-fill.green { background: var(--green); }
+  .budget-bar-fill.amber { background: var(--amber); }
+  .budget-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .budget-info-left {
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+  .budget-info-left strong {
+    color: var(--green);
+    font-weight: 600;
+  }
+
+  /* Spending Breakdown */
+  .spending-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .spending-row:last-child { border-bottom: none; }
+  .spending-row-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .spending-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+  .spending-cat {
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .spending-amount {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+  }
+
+  /* Forecast */
+  .forecast-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .forecast-row:last-child { border-bottom: none; }
+  .forecast-label {
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+  .forecast-value {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+  }
+  .forecast-projected {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 0 0;
+    margin-top: 4px;
+    border-top: 1px solid var(--border);
+  }
+  .forecast-projected-label {
+    font-size: 13px;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+  .forecast-projected-value {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+  .surplus-tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 8px;
+    background: var(--green-light);
+    color: var(--green);
+    font-size: 13px;
+    font-weight: 600;
+    margin-top: 10px;
+  }
+
+  /* AI Insight */
+  .ai-card {
+    background: linear-gradient(135deg, #f0faf4 0%, #f8f9fa 100%);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+    margin-bottom: 12px;
+    border: 1px solid rgba(22,111,71,0.08);
+  }
+  .ai-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--green);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+  }
+  .ai-label svg { width: 14px; height: 14px; }
+  .ai-insight {
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: -0.3px;
+    line-height: 1.45;
+    color: var(--text);
+  }
+
+  /* Quick Actions */
+  .quick-actions {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .quick-action {
+    background: var(--card);
+    border-radius: var(--radius-sm);
+    padding: 18px 8px 14px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    text-decoration: none;
+    color: var(--text);
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .quick-action:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+  }
+  .quick-action-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+    font-size: 18px;
+  }
+  .quick-action-icon.green-bg {
+    background: var(--green-light);
+    color: var(--green);
+  }
+  .quick-action-icon.amber-bg {
+    background: var(--amber-light);
+    color: var(--amber);
+  }
+  .quick-action-icon.blue-bg {
+    background: #eef4fd;
+    color: #2563eb;
+  }
+  .quick-action-icon.purple-bg {
+    background: #f3eeff;
+    color: #7c3aed;
+  }
+  .quick-action-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    line-height: 1.3;
+  }
+
+  /* Smooth entry animation */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-in {
+    animation: fadeUp 0.5s ease both;
+  }
+  .delay-1 { animation-delay: 0.05s; }
+  .delay-2 { animation-delay: 0.1s; }
+  .delay-3 { animation-delay: 0.15s; }
+  .delay-4 { animation-delay: 0.2s; }
+  .delay-5 { animation-delay: 0.25s; }
+  .delay-6 { animation-delay: 0.3s; }
+  .delay-7 { animation-delay: 0.35s; }
+  .delay-8 { animation-delay: 0.4s; }
+  .delay-9 { animation-delay: 0.45s; }
+</style>
+</head>
+<body>
+
+<div class="phone-frame">
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span>9:41</span>
+    <div class="status-bar-icons">
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><rect x="0" y="4" width="3" height="8" rx="1" fill="currentColor"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="1" fill="currentColor"/><rect x="9" y="1" width="3" height="11" rx="1" fill="currentColor"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" fill="currentColor" opacity="0.3"/></svg>
+      <svg width="15" height="12" viewBox="0 0 15 12" fill="none"><path d="M7.5 3.6C9.4 3.6 11.1 4.3 12.4 5.5L13.8 4.1C12.1 2.5 9.9 1.5 7.5 1.5C5.1 1.5 2.9 2.5 1.2 4.1L2.6 5.5C3.9 4.3 5.6 3.6 7.5 3.6Z" fill="currentColor"/><path d="M7.5 6.8C8.7 6.8 9.8 7.2 10.6 8L12 6.6C10.8 5.5 9.2 4.8 7.5 4.8C5.8 4.8 4.2 5.5 3 6.6L4.4 8C5.2 7.2 6.3 6.8 7.5 6.8Z" fill="currentColor"/><circle cx="7.5" cy="10.5" r="1.5" fill="currentColor"/></svg>
+      <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="1" width="21" height="10" rx="2.5" stroke="currentColor" stroke-opacity="0.35"/><rect x="2" y="2.5" width="16" height="7" rx="1.5" fill="currentColor"/><path d="M23 4.5V7.5C23.8 7.2 23.8 4.8 23 4.5Z" fill="currentColor" opacity="0.4"/></svg>
+    </div>
+  </div>
+
+  <!-- Nav Header -->
+  <div class="nav-header">
+    <a href="index.html" class="back-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+      Back
+    </a>
+    <div class="nav-title-area">
+      <h1>Cash Flow</h1>
+    </div>
+    <div style="width:60px"></div>
+  </div>
+
+  <!-- Segmented Nav -->
+  <div class="segmented-nav">
+    <button class="segment-nav-btn" onclick="location.href='overview.html'">Overview</button>
+    <button class="segment-nav-btn" onclick="location.href='spending.html'">Spending</button>
+    <button class="segment-nav-btn" onclick="location.href='budget.html'">Budget</button>
+    <button class="segment-nav-btn" onclick="location.href='networth.html'">Net Worth</button>
+    <button class="segment-nav-btn active">Cash Flow</button>
+  </div>
+
+  <div class="content">
+
+    <!-- 1. Monthly Cash Flow Hero -->
+    <div class="hero-card animate-in delay-1">
+      <div class="hero-label">Net Cash Flow</div>
+      <div class="hero-amount" id="heroAmount">$2,330</div>
+      <div class="hero-period">This Month</div>
+      <div class="hero-split">
+        <div class="hero-split-item">
+          <div class="hero-split-label">Income</div>
+          <div class="hero-split-value income">$8,450</div>
+        </div>
+        <div class="hero-split-item">
+          <div class="hero-split-label">Expenses</div>
+          <div class="hero-split-value expense">$6,120</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Income vs Expenses Chart -->
+    <div class="chart-card animate-in delay-2">
+      <div class="card-header">
+        <div class="card-title">Income vs Expenses</div>
+        <a href="#" class="card-link">6M</a>
+      </div>
+      <div class="area-chart">
+        <canvas id="incomeExpenseChart"></canvas>
+      </div>
+    </div>
+
+    <!-- 3 & 4. Net Worth + Budget -->
+    <div class="stat-row">
+      <div class="stat-card animate-in delay-3">
+        <div class="stat-card-label">Net Worth</div>
+        <div class="stat-card-value" style="color:var(--text)">$124,850</div>
+        <div class="stat-card-meta">
+          <span class="positive">+$2,330 this month</span>
+          <span class="positive">+$18,200 this year</span>
+        </div>
+        <a href="networth.html" class="stat-card-link">View Details</a>
+      </div>
+      <div class="stat-card animate-in delay-4">
+        <div class="stat-card-label">Budget Left</div>
+        <div class="stat-card-value" style="color:var(--green)">$380</div>
+        <div class="budget-bar-track" style="margin-top:8px">
+          <div class="budget-bar-fill green" style="width:64%"></div>
+        </div>
+        <div class="budget-info">
+          <span class="budget-info-left"><strong>$380</strong> of $1,050</span>
+        </div>
+        <a href="budget.html" class="stat-card-link">Review Budget</a>
+      </div>
+    </div>
+
+    <!-- 5. Spending Snapshot -->
+    <div class="full-card animate-in delay-5">
+      <div class="card-header">
+        <div>
+          <div class="full-card-label">Spending Snapshot</div>
+          <div class="full-card-value" style="color:var(--amber)">$6,120</div>
+        </div>
+        <a href="spending.html" class="card-link">View All</a>
+      </div>
+      <div class="spending-row">
+        <div class="spending-row-left">
+          <div class="spending-icon" style="background:#fef3e0">🏠</div>
+          <div class="spending-cat">Housing</div>
+        </div>
+        <div class="spending-amount">$2,200</div>
+      </div>
+      <div class="spending-row">
+        <div class="spending-row-left">
+          <div class="spending-icon" style="background:#eef4fd">🛒</div>
+          <div class="spending-cat">Groceries</div>
+        </div>
+        <div class="spending-amount">$890</div>
+      </div>
+      <div class="spending-row">
+        <div class="spending-row-left">
+          <div class="spending-icon" style="background:#f3eeff">🚗</div>
+          <div class="spending-cat">Transport</div>
+        </div>
+        <div class="spending-amount">$640</div>
+      </div>
+      <div class="spending-row">
+        <div class="spending-row-left">
+          <div class="spending-icon" style="background:#e8f5ee">🍽️</div>
+          <div class="spending-cat">Dining</div>
+        </div>
+        <div class="spending-amount">$520</div>
+      </div>
+    </div>
+
+    <!-- 6. Cash Flow Forecast -->
+    <div class="full-card animate-in delay-6">
+      <div class="card-header">
+        <div>
+          <div class="full-card-label">Cash Flow Forecast</div>
+          <div class="card-title" style="margin-top:4px">Next 30 Days</div>
+        </div>
+      </div>
+      <div class="forecast-row">
+        <span class="forecast-label">Expected Income</span>
+        <span class="forecast-value" style="color:var(--green)">$4,200</span>
+      </div>
+      <div class="forecast-row">
+        <span class="forecast-label">Scheduled Bills</span>
+        <span class="forecast-value" style="color:var(--amber)">$3,850</span>
+      </div>
+      <div class="forecast-projected">
+        <span class="forecast-projected-label">Projected Balance</span>
+        <span class="forecast-projected-value">$128,700</span>
+      </div>
+      <div style="text-align:center">
+        <span class="surplus-tag">+$350 surplus</span>
+      </div>
+    </div>
+
+    <!-- 7. AI Insight -->
+    <div class="ai-card animate-in delay-7">
+      <div class="ai-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        AI Insight
+      </div>
+      <div class="ai-insight">Your cash flow is healthier than last month. Income rose 4.2% while expenses dropped 2.1%.</div>
+    </div>
+
+    <!-- 8. Quick Actions -->
+    <div class="quick-actions animate-in delay-8">
+      <a href="budget.html" class="quick-action">
+        <div class="quick-action-icon green-bg">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 14l2 2 4-4"/></svg>
+        </div>
+        <div class="quick-action-label">Review Budget</div>
+      </a>
+      <a href="spending.html" class="quick-action">
+        <div class="quick-action-icon amber-bg">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        </div>
+        <div class="quick-action-label">View Spending</div>
+      </a>
+      <a href="#" class="quick-action">
+        <div class="quick-action-icon blue-bg">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+        <div class="quick-action-label">Move Money</div>
+      </a>
+      <a href="networth.html" class="quick-action">
+        <div class="quick-action-icon purple-bg">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12V7H5a2 2 0 010-4h14v4"/><path d="M3 5v14a2 2 0 002 2h16v-5"/><path d="M18 12a2 2 0 000 4h4v-4h-4z"/></svg>
+        </div>
+        <div class="quick-action-label">View Net Worth</div>
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+
+    // Income vs Expenses Area Chart
+    const ctx = document.getElementById('incomeExpenseChart').getContext('2d');
+
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+    const incomeData = [7800, 8100, 7950, 8300, 8120, 8450];
+    const expenseData = [6500, 6800, 6200, 6400, 6250, 6120];
+
+    const incomeGradient = ctx.createLinearGradient(0, 0, 0, 180);
+    incomeGradient.addColorStop(0, 'rgba(22,111,71,0.15)');
+    incomeGradient.addColorStop(1, 'rgba(22,111,71,0.01)');
+
+    const expenseGradient = ctx.createLinearGradient(0, 0, 0, 180);
+    expenseGradient.addColorStop(0, 'rgba(194,121,10,0.12)');
+    expenseGradient.addColorStop(1, 'rgba(194,121,10,0.01)');
+
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: months,
+        datasets: [
+          {
+            label: 'Income',
+            data: incomeData,
+            borderColor: '#166f47',
+            backgroundColor: incomeGradient,
+            fill: true,
+            tension: 0.4,
+            borderWidth: 2.5,
+            pointRadius: 0,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: '#166f47',
+            pointHoverBorderColor: '#fff',
+            pointHoverBorderWidth: 2
+          },
+          {
+            label: 'Expenses',
+            data: expenseData,
+            borderColor: '#c2790a',
+            backgroundColor: expenseGradient,
+            fill: true,
+            tension: 0.4,
+            borderWidth: 2.5,
+            pointRadius: 0,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: '#c2790a',
+            pointHoverBorderColor: '#fff',
+            pointHoverBorderWidth: 2
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+          intersect: false,
+          mode: 'index'
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#1d1d1f',
+            titleColor: '#aeaeb2',
+            bodyColor: '#fff',
+            bodyFont: { size: 14, weight: '600', family: 'Inter' },
+            titleFont: { size: 11, family: 'Inter' },
+            padding: { top: 10, bottom: 10, left: 14, right: 14 },
+            cornerRadius: 10,
+            displayColors: true,
+            boxWidth: 8,
+            boxHeight: 8,
+            boxPadding: 4,
+            callbacks: {
+              label: function(context) {
+                return context.dataset.label + ': $' + context.parsed.y.toLocaleString();
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: {
+              color: '#aeaeb2',
+              font: { size: 11, family: 'Inter' },
+              padding: 8
+            },
+            border: { display: false }
+          },
+          y: {
+            grid: {
+              color: 'rgba(0,0,0,0.04)',
+              drawBorder: false
+            },
+            ticks: {
+              color: '#aeaeb2',
+              font: { size: 11, family: 'Inter' },
+              padding: 8,
+              callback: function(value) {
+                return '$' + (value / 1000).toFixed(1) + 'k';
+              },
+              maxTicksLimit: 5
+            },
+            border: { display: false },
+            beginAtZero: false
+          }
+        }
+      }
+    });
+
+    // Animate budget bar
+    setTimeout(() => {
+      document.querySelector('.budget-bar-fill').style.width = '64%';
+    }, 300);
+
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,483 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cash Flow Operating System — Advizmo</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
+  body{background:#f2f2f7;font-family:'Inter',sans-serif;color:#1c1c1e;min-height:100vh}
+  .device{width:430px;margin:0 auto;position:relative;min-height:100vh;background:#f8f9fa;overflow-x:hidden;background-image:linear-gradient(rgba(0,0,0,0.012) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,0.012) 1px,transparent 1px);background-size:20px 20px}
+  .status-bar{display:flex;justify-content:space-between;align-items:center;padding:12px 24px 8px;background:#f8f9fa;font-size:15px;font-weight:600;color:#1c1c1e;position:relative;z-index:100}
+  .status-icons{display:flex;align-items:center;gap:6px}
+  .status-icons svg{width:16px;height:16px}
+  .nav-header{display:flex;align-items:center;padding:8px 16px 10px;background:#f8f9fa;position:sticky;top:44px;z-index:99}
+  .back-btn{width:36px;height:36px;border-radius:50%;background:rgba(120,120,128,0.08);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+  .nav-title{flex:1;text-align:center;font-family:'IBM Plex Sans',sans-serif;font-size:17px;font-weight:600;color:#1c1c1e}
+  .nav-spacer{width:36px}
+  .segmented-nav{display:flex;gap:4px;padding:4px 20px 12px;background:#f8f9fa;overflow-x:auto;scrollbar-width:none;position:sticky;top:82px;z-index:98}
+  .segmented-nav::-webkit-scrollbar{display:none}
+  .seg-btn{flex-shrink:0;padding:8px 18px;border-radius:10px;border:none;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all 0.2s}
+  .seg-btn.active{background:#1c1c1e;color:#fff}
+  .seg-btn:not(.active){background:transparent;color:#8e8e93}
+  .section{padding:0 20px;margin-bottom:16px}
+  .card{background:#fff;border-radius:20px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,0.04);position:relative;overflow:hidden}
+  .card-label{font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#8e8e93;margin-bottom:10px;font-family:'Inter',sans-serif}
+  .status-dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex-shrink:0}
+  .status-dot.green{background:#166f47}
+  .status-dot.amber{background:#c2790a}
+  .status-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:600;font-family:'Inter',sans-serif}
+  .status-badge.green{background:#e8f8e8;color:#166f47}
+  .status-badge.amber{background:#fef3c7;color:#c2790a}
+  .status-badge.blue{background:#e8f0fa;color:#1551a8}
+  .cc-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#8e8e93;margin-bottom:6px;font-family:'Inter',sans-serif;display:flex;align-items:center;gap:6px}
+  .cc-label::before{content:'';width:4px;height:4px;border-radius:50%;background:#166f47;display:inline-block}
+  .big-value{font-family:'IBM Plex Sans',sans-serif;font-size:38px;font-weight:700;color:#1c1c1e;line-height:1.1;letter-spacing:-1px}
+  .big-value.green{color:#166f47}
+  .big-value.amber{color:#c2790a}
+  .change-row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+  .change-pill{display:inline-flex;align-items:center;gap:4px;padding:5px 10px;border-radius:8px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif}
+  .change-pill.green{background:#e8f8e8;color:#166f47}
+  .change-pill.amber{background:#fef3c7;color:#c2790a}
+  .change-pill.blue{background:#e8f0fa;color:#1551a8}
+  .change-pill.neutral{background:rgba(120,120,128,0.08);color:#6b7280}
+  .control-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+  .control-tile{background:rgba(120,120,128,0.04);border-radius:14px;padding:16px 12px;text-align:center;border:1px solid rgba(0,0,0,0.04)}
+  .ct-label{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#8e8e93;margin-bottom:6px}
+  .ct-value{font-family:'IBM Plex Sans',sans-serif;font-size:22px;font-weight:700;color:#1c1c1e;line-height:1.1}
+  .ct-value.green{color:#166f47}
+  .ct-value.amber{color:#c2790a}
+  .ct-status{margin-top:6px}
+  .bar-chart{display:flex;align-items:flex-end;gap:6px;height:110px;padding:10px 0}
+  .bar-group{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+  .bar-pair{display:flex;gap:3px;align-items:flex-end;height:80px}
+  .bar{width:14px;border-radius:4px 4px 2px 2px}
+  .bar.income{background:#166f47}
+  .bar.expense{background:#c2790a;opacity:0.5}
+  .bar-month{font-size:10px;color:#8e8e93;font-weight:600}
+  .ring-container{display:flex;align-items:center;gap:20px}
+  .ring-wrap{position:relative;width:80px;height:80px;flex-shrink:0}
+  .ring-wrap svg{width:80px;height:80px;transform:rotate(-90deg)}
+  .ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .ring-center .rv{font-family:'IBM Plex Sans',sans-serif;font-size:20px;font-weight:700;color:#1c1c1e;line-height:1}
+  .ring-center .rl{font-size:10px;color:#8e8e93;margin-top:2px}
+  .quick-link{display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:600;color:#1551a8;text-decoration:none;margin-top:12px;font-family:'Inter',sans-serif}
+  .quick-link svg{width:14px;height:14px}
+  .divider-line{height:1px;background:rgba(0,0,0,0.06);margin:12px 0}
+  .forecast-timeline{position:relative;padding-left:24px}
+  .forecast-timeline::before{content:'';position:absolute;left:5px;top:8px;bottom:8px;width:2px;background:linear-gradient(to bottom,#166f47,#c2790a,#1551a8);border-radius:1px}
+  .forecast-node{position:relative;padding:10px 0 10px 16px}
+  .forecast-node::before{content:'';position:absolute;left:-24px;top:14px;width:12px;height:12px;border-radius:50%;border:2.5px solid;background:#fff}
+  .forecast-node:nth-child(1)::before{border-color:#166f47}
+  .forecast-node:nth-child(2)::before{border-color:#c2790a}
+  .forecast-node:nth-child(3)::before{border-color:#1551a8}
+  .fn-time{font-size:11px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:#8e8e93;margin-bottom:4px}
+  .fn-row{display:flex;justify-content:space-between;align-items:center}
+  .fn-label{font-size:13px;color:#6b7280}
+  .fn-value{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:700;color:#1c1c1e}
+  .ai-card{background:linear-gradient(135deg,#f0fdf4 0%,#ecfdf5 100%);border-radius:20px;padding:20px;border:1px solid rgba(22,111,71,0.08);position:relative;overflow:hidden}
+  .ai-card::after{content:'';position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;background:rgba(22,111,71,0.04)}
+  .ai-header{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+  .ai-badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:6px;background:rgba(22,111,71,0.1);font-size:11px;font-weight:700;color:#166f47;letter-spacing:0.5px;font-family:'Inter',sans-serif}
+  .ai-text{font-size:15px;color:#1c1c1e;line-height:1.6;font-family:'Inter',sans-serif}
+  .ai-text strong{font-weight:700;color:#166f47}
+  .actions-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .action-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:18px 12px;border-radius:16px;border:1.5px solid rgba(0,0,0,0.06);background:#fff;cursor:pointer;transition:all 0.2s;font-family:'Inter',sans-serif;text-decoration:none;color:inherit}
+  .action-btn:active{transform:scale(0.97);background:#f8f9fa}
+  .action-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center}
+  .action-icon.green{background:#e8f8e8;color:#166f47}
+  .action-icon.amber{background:#fef3c7;color:#c2790a}
+  .action-icon.blue{background:#e8f0fa;color:#1551a8}
+  .action-icon.purple{background:#f3e8ff;color:#7c3aed}
+  .action-label{font-size:13px;font-weight:600;color:#1c1c1e;text-align:center}
+  .cat-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  .cat-bar-label{font-size:12px;color:#6b7280;width:90px;flex-shrink:0;font-weight:500}
+  .cat-bar-track{flex:1;height:8px;background:rgba(120,120,128,0.08);border-radius:4px;overflow:hidden}
+  .cat-bar-fill{height:100%;border-radius:4px}
+  .cat-bar-amount{font-family:'IBM Plex Sans',sans-serif;font-size:12px;font-weight:600;color:#1c1c1e;width:56px;text-align:right;flex-shrink:0}
+  .bottom-spacer{height:40px}
+  .nw-row{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+  .nw-metric{text-align:center;flex:1}
+  .nw-metric .nm-val{font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;color:#1c1c1e}
+  .nw-metric .nm-label{font-size:11px;color:#8e8e93;margin-top:2px}
+</style>
+</head>
+<body>
+<div class="device">
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span>9:41</span>
+    <div class="status-icons">
+      <svg viewBox="0 0 16 16" fill="#1c1c1e"><rect x="1" y="10" width="3" height="5" rx="0.5"/><rect x="5" y="7" width="3" height="8" rx="0.5"/><rect x="9" y="4" width="3" height="11" rx="0.5"/><rect x="13" y="1" width="3" height="14" rx="0.5"/></svg>
+      <svg viewBox="0 0 16 16" fill="none" stroke="#1c1c1e" stroke-width="1.2"><path d="M1 11.5c0 0 2.5-4 7-4s7 4 7 4"/><path d="M3.5 9.5c0 0 2-2.8 4.5-2.8s4.5 2.8 4.5 2.8"/><circle cx="8" cy="12" r="1.2" fill="#1c1c1e" stroke="none"/></svg>
+      <svg viewBox="0 0 28 14" fill="none"><rect x="0.5" y="0.5" width="22" height="13" rx="2.5" stroke="#1c1c1e" stroke-width="1"/><rect x="2" y="2" width="17" height="10" rx="1" fill="#1c1c1e"/><path d="M24 4.5v5a2 2 0 002-2v-1a2 2 0 00-2-2z" fill="#1c1c1e"/></svg>
+    </div>
+  </div>
+
+  <!-- Navigation Header -->
+  <div class="nav-header">
+    <button class="back-btn" onclick="location.href='index.html'">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1c1c1e" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <div class="nav-title">Cash Flow</div>
+    <div class="nav-spacer"></div>
+  </div>
+
+  <!-- Segmented Nav -->
+  <div class="segmented-nav">
+    <button class="seg-btn" onclick="location.href='cashflow-overview.html'">Overview</button>
+    <button class="seg-btn" onclick="location.href='cashflow-spending.html'">Spending</button>
+    <button class="seg-btn" onclick="location.href='cashflow-budget.html'">Budget</button>
+    <button class="seg-btn" onclick="location.href='cashflow-networth.html'">Net Worth</button>
+    <button class="seg-btn active">Cash Flow</button>
+  </div>
+
+  <!-- 1. MONTHLY CASH FLOW — Control Panel -->
+  <div class="section" style="margin-top:8px">
+    <div class="card">
+      <div class="cc-label">Monthly Cash Flow</div>
+      <div class="control-grid">
+        <div class="control-tile">
+          <div class="ct-label">Income</div>
+          <div class="ct-value green">$8,450</div>
+          <div class="ct-status"><span class="status-badge green"><span class="status-dot green"></span>On Track</span></div>
+        </div>
+        <div class="control-tile">
+          <div class="ct-label">Expenses</div>
+          <div class="ct-value amber">$6,120</div>
+          <div class="ct-status"><span class="status-badge amber"><span class="status-dot amber"></span>Watch</span></div>
+        </div>
+        <div class="control-tile">
+          <div class="ct-label">Net</div>
+          <div class="ct-value green">+$2,330</div>
+          <div class="ct-status"><span class="status-badge green"><span class="status-dot green"></span>Positive</span></div>
+        </div>
+      </div>
+
+      <!-- Monthly Trend Chart -->
+      <div style="margin-top:16px">
+        <div class="cc-label">6-Month Trend</div>
+        <div class="bar-chart">
+          <div class="bar-group">
+            <div class="bar-pair">
+              <div class="bar income" style="height:52px"></div>
+              <div class="bar expense" style="height:44px"></div>
+            </div>
+            <div class="bar-month">Jan</div>
+          </div>
+          <div class="bar-group">
+            <div class="bar-pair">
+              <div class="bar income" style="height:56px"></div>
+              <div class="bar expense" style="height:46px"></div>
+            </div>
+            <div class="bar-month">Feb</div>
+          </div>
+          <div class="bar-group">
+            <div class="bar-pair">
+              <div class="bar income" style="height:54px"></div>
+              <div class="bar expense" style="height:42px"></div>
+            </div>
+            <div class="bar-month">Mar</div>
+          </div>
+          <div class="bar-group">
+            <div class="bar-pair">
+              <div class="bar income" style="height:58px"></div>
+              <div class="bar expense" style="height:48px"></div>
+            </div>
+            <div class="bar-month">Apr</div>
+          </div>
+          <div class="bar-group">
+            <div class="bar-pair">
+              <div class="bar income" style="height:55px"></div>
+              <div class="bar expense" style="height:43px"></div>
+            </div>
+            <div class="bar-month">May</div>
+          </div>
+          <div class="bar-group">
+            <div class="bar-pair">
+              <div class="bar income" style="height:62px"></div>
+              <div class="bar expense" style="height:46px"></div>
+            </div>
+            <div class="bar-month">Jun</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:16px;justify-content:center;margin-top:4px">
+          <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:#6b7280"><span style="width:10px;height:10px;border-radius:3px;background:#166f47;display:inline-block"></span>Income</span>
+          <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:#6b7280"><span style="width:10px;height:10px;border-radius:3px;background:#c2790a;opacity:0.5;display:inline-block"></span>Expenses</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. INCOME VS EXPENSES — Dashboard Comparison -->
+  <div class="section">
+    <div class="card">
+      <div class="cc-label">Income vs Expenses</div>
+      <div style="display:flex;gap:16px;margin-bottom:16px">
+        <div style="flex:1;background:#e8f8e8;border-radius:14px;padding:16px;text-align:center">
+          <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#166f47;margin-bottom:4px">Income</div>
+          <div style="font-family:'IBM Plex Sans',sans-serif;font-size:24px;font-weight:700;color:#166f47">$8,450</div>
+          <div style="font-size:12px;color:#166f47;margin-top:4px">+3.2% vs last month</div>
+        </div>
+        <div style="flex:1;background:#fef3c7;border-radius:14px;padding:16px;text-align:center">
+          <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#c2790a;margin-bottom:4px">Expenses</div>
+          <div style="font-family:'IBM Plex Sans',sans-serif;font-size:24px;font-weight:700;color:#c2790a">$6,120</div>
+          <div style="font-size:12px;color:#c2790a;margin-top:4px">+1.8% vs last month</div>
+        </div>
+      </div>
+
+      <!-- Stacked Comparison Bars -->
+      <div style="margin-bottom:4px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+          <div style="font-size:11px;color:#8e8e93;width:50px;flex-shrink:0;font-weight:600">Jul</div>
+          <div style="flex:1;height:24px;border-radius:6px;overflow:hidden;display:flex;background:rgba(120,120,128,0.06)">
+            <div style="width:58%;background:#166f47;border-radius:6px 0 0 6px;display:flex;align-items:center;padding-left:8px">
+              <span style="font-size:10px;font-weight:700;color:#fff">$8,450</span>
+            </div>
+            <div style="width:42%;background:#c2790a;border-radius:0 6px 6px 0;display:flex;align-items:center;justify-content:flex-end;padding-right:8px">
+              <span style="font-size:10px;font-weight:700;color:#fff">$6,120</span>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+          <div style="font-size:11px;color:#8e8e93;width:50px;flex-shrink:0;font-weight:600">Jun</div>
+          <div style="flex:1;height:24px;border-radius:6px;overflow:hidden;display:flex;background:rgba(120,120,128,0.06)">
+            <div style="width:56%;background:#166f47;opacity:0.7;border-radius:6px 0 0 6px;display:flex;align-items:center;padding-left:8px">
+              <span style="font-size:10px;font-weight:700;color:#fff">$8,190</span>
+            </div>
+            <div style="width:44%;background:#c2790a;opacity:0.5;border-radius:0 6px 6px 0;display:flex;align-items:center;justify-content:flex-end;padding-right:8px">
+              <span style="font-size:10px;font-weight:700;color:#fff">$6,010</span>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="font-size:11px;color:#8e8e93;width:50px;flex-shrink:0;font-weight:600">May</div>
+          <div style="flex:1;height:24px;border-radius:6px;overflow:hidden;display:flex;background:rgba(120,120,128,0.06)">
+            <div style="width:57%;background:#166f47;opacity:0.5;border-radius:6px 0 0 6px;display:flex;align-items:center;padding-left:8px">
+              <span style="font-size:10px;font-weight:700;color:#fff">$8,250</span>
+            </div>
+            <div style="width:43%;background:#c2790a;opacity:0.35;border-radius:0 6px 6px 0;display:flex;align-items:center;justify-content:flex-end;padding-right:8px">
+              <span style="font-size:10px;font-weight:700;color:#fff">$5,980</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a href="cashflow-spending.html" class="quick-link">View full breakdown <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+  </div>
+
+  <!-- 3. NET WORTH SNAPSHOT -->
+  <div class="section">
+    <div class="card">
+      <div class="cc-label">Net Worth Snapshot</div>
+      <div class="big-value">$124,850</div>
+      <div class="change-row">
+        <span class="change-pill green">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 2v8M3 5l3-3 3 3" stroke="#166f47" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          +$2,330 this month
+        </span>
+      </div>
+      <div class="nw-row">
+        <div class="nw-metric">
+          <div class="nm-val" style="color:#166f47">+$18,200</div>
+          <div class="nm-label">Annual Growth</div>
+        </div>
+        <div style="width:1px;height:32px;background:rgba(0,0,0,0.08)"></div>
+        <div class="nw-metric">
+          <div class="nm-val">+17.1%</div>
+          <div class="nm-label">YTD Return</div>
+        </div>
+        <div style="width:1px;height:32px;background:rgba(0,0,0,0.08)"></div>
+        <div class="nw-metric">
+          <div class="nm-val" style="color:#166f47">A+</div>
+          <div class="nm-label">Health Grade</div>
+        </div>
+      </div>
+      <a href="cashflow-networth.html" class="quick-link">View net worth details <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+  </div>
+
+  <!-- 4. BUDGET SNAPSHOT — Progress Ring -->
+  <div class="section">
+    <div class="card">
+      <div class="cc-label">Budget Snapshot</div>
+      <div class="ring-container">
+        <div class="ring-wrap">
+          <svg viewBox="0 0 80 80">
+            <circle cx="40" cy="40" r="34" fill="none" stroke="rgba(120,120,128,0.08)" stroke-width="7"/>
+            <circle cx="40" cy="40" r="34" fill="none" stroke="#166f47" stroke-width="7" stroke-linecap="round" stroke-dasharray="213.6" stroke-dashoffset="25.2"/>
+          </svg>
+          <div class="ring-center">
+            <div class="rv">88%</div>
+            <div class="rl">Used</div>
+          </div>
+        </div>
+        <div style="flex:1">
+          <div style="font-family:'IBM Plex Sans',sans-serif;font-size:28px;font-weight:700;color:#166f47;margin-bottom:4px">$380</div>
+          <div style="font-size:13px;color:#6b7280;margin-bottom:8px">remaining this month</div>
+          <span class="status-badge green"><span class="status-dot green"></span>On Track</span>
+        </div>
+      </div>
+      <div class="divider-line"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div style="font-size:12px;color:#6b7280">$5,740 of $6,120 budget used</div>
+        <div style="font-size:12px;color:#8e8e93">16 days left</div>
+      </div>
+      <a href="cashflow-budget.html" class="quick-link">Review budget <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+  </div>
+
+  <!-- 5. SPENDING SNAPSHOT -->
+  <div class="section">
+    <div class="card">
+      <div class="cc-label">Spending Snapshot</div>
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px">
+        <div class="big-value" style="font-size:32px">$6,120</div>
+        <span class="status-badge amber"><span class="status-dot amber"></span>+1.8%</span>
+      </div>
+
+      <!-- Category Breakdown Bars -->
+      <div class="cat-bar-row">
+        <div class="cat-bar-label">Housing</div>
+        <div class="cat-bar-track"><div class="cat-bar-fill" style="width:45%;background:#166f47"></div></div>
+        <div class="cat-bar-amount">$2,100</div>
+      </div>
+      <div class="cat-bar-row">
+        <div class="cat-bar-label">Food</div>
+        <div class="cat-bar-track"><div class="cat-bar-fill" style="width:22%;background:#c2790a"></div></div>
+        <div class="cat-bar-amount">$1,050</div>
+      </div>
+      <div class="cat-bar-row">
+        <div class="cat-bar-label">Transport</div>
+        <div class="cat-bar-track"><div class="cat-bar-fill" style="width:15%;background:#1551a8"></div></div>
+        <div class="cat-bar-amount">$680</div>
+      </div>
+      <div class="cat-bar-row">
+        <div class="cat-bar-label">Utilities</div>
+        <div class="cat-bar-track"><div class="cat-bar-fill" style="width:10%;background:#7c3aed"></div></div>
+        <div class="cat-bar-amount">$420</div>
+      </div>
+      <div class="cat-bar-row">
+        <div class="cat-bar-label">Other</div>
+        <div class="cat-bar-track"><div class="cat-bar-fill" style="width:37%;background:#8e8e93"></div></div>
+        <div class="cat-bar-amount">$1,870</div>
+      </div>
+
+      <div class="divider-line"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-size:11px;color:#8e8e93;text-transform:uppercase;font-weight:700;letter-spacing:0.8px">Largest Category</div>
+          <div style="font-size:14px;font-weight:600;color:#1c1c1e;margin-top:2px">Housing — $2,100</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:11px;color:#8e8e93;text-transform:uppercase;font-weight:700;letter-spacing:0.8px">Top Merchant</div>
+          <div style="font-size:14px;font-weight:600;color:#1c1c1e;margin-top:2px">Whole Foods</div>
+        </div>
+      </div>
+      <a href="cashflow-spending.html" class="quick-link">View spending details <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+  </div>
+
+  <!-- 6. CASH FLOW FORECAST — Timeline -->
+  <div class="section">
+    <div class="card">
+      <div class="cc-label">Cash Flow Forecast</div>
+      <div class="forecast-timeline">
+        <div class="forecast-node">
+          <div class="fn-time">Today</div>
+          <div class="fn-row">
+            <div class="fn-label">Available Balance</div>
+            <div class="fn-value" style="color:#166f47">$128,700</div>
+          </div>
+        </div>
+        <div class="forecast-node">
+          <div class="fn-time">This Week</div>
+          <div class="fn-row">
+            <div class="fn-label">Income Expected</div>
+            <div class="fn-value" style="color:#166f47">$4,200</div>
+          </div>
+          <div class="fn-row" style="margin-top:4px">
+            <div class="fn-label">Bills Due</div>
+            <div class="fn-value" style="color:#c2790a">$3,850</div>
+          </div>
+        </div>
+        <div class="forecast-node">
+          <div class="fn-time">This Month</div>
+          <div class="fn-row">
+            <div class="fn-label">Projected Balance</div>
+            <div class="fn-value" style="color:#1551a8">$128,700</div>
+          </div>
+          <div class="fn-row" style="margin-top:4px">
+            <div class="fn-label">Projected Surplus</div>
+            <div class="fn-value" style="color:#166f47">+$350</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. AI FINANCIAL INSIGHT -->
+  <div class="section">
+    <div class="ai-card">
+      <div class="ai-header">
+        <span class="ai-badge">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1l1.5 3H11l-2.5 2 1 3L6 7.5 2.5 9l1-3L1 4h3.5z" fill="#166f47"/></svg>
+          AI Insight
+        </span>
+      </div>
+      <div class="ai-text">You're on track to save <strong>18% more</strong> this month compared to your 3-month average. Your reduced dining spend is the primary driver.</div>
+    </div>
+  </div>
+
+  <!-- 8. QUICK ACTIONS — Control Center -->
+  <div class="section">
+    <div class="cc-label" style="margin-bottom:10px">Quick Actions</div>
+    <div class="actions-grid">
+      <a href="cashflow-budget.html" class="action-btn">
+        <div class="action-icon green">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10M6 20V4M18 20v-6"/></svg>
+        </div>
+        <div class="action-label">Review Budget</div>
+      </a>
+      <a href="cashflow-spending.html" class="action-btn">
+        <div class="action-icon amber">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+        <div class="action-label">View Spending</div>
+      </a>
+      <a href="move-money-1-workspace.html" class="action-btn">
+        <div class="action-icon blue">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
+        </div>
+        <div class="action-label">Move Money</div>
+      </a>
+      <a href="cashflow-networth.html" class="action-btn">
+        <div class="action-icon purple">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+        </div>
+        <div class="action-label">View Net Worth</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="bottom-spacer"></div>
+</div>
+
+<script>
+  document.querySelectorAll('.seg-btn:not(.active)').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      document.querySelectorAll('.seg-btn').forEach(function(b){b.classList.remove('active')});
+      this.classList.add('active');
+    });
+  });
+  document.querySelectorAll('.time-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      document.querySelectorAll('.time-btn').forEach(function(b){b.classList.remove('active')});
+      this.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
