@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Invest Overview — Advizmo</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --green:#166f47;--amber:#c2790a;--red:#b91c1c;--blue:#1551a8;
+    --bg:#f8f9fa;--card:#fff;--text:#1a1a1a;--muted:#6b7280;--border:#e5e7eb;
+    --font-heading:'IBM Plex Sans',sans-serif;--font-body:'Inter',sans-serif;
+  }
+  html{font-size:16px;-webkit-font-smoothing:antialiased}
+  body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh}
+  .phone{max-width:430px;margin:0 auto;padding:0 20px 40px;background:var(--bg)}
+
+  /* Nav Header */
+  .nav-header{position:sticky;top:0;z-index:100;background:var(--bg);padding:16px 0 0;border-bottom:1px solid var(--border)}
+  .nav-top{display:flex;align-items:center;gap:12px;padding-bottom:12px}
+  .nav-back{font-family:var(--font-body);font-size:15px;color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:4px;font-weight:500}
+  .nav-back svg{width:18px;height:18px;stroke:var(--blue);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .nav-title{font-family:var(--font-heading);font-size:13px;font-weight:600;color:var(--muted);letter-spacing:0.5px;text-transform:uppercase;margin-left:auto}
+  .seg-nav{display:flex;gap:0;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .seg-nav::-webkit-scrollbar{display:none}
+  .seg-nav a{font-family:var(--font-body);font-size:13px;font-weight:500;padding:10px 16px;color:var(--muted);text-decoration:none;white-space:nowrap;border-bottom:2px solid transparent;transition:color .2s,border-color .2s}
+  .seg-nav a.active{color:var(--text);border-bottom-color:var(--text)}
+  .seg-nav a:hover{color:var(--text)}
+
+  /* Section */
+  section{padding:28px 0}
+  section+section{border-top:1px solid var(--border)}
+  .section-label{font-family:var(--font-heading);font-size:11px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+
+  /* Cards */
+  .card{background:var(--card);border-radius:14px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04),0 0 0 1px rgba(0,0,0,.03)}
+
+  /* Hero Card */
+  .hero-card{background:var(--card);border-radius:14px;padding:28px 24px;box-shadow:0 1px 3px rgba(0,0,0,.04),0 0 0 1px rgba(0,0,0,.03);margin-bottom:0}
+  .hero-value{font-family:var(--font-heading);font-size:42px;font-weight:700;letter-spacing:-1px;line-height:1.1}
+  .hero-meta{display:flex;gap:16px;margin-top:8px;flex-wrap:wrap}
+  .hero-meta-item{display:flex;flex-direction:column}
+  .hero-meta-label{font-size:12px;color:var(--muted);font-weight:500}
+  .hero-meta-value{font-family:var(--font-heading);font-size:15px;font-weight:600;margin-top:2px}
+  .hero-meta-value.positive{color:var(--green)}
+  .hero-meta-value.negative{color:var(--red)}
+
+  /* Time Filters */
+  .time-filters{display:flex;gap:4px;margin-top:18px;padding:4px;background:#f1f1f1;border-radius:8px}
+  .time-filters button{flex:1;font-family:var(--font-body);font-size:12px;font-weight:600;padding:7px 0;border:none;border-radius:6px;background:transparent;color:var(--muted);cursor:pointer;transition:all .2s}
+  .time-filters button.active{background:var(--card);color:var(--text);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+
+  /* Graph placeholder */
+  .graph-area{height:140px;margin-top:16px;position:relative;overflow:hidden}
+  .graph-svg{width:100%;height:100%}
+
+  /* Account Cards */
+  .account-grid{display:flex;flex-direction:column;gap:12px}
+  .account-card{display:flex;flex-direction:column;gap:10px;padding:18px 20px;background:var(--card);border-radius:14px;box-shadow:0 1px 3px rgba(0,0,0,.04),0 0 0 1px rgba(0,0,0,.03)}
+  .account-top{display:flex;justify-content:space-between;align-items:flex-start}
+  .account-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-size:14px;font-weight:700;color:#fff}
+  .account-icon.cash{background:var(--green)}
+  .account-icon.reserve{background:var(--blue)}
+  .account-icon.auto{background:#6b21a8}
+  .account-icon.ext{background:#475569}
+  .account-name{font-family:var(--font-heading);font-size:15px;font-weight:600}
+  .account-sub{font-size:13px;color:var(--muted)}
+  .account-balance{font-family:var(--font-heading);font-size:22px;font-weight:700;text-align:right}
+  .account-balance-sub{font-size:12px;color:var(--muted);text-align:right;margin-top:2px}
+  .badge{display:inline-block;font-size:11px;font-weight:600;padding:3px 8px;border-radius:6px}
+  .badge.connected{background:#dcfce7;color:var(--green)}
+  .account-ctas{display:flex;gap:8px;margin-top:4px}
+  .btn{font-family:var(--font-body);font-size:13px;font-weight:600;padding:8px 14px;border-radius:8px;border:none;cursor:pointer;transition:all .15s}
+  .btn-primary{background:var(--text);color:#fff}
+  .btn-primary:hover{background:#333}
+  .btn-secondary{background:transparent;color:var(--text);border:1px solid var(--border)}
+  .btn-secondary:hover{background:#f5f5f5}
+
+  /* Status Indicators */
+  .health-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .health-item{display:flex;flex-direction:column;gap:4px;padding:14px;border-radius:10px;background:#f8f9fa}
+  .health-label{font-size:12px;color:var(--muted);font-weight:500}
+  .health-value{font-family:var(--font-heading);font-size:14px;font-weight:600;display:flex;align-items:center;gap:6px}
+  .dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+  .dot.green{background:var(--green)}
+  .dot.amber{background:var(--amber)}
+  .dot.blue{background:var(--blue)}
+
+  /* Donut Chart */
+  .donut-wrap{display:flex;flex-direction:column;align-items:center;gap:20px}
+  .donut-container{position:relative;width:180px;height:180px}
+  .donut-container svg{width:100%;height:100%;transform:rotate(-90deg)}
+  .donut-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+  .donut-center-value{font-family:var(--font-heading);font-size:18px;font-weight:700}
+  .donut-center-label{font-size:11px;color:var(--muted)}
+  .legend{display:flex;flex-wrap:wrap;gap:12px 20px;justify-content:center}
+  .legend-item{display:flex;align-items:center;gap:6px;font-size:13px}
+  .legend-swatch{width:10px;height:10px;border-radius:3px}
+  .legend-pct{font-family:var(--font-heading);font-weight:600}
+
+  /* Holdings List */
+  .list-item{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid #f1f1f1}
+  .list-item:last-child{border-bottom:none}
+  .list-icon{width:36px;height:36px;border-radius:10px;background:#f1f1f1;display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-size:12px;font-weight:700;color:#555;flex-shrink:0}
+  .list-info{flex:1;min-width:0}
+  .list-name{font-family:var(--font-heading);font-size:14px;font-weight:600}
+  .list-sub{font-size:12px;color:var(--muted)}
+  .list-right{text-align:right}
+  .list-value{font-family:var(--font-heading);font-size:14px;font-weight:600}
+  .list-change{font-size:12px;font-weight:600;margin-top:2px}
+  .list-change.positive{color:var(--green)}
+  .list-change.negative{color:var(--red)}
+
+  /* Sparkline */
+  .sparkline{width:40px;height:20px;flex-shrink:0}
+
+  /* Tax Card */
+  .tax-expand{display:flex;flex-direction:column;gap:12px}
+  .tax-head{display:flex;justify-content:space-between;align-items:center}
+  .tax-savings{font-family:var(--font-heading);font-size:28px;font-weight:700;color:var(--green)}
+  .tax-detail{font-size:13px;color:var(--muted);line-height:1.5}
+  .tax-harvest{display:flex;gap:12px;margin-top:4px}
+  .tax-harvest-item{flex:1;padding:10px 12px;background:#f8f9fa;border-radius:8px}
+  .tax-harvest-label{font-size:11px;color:var(--muted);font-weight:500}
+  .tax-harvest-value{font-family:var(--font-heading);font-size:13px;font-weight:600;margin-top:2px}
+
+  /* AI Insight */
+  .ai-card{background:linear-gradient(135deg,#f0f4ff 0%,#f8f0ff 100%);border:1px solid #e0e7ff;border-radius:14px;padding:20px;display:flex;gap:14px;align-items:flex-start}
+  .ai-icon{width:32px;height:32px;border-radius:8px;background:var(--blue);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .ai-icon svg{width:16px;height:16px;fill:#fff}
+  .ai-text{font-size:14px;line-height:1.5;color:#1a1a1a}
+  .ai-text strong{font-weight:600}
+
+  /* Move Money */
+  .move-money-card{display:flex;flex-direction:column;gap:10px;padding:20px;background:var(--card);border-radius:14px;box-shadow:0 1px 3px rgba(0,0,0,.04),0 0 0 1px rgba(0,0,0,.03)}
+  .move-money-text{font-size:14px;color:var(--muted);line-height:1.5}
+</style>
+</head>
+<body>
+<div class="phone">
+
+  <!-- Nav Header -->
+  <header class="nav-header">
+    <div class="nav-top">
+      <a href="../index.html" class="nav-back">
+        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+        Back
+      </a>
+      <span class="nav-title">Advizmo</span>
+    </div>
+    <nav class="seg-nav">
+      <a href="#" class="active">Overview</a>
+      <a href="#">Activity</a>
+      <a href="#">Documents</a>
+      <a href="#">Math</a>
+    </nav>
+  </header>
+
+  <!-- 1. Portfolio Overview (Hero) -->
+  <section>
+    <div class="hero-card">
+      <div class="hero-value">$42,850</div>
+      <div class="hero-meta">
+        <div class="hero-meta-item">
+          <span class="hero-meta-label">Today</span>
+          <span class="hero-meta-value positive">+$182</span>
+        </div>
+        <div class="hero-meta-item">
+          <span class="hero-meta-label">Total Return</span>
+          <span class="hero-meta-value positive">+$4,230</span>
+        </div>
+        <div class="hero-meta-item">
+          <span class="hero-meta-label">Return</span>
+          <span class="hero-meta-value positive">+11.0%</span>
+        </div>
+        <div class="hero-meta-item">
+          <span class="hero-meta-label">Since Inception</span>
+          <span class="hero-meta-value">Mar 2024</span>
+        </div>
+      </div>
+      <div class="time-filters">
+        <button onclick="setTimeFilter(this)">1D</button>
+        <button onclick="setTimeFilter(this)">1W</button>
+        <button onclick="setTimeFilter(this)" class="active">1M</button>
+        <button onclick="setTimeFilter(this)">3M</button>
+        <button onclick="setTimeFilter(this)">6M</button>
+        <button onclick="setTimeFilter(this)">1Y</button>
+        <button onclick="setTimeFilter(this)">ALL</button>
+      </div>
+      <div class="graph-area">
+        <svg class="graph-svg" viewBox="0 0 400 140" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="graphGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#166f47" stop-opacity="0.12"/>
+              <stop offset="100%" stop-color="#166f47" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <path id="graphArea" d="" fill="url(#graphGrad)"/>
+          <path id="graphLine" d="" fill="none" stroke="#166f47" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle id="graphDot" cx="0" cy="0" r="4" fill="#166f47" stroke="#fff" stroke-width="2" style="display:none"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Advizmo Accounts -->
+  <section>
+    <div class="section-label">Advizmo Accounts</div>
+    <div class="account-grid">
+      <div class="account-card">
+        <div class="account-top">
+          <div style="display:flex;gap:12px;align-items:center">
+            <div class="account-icon cash">$</div>
+            <div>
+              <div class="account-name">Advizmo Cash</div>
+              <div class="account-sub">4.1% APY</div>
+            </div>
+          </div>
+          <div class="account-balance">$1,850</div>
+        </div>
+        <div class="account-ctas">
+          <button class="btn btn-primary">Deposit</button>
+          <button class="btn btn-secondary">Details</button>
+        </div>
+      </div>
+      <div class="account-card">
+        <div class="account-top">
+          <div style="display:flex;gap:12px;align-items:center">
+            <div class="account-icon reserve">R</div>
+            <div>
+              <div class="account-name">Advizmo Reserve</div>
+              <div class="account-sub">84% of target</div>
+            </div>
+          </div>
+          <div class="account-balance">$8,120</div>
+        </div>
+        <div class="account-ctas">
+          <button class="btn btn-primary">Add Funds</button>
+          <button class="btn btn-secondary">Details</button>
+        </div>
+      </div>
+      <div class="account-card">
+        <div class="account-top">
+          <div style="display:flex;gap:12px;align-items:center">
+            <div class="account-icon auto">A</div>
+            <div>
+              <div class="account-name">Advizmo Auto Invest</div>
+              <div class="account-sub">Auto-rebalancing</div>
+            </div>
+          </div>
+          <div class="account-balance">$32,880</div>
+        </div>
+        <div class="account-ctas">
+          <button class="btn btn-primary">Invest More</button>
+          <button class="btn btn-secondary">Details</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. External Accounts -->
+  <section>
+    <div class="section-label">External Accounts</div>
+    <div class="account-grid">
+      <div class="account-card">
+        <div class="account-top">
+          <div style="display:flex;gap:12px;align-items:center">
+            <div class="account-icon ext">C</div>
+            <div>
+              <div class="account-name">Chase</div>
+              <div class="account-sub">Synced 2h ago</div>
+            </div>
+          </div>
+          <div style="text-align:right">
+            <div class="account-balance">$12,400</div>
+            <span class="badge connected" style="margin-top:4px">Connected</span>
+          </div>
+        </div>
+        <div class="account-ctas">
+          <button class="btn btn-primary">Move Money</button>
+          <button class="btn btn-secondary">View Details</button>
+        </div>
+      </div>
+      <div class="account-card">
+        <div class="account-top">
+          <div style="display:flex;gap:12px;align-items:center">
+            <div class="account-icon ext">CO</div>
+            <div>
+              <div class="account-name">Capital One</div>
+              <div class="account-sub">Synced 1h ago</div>
+            </div>
+          </div>
+          <div style="text-align:right">
+            <div class="account-balance">$8,900</div>
+            <span class="badge connected" style="margin-top:4px">Connected</span>
+          </div>
+        </div>
+        <div class="account-ctas">
+          <button class="btn btn-primary">Move Money</button>
+          <button class="btn btn-secondary">View Details</button>
+        </div>
+      </div>
+      <div class="account-card">
+        <div class="account-top">
+          <div style="display:flex;gap:12px;align-items:center">
+            <div class="account-icon ext">M</div>
+            <div>
+              <div class="account-name">Marcus</div>
+              <div class="account-sub">Synced 3h ago</div>
+            </div>
+          </div>
+          <div style="text-align:right">
+            <div class="account-balance">$15,200</div>
+            <span class="badge connected" style="margin-top:4px">Connected</span>
+          </div>
+        </div>
+        <div class="account-ctas">
+          <button class="btn btn-primary">Move Money</button>
+          <button class="btn btn-secondary">View Details</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Move Money -->
+  <section>
+    <div class="section-label">Move Money</div>
+    <div class="move-money-card">
+      <div style="display:flex;gap:12px;align-items:center">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 7l-5-5-5 5"/></svg>
+        <span class="account-name">Transfer Funds</span>
+      </div>
+      <div class="move-money-text">Move money from external accounts to Reserve or Auto Invest. We'll find the best allocation for you.</div>
+      <div><button class="btn btn-primary">Move Money</button></div>
+    </div>
+  </section>
+
+  <!-- 5. Investment Health -->
+  <section>
+    <div class="section-label">Investment Health</div>
+    <div class="card">
+      <div class="health-grid">
+        <div class="health-item">
+          <span class="health-label">Portfolio Health</span>
+          <span class="health-value"><span class="dot green"></span> Good</span>
+        </div>
+        <div class="health-item">
+          <span class="health-label">Diversification</span>
+          <span class="health-value"><span class="dot green"></span> Balanced</span>
+        </div>
+        <div class="health-item">
+          <span class="health-label">Automation</span>
+          <span class="health-value"><span class="dot green"></span> Active</span>
+        </div>
+        <div class="health-item">
+          <span class="health-label">Risk Alignment</span>
+          <span class="health-value"><span class="dot green"></span> On Track</span>
+        </div>
+        <div class="health-item">
+          <span class="health-label">Idle Cash</span>
+          <span class="health-value"><span class="dot amber"></span> Low</span>
+        </div>
+        <div class="health-item">
+          <span class="health-label">Reserve Progress</span>
+          <span class="health-value"><span class="dot blue"></span> 84%</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Tax Optimization -->
+  <section>
+    <div class="section-label">Tax Optimization</div>
+    <div class="card">
+      <div class="tax-expand">
+        <div class="tax-head">
+          <div>
+            <div class="health-label">Estimated Tax Savings</div>
+            <div class="tax-savings">$482 this year</div>
+          </div>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="tax-detail">Advizmo automatically harvests losses to offset gains. No action needed on your end.</div>
+        <div class="tax-harvest">
+          <div class="tax-harvest-item">
+            <div class="tax-harvest-label">Last Harvested</div>
+            <div class="tax-harvest-value">Dec 15</div>
+          </div>
+          <div class="tax-harvest-item">
+            <div class="tax-harvest-label">Next Opportunity</div>
+            <div class="tax-harvest-value">Jan 15</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. Portfolio Allocation -->
+  <section>
+    <div class="section-label">Portfolio Allocation</div>
+    <div class="card">
+      <div class="donut-wrap">
+        <div class="donut-container">
+          <svg viewBox="0 0 180 180">
+            <circle cx="90" cy="90" r="70" fill="none" stroke="#f1f1f1" stroke-width="24"/>
+            <circle id="arc-vti" cx="90" cy="90" r="70" fill="none" stroke="#166f47" stroke-width="24" stroke-dasharray="0 440" stroke-linecap="round"/>
+            <circle id="arc-vxus" cx="90" cy="90" r="70" fill="none" stroke="#1551a8" stroke-width="24" stroke-dasharray="0 440" stroke-linecap="round"/>
+            <circle id="arc-bnd" cx="90" cy="90" r="70" fill="none" stroke="#c2790a" stroke-width="24" stroke-dasharray="0 440" stroke-linecap="round"/>
+            <circle id="arc-vnq" cx="90" cy="90" r="70" fill="none" stroke="#6b21a8" stroke-width="24" stroke-dasharray="0 440" stroke-linecap="round"/>
+            <circle id="arc-cash" cx="90" cy="90" r="70" fill="none" stroke="#94a3b8" stroke-width="24" stroke-dasharray="0 440" stroke-linecap="round"/>
+          </svg>
+          <div class="donut-center">
+            <div class="donut-center-value">$42,850</div>
+            <div class="donut-center-label">Total</div>
+          </div>
+        </div>
+        <div class="legend">
+          <div class="legend-item"><span class="legend-swatch" style="background:#166f47"></span>VTI <span class="legend-pct">58%</span></div>
+          <div class="legend-item"><span class="legend-swatch" style="background:#1551a8"></span>VXUS <span class="legend-pct">18%</span></div>
+          <div class="legend-item"><span class="legend-swatch" style="background:#c2790a"></span>BND <span class="legend-pct">14%</span></div>
+          <div class="legend-item"><span class="legend-swatch" style="background:#6b21a8"></span>VNQ <span class="legend-pct">10%</span></div>
+          <div class="legend-item"><span class="legend-swatch" style="background:#94a3b8"></span>Cash <span class="legend-pct">4%</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. Top Holdings -->
+  <section>
+    <div class="section-label">Top Holdings</div>
+    <div class="card" style="padding:4px 20px">
+      <div class="list-item">
+        <div class="list-icon">VTI</div>
+        <div class="list-info">
+          <div class="list-name">Vanguard Total Stock Market ETF</div>
+          <div class="list-sub">58% · $14,820</div>
+        </div>
+        <div class="list-right">
+          <div class="list-value">$14,820</div>
+          <div class="list-change positive">+8.2%</div>
+        </div>
+      </div>
+      <div class="list-item">
+        <div class="list-icon">VX</div>
+        <div class="list-info">
+          <div class="list-name">Vanguard Total Intl Stock ETF</div>
+          <div class="list-sub">18% · $4,580</div>
+        </div>
+        <div class="list-right">
+          <div class="list-value">$4,580</div>
+          <div class="list-change positive">+5.1%</div>
+        </div>
+      </div>
+      <div class="list-item">
+        <div class="list-icon">BN</div>
+        <div class="list-info">
+          <div class="list-name">Vanguard Total Bond Market ETF</div>
+          <div class="list-sub">14% · $3,560</div>
+        </div>
+        <div class="list-right">
+          <div class="list-value">$3,560</div>
+          <div class="list-change positive">+2.3%</div>
+        </div>
+      </div>
+      <div class="list-item">
+        <div class="list-icon">VN</div>
+        <div class="list-info">
+          <div class="list-name">Vanguard Real Estate ETF</div>
+          <div class="list-sub">10% · $2,540</div>
+        </div>
+        <div class="list-right">
+          <div class="list-value">$2,540</div>
+          <div class="list-change negative">-1.2%</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. Top Movers -->
+  <section>
+    <div class="section-label">Top Movers</div>
+    <div class="card" style="padding:4px 20px">
+      <div class="list-item">
+        <div class="list-icon" style="background:#dcfce7;color:var(--green)">VTI</div>
+        <div class="list-info">
+          <div class="list-name">VTI</div>
+          <div class="list-sub">Today's change</div>
+        </div>
+        <svg class="sparkline" viewBox="0 0 40 20"><polyline points="2,16 8,12 14,14 20,8 26,10 32,4 38,6" fill="none" stroke="#166f47" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="list-right">
+          <div class="list-change positive">+$42</div>
+        </div>
+      </div>
+      <div class="list-item">
+        <div class="list-icon" style="background:#fee2e2;color:var(--red)">VN</div>
+        <div class="list-info">
+          <div class="list-name">VNQ</div>
+          <div class="list-sub">Today's change</div>
+        </div>
+        <svg class="sparkline" viewBox="0 0 40 20"><polyline points="2,6 8,10 14,8 20,14 26,12 32,16 38,14" fill="none" stroke="#b91c1c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="list-right">
+          <div class="list-change negative">-$18</div>
+        </div>
+      </div>
+      <div class="list-item">
+        <div class="list-icon" style="background:#dcfce7;color:var(--green)">BN</div>
+        <div class="list-info">
+          <div class="list-name">BND</div>
+          <div class="list-sub">Today's change</div>
+        </div>
+        <svg class="sparkline" viewBox="0 0 40 20"><polyline points="2,14 8,10 14,12 20,8 26,9 32,6 38,7" fill="none" stroke="#166f47" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="list-right">
+          <div class="list-change positive">+$8</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. AI Insight -->
+  <section>
+    <div class="section-label">AI Insight</div>
+    <div class="ai-card">
+      <div class="ai-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 017 7h1a1 1 0 011 1v3a1 1 0 01-1 1h-1v1a2 2 0 01-2 2H5a2 2 0 01-2-2v-1H2a1 1 0 01-1-1v-3a1 1 0 011-1h1a7 7 0 017-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 012-2zM9.5 13a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm5 0a1.5 1.5 0 100 3 1.5 1.5 0 000-3z"/></svg>
+      </div>
+      <div class="ai-text">
+        Idle cash could earn <strong>$58/month</strong> in Auto Invest. We'll move it automatically when you're ready.
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  /* Time filter switching */
+  function setTimeFilter(btn){
+    document.querySelectorAll('.time-filters button').forEach(function(b){b.classList.remove('active')});
+    btn.classList.add('active');
+    drawGraph(btn.textContent);
+  }
+
+  /* Graph data per timeframe */
+  var graphData={
+    '1D':{points:[60,62,58,65,70,68,72,75,73,78,80,82],label:'Today'},
+    '1W':{points:[50,55,48,60,58,65,70,68,74,78,80,82],label:'1 Week'},
+    '1M':{points:[40,45,42,50,48,55,52,60,58,65,70,75,72,78,80,85,82,88,84,90],label:'1 Month'},
+    '3M':{points:[30,35,32,40,38,45,42,50,48,55,52,60,58,65,70,68,74,78,80,82],label:'3 Months'},
+    '6M':{points:[20,25,28,24,32,30,38,35,42,40,48,45,52,50,58,55,62,60,68,72,70,76,78,82],label:'6 Months'},
+    '1Y':{points:[15,18,22,20,28,25,32,30,38,35,42,40,48,45,52,50,58,55,62,60,68,72,70,76,78,82],label:'1 Year'},
+    'ALL':{points:[10,12,15,14,20,18,25,22,30,28,35,32,40,38,45,42,50,48,55,52,60,58,65,70,68,74,78,80,82],label:'All Time'}
+  };
+
+  function drawGraph(period){
+    var data=graphData[period]||graphData['1M'];
+    var pts=data.points;
+    var w=400,h=140,pad=20;
+    var minY=Math.min.apply(null,pts)-5;
+    var maxY=Math.max.apply(null,pts)+5;
+    var stepX=(w-pad*2)/(pts.length-1);
+
+    var linePts=[];
+    var areaPts=[];
+    pts.forEach(function(y,i){
+      var x=pad+i*stepX;
+      var py=h-pad-(y-minY)/(maxY-minY)*(h-pad*2);
+      linePts.push(x+','+py);
+      areaPts.push(x+','+py);
+    });
+    areaPts.push((pad+(pts.length-1)*stepX)+','+h);
+    areaPts.push(pad+','+h);
+
+    document.getElementById('graphLine').setAttribute('points',linePts.join(' '));
+    document.getElementById('graphArea').setAttribute('points',areaPts.join(' '));
+  }
+
+  /* Donut chart arcs */
+  function drawDonut(){
+    var total=42850;
+    var segs=[
+      {id:'arc-vti',pct:58,color:'#166f47'},
+      {id:'arc-vxus',pct:18,color:'#1551a8'},
+      {id:'arc-bnd',pct:14,color:'#c2790a'},
+      {id:'arc-vnq',pct:10,color:'#6b21a8'},
+      {id:'arc-cash',pct:4,color:'#94a3b8'}
+    ];
+    var circ=2*Math.PI*70;
+    var offset=0;
+    segs.forEach(function(s){
+      var arc=(s.pct/100)*circ;
+      var el=document.getElementById(s.id);
+      el.setAttribute('stroke-dasharray',arc+' '+(circ-arc));
+      el.setAttribute('stroke-dashoffset',-offset);
+      offset+=arc;
+    });
+  }
+
+  /* Init */
+  drawGraph('1M');
+  drawDonut();
+</script>
+</body>
+</html>

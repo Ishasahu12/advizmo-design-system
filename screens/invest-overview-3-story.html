@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advizmo — Portfolio Story</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--green:#166f47;--green-light:#e8f5ee;--green-dark:#0f4f30;--amber:#c2790a;--amber-light:#fff4e0;--bg:#f8f9fa;--card:#fff;--text:#1a1a1a;--text-secondary:#6b7280;--text-tertiary:#9ca3af;--border:#e5e7eb;--border-light:#f3f4f6;--radius:14px;--radius-sm:10px;--shadow:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);--shadow-md:0 4px 12px rgba(0,0,0,.08);--font-primary:'IBM Plex Sans',sans-serif;--font-ui:'Inter',sans-serif}
+html{font-size:16px;-webkit-font-smoothing:antialiased}
+body{font-family:var(--font-primary);background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:80px}
+.shell{max-width:430px;margin:0 auto;background:var(--bg);position:relative;min-height:100vh}
+
+/* NAV */
+.top-bar{position:sticky;top:0;z-index:100;background:var(--bg);padding:12px 16px 0;display:flex;align-items:center;gap:12px}
+.back-btn{display:inline-flex;align-items:center;gap:4px;font-family:var(--font-ui);font-size:14px;font-weight:500;color:var(--text);text-decoration:none;padding:6px 0;transition:opacity .15s}
+.back-btn:hover{opacity:.7}
+.back-btn svg{width:18px;height:18px}
+.seg-nav{display:flex;background:var(--border-light);border-radius:10px;padding:3px;gap:2px;flex:1;margin-top:4px}
+.seg-nav a{flex:1;text-align:center;padding:8px 6px;border-radius:8px;font-family:var(--font-ui);font-size:12px;font-weight:500;color:var(--text-secondary);text-decoration:none;transition:all .2s}
+.seg-nav a.active{background:var(--card);color:var(--text);box-shadow:var(--shadow);font-weight:600}
+.nav-row{display:flex;align-items:center;gap:12px;padding-bottom:8px}
+
+/* STORY CONNECTOR */
+.story-connector{display:flex;align-items:center;justify-content:center;padding:4px 0;user-select:none}
+.story-connector .arrow{color:var(--text-tertiary);font-size:18px;font-weight:300;opacity:.4;letter-spacing:2px}
+.story-connector .line{width:1px;height:16px;background:var(--border);margin:0 auto}
+
+/* SECTIONS */
+.section{padding:16px}
+.section-label{font-family:var(--font-ui);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:var(--text-tertiary);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.section-label .dot{width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block}
+
+/* HERO */
+.hero{padding:20px 16px 16px;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:5px;background:var(--green-light);color:var(--green);font-family:var(--font-ui);font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;margin-bottom:14px}
+.hero-badge .pulse{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.4)}}
+.hero-value{font-size:42px;font-weight:700;letter-spacing:-1.5px;line-height:1.1;margin-bottom:6px;font-family:var(--font-primary)}
+.hero-change{font-family:var(--font-ui);font-size:15px;font-weight:600;margin-bottom:4px}
+.hero-change.pos{color:var(--green)}
+.hero-total{font-family:var(--font-ui);font-size:13px;color:var(--text-secondary);margin-bottom:16px}
+.hero-total strong{color:var(--text);font-weight:600}
+
+/* CHART */
+.chart-card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin-top:8px}
+.chart-area{position:relative;height:140px;margin-bottom:12px}
+.chart-canvas{width:100%;height:100%}
+.time-filters{display:flex;gap:4px;justify-content:center}
+.time-filters button{border:none;background:var(--border-light);color:var(--text-secondary);font-family:var(--font-ui);font-size:12px;font-weight:500;padding:6px 14px;border-radius:8px;cursor:pointer;transition:all .15s}
+.time-filters button.active{background:var(--text);color:#fff}
+.time-filters button:hover:not(.active){background:var(--border)}
+
+/* ACCOUNTS */
+.account-grid{display:flex;flex-direction:column;gap:10px}
+.account-card{background:var(--card);border-radius:var(--radius-sm);box-shadow:var(--shadow);padding:16px;display:flex;align-items:center;justify-content:space-between;transition:box-shadow .2s}
+.account-card:hover{box-shadow:var(--shadow-md)}
+.account-left{display:flex;align-items:center;gap:12px}
+.account-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;font-family:var(--font-ui)}
+.account-icon.cash{background:#e0f2fe;color:#0284c7}
+.account-icon.reserve{background:#fef3c7;color:var(--amber)}
+.account-icon.auto{background:var(--green-light);color:var(--green)}
+.account-name{font-family:var(--font-ui);font-size:14px;font-weight:600;margin-bottom:2px}
+.account-sub{font-family:var(--font-ui);font-size:12px;color:var(--text-secondary)}
+.account-val{text-align:right}
+.account-amount{font-family:var(--font-ui);font-size:15px;font-weight:700}
+.account-pct{font-family:var(--font-ui);font-size:11px;color:var(--text-secondary)}
+.account-flow{display:flex;align-items:center;justify-content:center;gap:8px;padding:6px 0;color:var(--text-tertiary);font-size:12px;font-family:var(--font-ui)}
+.account-flow .line{flex:1;height:1px;background:var(--border)}
+.account-flow .label{font-style:italic;opacity:.6}
+
+/* EXTERNAL */
+.external-card{background:var(--card);border-radius:var(--radius-sm);box-shadow:var(--shadow);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.ext-left{display:flex;align-items:center;gap:10px}
+.ext-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;font-family:var(--font-ui);color:#fff}
+.ext-icon.chase{background:#003087}
+.ext-icon.capone{background:#d42b2b}
+.ext-icon.marcus{background:#1a1a1a}
+.ext-name{font-family:var(--font-ui);font-size:14px;font-weight:600}
+.ext-status{font-family:var(--font-ui);font-size:11px;color:var(--green);display:flex;align-items:center;gap:4px}
+.ext-status::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--green)}
+.ext-val{text-align:right}
+.ext-amount{font-family:var(--font-ui);font-size:14px;font-weight:700}
+.ext-actions{display:flex;gap:6px;margin-top:10px}
+.ext-btn{flex:1;border:1.5px solid var(--border);background:var(--card);font-family:var(--font-ui);font-size:12px;font-weight:600;padding:10px;border-radius:var(--radius-sm);cursor:pointer;text-align:center;transition:all .15s;color:var(--text)}
+.ext-btn.primary{background:var(--green);border-color:var(--green);color:#fff}
+.ext-btn:hover{opacity:.85}
+
+/* MOVE MONEY CTA */
+.money-cta{background:linear-gradient(135deg,var(--green) 0%,var(--green-dark) 100%);border-radius:var(--radius);padding:24px 20px;text-align:center;color:#fff;margin-top:4px}
+.money-cta p{font-family:var(--font-ui);font-size:14px;opacity:.9;margin-bottom:14px;line-height:1.5}
+.money-cta-btn{display:inline-flex;align-items:center;gap:6px;background:#fff;color:var(--green);font-family:var(--font-ui);font-size:14px;font-weight:700;padding:12px 28px;border-radius:10px;border:none;cursor:pointer;transition:transform .15s,box-shadow .15s;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.money-cta-btn:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,.2)}
+.money-cta-btn svg{width:16px;height:16px}
+
+/* HEALTH */
+.health-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.health-tile{background:var(--card);border-radius:var(--radius-sm);box-shadow:var(--shadow);padding:14px 12px;text-align:center}
+.health-tile .h-icon{font-size:20px;margin-bottom:6px}
+.health-tile .h-label{font-family:var(--font-ui);font-size:11px;color:var(--text-secondary);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px}
+.health-tile .h-val{font-family:var(--font-ui);font-size:13px;font-weight:700}
+.health-tile .h-val.good{color:var(--green)}
+.health-tile .h-val.warn{color:var(--amber)}
+.health-tile .h-val.neutral{color:var(--text)}
+
+/* TAX */
+.tax-card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.tax-header{display:flex;align-items:center;justify-content:space-between;padding:16px;cursor:pointer;transition:background .15s}
+.tax-header:hover{background:var(--border-light)}
+.tax-left{display:flex;align-items:center;gap:10px}
+.tax-icon{width:36px;height:36px;border-radius:9px;background:var(--green-light);display:flex;align-items:center;justify-content:center;font-size:16px}
+.tax-title{font-family:var(--font-ui);font-size:14px;font-weight:600}
+.tax-sub{font-family:var(--font-ui);font-size:12px;color:var(--text-secondary)}
+.tax-saved{font-family:var(--font-ui);font-size:18px;font-weight:700;color:var(--green)}
+.tax-chevron{transition:transform .25s;font-size:14px;color:var(--text-tertiary)}
+.tax-chevron.open{transform:rotate(180deg)}
+.tax-body{max-height:0;overflow:hidden;transition:max-height .3s ease}
+.tax-body.open{max-height:300px}
+.tax-content{padding:0 16px 16px;border-top:1px solid var(--border-light)}
+.tax-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border-light);font-family:var(--font-ui);font-size:13px}
+.tax-row:last-child{border-bottom:none}
+.tax-row .tl{color:var(--text-secondary)}
+.tax-row .tv{font-weight:600}
+.tax-row .tv.green{color:var(--green)}
+
+/* ALLOCATION */
+.alloc-card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px}
+.donut-wrap{position:relative;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.donut-center{position:absolute;text-align:center}
+.donut-center .dc-val{font-size:20px;font-weight:700}
+.donut-center .dc-label{font-family:var(--font-ui);font-size:11px;color:var(--text-secondary)}
+.alloc-list{display:flex;flex-direction:column;gap:8px}
+.alloc-item{display:flex;align-items:center;gap:10px}
+.alloc-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+.alloc-name{font-family:var(--font-ui);font-size:13px;font-weight:600;flex:1}
+.alloc-pct{font-family:var(--font-ui);font-size:13px;font-weight:600;width:40px;text-align:right}
+.alloc-bar-wrap{flex:1;max-width:100px;height:6px;background:var(--border-light);border-radius:3px;overflow:hidden}
+.alloc-bar{height:100%;border-radius:3px;transition:width .6s ease}
+
+/* HOLDINGS */
+.holdings-list{display:flex;flex-direction:column;gap:8px}
+.holding-row{background:var(--card);border-radius:var(--radius-sm);box-shadow:var(--shadow);padding:14px 16px;display:flex;align-items:center;justify-content:space-between}
+.hold-left{display:flex;align-items:center;gap:10px}
+.hold-ticker{width:36px;height:36px;border-radius:8px;background:var(--border-light);display:flex;align-items:center;justify-content:center;font-family:var(--font-ui);font-size:13px;font-weight:700;color:var(--text)}
+.hold-name{font-family:var(--font-ui);font-size:13px;font-weight:600}
+.hold-sub{font-family:var(--font-ui);font-size:11px;color:var(--text-secondary)}
+.hold-right{text-align:right}
+.hold-val{font-family:var(--font-ui);font-size:14px;font-weight:700}
+.hold-ret{font-family:var(--font-ui);font-size:12px;font-weight:600}
+.hold-ret.pos{color:var(--green)}
+.hold-ret.neg{color:#dc2626}
+.hold-pct{font-family:var(--font-ui);font-size:11px;color:var(--text-secondary)}
+
+/* MOVERS */
+.movers-list{display:flex;flex-direction:column;gap:8px}
+.mover-row{background:var(--card);border-radius:var(--radius-sm);box-shadow:var(--shadow);padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
+.mover-left{display:flex;align-items:center;gap:10px}
+.mover-ticker{font-family:var(--font-ui);font-size:13px;font-weight:700;width:42px}
+.mover-name{font-family:var(--font-ui);font-size:12px;color:var(--text-secondary)}
+.mover-val{font-family:var(--font-ui);font-size:14px;font-weight:700}
+.mover-val.pos{color:var(--green)}
+.mover-val.neg{color:#dc2626}
+.mover-badge{font-family:var(--font-ui);font-size:10px;font-weight:600;padding:3px 8px;border-radius:6px;margin-left:8px}
+.mover-badge.pos{background:var(--green-light);color:var(--green)}
+.mover-badge.neg{background:#fef2f2;color:#dc2626}
+
+/* AI INSIGHT */
+.insight-card{background:linear-gradient(135deg,#f0fdf4 0%,#ecfdf5 50%,#f0f9ff 100%);border-radius:var(--radius);padding:20px;border:1px solid #d1fae5;position:relative;overflow:hidden}
+.insight-card::before{content:'';position:absolute;top:-20px;right:-20px;width:80px;height:80px;background:radial-gradient(circle,rgba(22,111,71,.08) 0%,transparent 70%);border-radius:50%}
+.insight-header{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.insight-icon{width:28px;height:28px;border-radius:7px;background:var(--green);display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px}
+.insight-label{font-family:var(--font-ui);font-size:12px;font-weight:600;color:var(--green);text-transform:uppercase;letter-spacing:.5px}
+.insight-text{font-family:var(--font-primary);font-size:14px;line-height:1.6;color:var(--text);margin-bottom:12px}
+.insight-highlight{font-weight:700;color:var(--green)}
+.insight-action{display:inline-flex;align-items:center;gap:5px;background:var(--green);color:#fff;font-family:var(--font-ui);font-size:13px;font-weight:600;padding:10px 20px;border-radius:var(--radius-sm);border:none;cursor:pointer;transition:all .15s}
+.insight-action:hover{background:var(--green-dark);transform:translateY(-1px)}
+
+/* SECTION TITLE */
+.sec-title{font-family:var(--font-primary);font-size:16px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.sec-title .icon{font-size:16px}
+
+/* FOOTER SPACE */
+.footer-space{height:20px}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- TOP NAV -->
+<div class="top-bar">
+  <div class="nav-row" style="width:100%">
+    <a href="index.html" class="back-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Back
+    </a>
+    <div class="seg-nav">
+      <a href="#" class="active">Overview</a>
+      <a href="#">Activity</a>
+      <a href="#">Documents</a>
+      <a href="#">Math</a>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge"><span class="pulse"></span> Your Portfolio Story</div>
+  <div class="hero-value">$42,850</div>
+  <div class="hero-change pos">Today: +$182.00</div>
+  <div class="hero-total">Total return: <strong>+$4,230</strong> (+11.0%) since inception</div>
+</div>
+
+<!-- CHART -->
+<div class="section" style="padding-top:0">
+  <div class="chart-card">
+    <div class="chart-area">
+      <canvas id="heroChart" class="chart-canvas"></canvas>
+    </div>
+    <div class="time-filters">
+      <button>1W</button>
+      <button>1M</button>
+      <button class="active">3M</button>
+      <button>YTD</button>
+      <button>1Y</button>
+      <button>All</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONNECTOR -->
+<div class="story-connector"><div class="line"></div></div>
+<div class="story-connector"><span class="arrow">↓ &nbsp; your portfolio is composed of three accounts</span></div>
+<div class="story-connector"><div class="line"></div></div>
+
+<!-- 2. ADVIZMO ACCOUNTS -->
+<div class="section">
+  <div class="sec-title"><span class="icon">🏦</span> Advizmo Accounts</div>
+  <div class="account-grid">
+    <div class="account-card">
+      <div class="account-left">
+        <div class="account-icon cash">$</div>
+        <div><div class="account-name">Cash</div><div class="account-sub">Available to invest</div></div>
+      </div>
+      <div class="account-val"><div class="account-amount">$1,850</div><div class="account-pct">4.3%</div></div>
+    </div>
+    <div class="account-flow"><div class="line"></div><span class="label">funds flow to</span><div class="line"></div></div>
+    <div class="account-card">
+      <div class="account-left">
+        <div class="account-icon reserve">R</div>
+        <div><div class="account-name">Reserve</div><div class="account-sub">Emergency buffer</div></div>
+      </div>
+      <div class="account-val"><div class="account-amount">$8,120</div><div class="account-pct">18.9%</div></div>
+    </div>
+    <div class="account-flow"><div class="line"></div><span class="label">excess moves to</span><div class="line"></div></div>
+    <div class="account-card">
+      <div class="account-left">
+        <div class="account-icon auto">A</div>
+        <div><div class="account-name">Auto Invest</div><div class="account-sub">Working hard for you</div></div>
+      </div>
+      <div class="account-val"><div class="account-amount">$32,880</div><div class="account-pct">76.8%</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- CONNECTOR -->
+<div class="story-connector"><div class="line"></div></div>
+<div class="story-connector"><span class="arrow">↓ &nbsp; outside money feeds the story too</span></div>
+<div class="story-connector"><div class="line"></div></div>
+
+<!-- 3. EXTERNAL ACCOUNTS -->
+<div class="section">
+  <div class="sec-title"><span class="icon">🔗</span> External Accounts</div>
+  <div class="external-card">
+    <div class="ext-left">
+      <div class="ext-icon chase">C</div>
+      <div><div class="ext-name">Chase</div><div class="ext-status">Connected</div></div>
+    </div>
+    <div class="ext-val"><div class="ext-amount">$12,400</div></div>
+  </div>
+  <div class="external-card">
+    <div class="ext-left">
+      <div class="ext-icon capone">CO</div>
+      <div><div class="ext-name">Capital One</div><div class="ext-status">Connected</div></div>
+    </div>
+    <div class="ext-val"><div class="ext-amount">$8,900</div></div>
+  </div>
+  <div class="external-card">
+    <div class="ext-left">
+      <div class="ext-icon marcus">M</div>
+      <div><div class="ext-name">Marcus</div><div class="ext-status">Connected</div></div>
+    </div>
+    <div class="ext-val"><div class="ext-amount">$15,200</div></div>
+  </div>
+  <div class="ext-actions">
+    <button class="ext-btn primary">Move Money</button>
+    <button class="ext-btn">View Details</button>
+  </div>
+</div>
+
+<!-- CONNECTOR -->
+<div class="story-connector"><div class="line"></div></div>
+<div class="story-connector"><span class="arrow">↓ &nbsp; ready to put money to work?</span></div>
+<div class="story-connector"><div class="line"></div></div>
+
+<!-- 4. MOVE MONEY -->
+<div class="section">
+  <div class="money-cta">
+    <p>Move money to grow your portfolio.<br>Advizmo will allocate it automatically.</p>
+    <button class="money-cta-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Move Money
+    </button>
+  </div>
+</div>
+
+<!-- CONNECTOR -->
+<div class="story-connector"><div class="line"></div></div>
+<div class="story-connector"><span class="arrow">↓ &nbsp; how healthy is your portfolio?</span></div>
+<div class="story-connector"><div class="line"></div></div>
+
+<!-- 5. INVESTMENT HEALTH -->
+<div class="section">
+  <div class="sec-title"><span class="icon">💚</span> Investment Health</div>
+  <div class="health-grid">
+    <div class="health-tile"><div class="h-icon">💚</div><div class="h-label">Health</div><div class="h-val good">Good</div></div>
+    <div class="health-tile"><div class="h-icon">⚖️</div><div class="h-label">Diversification</div><div class="h-val good">Balanced</div></div>
+    <div class="health-tile"><div class="h-icon">⚡</div><div class="h-label">Automation</div><div class="h-val good">Active</div></div>
+    <div class="health-tile"><div class="h-icon">📈</div><div class="h-label">Risk</div><div class="h-val good">On Track</div></div>
+    <div class="health-tile"><div class="h-icon">💧</div><div class="h-label">Idle Cash</div><div class="h-val good">Low</div></div>
+    <div class="health-tile"><div class="h-icon">🛡️</div><div class="h-label">Reserve</div><div class="h-val warn">84%</div></div>
+  </div>
+</div>
+
+<!-- CONNECTOR -->
+<div class="story-connector"><div class="line"></div></div>
+<div class="story-connector"><span class="arrow">↓ &nbsp; smart moves save you money</span></div>
+<div class="story-connector"><div class="line"></div></div>
+
+<!-- 6. TAX OPTIMIZATION -->
+<div class="section">
+  <div class="sec-title"><span class="icon">🧮</span> Tax Optimization</div>
+  <div class="tax-card">
+    <div class="tax-header" onclick="toggleTax()">
+      <div class="tax-left">
+        <div class="tax-icon">📋</div>
+        <div><div class="tax-title">Tax-Loss Harvesting</div><div class="tax-sub">Actively saving you money</div></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="tax-saved">$482 saved</div>
+        <span class="tax-chevron" id="taxChevron">▼</span>
+      </div>
+    </div>
+    <div class="tax-body" id="taxBody">
+      <div class="tax-content">
+        <div class="tax-row"><span class="tl">Harvested losses (YTD)</span><span class="tv green">-$1,240</span></div>
+        <div class="tax-row"><span class="tl">Tax savings at 24% bracket</span><span class="tv green">$482</span></div>
+        <div class="tax-row"><span class="tl">Wash-sale compliant</span><span class="tv green">✓ Yes</span></div>
+        <div class="tax-row"><span class="tl">Last harvest event</span><span class="tv">3 days ago</span></div>
+        <div class="tax-row"><span class="tl">Next opportunity</span><span class="tv">Monitoring</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONNECTOR -->
+<div class="story-connector"><div class="line"></div></div>
+<div class="story-connector"><span class="arrow">↓ &nbsp; here's where your money lives</span></div>
+<div class="story-connector"><div class="line"></div></div>
+
+<!-- 7. PORTFOLIO ALLOCATION -->
+<div class="section">
+  <div class="sec-title"><span class="icon">🎯</span> Portfolio Allocation</div>
+  <div class="alloc-card">
+    <div class="donut-wrap">
+      <canvas id="donutChart" width="160" height="160"></canvas>
+      <div class="donut-center">
+        <div class="dc-val">$42,850</div>
+        <div class="dc-label">Total</div>
+      </div>
+    </div>
+    <div class="alloc-list">
+      <div class="alloc-item">
+        <div class="alloc-dot" style="background:#166f47"></div>
+        <div class="alloc-name">VTI</div>
+        <div class="alloc-pct">58%</div>
+        <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:58%;background:#166f47"></div></div>
+      </div>
+      <div class="alloc-item">
+        <div class="alloc-dot" style="background:#2563eb"></div>
+        <div class="alloc-name">VXUS</div>
+        <div class="alloc-pct">18%</div>
+        <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:18%;background:#2563eb"></div></div>
+      </div>
+      <div class="alloc-item">
+        <div class="alloc-dot" style="background:#c2790a"></div>
+        <div class="alloc-name">BND</div>
+        <div class="alloc-pct">14%</div>
+        <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:14%;background:#c2790a"></div></div>
+      </div>
+      <div class="alloc-item">
+        <div class="alloc-dot" style="background:#7c3aed"></div>
+        <div class="alloc-name">VNQ</div>
+        <div class="alloc-pct">10%</div>
+        <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:10%;background:#7c3aed"></div></div>
+      </div>
+      <div class="alloc-item">
+        <div class="alloc-dot" style="background:#9ca3af"></div>
+        <div class="alloc-name">Cash</div>
+        <div class="alloc-pct">4%</div>
+        <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:4%;background:#9ca3af"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONNECTOR -->
+<div class="story-connector"><div class="line"></div></div>
+<div class="story-connector"><span class="arrow">↓ &nbsp; let's look at each holding</span></div>
+<div class="story-connector"><div class="line"></div></div>
+
+<!-- 8. TOP HOLDINGS -->
+<div class="section">
+  <div class="sec-title"><span class="icon">📊</span> Top Holdings</div>
+  <div class="holdings-list">
+    <div class="holding-row">
+      <div class="hold-left">
+        <div class="hold-ticker">VTI</div>
+        <div><div class="hold-name">Vanguard Total Stock Market</div><div class="hold-sub">U.S. Equity · 58%</div></div>
+      </div>
+      <div class="hold-right">
+        <div class="hold-val">$24,853</div>
+        <div class="hold-ret pos">+$2,850 · +12.9%</div>
+      </div>
+    </div>
+    <div class="holding-row">
+      <div class="hold-left">
+        <div class="hold-ticker">VXUS</div>
+        <div><div class="hold-name">Vanguard Total International</div><div class="hold-sub">Int'l Equity · 18%</div></div>
+      </div>
+      <div class="hold-right">
+        <div class="hold-val">$7,713</div>
+        <div class="hold-ret pos">+$620 · +8.8%</div>
+      </div>
+    </div>
+    <div class="holding-row">
+      <div class="hold-left">
+        <div class="hold-ticker">BND</div>
+        <div><div class="hold-name">Vanguard Total Bond Market</div><div class="hold-sub">Fixed Income · 14%</div></div>
+      </div>
+      <div class="hold-right">
+        <div class="hold-val">$5,999</div>
+        <div class="hold-ret pos">+$310 · +5.5%</div>
+      </div>
+    </div>
+    <div class="holding-row">
+      <div class="hold-left">
+        <div class="hold-ticker">VNQ</div>
+        <div><div class="hold-name">Vanguard Real Estate ETF</div><div class="hold-sub">Real Estate · 10%</div></div>
+      </div>
+      <div class="hold-right">
+        <div class="hold-val">$4,285</div>
+        <div class="hold-ret neg">-$80 · -1.8%</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONNECTOR -->
+<div class="story-connector"><div class="line"></div></div>
+<div class="story-connector"><span class="arrow">↓ &nbsp; what moved today?</span></div>
+<div class="story-connector"><div class="line"></div></div>
+
+<!-- 9. TOP MOVERS -->
+<div class="section">
+  <div class="sec-title"><span class="icon">🔥</span> Top Movers</div>
+  <div class="movers-list">
+    <div class="mover-row">
+      <div class="mover-left">
+        <div class="mover-ticker">VTI</div>
+        <div class="mover-name">Total Stock Market</div>
+      </div>
+      <div style="display:flex;align-items:center">
+        <div class="mover-val pos">+$42</div>
+        <div class="mover-badge pos">↑ Today</div>
+      </div>
+    </div>
+    <div class="mover-row">
+      <div class="mover-left">
+        <div class="mover-ticker">VNQ</div>
+        <div class="mover-name">Real Estate ETF</div>
+      </div>
+      <div style="display:flex;align-items:center">
+        <div class="mover-val neg">-$18</div>
+        <div class="mover-badge neg">↓ Today</div>
+      </div>
+    </div>
+    <div class="mover-row">
+      <div class="mover-left">
+        <div class="mover-ticker">BND</div>
+        <div class="mover-name">Total Bond Market</div>
+      </div>
+      <div style="display:flex;align-items:center">
+        <div class="mover-val pos">+$8</div>
+        <div class="mover-badge pos">↑ Today</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONNECTOR -->
+<div class="story-connector"><div class="line"></div></div>
+<div class="story-connector"><span class="arrow">↓ &nbsp; one last insight from Advizmo</span></div>
+<div class="story-connector"><div class="line"></div></div>
+
+<!-- 10. AI INSIGHT -->
+<div class="section">
+  <div class="sec-title"><span class="icon">🤖</span> AI Insight</div>
+  <div class="insight-card">
+    <div class="insight-header">
+      <div class="insight-icon">✦</div>
+      <div class="insight-label">Advizmo AI</div>
+    </div>
+    <div class="insight-text">
+      Your idle cash of <span class="insight-highlight">$1,850</span> could earn an estimated <span class="insight-highlight">$58/month</span> if moved to Auto Invest. That's <span class="insight-highlight">$696/year</span> in potential earnings working for you — instead of sitting still.
+    </div>
+    <button class="insight-action">
+      Move to Auto Invest
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </button>
+  </div>
+</div>
+
+<div class="footer-space"></div>
+</div>
+
+<script>
+// Tax toggle
+function toggleTax(){
+  const b=document.getElementById('taxBody');
+  const c=document.getElementById('taxChevron');
+  b.classList.toggle('open');
+  c.classList.toggle('open');
+}
+
+// Time filter buttons
+document.querySelectorAll('.time-filters button').forEach(btn=>{
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.time-filters button').forEach(b=>b.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+// Hero Chart
+(function(){
+  const canvas=document.getElementById('heroChart');
+  const ctx=canvas.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  const rect=canvas.parentElement.getBoundingClientRect();
+  canvas.width=rect.width*dpr;
+  canvas.height=rect.height*dpr;
+  canvas.style.width=rect.width+'px';
+  canvas.style.height=rect.height+'px';
+  ctx.scale(dpr,dpr);
+
+  const w=rect.width, h=rect.height;
+  const pad={t:10,r:10,b:10,l:10};
+
+  // Generate smooth portfolio data
+  const months=['Jan','Feb','Mar','Apr','May','Jun'];
+  const data=[38620,39100,38800,39500,40200,40900,41500,42200,42850];
+  const minV=Math.min(...data)-400;
+  const maxV=Math.max(...data)+400;
+
+  function x(i){return pad.l+(i/(data.length-1))*(w-pad.l-pad.r)}
+  function y(v){return pad.t+(1-(v-minV)/(maxV-minV))*(h-pad.t-pad.b)}
+
+  // Grid lines
+  ctx.strokeStyle='#f0f0f0';
+  ctx.lineWidth=1;
+  for(let i=0;i<5;i++){
+    const yy=pad.t+i*(h-pad.t-pad.b)/4;
+    ctx.beginPath();ctx.moveTo(pad.l,yy);ctx.lineTo(w-pad.r,yy);ctx.stroke();
+  }
+
+  // Gradient fill
+  const grad=ctx.createLinearGradient(0,0,0,h);
+  grad.addColorStop(0,'rgba(22,111,71,0.15)');
+  grad.addColorStop(1,'rgba(22,111,71,0.01)');
+  ctx.beginPath();
+  ctx.moveTo(x(0),y(data[0]));
+  for(let i=1;i<data.length;i++){
+    const cx1=(x(i-1)+x(i))/2;
+    const cy1=y(data[i-1]);
+    const cx2=(x(i-1)+x(i))/2;
+    const cy2=y(data[i]);
+    ctx.bezierCurveTo(cx1,cy1,cx2,cy2,x(i),y(data[i]));
+  }
+  ctx.lineTo(x(data.length-1),h);
+  ctx.lineTo(x(0),h);
+  ctx.closePath();
+  ctx.fillStyle=grad;
+  ctx.fill();
+
+  // Line
+  ctx.beginPath();
+  ctx.moveTo(x(0),y(data[0]));
+  for(let i=1;i<data.length;i++){
+    const cx1=(x(i-1)+x(i))/2;
+    const cy1=y(data[i-1]);
+    const cx2=(x(i-1)+x(i))/2;
+    const cy2=y(data[i]);
+    ctx.bezierCurveTo(cx1,cy1,cx2,cy2,x(i),y(data[i]));
+  }
+  ctx.strokeStyle='#166f47';
+  ctx.lineWidth=2.5;
+  ctx.stroke();
+
+  // End dot
+  const lastX=x(data.length-1),lastY=y(data[data.length-1]);
+  ctx.beginPath();ctx.arc(lastX,lastY,5,0,Math.PI*2);ctx.fillStyle='#166f47';ctx.fill();
+  ctx.beginPath();ctx.arc(lastX,lastY,3,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();
+
+  // Labels
+  ctx.fillStyle='#9ca3af';
+  ctx.font='11px Inter,sans-serif';
+  ctx.textAlign='center';
+  months.forEach((m,i)=>{
+    ctx.fillText(m,x(i),h-1);
+  });
+})();
+
+// Donut Chart
+(function(){
+  const canvas=document.getElementById('donutChart');
+  const ctx=canvas.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  canvas.width=160*dpr;canvas.height=160*dpr;
+  ctx.scale(dpr,dpr);
+
+  const cx=80,cy=80,r=58,lw=20;
+  const slices=[
+    {pct:58,color:'#166f47'},
+    {pct:18,color:'#2563eb'},
+    {pct:14,color:'#c2790a'},
+    {pct:10,color:'#7c3aed'},
+    {pct:4,color:'#9ca3af'}
+  ];
+  let start=-Math.PI/2;
+  slices.forEach(s=>{
+    const angle=(s.pct/100)*Math.PI*2;
+    ctx.beginPath();
+    ctx.arc(cx,cy,r,start,start+angle);
+    ctx.strokeStyle=s.color;
+    ctx.lineWidth=lw;
+    ctx.lineCap='butt';
+    ctx.stroke();
+    start+=angle+0.03;
+  });
+})();
+</script>
+</body>
+</html>
