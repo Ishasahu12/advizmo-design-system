@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Market Closed · Activity Detail · Advizmo</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:#f2f2f7;color:#1c1c1e;-webkit-font-smoothing:antialiased;max-width:430px;margin:0 auto;min-height:100vh}
+.header{position:sticky;top:0;z-index:100;background:rgba(242,242,247,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:12px 20px 14px}
+.header-top{display:flex;align-items:center;justify-content:space-between}
+.back-btn{display:flex;align-items:center;gap:4px;color:#007aff;font-size:17px;font-family:'IBM Plex Sans',sans-serif;font-weight:500;text-decoration:none;background:none;border:none;cursor:pointer;padding:4px 0}
+.back-btn svg{width:20px;height:20px}
+.header-title{font-family:'IBM Plex Sans',sans-serif;font-size:17px;font-weight:600}
+.hero{padding:24px 20px;text-align:center}
+.hero .icon{width:64px;height:64px;border-radius:16px;background:rgba(255,159,10,0.12);color:#ff9f0a;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 12px}
+.hero .amount{font-family:'IBM Plex Sans',sans-serif;font-size:42px;font-weight:700;color:#1c1c1e;letter-spacing:-1px}
+.hero .label{font-size:15px;color:#ff9f0a;margin-top:4px;font-weight:500}
+.card{background:#fff;border-radius:14px;padding:0 16px;margin:0 20px 12px;overflow:hidden}
+.card-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:0.5px solid #e5e5ea}
+.card-row:last-child{border-bottom:none}
+.card-row .label{font-size:15px;color:#8e8e93}
+.card-row .value{font-size:15px;font-weight:500;color:#1c1c1e;text-align:right;max-width:55%}
+.status-badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:8px;font-size:13px;font-weight:600}
+.status-badge.scheduled{background:rgba(142,142,147,0.12);color:#8e8e93}
+.section-title{font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:0.5px;padding:20px 20px 8px}
+.allocation{margin:0 20px 20px;background:#fff;border-radius:14px;padding:16px}
+.allocation h4{font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px}
+.alloc-row{display:flex;align-items:center;gap:12px;padding:8px 0}
+.alloc-bar{flex:1;height:8px;background:#e5e5ea;border-radius:4px;overflow:hidden}
+.alloc-fill{height:100%;border-radius:4px}
+.alloc-fill.vti{background:#0a84ff}
+.alloc-fill.vxus{background:#bf5af2}
+.alloc-fill.bnd{background:#30d158}
+.alloc-fill.vnq{background:#ff9f0a}
+.alloc-label{font-size:14px;font-weight:600;color:#1c1c1e;width:48px}
+.alloc-pct{font-size:13px;color:#8e8e93;width:40px;text-align:right}
+.help-btn{display:block;margin:20px;padding:16px;background:#fff;border-radius:14px;text-align:center;color:#007aff;font-size:17px;font-weight:500;text-decoration:none;border:none;width:calc(100% - 40px);cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <a href="javascript:history.back()" class="back-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>Back</a>
+    <div class="header-title">Investment Scheduled</div>
+    <div style="width:50px"></div>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="icon">◷</div>
+  <div class="amount">$520.00</div>
+  <div class="label">Waiting for market to open</div>
+</div>
+
+<div class="card">
+  <div class="card-row"><span class="label">Status</span><span class="value"><span class="status-badge scheduled">○ Scheduled</span></span></div>
+  <div class="card-row"><span class="label">Amount</span><span class="value">$520.00</span></div>
+  <div class="card-row"><span class="label">Source</span><span class="value">Advizmo Cash</span></div>
+  <div class="card-row"><span class="label">Portfolio</span><span class="value">Growth Portfolio</span></div>
+  <div class="card-row"><span class="label">Expected Execution</span><span class="value" style="color:#ff9f0a">Mon, Jan 6 · 9:30 AM ET</span></div>
+  <div class="card-row"><span class="label">Market Status</span><span class="value" style="color:#ff9f0a">Closed · Opens in 14h 28m</span></div>
+</div>
+
+<div class="section-title">Estimated Allocation</div>
+<div class="allocation">
+  <div class="alloc-row">
+    <span class="alloc-label">VTI</span>
+    <div class="alloc-bar"><div class="alloc-fill vti" style="width:58%"></div></div>
+    <span class="alloc-pct">58%</span>
+  </div>
+  <div class="alloc-row">
+    <span class="alloc-label">VXUS</span>
+    <div class="alloc-bar"><div class="alloc-fill vxus" style="width:18%"></div></div>
+    <span class="alloc-pct">18%</span>
+  </div>
+  <div class="alloc-row">
+    <span class="alloc-label">BND</span>
+    <div class="alloc-bar"><div class="alloc-fill bnd" style="width:14%"></div></div>
+    <span class="alloc-pct">14%</span>
+  </div>
+  <div class="alloc-row">
+    <span class="alloc-label">VNQ</span>
+    <div class="alloc-bar"><div class="alloc-fill vnq" style="width:10%"></div></div>
+    <span class="alloc-pct">10%</span>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-row"><span class="label">What happened?</span><span class="value" style="font-size:14px;font-weight:400;color:#636366">Your $520.00 is queued and ready to invest. Since the market is closed, the order will execute when trading opens on Monday.</span></div>
+  <div class="card-row"><span class="label">What's next?</span><span class="value" style="font-size:14px;font-weight:400;color:#636366">At 9:30 AM ET on Monday, Advizmo will place the order. Exact prices may vary slightly from estimates.</span></div>
+  <div class="card-row"><span class="label">Can I cancel?</span><span class="value" style="font-size:14px;font-weight:400;color:#636366">Yes. You can cancel anytime before market open by tapping the button below.</span></div>
+</div>
+
+<button class="help-btn" style="color:#ff453a;border:1px solid #ff453a">Cancel Order</button>
+<button class="help-btn">Need Help?</button>
+
+<div style="height:40px"></div>
+
+</body>
+</html>

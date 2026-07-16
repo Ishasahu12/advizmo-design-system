@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Failed · Activity Detail · Advizmo</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:#f2f2f7;color:#1c1c1e;-webkit-font-smoothing:antialiased;max-width:430px;margin:0 auto;min-height:100vh}
+.header{position:sticky;top:0;z-index:100;background:rgba(242,242,247,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:12px 20px 14px}
+.header-top{display:flex;align-items:center;justify-content:space-between}
+.back-btn{display:flex;align-items:center;gap:4px;color:#007aff;font-size:17px;font-family:'IBM Plex Sans',sans-serif;font-weight:500;text-decoration:none;background:none;border:none;cursor:pointer;padding:4px 0}
+.back-btn svg{width:20px;height:20px}
+.header-title{font-family:'IBM Plex Sans',sans-serif;font-size:17px;font-weight:600}
+.hero{padding:24px 20px;text-align:center}
+.hero .icon{width:64px;height:64px;border-radius:16px;background:rgba(255,69,58,0.12);color:#ff453a;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 12px}
+.hero .amount{font-family:'IBM Plex Sans',sans-serif;font-size:42px;font-weight:700;color:#1c1c1e;letter-spacing:-1px}
+.hero .label{font-size:15px;color:#ff453a;margin-top:4px;font-weight:500}
+.card{background:#fff;border-radius:14px;padding:0 16px;margin:0 20px 12px;overflow:hidden}
+.card-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:0.5px solid #e5e5ea}
+.card-row:last-child{border-bottom:none}
+.card-row .label{font-size:15px;color:#8e8e93}
+.card-row .value{font-size:15px;font-weight:500;color:#1c1c1e;text-align:right;max-width:55%}
+.status-badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:8px;font-size:13px;font-weight:600}
+.status-badge.failed{background:rgba(255,69,58,0.12);color:#ff453a}
+.help-btn{display:block;margin:20px;padding:16px;background:#fff;border-radius:14px;text-align:center;color:#007aff;font-size:17px;font-weight:500;text-decoration:none;border:none;width:calc(100% - 40px);cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <a href="javascript:history.back()" class="back-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>Back</a>
+    <div class="header-title">Deposit Failed</div>
+    <div style="width:50px"></div>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="icon">✕</div>
+  <div class="amount">$1,200.00</div>
+  <div class="label">Deposit could not be completed</div>
+</div>
+
+<div class="card">
+  <div class="card-row"><span class="label">Status</span><span class="value"><span class="status-badge failed">✕ Failed</span></span></div>
+  <div class="card-row"><span class="label">Source</span><span class="value">Capital One Checking<br><span style="font-size:13px;color:#8e8e93">****4821</span></span></div>
+  <div class="card-row"><span class="label">Amount</span><span class="value">$1,200.00</span></div>
+  <div class="card-row"><span class="label">Date</span><span class="value">Dec 28, 2024</span></div>
+  <div class="card-row"><span class="label">Error</span><span class="value" style="color:#ff453a">Account frozen by bank</span></div>
+</div>
+
+<div class="card">
+  <div class="card-row"><span class="label">What happened?</span><span class="value" style="font-size:14px;font-weight:400;color:#636366">The ACH transfer from your Capital One Checking account failed because the bank has temporarily frozen the account.</span></div>
+  <div class="card-row"><span class="label">Why?</span><span class="value" style="font-size:14px;font-weight:400;color:#636366">Banks sometimes freeze accounts for security reasons, suspicious activity, or verification. This is not an Advizmo issue.</span></div>
+  <div class="card-row"><span class="label">What should I do?</span><span class="value" style="font-size:14px;font-weight:400;color:#636366">Contact Capital One to unfreeze your account. Once resolved, you can try the deposit again. No money was moved from your bank.</span></div>
+</div>
+
+<button class="help-btn">Try Again</button>
+<button class="help-btn">Contact Support</button>
+
+<div style="height:40px"></div>
+
+</body>
+</html>

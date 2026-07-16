@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buy · Activity Detail · Advizmo</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:#f2f2f7;color:#1c1c1e;-webkit-font-smoothing:antialiased;max-width:430px;margin:0 auto;min-height:100vh}
+.header{position:sticky;top:0;z-index:100;background:rgba(242,242,247,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:12px 20px 14px}
+.header-top{display:flex;align-items:center;justify-content:space-between}
+.back-btn{display:flex;align-items:center;gap:4px;color:#007aff;font-size:17px;font-family:'IBM Plex Sans',sans-serif;font-weight:500;text-decoration:none;background:none;border:none;cursor:pointer;padding:4px 0}
+.back-btn svg{width:20px;height:20px}
+.header-title{font-family:'IBM Plex Sans',sans-serif;font-size:17px;font-weight:600}
+.hero{padding:24px 20px;text-align:center}
+.hero .icon{width:64px;height:64px;border-radius:16px;background:rgba(10,132,255,0.12);color:#0a84ff;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 12px}
+.hero .ticker{font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#0a84ff;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.hero .amount{font-family:'IBM Plex Sans',sans-serif;font-size:42px;font-weight:700;color:#1c1c1e;letter-spacing:-1px}
+.hero .label{font-size:15px;color:#8e8e93;margin-top:4px}
+.card{background:#fff;border-radius:14px;padding:0 16px;margin:0 20px 12px;overflow:hidden}
+.card-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:0.5px solid #e5e5ea}
+.card-row:last-child{border-bottom:none}
+.card-row .label{font-size:15px;color:#8e8e93}
+.card-row .value{font-size:15px;font-weight:500;color:#1c1c1e;text-align:right;max-width:55%}
+.status-badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:8px;font-size:13px;font-weight:600}
+.status-badge.completed{background:rgba(48,209,88,0.12);color:#30d158}
+.section-title{font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:0.5px;padding:20px 20px 8px}
+.timeline{margin:0 20px 20px;background:#fff;border-radius:14px;padding:16px}
+.timeline-item{display:flex;gap:12px;padding-bottom:16px;position:relative}
+.timeline-item:last-child{padding-bottom:0}
+.timeline-item::before{content:'';position:absolute;left:7px;top:18px;bottom:0;width:1px;background:#e5e5ea}
+.timeline-item:last-child::before{display:none}
+.timeline-dot{width:15px;height:15px;border-radius:50%;border:2px solid #30d158;background:#fff;flex-shrink:0;z-index:1}
+.timeline-dot.active{background:#30d158}
+.timeline-content .time{font-size:12px;color:#8e8e93}
+.timeline-content .text{font-size:14px;color:#1c1c1e;margin-top:2px}
+.portfolio-impact{margin:0 20px 20px;background:#fff;border-radius:14px;padding:16px}
+.portfolio-impact h4{font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px}
+.impact-row{display:flex;justify-content:space-between;padding:8px 0;font-size:14px}
+.impact-row .label{color:#636366}
+.impact-row .value{font-weight:600;color:#1c1c1e}
+.help-btn{display:block;margin:20px;padding:16px;background:#fff;border-radius:14px;text-align:center;color:#007aff;font-size:17px;font-weight:500;text-decoration:none;border:none;width:calc(100% - 40px);cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <a href="javascript:history.back()" class="back-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>Back</a>
+    <div class="header-title">Buy Order</div>
+    <div style="width:50px"></div>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="icon">↗</div>
+  <div class="ticker">VTI · Vanguard Total Stock Market</div>
+  <div class="amount">$301.60</div>
+  <div class="label">1.52 shares purchased @ $198.42</div>
+</div>
+
+<div class="card">
+  <div class="card-row"><span class="label">Status</span><span class="value"><span class="status-badge completed">✓ Settled</span></span></div>
+  <div class="card-row"><span class="label">Shares</span><span class="value">1.52</span></div>
+  <div class="card-row"><span class="label">Price</span><span class="value">$198.42 per share</span></div>
+  <div class="card-row"><span class="label">Total</span><span class="value" style="font-weight:700">$301.60</span></div>
+  <div class="card-row"><span class="label">Source</span><span class="value">Advizmo Cash</span></div>
+  <div class="card-row"><span class="label">Portfolio</span><span class="value">Growth Portfolio</span></div>
+</div>
+
+<div class="section-title">Timeline</div>
+<div class="timeline">
+  <div class="timeline-item">
+    <div class="timeline-dot active"></div>
+    <div class="timeline-content">
+      <div class="time">Mon, Jan 6 · 4:00 PM</div>
+      <div class="text">Trade settled · Shares in your account</div>
+    </div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-dot active"></div>
+    <div class="timeline-content">
+      <div class="time">Mon, Jan 6 · 9:32 AM</div>
+      <div class="text">Order executed at market open</div>
+    </div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-dot"></div>
+    <div class="timeline-content">
+      <div class="time">Sun, Jan 5 · 8:00 PM</div>
+      <div class="text">Order queued for market open</div>
+    </div>
+  </div>
+</div>
+
+<div class="portfolio-impact">
+  <h4>Portfolio Impact</h4>
+  <div class="impact-row"><span class="label">Portfolio Value Before</span><span class="value">$42,548.40</span></div>
+  <div class="impact-row"><span class="label">This Purchase</span><span class="value">+$301.60</span></div>
+  <div class="impact-row"><span class="label">Portfolio Value After</span><span class="value" style="color:#30d158">$42,850.00</span></div>
+  <div class="impact-row"><span class="label">VTI Allocation</span><span class="value">35.2% → 35.4%</span></div>
+</div>
+
+<div class="card">
+  <div class="card-row"><span class="label">What happened?</span><span class="value" style="font-size:14px;font-weight:400;color:#636366">Advizmo bought 1.52 shares of VTI at $198.42 per share using $301.60 from your Advizmo Cash account.</span></div>
+  <div class="card-row"><span class="label">Why this ETF?</span><span class="value" style="font-size:14px;font-weight:400;color:#636366">VTI tracks the entire US stock market. It's low-cost and diversified — the foundation of your growth portfolio.</span></div>
+  <div class="card-row"><span class="label">What's next?</span><span class="value" style="font-size:14px;font-weight:400;color:#636366">The shares are now yours. Advizmo will monitor your allocation and rebalance when needed.</span></div>
+</div>
+
+<button class="help-btn">Need Help?</button>
+
+<div style="height:40px"></div>
+
+</body>
+</html>

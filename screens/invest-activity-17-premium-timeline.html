@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Activity — Premium Timeline · Advizmo</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:#f2f2f7;color:#1c1c1e;-webkit-font-smoothing:antialiased;max-width:430px;margin:0 auto;min-height:100vh}
+.header{position:sticky;top:0;z-index:100;background:rgba(242,242,247,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:12px 20px 0}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.back-btn{display:flex;align-items:center;gap:4px;color:#007aff;font-size:17px;font-family:'IBM Plex Sans',sans-serif;font-weight:500;text-decoration:none;background:none;border:none;cursor:pointer;padding:4px 0}
+.back-btn svg{width:20px;height:20px}
+.header-title{font-family:'IBM Plex Sans',sans-serif;font-size:34px;font-weight:700;letter-spacing:-0.5px;color:#1c1c1e}
+.segmented-nav{display:flex;background:#e5e5ea;border-radius:9px;padding:2px;margin-bottom:12px}
+.segmented-nav button{flex:1;padding:8px 0;border:none;background:transparent;font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#636366;border-radius:7px;cursor:pointer;transition:all 0.2s}
+.segmented-nav button.active{background:#fff;color:#1c1c1e;box-shadow:0 1px 3px rgba(0,0,0,0.08)}
+.filter-bar{display:flex;gap:8px;overflow-x:auto;padding-bottom:12px;-ms-overflow-style:none;scrollbar-width:none}
+.filter-bar::-webkit-scrollbar{display:none}
+.filter-chip{white-space:nowrap;padding:7px 14px;border-radius:20px;font-size:13px;font-weight:500;background:#fff;color:#636366;border:1px solid #d1d1d6;cursor:pointer;transition:all 0.2s}
+.filter-chip.active{background:#1c1c1e;color:#fff;border-color:#1c1c1e}
+.summary-card{margin:0 20px 16px;background:linear-gradient(135deg,#1c1c1e 0%,#2c2c2e 100%);border-radius:16px;padding:20px;color:#fff}
+.summary-card h3{font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px}
+.summary-row{display:flex;justify-content:space-between}
+.summary-item{text-align:center;flex:1}
+.summary-item .value{font-family:'IBM Plex Sans',sans-serif;font-size:22px;font-weight:700;letter-spacing:-0.3px}
+.summary-item .value.green{color:#30d158}
+.summary-item .value.amber{color:#ffd60a}
+.summary-item .value.white{color:#fff}
+.summary-item .label{font-size:11px;color:rgba(255,255,255,0.5);margin-top:2px}
+.timeline-container{padding:0 20px;margin-bottom:20px}
+.date-label{font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;padding-left:24px}
+.timeline{position:relative;padding-left:24px}
+.timeline::before{content:'';position:absolute;left:7px;top:0;bottom:0;width:2px;background:#e5e5ea;border-radius:1px}
+.timeline-card{position:relative;margin-bottom:12px;background:#fff;border-radius:14px;padding:14px 16px;cursor:pointer;transition:transform 0.15s}
+.timeline-card:active{transform:scale(0.98)}
+.timeline-card::before{content:'';position:absolute;left:-20px;top:18px;width:12px;height:12px;border-radius:50%;border:2px solid #e5e5ea;background:#fff;z-index:1}
+.timeline-card.type-deposit::before{border-color:#30d158;background:#30d158}
+.timeline-card.type-buy::before{border-color:#0a84ff;background:#0a84ff}
+.timeline-card.type-sell::before{border-color:#bf5af2;background:#bf5af2}
+.timeline-card.type-dividend::before{border-color:#30d158;background:#30d158}
+.timeline-card.type-interest::before{border-color:#30d158;background:#30d158}
+.timeline-card.type-scheduled::before{border-color:#ff9f0a;background:#fff}
+.timeline-card.type-market-closed::before{border-color:#ff9f0a;background:#ff9f0a}
+.timeline-card.type-market-open::before{border-color:#30d158;background:#30d158}
+.timeline-card.type-tax-harvest::before{border-color:#30d158;background:#30d158}
+.timeline-card.type-rebalance::before{border-color:#0a84ff;background:#0a84ff}
+.timeline-card.type-transfer::before{border-color:#ff9f0a;background:#ff9f0a}
+.timeline-card.type-withdrawal::before{border-color:#ff453a;background:#ff453a}
+.timeline-card.type-failed::before{border-color:#ff453a;background:#ff453a}
+.timeline-card.type-cancelled::before{border-color:#8e8e93;background:#8e8e93}
+.tc-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px}
+.tc-type{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600;color:#1c1c1e}
+.tc-amount{font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;letter-spacing:-0.2px}
+.tc-amount.positive{color:#30d158}
+.tc-amount.negative{color:#1c1c1e}
+.tc-detail{font-size:13px;color:#8e8e93;margin-bottom:6px}
+.tc-footer{display:flex;justify-content:space-between;align-items:center}
+.tc-time{font-size:12px;color:#8e8e93}
+.tc-status{font-size:11px;font-weight:600;padding:3px 8px;border-radius:6px}
+.tc-status.completed{background:rgba(48,209,88,0.12);color:#30d158}
+.tc-status.scheduled{background:rgba(255,159,10,0.12);color:#ff9f0a}
+.tc-status.pending{background:rgba(142,142,147,0.12);color:#8e8e93}
+.tc-status.failed{background:rgba(255,69,58,0.12);color:#ff453a}
+.nav-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(242,242,247,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:0.5px solid #d1d1d6;display:flex;padding:8px 0 28px;z-index:100}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;color:#8e8e93;font-size:10px;font-weight:500;text-decoration:none;cursor:pointer}
+.nav-item.active{color:#007aff}
+.nav-item svg{width:24px;height:24px}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <a href="index.html" class="back-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>Hub</a>
+  </div>
+  <div class="header-title">Activity</div>
+  <div class="segmented-nav">
+    <button onclick="location.href='invest-overview-1-clarity.html'">Overview</button>
+    <button class="active">Activity</button>
+    <button onclick="location.href='invest-documents-1-files.html'">Documents</button>
+    <button onclick="location.href='invest-math-1-command.html'">Math</button>
+  </div>
+  <div class="filter-bar">
+    <div class="filter-chip active">All</div>
+    <div class="filter-chip">Deposits</div>
+    <div class="filter-chip">Investments</div>
+    <div class="filter-chip">Transfers</div>
+    <div class="filter-chip">Automation</div>
+    <div class="filter-chip">Exceptions</div>
+  </div>
+</div>
+
+<div class="summary-card" style="margin-top:150px">
+  <h3>This Month</h3>
+  <div class="summary-row">
+    <div class="summary-item"><div class="value green">+$6,368</div><div class="label">Deposited</div></div>
+    <div class="summary-item"><div class="value white">$520</div><div class="label">Invested</div></div>
+    <div class="summary-item"><div class="value green">$164</div><div class="label">Dividends</div></div>
+    <div class="summary-item"><div class="value amber">$82</div><div class="label">Tax Saved</div></div>
+  </div>
+</div>
+
+<div class="timeline-container">
+  <div class="date-label">Today · Monday, January 6</div>
+  <div class="timeline">
+    <a href="activity-detail-deposit.html" class="timeline-card type-deposit">
+      <div class="tc-header"><span class="tc-type">Deposit</span><span class="tc-amount positive">+$2,400.00</span></div>
+      <div class="tc-detail">From Capital One Checking</div>
+      <div class="tc-footer"><span class="tc-time">10:15 AM</span><span class="tc-status completed">Available</span></div>
+    </a>
+    <a href="activity-detail-buy.html" class="timeline-card type-buy">
+      <div class="tc-header"><span class="tc-type">Buy · VTI</span><span class="tc-amount negative">$301.60</span></div>
+      <div class="tc-detail">1.52 shares @ $198.42</div>
+      <div class="tc-footer"><span class="tc-time">9:32 AM</span><span class="tc-status completed">Settled</span></div>
+    </a>
+    <a href="activity-detail-buy.html" class="timeline-card type-buy">
+      <div class="tc-header"><span class="tc-type">Buy · VXUS</span><span class="tc-amount negative">$93.72</span></div>
+      <div class="tc-detail">1.65 shares @ $56.80</div>
+      <div class="tc-footer"><span class="tc-time">9:32 AM</span><span class="tc-status completed">Settled</span></div>
+    </a>
+    <a href="activity-detail-buy.html" class="timeline-card type-buy">
+      <div class="tc-header"><span class="tc-type">Buy · BND</span><span class="tc-amount negative">$72.40</span></div>
+      <div class="tc-detail">1.00 shares @ $72.40</div>
+      <div class="tc-footer"><span class="tc-time">9:32 AM</span><span class="tc-status completed">Settled</span></div>
+    </a>
+    <a href="activity-detail-buy.html" class="timeline-card type-buy">
+      <div class="tc-header"><span class="tc-type">Buy · VNQ</span><span class="tc-amount negative">$52.04</span></div>
+      <div class="tc-detail">0.63 shares @ $82.60</div>
+      <div class="tc-footer"><span class="tc-time">9:32 AM</span><span class="tc-status completed">Settled</span></div>
+    </a>
+  </div>
+</div>
+
+<div class="timeline-container">
+  <div class="date-label">Yesterday · Sunday, January 5</div>
+  <div class="timeline">
+    <a href="activity-detail-tax-harvest.html" class="timeline-card type-tax-harvest">
+      <div class="tc-header"><span class="tc-type">Tax Loss Harvesting</span><span class="tc-amount positive">$81.60 saved</span></div>
+      <div class="tc-detail">VXUS → IXUS · Loss captured: $340</div>
+      <div class="tc-footer"><span class="tc-time">2:30 PM</span><span class="tc-status completed">Completed</span></div>
+    </a>
+    <a href="activity-detail-transfer.html" class="timeline-card type-transfer">
+      <div class="tc-header"><span class="tc-type">Move to Reserve</span><span class="tc-amount negative">$200.00</span></div>
+      <div class="tc-detail">Advizmo Cash → Reserve</div>
+      <div class="tc-footer"><span class="tc-time">11:00 AM</span><span class="tc-status completed">Completed</span></div>
+    </a>
+    <a href="activity-detail-dividend.html" class="timeline-card type-dividend">
+      <div class="tc-header"><span class="tc-type">Dividend · VTI</span><span class="tc-amount positive">+$42.18</span></div>
+      <div class="tc-detail">Quarterly dividend · Reinvested</div>
+      <div class="tc-footer"><span class="tc-time">9:00 AM</span><span class="tc-status completed">Reinvested</span></div>
+    </a>
+  </div>
+</div>
+
+<div class="timeline-container">
+  <div class="date-label">Saturday, January 4</div>
+  <div class="timeline">
+    <a href="activity-detail-market-closed.html" class="timeline-card type-market-closed">
+      <div class="tc-header"><span class="tc-type">Investment Scheduled</span><span class="tc-amount negative">$520.00</span></div>
+      <div class="tc-detail">Queued for market open · Jan 6</div>
+      <div class="tc-footer"><span class="tc-time">4:00 PM</span><span class="tc-status scheduled">Scheduled</span></div>
+    </a>
+    <a href="activity-detail-interest.html" class="timeline-card type-interest">
+      <div class="tc-header"><span class="tc-type">Interest Earned</span><span class="tc-amount positive">+$12.40</span></div>
+      <div class="tc-detail">Money Market · 4.1% APY</div>
+      <div class="tc-footer"><span class="tc-time">12:00 PM</span><span class="tc-status completed">Added</span></div>
+    </a>
+  </div>
+</div>
+
+<div class="timeline-container">
+  <div class="date-label">Friday, January 3</div>
+  <div class="timeline">
+    <a href="activity-detail-market-open.html" class="timeline-card type-market-open">
+      <div class="tc-header"><span class="tc-type">Investment Executed</span><span class="tc-amount negative">$520.00</span></div>
+      <div class="tc-detail">4 ETFs purchased at market open</div>
+      <div class="tc-footer"><span class="tc-time">9:32 AM</span><span class="tc-status completed">Settled</span></div>
+    </a>
+    <a href="activity-detail-rebalance.html" class="timeline-card type-rebalance">
+      <div class="tc-header"><span class="tc-type">Portfolio Rebalance</span><span class="tc-amount positive">$18.40 impact</span></div>
+      <div class="tc-detail">Allocation drifted 2.3% · Auto-corrected</div>
+      <div class="tc-footer"><span class="tc-time">9:30 AM</span><span class="tc-status completed">Completed</span></div>
+    </a>
+  </div>
+</div>
+
+<div class="timeline-container" style="margin-bottom:80px">
+  <div class="date-label">Thursday, January 2</div>
+  <div class="timeline">
+    <a href="activity-detail-withdrawal.html" class="timeline-card type-withdrawal">
+      <div class="tc-header"><span class="tc-type">Withdrawal</span><span class="tc-amount negative">-$1,000.00</span></div>
+      <div class="tc-detail">To Capital One Checking · ACH</div>
+      <div class="tc-footer"><span class="tc-time">3:45 PM</span><span class="tc-status completed">Completed</span></div>
+    </a>
+  </div>
+</div>
+
+<nav class="nav-bar">
+  <a class="nav-item" href="overview.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</a>
+  <a class="nav-item" href="invest-overview-1-clarity.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Portfolio</a>
+  <a class="nav-item active" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Activity</a>
+  <a class="nav-item" href="invest-documents-1-files.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>Docs</a>
+  <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</a>
+</nav>
+
+</body>
+</html>

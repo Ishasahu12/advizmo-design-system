@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Activity — Automation-First · Advizmo</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:#f2f2f7;color:#1c1c1e;-webkit-font-smoothing:antialiased;max-width:430px;margin:0 auto;min-height:100vh}
+.header{position:sticky;top:0;z-index:100;background:rgba(242,242,247,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:12px 20px 0}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.back-btn{display:flex;align-items:center;gap:4px;color:#007aff;font-size:17px;font-family:'IBM Plex Sans',sans-serif;font-weight:500;text-decoration:none;background:none;border:none;cursor:pointer;padding:4px 0}
+.back-btn svg{width:20px;height:20px}
+.header-title{font-family:'IBM Plex Sans',sans-serif;font-size:34px;font-weight:700;letter-spacing:-0.5px;color:#1c1c1e}
+.segmented-nav{display:flex;background:#e5e5ea;border-radius:9px;padding:2px;margin-bottom:12px}
+.segmented-nav button{flex:1;padding:8px 0;border:none;background:transparent;font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#636366;border-radius:7px;cursor:pointer;transition:all 0.2s}
+.segmented-nav button.active{background:#fff;color:#1c1c1e;box-shadow:0 1px 3px rgba(0,0,0,0.08)}
+.filter-bar{display:flex;gap:8px;overflow-x:auto;padding-bottom:12px;-ms-overflow-style:none;scrollbar-width:none}
+.filter-bar::-webkit-scrollbar{display:none}
+.filter-chip{white-space:nowrap;padding:7px 14px;border-radius:20px;font-size:13px;font-weight:500;background:#fff;color:#636366;border:1px solid #d1d1d6;cursor:pointer;transition:all 0.2s}
+.filter-chip.active{background:#1c1c1e;color:#fff;border-color:#1c1c1e}
+.auto-hero{margin:0 20px 16px;background:linear-gradient(135deg,#30d158 0%,#0a84ff 100%);border-radius:16px;padding:20px;color:#fff}
+.auto-hero h3{font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:rgba(255,255,255,0.8);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
+.auto-hero .value{font-family:'IBM Plex Sans',sans-serif;font-size:32px;font-weight:700;letter-spacing:-0.5px}
+.auto-hero .sub{font-size:13px;color:rgba(255,255,255,0.7);margin-top:4px}
+.date-group{padding:0 20px;margin-bottom:20px}
+.date-label{font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;padding-left:4px}
+.auto-card{background:#fff;border-radius:14px;margin-bottom:10px;overflow:hidden;cursor:pointer;transition:transform 0.15s}
+.auto-card:active{transform:scale(0.98)}
+.ac-header{padding:14px 16px;display:flex;align-items:center;gap:12px}
+.ac-badge{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.ac-badge.tax{background:rgba(48,209,88,0.12);color:#30d158}
+.ac-badge.rebalance{background:rgba(10,132,255,0.12);color:#0a84ff}
+.ac-badge.optimize{background:rgba(191,90,242,0.12);color:#bf5af2}
+.ac-info{flex:1}
+.ac-info .type{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600;color:#1c1c1e}
+.ac-info .detail{font-size:12px;color:#8e8e93;margin-top:1px}
+.ac-right{text-align:right}
+.ac-right .amount{font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;color:#30d158}
+.ac-right .status{font-size:11px;color:#30d158;margin-top:2px}
+.ac-body{border-top:0.5px solid #e5e5ea;padding:12px 16px;background:#f8f9fa}
+.ac-body .row{display:flex;justify-content:space-between;padding:4px 0;font-size:13px}
+.ac-body .row .label{color:#8e8e93}
+.ac-body .row .value{color:#1c1c1e;font-weight:500}
+.ac-footer{padding:10px 16px;border-top:0.5px solid #e5e5ea;display:flex;align-items:center;gap:8px}
+.ac-footer .icon{width:20px;height:20px;border-radius:50%;background:rgba(48,209,88,0.12);color:#30d158;display:flex;align-items:center;justify-content:center;font-size:10px}
+.ac-footer .text{font-size:12px;color:#636366;flex:1}
+.ac-footer .chevron{color:#c7c7cc;font-size:14px}
+.nav-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(242,242,247,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:0.5px solid #d1d1d6;display:flex;padding:8px 0 28px;z-index:100}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;color:#8e8e93;font-size:10px;font-weight:500;text-decoration:none;cursor:pointer}
+.nav-item.active{color:#007aff}
+.nav-item svg{width:24px;height:24px}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <a href="index.html" class="back-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>Hub</a>
+  </div>
+  <div class="header-title">Activity</div>
+  <div class="segmented-nav">
+    <button onclick="location.href='invest-overview-1-clarity.html'">Overview</button>
+    <button class="active">Activity</button>
+    <button onclick="location.href='invest-documents-1-files.html'">Documents</button>
+    <button onclick="location.href='invest-math-1-command.html'">Math</button>
+  </div>
+  <div class="filter-bar">
+    <div class="filter-chip active">All</div>
+    <div class="filter-chip">Deposits</div>
+    <div class="filter-chip">Investments</div>
+    <div class="filter-chip">Transfers</div>
+    <div class="filter-chip">Automation</div>
+    <div class="filter-chip">Exceptions</div>
+  </div>
+</div>
+
+<div class="auto-hero" style="margin-top:150px">
+  <h3>Advizmo Automation</h3>
+  <div class="value">$164.00</div>
+  <div class="sub">Saved through automated tax optimization and rebalancing</div>
+</div>
+
+<div class="date-group">
+  <div class="date-label">Today · Monday, January 6</div>
+
+  <a href="activity-detail-deposit.html" class="auto-card">
+    <div class="ac-header">
+      <div class="ac-badge" style="background:rgba(48,209,88,0.12);color:#30d158">↓</div>
+      <div class="ac-info"><div class="type">Deposit</div><div class="detail">From Capital One Checking</div></div>
+      <div class="ac-right"><div class="amount" style="color:#30d158">+$2,400.00</div><div class="status">Available</div></div>
+    </div>
+  </a>
+
+  <a href="activity-detail-buy.html" class="auto-card">
+    <div class="ac-header">
+      <div class="ac-badge" style="background:rgba(10,132,255,0.12);color:#0a84ff">↗</div>
+      <div class="ac-info"><div class="type">Buy · VTI</div><div class="detail">1.52 shares @ $198.42</div></div>
+      <div class="ac-right"><div class="amount" style="color:#1c1c1e">$301.60</div><div class="status" style="color:#30d158">Settled</div></div>
+    </div>
+  </a>
+
+  <a href="activity-detail-buy.html" class="auto-card">
+    <div class="ac-header">
+      <div class="ac-badge" style="background:rgba(10,132,255,0.12);color:#0a84ff">↗</div>
+      <div class="ac-info"><div class="type">Buy · VXUS</div><div class="detail">1.65 shares @ $56.80</div></div>
+      <div class="ac-right"><div class="amount" style="color:#1c1c1e">$93.72</div><div class="status" style="color:#30d158">Settled</div></div>
+    </div>
+  </a>
+
+  <a href="activity-detail-buy.html" class="auto-card">
+    <div class="ac-header">
+      <div class="ac-badge" style="background:rgba(10,132,255,0.12);color:#0a84ff">↗</div>
+      <div class="ac-info"><div class="type">Buy · BND</div><div class="detail">1.00 shares @ $72.40</div></div>
+      <div class="ac-right"><div class="amount" style="color:#1c1c1e">$72.40</div><div class="status" style="color:#30d158">Settled</div></div>
+    </div>
+  </a>
+
+  <a href="activity-detail-buy.html" class="auto-card">
+    <div class="ac-header">
+      <div class="ac-badge" style="background:rgba(10,132,255,0.12);color:#0a84ff">↗</div>
+      <div class="ac-info"><div class="type">Buy · VNQ</div><div class="detail">0.63 shares @ $82.60</div></div>
+      <div class="ac-right"><div class="amount" style="color:#1c1c1e">$52.04</div><div class="status" style="color:#30d158">Settled</div></div>
+    </div>
+  </a>
+</div>
+
+<div class="date-group">
+  <div class="date-label">Yesterday · Sunday, January 5</div>
+
+  <a href="activity-detail-tax-harvest.html" class="auto-card">
+    <div class="ac-header">
+      <div class="ac-badge tax">✓</div>
+      <div class="ac-info"><div class="type">Tax Loss Harvesting</div><div class="detail">VXUS → IXUS · Loss captured: $340</div></div>
+      <div class="ac-right"><div class="amount">$81.60 saved</div><div class="status">Completed</div></div>
+    </div>
+    <div class="ac-body">
+      <div class="row"><span class="label">Sold</span><span class="value">VXUS · 10 shares @ $56.80</span></div>
+      <div class="row"><span class="label">Bought</span><span class="value">IXUS · 9.97 shares @ $56.96</span></div>
+      <div class="row"><span class="label">Tax Benefit</span><span class="value" style="color:#30d158">$81.60 estimated savings</span></div>
+    </div>
+    <div class="ac-footer">
+      <div class="icon">✓</div>
+      <div class="text">Advizmo found a tax-saving opportunity</div>
+      <div class="chevron">›</div>
+    </div>
+  </a>
+
+  <a href="activity-detail-transfer.html" class="auto-card">
+    <div class="ac-header">
+      <div class="ac-badge" style="background:rgba(255,159,10,0.12);color:#ff9f0a">↔</div>
+      <div class="ac-info"><div class="type">Move to Reserve</div><div class="detail">Advizmo Cash → Reserve</div></div>
+      <div class="ac-right"><div class="amount" style="color:#1c1c1e">$200.00</div><div class="status" style="color:#30d158">Completed</div></div>
+    </div>
+  </a>
+
+  <a href="activity-detail-dividend.html" class="auto-card">
+    <div class="ac-header">
+      <div class="ac-badge" style="background:rgba(48,209,88,0.12);color:#30d158">$</div>
+      <div class="ac-info"><div class="type">Dividend · VTI</div><div class="detail">Quarterly dividend · Reinvested</div></div>
+      <div class="ac-right"><div class="amount" style="color:#30d158">+$42.18</div><div class="status" style="color:#30d158">Reinvested</div></div>
+    </div>
+  </a>
+</div>
+
+<div class="date-group">
+  <div class="date-label">Saturday, January 4</div>
+
+  <a href="activity-detail-market-closed.html" class="auto-card">
+    <div class="ac-header">
+      <div class="ac-badge" style="background:rgba(255,159,10,0.12);color:#ff9f0a">◷</div>
+      <div class="ac-info"><div class="type">Investment Scheduled</div><div class="detail">$520.00 · Queued for market open</div></div>
+      <div class="ac-right"><div class="amount" style="color:#1c1c1e">$520.00</div><div class="status" style="color:#ff9f0a">Scheduled</div></div>
+    </div>
+  </a>
+
+  <a href="activity-detail-interest.html" class="auto-card">
+    <div class="ac-header">
+      <div class="ac-badge" style="background:rgba(48,209,88,0.12);color:#30d158">%</div>
+      <div class="ac-info"><div class="type">Interest Earned</div><div class="detail">Money Market · 4.1% APY</div></div>
+      <div class="ac-right"><div class="amount" style="color:#30d158">+$12.40</div><div class="status" style="color:#30d158">Added</div></div>
+    </div>
+  </a>
+</div>
+
+<div class="date-group">
+  <div class="date-label">Friday, January 3</div>
+
+  <a href="activity-detail-market-open.html" class="auto-card">
+    <div class="ac-header">
+      <div class="ac-badge" style="background:rgba(48,209,88,0.12);color:#30d158">✓</div>
+      <div class="ac-info"><div class="type">Investment Executed</div><div class="detail">4 ETFs purchased · $520.00 invested</div></div>
+      <div class="ac-right"><div class="amount" style="color:#1c1c1e">$520.00</div><div class="status" style="color:#30d158">Settled</div></div>
+    </div>
+  </a>
+
+  <a href="activity-detail-rebalance.html" class="auto-card">
+    <div class="ac-header">
+      <div class="ac-badge rebalance">⟳</div>
+      <div class="ac-info"><div class="type">Portfolio Rebalance</div><div class="detail">Allocation drifted 2.3% · Auto-corrected</div></div>
+      <div class="ac-right"><div class="amount">$18.40 impact</div><div class="status">Completed</div></div>
+    </div>
+    <div class="ac-body">
+      <div class="row"><span class="label">Sold</span><span class="value">VTI: $858 · VXUS: $427</span></div>
+      <div class="row"><span class="label">Bought</span><span class="value">BND: $1,285</span></div>
+      <div class="row"><span class="label">Reason</span><span class="value">Drift exceeded 2% threshold</span></div>
+    </div>
+    <div class="ac-footer">
+      <div class="icon">⟳</div>
+      <div class="text">Portfolio back on target</div>
+      <div class="chevron">›</div>
+    </div>
+  </a>
+</div>
+
+<div class="date-group" style="margin-bottom:80px">
+  <div class="date-label">Thursday, January 2</div>
+
+  <a href="activity-detail-withdrawal.html" class="auto-card">
+    <div class="ac-header">
+      <div class="ac-badge" style="background:rgba(255,69,58,0.12);color:#ff453a">↑</div>
+      <div class="ac-info"><div class="type">Withdrawal</div><div class="detail">To Capital One Checking · ACH</div></div>
+      <div class="ac-right"><div class="amount" style="color:#1c1c1e">-$1,000.00</div><div class="status" style="color:#30d158">Completed</div></div>
+    </div>
+  </a>
+</div>
+
+<nav class="nav-bar">
+  <a class="nav-item" href="overview.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</a>
+  <a class="nav-item" href="invest-overview-1-clarity.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Portfolio</a>
+  <a class="nav-item active" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Activity</a>
+  <a class="nav-item" href="invest-documents-1-files.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>Docs</a>
+  <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</a>
+</nav>
+
+</body>
+</html>

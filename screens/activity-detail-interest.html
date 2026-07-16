@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interest · Activity Detail · Advizmo</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:#f2f2f7;color:#1c1c1e;-webkit-font-smoothing:antialiased;max-width:430px;margin:0 auto;min-height:100vh}
+.header{position:sticky;top:0;z-index:100;background:rgba(242,242,247,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:12px 20px 14px}
+.header-top{display:flex;align-items:center;justify-content:space-between}
+.back-btn{display:flex;align-items:center;gap:4px;color:#007aff;font-size:17px;font-family:'IBM Plex Sans',sans-serif;font-weight:500;text-decoration:none;background:none;border:none;cursor:pointer;padding:4px 0}
+.back-btn svg{width:20px;height:20px}
+.header-title{font-family:'IBM Plex Sans',sans-serif;font-size:17px;font-weight:600}
+.hero{padding:24px 20px;text-align:center}
+.hero .icon{width:64px;height:64px;border-radius:16px;background:rgba(48,209,88,0.12);color:#30d158;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 12px}
+.hero .amount{font-family:'IBM Plex Sans',sans-serif;font-size:42px;font-weight:700;color:#30d158;letter-spacing:-1px}
+.hero .label{font-size:15px;color:#8e8e93;margin-top:4px}
+.card{background:#fff;border-radius:14px;padding:0 16px;margin:0 20px 12px;overflow:hidden}
+.card-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:0.5px solid #e5e5ea}
+.card-row:last-child{border-bottom:none}
+.card-row .label{font-size:15px;color:#8e8e93}
+.card-row .value{font-size:15px;font-weight:500;color:#1c1c1e;text-align:right;max-width:55%}
+.card-row .value.green{color:#30d158}
+.status-badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:8px;font-size:13px;font-weight:600}
+.status-badge.completed{background:rgba(48,209,88,0.12);color:#30d158}
+.help-btn{display:block;margin:20px;padding:16px;background:#fff;border-radius:14px;text-align:center;color:#007aff;font-size:17px;font-weight:500;text-decoration:none;border:none;width:calc(100% - 40px);cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <a href="javascript:history.back()" class="back-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>Back</a>
+    <div class="header-title">Interest Earned</div>
+    <div style="width:50px"></div>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="icon">%</div>
+  <div class="amount">+$12.40</div>
+  <div class="label">Money Market interest earned</div>
+</div>
+
+<div class="card">
+  <div class="card-row"><span class="label">Status</span><span class="value"><span class="status-badge completed">✓ Added</span></span></div>
+  <div class="card-row"><span class="label">Account</span><span class="value">Advizmo Money Market</span></div>
+  <div class="card-row"><span class="label">APY</span><span class="value" style="font-weight:700;color:#30d158">4.10%</span></div>
+  <div class="card-row"><span class="label">Balance Before</span><span class="value">$3,628.00</span></div>
+  <div class="card-row"><span class="label">Interest Earned</span><span class="value" style="font-weight:700;color:#30d158">+$12.40</span></div>
+  <div class="card-row"><span class="label">Balance After</span><span class="value" style="font-weight:700">$3,640.40</span></div>
+  <div class="card-row"><span class="label">Period</span><span class="value">Dec 1 – Dec 31</span></div>
+</div>
+
+<div class="card">
+  <div class="card-row"><span class="label">What happened?</span><span class="value" style="font-size:14px;font-weight:400;color:#636366">Your Advizmo Money Market account earned $12.40 in interest this month at a 4.1% annual rate.</span></div>
+  <div class="card-row"><span class="label">What's next?</span><span class="value" style="font-size:14px;font-weight:400;color:#636366">Interest compounds daily. You'll earn approximately $12.40 each month at the current rate. The rate may change over time.</span></div>
+</div>
+
+<button class="help-btn">Need Help?</button>
+
+<div style="height:40px"></div>
+
+</body>
+</html>
