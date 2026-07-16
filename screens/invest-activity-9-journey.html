@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Journey - Advizmo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --green: #166f47;
+            --green-light: #e8f5ee;
+            --amber: #c2790a;
+            --amber-light: #fef3e2;
+            --red: #b91c1c;
+            --red-light: #fee2e2;
+            --bg: #f8f9fa;
+            --card: #ffffff;
+            --text-primary: #1a1a1a;
+            --text-secondary: #6b7280;
+            --border: #e5e7eb;
+            --radius: 14px;
+        }
+
+        body {
+            font-family: 'IBM Plex Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 430px;
+            margin: 0 auto;
+            background: var(--bg);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: var(--bg);
+            border: none;
+            cursor: pointer;
+            color: var(--text-primary);
+            font-size: 18px;
+        }
+
+        .back-btn:hover {
+            background: var(--border);
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .segmented-nav {
+            display: flex;
+            background: var(--bg);
+            border-radius: 10px;
+            padding: 3px;
+        }
+
+        .nav-item {
+            flex: 1;
+            padding: 8px 12px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            border: none;
+            background: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item.active {
+            background: var(--card);
+            color: var(--text-primary);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .nav-item:hover:not(.active) {
+            color: var(--text-primary);
+        }
+
+        /* Journey Summary */
+        .journey-summary {
+            background: linear-gradient(135deg, var(--green) 0%, #1a8f5c 100%);
+            margin: 16px 20px;
+            padding: 24px;
+            border-radius: var(--radius);
+            color: white;
+        }
+
+        .journey-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .journey-icon {
+            width: 44px;
+            height: 44px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .journey-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .journey-subtitle {
+            font-size: 13px;
+            opacity: 0.85;
+        }
+
+        .journey-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .stat-item {
+            background: rgba(255,255,255,0.15);
+            border-radius: 10px;
+            padding: 14px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .stat-value.positive {
+            color: #86efac;
+        }
+
+        .stat-highlight {
+            grid-column: span 2;
+            text-align: center;
+            background: rgba(255,255,255,0.2);
+            padding: 16px;
+        }
+
+        .stat-highlight .stat-value {
+            font-size: 28px;
+        }
+
+        /* Filter Bar */
+        .filter-bar {
+            display: flex;
+            gap: 8px;
+            padding: 0 20px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .filter-bar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: var(--card);
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+
+        .filter-btn.active {
+            background: var(--text-primary);
+            color: white;
+            border-color: var(--text-primary);
+        }
+
+        .filter-btn:hover:not(.active) {
+            border-color: var(--text-secondary);
+        }
+
+        /* Time Groups */
+        .time-groups {
+            padding: 0 20px 100px;
+        }
+
+        .time-group {
+            margin-bottom: 28px;
+        }
+
+        .time-label {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .time-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        /* Activity Cards */
+        .activity-card {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-bottom: 10px;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .activity-card:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .activity-main {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        .activity-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .activity-icon.green {
+            background: var(--green-light);
+            color: var(--green);
+        }
+
+        .activity-icon.blue {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .activity-icon.amber {
+            background: var(--amber-light);
+            color: var(--amber);
+        }
+
+        .activity-icon.red {
+            background: var(--red-light);
+            color: var(--red);
+        }
+
+        .activity-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .activity-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .activity-subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .activity-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 4px 10px;
+            border-radius: 6px;
+            white-space: nowrap;
+        }
+
+        .activity-status.completed {
+            background: var(--green-light);
+            color: var(--green);
+        }
+
+        .activity-status.reinvested {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .activity-status.available {
+            background: var(--green-light);
+            color: var(--green);
+        }
+
+        /* Compound Activity Expanded */
+        .activity-expanded {
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px solid var(--border);
+        }
+
+        .expanded-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            background: var(--bg);
+            border-radius: 10px;
+            margin-bottom: 8px;
+        }
+
+        .expanded-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .expanded-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .expanded-content {
+            flex: 1;
+        }
+
+        .expanded-title {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .expanded-subtitle {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .expand-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            background: var(--bg);
+            color: var(--text-secondary);
+            font-size: 12px;
+            margin-left: auto;
+            transition: transform 0.2s ease;
+        }
+
+        .activity-card.expanded .expand-indicator {
+            transform: rotate(180deg);
+        }
+
+        /* Milestone */
+        .milestone {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: var(--radius);
+            padding: 18px;
+            margin-top: 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            border: 1px solid #fbbf24;
+        }
+
+        .milestone-icon {
+            width: 48px;
+            height: 48px;
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .milestone-content {
+            flex: 1;
+        }
+
+        .milestone-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #92400e;
+        }
+
+        .milestone-date {
+            font-size: 12px;
+            color: #a16207;
+        }
+
+        /* Progress Bar */
+        .progress-section {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin: 0 20px 20px;
+            border: 1px solid var(--border);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .progress-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .progress-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--green);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--bg);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--green) 0%, #22c55e 100%);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        /* Timeline Connector */
+        .timeline-connector {
+            position: relative;
+            padding-left: 32px;
+            margin-left: 22px;
+        }
+
+        .timeline-connector::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border);
+        }
+
+        .timeline-connector .activity-card {
+            position: relative;
+        }
+
+        .timeline-connector .activity-card::before {
+            content: '';
+            position: absolute;
+            left: -36px;
+            top: 24px;
+            width: 12px;
+            height: 12px;
+            background: var(--card);
+            border: 2px solid var(--green);
+            border-radius: 50%;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--bg);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin: 0 auto 20px;
+        }
+
+        .empty-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .empty-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .activity-card {
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        .activity-card:nth-child(1) { animation-delay: 0.05s; }
+        .activity-card:nth-child(2) { animation-delay: 0.1s; }
+        .activity-card:nth-child(3) { animation-delay: 0.15s; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-top">
+                <a href="index.html" class="back-btn">←</a>
+                <h1 class="header-title">Your Journey</h1>
+            </div>
+            <nav class="segmented-nav">
+                <button class="nav-item">Overview</button>
+                <button class="nav-item active">Activity</button>
+                <button class="nav-item">Documents</button>
+                <button class="nav-item">Math</button>
+            </nav>
+        </header>
+
+        <!-- Journey Summary -->
+        <div class="journey-summary">
+            <div class="journey-header">
+                <div class="journey-icon">📈</div>
+                <div>
+                    <div class="journey-title">Investment Journey</div>
+                    <div class="journey-subtitle">Started September 2024 · 14 months</div>
+                </div>
+            </div>
+            <div class="journey-stats">
+                <div class="stat-item">
+                    <div class="stat-label">Total Invested</div>
+                    <div class="stat-value">$38,620</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Total Return</div>
+                    <div class="stat-value positive">+$4,230</div>
+                </div>
+                <div class="stat-highlight">
+                    <div class="stat-label">Return Rate</div>
+                    <div class="stat-value positive">+11.0%</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress Section -->
+        <div class="progress-section">
+            <div class="progress-header">
+                <span class="progress-title">Annual Goal Progress</span>
+                <span class="progress-value">82%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 82%"></div>
+            </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+            <button class="filter-btn active">All</button>
+            <button class="filter-btn">Deposits</button>
+            <button class="filter-btn">Investments</button>
+            <button class="filter-btn">Automation</button>
+            <button class="filter-btn">Transfers</button>
+        </div>
+
+        <!-- Time Groups -->
+        <div class="time-groups">
+            <!-- Today -->
+            <div class="time-group">
+                <div class="time-label">Today — December 30, 2024</div>
+                
+                <!-- Deposit Activity -->
+                <div class="activity-card">
+                    <div class="activity-main">
+                        <div class="activity-icon green">↓</div>
+                        <div class="activity-content">
+                            <div class="activity-title">Deposited $2,400</div>
+                            <div class="activity-subtitle">From Capital One Checking</div>
+                        </div>
+                        <div class="activity-status available">✓ Available</div>
+                    </div>
+                </div>
+
+                <!-- Investment Activity -->
+                <div class="activity-card">
+                    <div class="activity-main">
+                        <div class="activity-icon blue">→</div>
+                        <div class="activity-content">
+                            <div class="activity-title">Invested $520</div>
+                            <div class="activity-subtitle">VTI, VXUS, BND, VNQ</div>
+                        </div>
+                        <div class="activity-status completed">✓ Completed</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Yesterday -->
+            <div class="time-group">
+                <div class="time-label">Yesterday — December 29, 2024</div>
+                
+                <!-- Compound Activity (Expanded) -->
+                <div class="activity-card expanded">
+                    <div class="activity-main">
+                        <div class="activity-icon green">↓→</div>
+                        <div class="activity-content">
+                            <div class="activity-title">Added Funds & Invested</div>
+                            <div class="activity-subtitle">$2,400 deposited, $520 invested</div>
+                        </div>
+                        <div class="activity-status completed">✓ Completed</div>
+                        <div class="expand-indicator">▼</div>
+                    </div>
+                    <div class="activity-expanded">
+                        <div class="expanded-item">
+                            <div class="expanded-icon green">↓</div>
+                            <div class="expanded-content">
+                                <div class="expanded-title">Deposited $2,400</div>
+                                <div class="expanded-subtitle">From Capital One Checking</div>
+                            </div>
+                        </div>
+                        <div class="expanded-item">
+                            <div class="expanded-icon blue">→</div>
+                            <div class="expanded-content">
+                                <div class="expanded-title">Invested $520</div>
+                                <div class="expanded-subtitle">VTI, VXUS, BND, VNQ</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transfer Activity -->
+                <div class="activity-card">
+                    <div class="activity-main">
+                        <div class="activity-icon amber">→</div>
+                        <div class="activity-content">
+                            <div class="activity-title">Transferred $200 to Reserve</div>
+                            <div class="activity-subtitle">Emergency fund now 84%</div>
+                        </div>
+                        <div class="activity-status completed">✓ Completed</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- July 15 -->
+            <div class="time-group">
+                <div class="time-label">July 15, 2024</div>
+                
+                <!-- Tax Optimization -->
+                <div class="activity-card">
+                    <div class="activity-main">
+                        <div class="activity-icon green">✓</div>
+                        <div class="activity-content">
+                            <div class="activity-title">Tax Optimization</div>
+                            <div class="activity-subtitle">Saved $81.60</div>
+                        </div>
+                        <div class="activity-status completed">✓ Completed</div>
+                    </div>
+                </div>
+
+                <!-- Compound Activity (Collapsed) -->
+                <div class="activity-card">
+                    <div class="activity-main">
+                        <div class="activity-icon amber">→↓</div>
+                        <div class="activity-content">
+                            <div class="activity-title">Sold Investments & Withdrew</div>
+                            <div class="activity-subtitle">$3,200 sold, $2,800 withdrawn</div>
+                        </div>
+                        <div class="activity-status completed">✓ Completed</div>
+                        <div class="expand-indicator">▼</div>
+                    </div>
+                </div>
+
+                <!-- Dividend Activity -->
+                <div class="activity-card">
+                    <div class="activity-main">
+                        <div class="activity-icon green">$</div>
+                        <div class="activity-content">
+                            <div class="activity-title">Received $42.18 dividend</div>
+                            <div class="activity-subtitle">VTI quarterly dividend</div>
+                        </div>
+                        <div class="activity-status reinvested">✓ Reinvested</div>
+                    </div>
+                </div>
+
+                <!-- Milestone -->
+                <div class="milestone">
+                    <div class="milestone-icon">🎉</div>
+                    <div class="milestone-content">
+                        <div class="milestone-title">Portfolio crossed $40,000 on July 10</div>
+                        <div class="milestone-date">14 months of consistent investing</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Filter functionality
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Expand/Collapse compound activities
+        document.querySelectorAll('.activity-card').forEach(card => {
+            const indicator = card.querySelector('.expand-indicator');
+            if (indicator) {
+                card.addEventListener('click', function() {
+                    this.classList.toggle('expanded');
+                    const expanded = this.querySelector('.activity-expanded');
+                    if (expanded) {
+                        expanded.style.display = this.classList.contains('expanded') ? 'block' : 'none';
+                    }
+                });
+            }
+        });
+
+        // Navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

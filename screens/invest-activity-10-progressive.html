@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Activity — Advizmo</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #f0f0f0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+  }
+  .phone {
+    width: 430px;
+    max-width: 100%;
+    background: #f8f9fa;
+    min-height: 100vh;
+    position: relative;
+    border-radius: 0;
+  }
+
+  /* HEADER */
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: #fff;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 0 20px;
+  }
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 0 12px;
+  }
+  .back-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #1a1a1a;
+    font-size: 18px;
+    transition: background 0.15s;
+  }
+  .back-btn:hover { background: #e5e7eb; }
+  .header-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1a1a1a;
+  }
+  .header-right {
+    width: 36px;
+  }
+
+  /* SEGMENTED NAV */
+  .segmented-nav {
+    display: flex;
+    gap: 2px;
+    background: #f3f4f6;
+    border-radius: 10px;
+    padding: 3px;
+    margin-bottom: 0;
+  }
+  .seg-btn {
+    flex: 1;
+    padding: 8px 6px;
+    border: none;
+    border-radius: 8px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #6b7280;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .seg-btn.active {
+    background: #fff;
+    color: #1a1a1a;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  .seg-btn:hover:not(.active) { color: #374151; }
+
+  /* FILTER BAR */
+  .filter-bar {
+    background: #fff;
+    padding: 12px 20px;
+    border-bottom: 1px solid #e5e7eb;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .filter-bar::-webkit-scrollbar { display: none; }
+  .filter-pills {
+    display: flex;
+    gap: 8px;
+    white-space: nowrap;
+  }
+  .filter-pill {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #6b7280;
+    cursor: pointer;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .filter-pill.active {
+    background: #1a1a1a;
+    color: #fff;
+    border-color: #1a1a1a;
+  }
+  .filter-pill:hover:not(.active) {
+    border-color: #d1d5db;
+    background: #f9fafb;
+  }
+
+  /* MAIN CONTENT */
+  .content {
+    padding: 0 20px 100px;
+  }
+
+  /* TIME GROUP */
+  .time-group {
+    padding-top: 24px;
+  }
+  .time-label {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .time-label .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #166f47;
+  }
+
+  /* ACTIVITY ITEM */
+  .activity-item {
+    background: #fff;
+    border-radius: 14px;
+    margin-bottom: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    transition: box-shadow 0.2s;
+  }
+  .activity-item:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+
+  /* COLLAPSED ROW */
+  .activity-row {
+    display: flex;
+    align-items: center;
+    padding: 14px 16px;
+    cursor: pointer;
+    user-select: none;
+    gap: 12px;
+    transition: background 0.15s;
+  }
+  .activity-row:hover {
+    background: #f9fafb;
+  }
+  .activity-row:active {
+    background: #f3f4f6;
+  }
+
+  .activity-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .activity-icon.deposit { background: #dcfce7; color: #166f47; }
+  .activity-icon.invest { background: #dbeafe; color: #1e40af; }
+  .activity-icon.transfer { background: #f3e8ff; color: #7c3aed; }
+  .activity-icon.withdraw { background: #fef3c7; color: #c2790a; }
+  .activity-icon.compound { background: #e0f2fe; color: #0369a1; }
+  .activity-icon.tax { background: #dcfce7; color: #166f47; }
+  .activity-icon.dividend { background: #fef3c7; color: #c2790a; }
+
+  .activity-summary {
+    flex: 1;
+    min-width: 0;
+  }
+  .activity-summary-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1a1a1a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    line-height: 1.4;
+  }
+  .activity-status {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+    font-size: 12px;
+    font-weight: 500;
+    color: #6b7280;
+  }
+  .activity-status .check {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #dcfce7;
+    color: #166f47;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+  }
+  .expand-chevron {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #9ca3af;
+    font-size: 12px;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+  .activity-item.expanded .expand-chevron {
+    transform: rotate(180deg);
+  }
+
+  /* EXPANDED CONTENT */
+  .activity-details {
+    display: none;
+    padding: 0 16px 16px;
+    border-top: 1px solid #f3f4f6;
+    animation: slideDown 0.2s ease;
+  }
+  .activity-item.expanded .activity-details {
+    display: block;
+  }
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #f3f4f6;
+  }
+  .detail-row:last-child { border-bottom: none; }
+  .detail-label {
+    font-size: 13px;
+    color: #6b7280;
+    font-weight: 400;
+  }
+  .detail-value {
+    font-size: 13px;
+    color: #1a1a1a;
+    font-weight: 500;
+    text-align: right;
+  }
+  .detail-section-title {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #9ca3af;
+    padding: 12px 0 4px;
+  }
+  .detail-sub-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: #f9fafb;
+    border-radius: 8px;
+    margin-bottom: 6px;
+  }
+  .detail-sub-label {
+    font-size: 13px;
+    color: #374151;
+  }
+  .detail-sub-value {
+    font-size: 13px;
+    color: #1a1a1a;
+    font-weight: 500;
+  }
+  .detail-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    background: #f3f4f6;
+    border-radius: 8px;
+    margin-top: 4px;
+  }
+  .detail-total-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1a1a1a;
+  }
+  .detail-total-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: #166f47;
+  }
+  .detail-reference {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid #f3f4f6;
+    font-size: 11px;
+    color: #9ca3af;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .detail-reference code {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    background: #f3f4f6;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 11px;
+    color: #6b7280;
+  }
+
+  /* COMPACT EXPANDED LIST */
+  .compact-list {
+    margin-top: 8px;
+  }
+  .compact-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    font-size: 13px;
+  }
+  .compact-item + .compact-item {
+    border-top: 1px solid #f3f4f6;
+  }
+  .compact-label { color: #374151; }
+  .compact-value { color: #1a1a1a; font-weight: 500; }
+  .compact-value.green { color: #166f47; }
+  .compact-value.amber { color: #c2790a; }
+
+  /* STATUS BADGES */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 500;
+  }
+  .badge.completed { background: #dcfce7; color: #166f47; }
+  .badge.pending { background: #fef3c7; color: #c2790a; }
+  .badge.in-progress { background: #dbeafe; color: #1e40af; }
+
+  /* HINT TEXT */
+  .hint-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 0 4px;
+    margin-top: 8px;
+    border-top: 1px solid #f3f4f6;
+  }
+  .hint-icon {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    color: #9ca3af;
+  }
+  .hint-text {
+    font-size: 11px;
+    color: #9ca3af;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 430px) {
+    body { padding: 0; }
+    .phone { width: 100%; }
+  }
+</style>
+</head>
+<body>
+<div class="phone">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-top">
+      <button class="back-btn" onclick="location.href='index.html'" aria-label="Back">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <span class="header-title">Activity</span>
+      <div class="header-right"></div>
+    </div>
+    <div class="segmented-nav">
+      <button class="seg-btn">Overview</button>
+      <button class="seg-btn active">Activity</button>
+      <button class="seg-btn">Documents</button>
+      <button class="seg-btn">Math</button>
+    </div>
+  </div>
+
+  <!-- FILTER BAR -->
+  <div class="filter-bar">
+    <div class="filter-pills">
+      <button class="filter-pill active">All</button>
+      <button class="filter-pill">Deposits</button>
+      <button class="filter-pill">Investments</button>
+      <button class="filter-pill">Automation</button>
+      <button class="filter-pill">Transfers</button>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- TODAY -->
+    <div class="time-group">
+      <div class="time-label">
+        <span class="dot"></span>
+        Today — December 30, 2024
+      </div>
+
+      <!-- Simple Activity: Deposit -->
+      <div class="activity-item" onclick="this.classList.toggle('expanded')">
+        <div class="activity-row">
+          <div class="activity-icon deposit">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M19 12l-7 7-7-7"/></svg>
+          </div>
+          <div class="activity-summary">
+            <div class="activity-summary-text">
+              <span>↓ Deposited $2,400 from Capital One</span>
+              <span class="activity-status"><span class="check">✓</span></span>
+            </div>
+          </div>
+          <div class="expand-chevron">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+        </div>
+        <div class="activity-details">
+          <div class="detail-row">
+            <span class="detail-label">Amount</span>
+            <span class="detail-value" style="color:#166f47;font-size:15px;font-weight:600;">$2,400.00</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Source</span>
+            <span class="detail-value">Capital One ···4821</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Destination</span>
+            <span class="detail-value">Advizmo Cash</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Status</span>
+            <span class="detail-value"><span class="badge completed">✓ Available</span></span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Time</span>
+            <span class="detail-value">10:34 AM</span>
+          </div>
+          <div class="detail-reference">
+            Ref: <code>ADV-2024-12-30-001</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- Simple Activity: Investment -->
+      <div class="activity-item" onclick="this.classList.toggle('expanded')">
+        <div class="activity-row">
+          <div class="activity-icon invest">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+          </div>
+          <div class="activity-summary">
+            <div class="activity-summary-text">
+              <span>→ Invested $520 in VTI, VXUS, BND, VNQ</span>
+              <span class="activity-status"><span class="check">✓</span></span>
+            </div>
+          </div>
+          <div class="expand-chevron">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+        </div>
+        <div class="activity-details">
+          <div class="detail-section-title">Investments</div>
+          <div class="detail-sub-row">
+            <span class="detail-sub-label">VTI · Vanguard Total Stock</span>
+            <span class="detail-sub-value">$208.00</span>
+          </div>
+          <div class="detail-sub-row">
+            <span class="detail-sub-label">VXUS · Vanguard Int'l Stock</span>
+            <span class="detail-sub-value">$156.00</span>
+          </div>
+          <div class="detail-sub-row">
+            <span class="detail-sub-label">BND · Vanguard Total Bond</span>
+            <span class="detail-sub-value">$104.00</span>
+          </div>
+          <div class="detail-sub-row">
+            <span class="detail-sub-label">VNQ · Vanguard Real Estate</span>
+            <span class="detail-sub-value">$52.00</span>
+          </div>
+          <div class="detail-total">
+            <span class="detail-total-label">Total Invested</span>
+            <span class="detail-total-value">$520.00</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Status</span>
+            <span class="detail-value"><span class="badge completed">✓ Completed</span></span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Executed at</span>
+            <span class="detail-value">10:34 AM</span>
+          </div>
+          <div class="detail-reference">
+            Ref: <code>ADV-2024-12-30-002</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- Compound Activity -->
+      <div class="activity-item" onclick="this.classList.toggle('expanded')">
+        <div class="activity-row">
+          <div class="activity-icon compound">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M19 12l-7 7-7-7"/><path d="M3 3v18h18"/></svg>
+          </div>
+          <div class="activity-summary">
+            <div class="activity-summary-text">
+              <span>↓→ Added Funds & Invested $2,920</span>
+              <span class="activity-status"><span class="check">✓</span></span>
+            </div>
+          </div>
+          <div class="expand-chevron">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+        </div>
+        <div class="activity-details">
+          <div class="detail-section-title">Sub-actions</div>
+          <div class="detail-sub-row">
+            <span class="detail-sub-label">↓ Deposited $2,400 from Capital One</span>
+            <span class="detail-sub-value" style="color:#166f47">✓</span>
+          </div>
+          <div class="detail-sub-row">
+            <span class="detail-sub-label">→ Invested $520 across 4 funds</span>
+            <span class="detail-sub-value" style="color:#166f47">✓</span>
+          </div>
+          <div class="detail-total">
+            <span class="detail-total-label">Total</span>
+            <span class="detail-total-value">$2,920.00</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Status</span>
+            <span class="detail-value"><span class="badge completed">✓ Completed</span></span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Duration</span>
+            <span class="detail-value">~2 min</span>
+          </div>
+          <div class="detail-reference">
+            Ref: <code>ADV-2024-12-30-003</code>
+          </div>
+          <div class="hint-row">
+            <span class="hint-icon">i</span>
+            <span class="hint-text">Automated workflow: deposit → invest</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- YESTERDAY -->
+    <div class="time-group">
+      <div class="time-label">
+        <span class="dot"></span>
+        Yesterday — December 29, 2024
+      </div>
+
+      <!-- Medium Activity: Tax -->
+      <div class="activity-item" onclick="this.classList.toggle('expanded')">
+        <div class="activity-row">
+          <div class="activity-icon tax">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+          </div>
+          <div class="activity-summary">
+            <div class="activity-summary-text">
+              <span>✓ Tax Optimization — Saved $81.60</span>
+              <span class="activity-status"><span class="check">✓</span></span>
+            </div>
+          </div>
+          <div class="expand-chevron">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+        </div>
+        <div class="activity-details">
+          <div class="detail-section-title">Actions Performed</div>
+          <div class="detail-sub-row">
+            <span class="detail-sub-label">Tax-loss harvest: VEA → SCHF</span>
+            <span class="detail-sub-value" style="color:#166f47">+$54.20</span>
+          </div>
+          <div class="detail-sub-row">
+            <span class="detail-sub-label">Tax-loss harvest: AGG → BND</span>
+            <span class="detail-sub-value" style="color:#166f47">+$27.40</span>
+          </div>
+          <div class="detail-total">
+            <span class="detail-total-label">Estimated Tax Saved</span>
+            <span class="detail-total-value">$81.60</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Harvest Window</span>
+            <span class="detail-value">Wash-sale safe (30d)</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Status</span>
+            <span class="detail-value"><span class="badge completed">✓ Completed</span></span>
+          </div>
+          <div class="detail-reference">
+            Ref: <code>ADV-2024-12-29-001</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- Simple Activity: Transfer -->
+      <div class="activity-item" onclick="this.classList.toggle('expanded')">
+        <div class="activity-row">
+          <div class="activity-icon transfer">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
+          </div>
+          <div class="activity-summary">
+            <div class="activity-summary-text">
+              <span>→ Transferred $200 to Reserve</span>
+              <span style="font-size:12px;color:#6b7280;">· Emergency fund 84%</span>
+              <span class="activity-status"><span class="check">✓</span></span>
+            </div>
+          </div>
+          <div class="expand-chevron">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+        </div>
+        <div class="activity-details">
+          <div class="detail-row">
+            <span class="detail-label">Amount</span>
+            <span class="detail-value" style="font-weight:600;">$200.00</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">From</span>
+            <span class="detail-value">Advizmo Cash</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">To</span>
+            <span class="detail-value">Reserve Fund</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Reserve Progress</span>
+            <span class="detail-value">
+              <span style="display:inline-block;width:80px;height:6px;background:#e5e7eb;border-radius:3px;overflow:hidden;vertical-align:middle;margin-right:6px;">
+                <span style="display:block;width:84%;height:100%;background:#166f47;border-radius:3px;"></span>
+              </span>
+              84%
+            </span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Status</span>
+            <span class="detail-value"><span class="badge completed">✓ Completed</span></span>
+          </div>
+          <div class="detail-reference">
+            Ref: <code>ADV-2024-12-29-002</code>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JULY 15 -->
+    <div class="time-group">
+      <div class="time-label">
+        <span class="dot"></span>
+        July 15, 2024
+      </div>
+
+      <!-- Compound Activity: Sell & Withdraw -->
+      <div class="activity-item" onclick="this.classList.toggle('expanded')">
+        <div class="activity-row">
+          <div class="activity-icon compound">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M12 19v2"/><path d="M7 23l-4-4 4-4"/></svg>
+          </div>
+          <div class="activity-summary">
+            <div class="activity-summary-text">
+              <span>→↓ Sold Investments & Withdrew $2,800</span>
+              <span class="activity-status"><span class="check">✓</span></span>
+            </div>
+          </div>
+          <div class="expand-chevron">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+        </div>
+        <div class="activity-details">
+          <div class="detail-section-title">Sold Investments</div>
+          <div class="detail-sub-row">
+            <span class="detail-sub-label">Sold VTI · 2.1 shares @ $195.00</span>
+            <span class="detail-sub-value">$409.50</span>
+          </div>
+          <div class="detail-sub-row">
+            <span class="detail-sub-label">Sold VXUS · 1.8 shares @ $55.20</span>
+            <span class="detail-sub-value">$99.36</span>
+          </div>
+          <div class="detail-total">
+            <span class="detail-total-label">Total Sold</span>
+            <span class="detail-total-value">$508.86</span>
+          </div>
+
+          <div class="detail-section-title" style="margin-top:8px;">Withdrawal</div>
+          <div class="detail-sub-row">
+            <span class="detail-sub-label">To Chase Checking ···7293</span>
+            <span class="detail-sub-value" style="font-weight:600;">$2,800.00</span>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-label">Funding source</span>
+            <span class="detail-value">$508.86 from sales + $2,291.14 cash</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Status</span>
+            <span class="detail-value"><span class="badge completed">✓ Completed</span></span>
+          </div>
+          <div class="detail-reference">
+            Ref: <code>ADV-2024-07-15-003</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- Simple Activity: Dividend -->
+      <div class="activity-item" onclick="this.classList.toggle('expanded')">
+        <div class="activity-row">
+          <div class="activity-icon dividend">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>
+          </div>
+          <div class="activity-summary">
+            <div class="activity-summary-text">
+              <span>$ Received $42.18 dividend from VTI</span>
+              <span style="font-size:12px;color:#166f47;font-weight:500;">· Reinvested</span>
+              <span class="activity-status"><span class="check">✓</span></span>
+            </div>
+          </div>
+          <div class="expand-chevron">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+        </div>
+        <div class="activity-details">
+          <div class="detail-row">
+            <span class="detail-label">Fund</span>
+            <span class="detail-value">VTI · Vanguard Total Stock Market</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Dividend Amount</span>
+            <span class="detail-value" style="color:#166f47;font-weight:600;">$42.18</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Action</span>
+            <span class="detail-value"><span class="badge completed">DRIP · Reinvested</span></span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Shares Purchased</span>
+            <span class="detail-value">0.216 shares @ $195.00</span>
+          </div>
+          <div class="detail-reference">
+            Ref: <code>ADV-2024-07-15-004</code>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.filter-pill').forEach(pill => {
+  pill.addEventListener('click', () => {
+    document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+    pill.classList.add('active');
+  });
+});
+document.querySelectorAll('.seg-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

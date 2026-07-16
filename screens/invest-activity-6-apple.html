@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity — Advizmo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --green: #166f47;
+            --green-bg: #e8f5ee;
+            --amber: #c2790a;
+            --amber-bg: #fef3e2;
+            --red: #b91c1c;
+            --red-bg: #fde8e8;
+            --blue: #1d4ed8;
+            --blue-bg: #e8effc;
+            --bg: #f8f9fa;
+            --card: #ffffff;
+            --text-primary: #1a1a1a;
+            --text-secondary: #6b7280;
+            --text-tertiary: #9ca3af;
+            --border: #e5e7eb;
+            --radius: 14px;
+            --radius-sm: 10px;
+        }
+
+        body {
+            font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            max-width: 430px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background: var(--bg);
+            position: relative;
+        }
+
+        /* Header */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--bg);
+            padding: 16px 20px 0;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            text-decoration: none;
+            color: var(--blue);
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .back-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .header-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .header-placeholder {
+            width: 60px;
+        }
+
+        /* Segmented Nav */
+        .segmented-nav {
+            display: flex;
+            background: #e8e8ed;
+            border-radius: 9px;
+            padding: 3px;
+            gap: 2px;
+        }
+
+        .segmented-nav a {
+            flex: 1;
+            text-align: center;
+            padding: 8px 6px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 7px;
+            transition: all 0.2s ease;
+        }
+
+        .segmented-nav a.active {
+            background: #ffffff;
+            color: var(--text-primary);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            font-weight: 600;
+        }
+
+        /* Filter Bar */
+        .filter-bar {
+            padding: 16px 20px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .filter-bar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .filter-pills {
+            display: flex;
+            gap: 8px;
+            width: max-content;
+        }
+
+        .filter-pill {
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .filter-pill:hover {
+            border-color: var(--text-tertiary);
+        }
+
+        .filter-pill.active {
+            background: var(--text-primary);
+            color: #ffffff;
+            border-color: var(--text-primary);
+        }
+
+        /* Content */
+        .content {
+            padding: 0 20px 100px;
+        }
+
+        /* Time Group */
+        .time-group {
+            margin-bottom: 28px;
+        }
+
+        .time-group-header {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 0 4px;
+            margin-bottom: 12px;
+        }
+
+        /* Activity Card */
+        .activity-card {
+            background: var(--card);
+            border-radius: var(--radius);
+            margin-bottom: 8px;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .activity-card:hover {
+            background: #fafafa;
+        }
+
+        .activity-main {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            gap: 14px;
+            cursor: pointer;
+        }
+
+        /* Activity Icon */
+        .activity-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .activity-icon.green {
+            background: var(--green-bg);
+            color: var(--green);
+        }
+
+        .activity-icon.amber {
+            background: var(--amber-bg);
+            color: var(--amber);
+        }
+
+        .activity-icon.blue {
+            background: var(--blue-bg);
+            color: var(--blue);
+        }
+
+        .activity-icon.red {
+            background: var(--red-bg);
+            color: var(--red);
+        }
+
+        /* Activity Content */
+        .activity-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .activity-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .activity-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Activity Right */
+        .activity-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+
+        .activity-status {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .activity-status.completed {
+            color: var(--green);
+        }
+
+        .activity-status.processing {
+            color: var(--amber);
+        }
+
+        .activity-status.scheduled {
+            color: var(--text-tertiary);
+        }
+
+        .status-icon {
+            width: 14px;
+            height: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .activity-chevron {
+            color: var(--text-tertiary);
+            font-size: 18px;
+            line-height: 1;
+        }
+
+        /* Compound Activity Expanded */
+        .activity-expanded {
+            display: none;
+            padding: 0 16px 16px;
+            border-top: 1px solid var(--border);
+            margin: 0 16px;
+            padding: 14px 0;
+        }
+
+        .activity-card.expanded .activity-expanded {
+            display: block;
+        }
+
+        .activity-card.expanded .activity-chevron {
+            transform: rotate(90deg);
+        }
+
+        .sub-action {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+        }
+
+        .sub-action:not(:last-child) {
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .sub-action-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .sub-action-dot.green {
+            background: var(--green);
+        }
+
+        .sub-action-dot.amber {
+            background: var(--amber);
+        }
+
+        .sub-action-dot.blue {
+            background: var(--blue);
+        }
+
+        .sub-action-text {
+            flex: 1;
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+
+        .sub-action-amount {
+            font-weight: 600;
+        }
+
+        /* Chevron rotation */
+        .activity-chevron {
+            transition: transform 0.2s ease;
+        }
+
+        /* Responsive */
+        @media (max-width: 430px) {
+            .container {
+                max-width: 100%;
+            }
+        }
+
+        /* Safe area for mobile */
+        @supports (padding-bottom: env(safe-area-inset-bottom)) {
+            .content {
+                padding-bottom: calc(100px + env(safe-area-inset-bottom));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-top">
+                <a href="index.html" class="back-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                    Back
+                </a>
+                <h1 class="header-title">Activity</h1>
+                <div class="header-placeholder"></div>
+            </div>
+            <nav class="segmented-nav">
+                <a href="#">Overview</a>
+                <a href="#" class="active">Activity</a>
+                <a href="#">Documents</a>
+                <a href="#">Math</a>
+            </nav>
+        </header>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+            <div class="filter-pills">
+                <button class="filter-pill active">All</button>
+                <button class="filter-pill">Deposits</button>
+                <button class="filter-pill">Investments</button>
+                <button class="filter-pill">Automation</button>
+                <button class="filter-pill">Transfers</button>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <main class="content">
+            <!-- Today Group -->
+            <section class="time-group">
+                <h2 class="time-group-header">Today — December 30, 2024</h2>
+
+                <!-- Simple Activity: Deposit -->
+                <div class="activity-card">
+                    <div class="activity-main">
+                        <div class="activity-icon green">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <polyline points="19 12 12 19 5 12"></polyline>
+                            </svg>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Deposited $2,400</div>
+                            <div class="activity-subtitle">From Capital One Checking</div>
+                        </div>
+                        <div class="activity-right">
+                            <div class="activity-status completed">
+                                <span class="status-icon">✓</span>
+                                Available
+                            </div>
+                            <span class="activity-chevron">›</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Simple Activity: Auto Invest -->
+                <div class="activity-card">
+                    <div class="activity-main">
+                        <div class="activity-icon blue">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Invested $520</div>
+                            <div class="activity-subtitle">VTI, VXUS, BND, VNQ</div>
+                        </div>
+                        <div class="activity-right">
+                            <div class="activity-status completed">
+                                <span class="status-icon">✓</span>
+                                Completed
+                            </div>
+                            <span class="activity-chevron">›</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Compound Activity: Deposit & Buy -->
+                <div class="activity-card" onclick="this.classList.toggle('expanded')">
+                    <div class="activity-main">
+                        <div class="activity-icon green">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <polyline points="19 12 12 19 5 12"></polyline>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Added Funds & Invested</div>
+                            <div class="activity-subtitle">$2,400 deposited, $520 invested</div>
+                        </div>
+                        <div class="activity-right">
+                            <div class="activity-status completed">
+                                <span class="status-icon">✓</span>
+                                Completed
+                            </div>
+                            <span class="activity-chevron">›</span>
+                        </div>
+                    </div>
+                    <div class="activity-expanded">
+                        <div class="sub-action">
+                            <div class="sub-action-dot green"></div>
+                            <div class="sub-action-text">Deposited <span class="sub-action-amount">$2,400</span> from Capital One</div>
+                        </div>
+                        <div class="sub-action">
+                            <div class="sub-action-dot blue"></div>
+                            <div class="sub-action-text">Invested <span class="sub-action-amount">$520</span> in VTI, VXUS, BND, VNQ</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Yesterday Group -->
+            <section class="time-group">
+                <h2 class="time-group-header">Yesterday — December 29, 2024</h2>
+
+                <!-- Medium Activity: Tax Optimization -->
+                <div class="activity-card">
+                    <div class="activity-main">
+                        <div class="activity-icon green">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Tax Optimization</div>
+                            <div class="activity-subtitle">Saved $81.60</div>
+                        </div>
+                        <div class="activity-right">
+                            <div class="activity-status completed">
+                                <span class="status-icon">✓</span>
+                                Completed
+                            </div>
+                            <span class="activity-chevron">›</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Simple Activity: Reserve Transfer -->
+                <div class="activity-card">
+                    <div class="activity-main">
+                        <div class="activity-icon amber">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Transferred $200 to Reserve</div>
+                            <div class="activity-subtitle">Emergency fund now 84%</div>
+                        </div>
+                        <div class="activity-right">
+                            <div class="activity-status completed">
+                                <span class="status-icon">✓</span>
+                                Completed
+                            </div>
+                            <span class="activity-chevron">›</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- July 15 Group -->
+            <section class="time-group">
+                <h2 class="time-group-header">July 15, 2024</h2>
+
+                <!-- Compound Activity: Sell & Withdraw -->
+                <div class="activity-card" onclick="this.classList.toggle('expanded')">
+                    <div class="activity-main">
+                        <div class="activity-icon amber">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <polyline points="5 12 12 19 19 12"></polyline>
+                            </svg>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Sold Investments & Withdrew Cash</div>
+                            <div class="activity-subtitle">$3,200 sold, $2,800 withdrawn</div>
+                        </div>
+                        <div class="activity-right">
+                            <div class="activity-status completed">
+                                <span class="status-icon">✓</span>
+                                Completed
+                            </div>
+                            <span class="activity-chevron">›</span>
+                        </div>
+                    </div>
+                    <div class="activity-expanded">
+                        <div class="sub-action">
+                            <div class="sub-action-dot blue"></div>
+                            <div class="sub-action-text">Sold VTI <span class="sub-action-amount">(2.1 shares @ $195.00)</span></div>
+                        </div>
+                        <div class="sub-action">
+                            <div class="sub-action-dot blue"></div>
+                            <div class="sub-action-text">Sold VXUS <span class="sub-action-amount">(1.8 shares @ $55.20)</span></div>
+                        </div>
+                        <div class="sub-action">
+                            <div class="sub-action-dot amber"></div>
+                            <div class="sub-action-text">Withdrew <span class="sub-action-amount">$2,800</span> to Chase Checking</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Simple Activity: Dividend -->
+                <div class="activity-card">
+                    <div class="activity-main">
+                        <div class="activity-icon green">
+                            <span style="font-size: 20px; font-weight: 700;">$</span>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Received $42.18 dividend</div>
+                            <div class="activity-subtitle">VTI quarterly dividend</div>
+                        </div>
+                        <div class="activity-right">
+                            <div class="activity-status completed">
+                                <span class="status-icon">✓</span>
+                                Reinvested
+                            </div>
+                            <span class="activity-chevron">›</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Filter pill interaction
+        document.querySelectorAll('.filter-pill').forEach(pill => {
+            pill.addEventListener('click', function() {
+                document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
