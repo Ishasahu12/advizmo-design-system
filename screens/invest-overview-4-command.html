@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Invest Overview — Advizmo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --green:#166f47;--green-light:#e8f5ee;--green-mid:#2a9d6a;
+  --amber:#c2790a;--amber-light:#fef3e0;
+  --bg:#f8f9fa;--card:#fff;--border:#e5e7eb;
+  --text:#1a1a1a;--text-sec:#6b7280;--text-ter:#9ca3af;
+  --radius:16px;--radius-sm:10px;
+  --shadow:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:0 4px 12px rgba(0,0,0,.07);
+  --font:'IBM Plex Sans',system-ui,sans-serif;
+  --font-body:'Inter','IBM Plex Sans',system-ui,sans-serif;
+}
+html{font-size:16px;-webkit-font-smoothing:antialiased}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh;display:flex;justify-content:center}
+.shell{width:100%;max-width:430px;min-height:100vh;background:var(--bg);position:relative;padding-bottom:80px}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:100;background:rgba(248,249,250,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding:12px 20px 0;border-bottom:1px solid var(--border)}
+.nav-top{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.nav-back{display:flex;align-items:center;gap:4px;font-size:.8125rem;font-weight:500;color:var(--text-sec);text-decoration:none;cursor:pointer;transition:color .15s}
+.nav-back:hover{color:var(--green)}
+.nav-back svg{width:16px;height:16px}
+.nav-title{font-family:var(--font);font-size:.9375rem;font-weight:600;margin-left:auto;margin-right:auto;letter-spacing:-.01em}
+.nav-placeholder{width:48px}
+.seg-nav{display:flex;gap:0;background:var(--card);border-radius:var(--radius-sm);padding:3px;margin:0 0 0;overflow:hidden}
+.seg-nav a{flex:1;text-align:center;padding:7px 0;font-size:.75rem;font-weight:500;color:var(--text-sec);border-radius:8px;text-decoration:none;transition:all .2s}
+.seg-nav a.active{background:var(--text);color:#fff;box-shadow:0 1px 4px rgba(0,0,0,.15)}
+
+/* SECTION */
+.section{padding:20px 20px 0}
+.section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.section-label{font-family:var(--font);font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-sec)}
+.section-action{font-size:.75rem;font-weight:500;color:var(--green);cursor:pointer;text-decoration:none}
+
+/* CARDS */
+.card{background:var(--card);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);border:1px solid var(--border)}
+
+/* STATUS DOT */
+.status{display:inline-flex;align-items:center;gap:5px;font-size:.6875rem;font-weight:600;padding:3px 9px;border-radius:20px}
+.status::before{content:'';width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.status-excellent{background:var(--green-light);color:var(--green)}
+.status-excellent::before{background:var(--green)}
+.status-growing{background:var(--green-light);color:var(--green)}
+.status-growing::before{background:var(--green)}
+.status-ready{background:#e0f2fe;color:#0369a1}
+.status-ready::before{background:#0369a1}
+.status-investing{background:#f3e8ff;color:#7c3aed}
+.status-investing::before{background:#7c3aed}
+.status-warn{background:var(--amber-light);color:var(--amber)}
+.status-warn::before{background:var(--amber)}
+.status-live{background:var(--green-light);color:var(--green)}
+.status-live::before{background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* HERO */
+.hero-card{background:linear-gradient(135deg,#166f47 0%,#1a8a56 50%,#22b07a 100%);color:#fff;border:none;padding:24px 20px;position:relative;overflow:hidden}
+.hero-card::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.08)}
+.hero-card::after{content:'';position:absolute;bottom:-40px;left:20px;width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.05)}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;position:relative;z-index:1}
+.hero-label{font-size:.8125rem;font-weight:500;opacity:.8}
+.hero-status{background:rgba(255,255,255,.18);color:#fff;padding:4px 10px;border-radius:20px;font-size:.6875rem;font-weight:600;display:flex;align-items:center;gap:5px}
+.hero-status::before{content:'';width:6px;height:6px;border-radius:50%;background:#86efac}
+.hero-amt{font-family:var(--font);font-size:2.25rem;font-weight:700;letter-spacing:-.03em;position:relative;z-index:1;margin-bottom:10px}
+.hero-row{display:flex;gap:20px;position:relative;z-index:1;margin-bottom:16px}
+.hero-stat span{font-size:.75rem;opacity:.7;display:block;margin-bottom:2px}
+.hero-stat strong{font-size:.9375rem;font-weight:600}
+.hero-stat strong.pos{color:#bbf7d0}
+.hero-stat strong.neg{color:#fecaca}
+.hero-chart{position:relative;z-index:1;height:60px;margin:0 -4px;display:flex;align-items:flex-end;gap:3px}
+.hero-chart-bar{flex:1;border-radius:3px 3px 0 0;transition:height .6s ease}
+.hero-filters{display:flex;gap:6px;margin-top:14px;position:relative;z-index:1}
+.hero-filter{padding:4px 12px;border-radius:16px;font-size:.6875rem;font-weight:500;cursor:pointer;border:none;background:rgba(255,255,255,.15);color:rgba(255,255,255,.7);transition:all .2s}
+.hero-filter.active{background:rgba(255,255,255,.25);color:#fff}
+
+/* ACCOUNTS */
+.acct-grid{display:flex;flex-direction:column;gap:10px}
+.acct-row{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--card);border-radius:var(--radius-sm);border:1px solid var(--border);box-shadow:var(--shadow)}
+.acct-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:.8125rem;font-weight:700;flex-shrink:0}
+.acct-icon.cash{background:var(--green-light);color:var(--green)}
+.acct-icon.reserve{background:#e0f2fe;color:#0369a1}
+.acct-icon.auto{background:#f3e8ff;color:#7c3aed}
+.acct-info{flex:1;min-width:0}
+.acct-name{font-size:.8125rem;font-weight:600;margin-bottom:2px}
+.acct-sub{font-size:.6875rem;color:var(--text-ter)}
+.acct-val{text-align:right;flex-shrink:0}
+.acct-amt{font-family:var(--font);font-size:.9375rem;font-weight:600;margin-bottom:2px}
+.acct-status{font-size:.625rem}
+
+/* EXTERNAL */
+.ext-list{display:flex;flex-direction:column;gap:10px}
+.ext-row{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--card);border-radius:var(--radius-sm);border:1px solid var(--border);box-shadow:var(--shadow)}
+.ext-dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0}
+.ext-info{flex:1;min-width:0}
+.ext-name{font-size:.8125rem;font-weight:600;margin-bottom:2px}
+.ext-type{font-size:.6875rem;color:var(--text-ter)}
+.ext-amt{font-family:var(--font);font-size:.9375rem;font-weight:600;flex-shrink:0}
+
+/* MOVE MONEY */
+.action-card{background:var(--card);border-radius:var(--radius);padding:18px 20px;border:1px solid var(--border);box-shadow:var(--shadow);display:flex;align-items:center;gap:14px;cursor:pointer;transition:box-shadow .2s,border-color .2s}
+.action-card:hover{box-shadow:var(--shadow-md);border-color:var(--green)}
+.action-icon{width:44px;height:44px;border-radius:12px;background:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.action-icon svg{width:22px;height:22px;color:#fff}
+.action-info{flex:1}
+.action-title{font-size:.875rem;font-weight:600;margin-bottom:2px}
+.action-sub{font-size:.75rem;color:var(--text-sec)}
+.action-badge{padding:4px 10px;border-radius:16px;font-size:.6875rem;font-weight:600;background:var(--green-light);color:var(--green)}
+
+/* HEALTH */
+.health-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.health-card{background:var(--card);border-radius:var(--radius-sm);padding:16px;border:1px solid var(--border);box-shadow:var(--shadow);text-align:center}
+.ring-wrap{width:64px;height:64px;margin:0 auto 10px;position:relative}
+.ring-wrap svg{width:64px;height:64px;transform:rotate(-90deg)}
+.ring-wrap circle{fill:none;stroke-width:5}
+.ring-bg{stroke:var(--border)}
+.ring-fill{stroke-linecap:round;transition:stroke-dashoffset 1.2s ease}
+.ring-val{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--font);font-size:.9375rem;font-weight:700}
+.health-label{font-size:.75rem;font-weight:500;color:var(--text-sec);margin-bottom:2px}
+.health-score{font-family:var(--font);font-size:1.125rem;font-weight:700;color:var(--green)}
+
+/* TAX */
+.tax-card{background:var(--card);border-radius:var(--radius);padding:18px 20px;border:1px solid var(--border);box-shadow:var(--shadow)}
+.tax-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.tax-left{display:flex;align-items:center;gap:10px}
+.tax-icon{width:36px;height:36px;border-radius:10px;background:var(--amber-light);display:flex;align-items:center;justify-content:center;font-size:1rem}
+.tax-amt{font-family:var(--font);font-size:1.25rem;font-weight:700;color:var(--amber)}
+.tax-sub{font-size:.75rem;color:var(--text-sec)}
+.tax-bar-track{height:6px;background:#f1f3f5;border-radius:3px;overflow:hidden;margin-bottom:12px}
+.tax-bar-fill{height:100%;background:linear-gradient(90deg,var(--amber),#e8a317);border-radius:3px;transition:width 1s ease}
+.tax-expand{font-size:.75rem;font-weight:500;color:var(--green);cursor:pointer;display:flex;align-items:center;gap:4px;border:none;background:none;padding:0}
+.tax-details{margin-top:12px;padding-top:12px;border-top:1px solid var(--border);display:none}
+.tax-details.open{display:block}
+.tax-row{display:flex;justify-content:space-between;padding:6px 0;font-size:.8125rem}
+.tax-row span:first-child{color:var(--text-sec)}
+.tax-row span:last-child{font-weight:600}
+
+/* ALLOCATION */
+.alloc-bar{height:28px;border-radius:14px;overflow:hidden;display:flex;margin-bottom:14px;box-shadow:inset 0 1px 2px rgba(0,0,0,.05)}
+.alloc-seg{height:100%;transition:width .8s ease;position:relative}
+.alloc-seg.vti{background:#166f47}
+.alloc-seg.vxus{background:#0369a1}
+.alloc-seg.bnd{background:#7c3aed}
+.alloc-seg.vnq{background:#c2790a}
+.alloc-seg.cash-seg{background:#d1d5db}
+.alloc-legend{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.alloc-item{display:flex;align-items:center;gap:8px;font-size:.75rem}
+.alloc-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.alloc-pct{font-family:var(--font);font-weight:600;margin-left:auto}
+
+/* HOLDINGS */
+.hold-table{width:100%;border-collapse:collapse}
+.hold-table th{text-align:left;font-size:.6875rem;font-weight:500;color:var(--text-ter);padding:6px 0;border-bottom:1px solid var(--border);text-transform:uppercase;letter-spacing:.04em}
+.hold-table th:last-child,.hold-table td:last-child{text-align:right}
+.hold-table td{padding:10px 0;font-size:.8125rem;border-bottom:1px solid #f3f4f6}
+.hold-table tr:last-child td{border-bottom:none}
+.hold-name{font-weight:600}
+.hold-ticker{font-size:.6875rem;color:var(--text-ter);margin-left:4px}
+.hold-perf{font-weight:600;font-size:.75rem;padding:2px 8px;border-radius:12px;display:inline-block}
+.hold-perf.pos{background:var(--green-light);color:var(--green)}
+.hold-perf.neg{background:#fef2f2;color:#dc2626}
+
+/* MOVERS */
+.mover-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #f3f4f6}
+.mover-row:last-child{border-bottom:none}
+.mover-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:.6875rem;font-weight:700;flex-shrink:0}
+.mover-icon.up{background:var(--green-light);color:var(--green)}
+.mover-icon.down{background:#fef2f2;color:#dc2626}
+.mover-info{flex:1}
+.mover-name{font-size:.8125rem;font-weight:600}
+.mover-impact{font-size:.6875rem;color:var(--text-sec);margin-top:1px}
+.mover-change{text-align:right;flex-shrink:0}
+.mover-pct{font-family:var(--font);font-size:.875rem;font-weight:700}
+.mover-pct.pos{color:var(--green)}
+.mover-pct.neg{color:#dc2626}
+.mover-val{font-size:.6875rem;color:var(--text-ter)}
+
+/* AI INSIGHT */
+.ai-card{background:linear-gradient(135deg,#f8f9fa 0%,#e8f5ee 100%);border-radius:var(--radius);padding:18px 20px;border:1px solid #d1e7dd;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.ai-card::before{content:'';position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;background:rgba(22,111,71,.06)}
+.ai-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:12px;background:var(--green);color:#fff;font-size:.6875rem;font-weight:600;margin-bottom:10px}
+.ai-badge svg{width:14px;height:14px}
+.ai-text{font-size:.875rem;line-height:1.55;color:var(--text);position:relative;z-index:1}
+.ai-text strong{color:var(--green)}
+
+/* SPACER */
+.spacer{height:20px}
+
+/* DIVIDER */
+.divider{height:1px;background:var(--border);margin:0 20px}
+
+/* FOOTER */
+.footer-space{height:40px}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-top">
+      <a class="nav-back" href="../index.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        Back
+      </a>
+      <span class="nav-title">Invest Overview</span>
+      <span class="nav-placeholder"></span>
+    </div>
+    <div class="seg-nav">
+      <a class="active" href="invest-overview-4-command.html">Overview</a>
+      <a href="#">Activity</a>
+      <a href="#">Documents</a>
+      <a href="#">Math</a>
+    </div>
+  </nav>
+
+  <!-- 1. PORTFOLIO OVERVIEW (HERO) -->
+  <div class="section">
+    <div class="card hero-card" id="hero">
+      <div class="hero-top">
+        <span class="hero-label">Portfolio Value</span>
+        <span class="hero-status">Excellent</span>
+      </div>
+      <div class="hero-amt" id="heroAmt">$124,850</div>
+      <div class="hero-row">
+        <div class="hero-stat">
+          <span>Today</span>
+          <strong class="pos" id="todayPnl">+$2,330</strong>
+        </div>
+        <div class="hero-stat">
+          <span>All Time</span>
+          <strong class="pos" id="totalPnl">+$18,200</strong>
+        </div>
+        <div class="hero-stat">
+          <span>Return</span>
+          <strong class="pos" id="returnPct">+17.0%</strong>
+        </div>
+      </div>
+      <div class="hero-chart" id="heroChart"></div>
+      <div class="hero-filters">
+        <button class="hero-filter" data-range="1w">1W</button>
+        <button class="hero-filter" data-range="1m">1M</button>
+        <button class="hero-filter active" data-range="3m">3M</button>
+        <button class="hero-filter" data-range="1y">1Y</button>
+        <button class="hero-filter" data-range="all">All</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- 2. ADVIZMO ACCOUNTS -->
+  <div class="section">
+    <div class="section-hdr">
+      <span class="section-label">Advizmo Accounts</span>
+      <span class="section-action">View All</span>
+    </div>
+    <div class="acct-grid">
+      <div class="acct-row">
+        <div class="acct-icon cash">$</div>
+        <div class="acct-info">
+          <div class="acct-name">Cash</div>
+          <div class="acct-sub">Operating funds</div>
+        </div>
+        <div class="acct-val">
+          <div class="acct-amt">$4,200</div>
+          <span class="status status-growing">Growing</span>
+        </div>
+      </div>
+      <div class="acct-row">
+        <div class="acct-icon reserve">R</div>
+        <div class="acct-info">
+          <div class="acct-name">Reserve</div>
+          <div class="acct-sub">Emergency buffer</div>
+        </div>
+        <div class="acct-val">
+          <div class="acct-amt">$12,400</div>
+          <span class="status status-ready">Ready</span>
+        </div>
+      </div>
+      <div class="acct-row">
+        <div class="acct-icon auto">A</div>
+        <div class="acct-info">
+          <div class="acct-name">Auto Invest</div>
+          <div class="acct-sub">Systematic allocation</div>
+        </div>
+        <div class="acct-val">
+          <div class="acct-amt">$85,250</div>
+          <span class="status status-investing">Investing</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- 3. EXTERNAL ACCOUNTS -->
+  <div class="section">
+    <div class="section-hdr">
+      <span class="section-label">External Accounts</span>
+      <span class="section-action">Manage</span>
+    </div>
+    <div class="ext-list">
+      <div class="ext-row">
+        <div class="ext-dot"></div>
+        <div class="ext-info">
+          <div class="ext-name">Chase</div>
+          <div class="ext-type">Checking</div>
+        </div>
+        <div class="ext-amt">$3,200</div>
+      </div>
+      <div class="ext-row">
+        <div class="ext-dot"></div>
+        <div class="ext-info">
+          <div class="ext-name">Capital One</div>
+          <div class="ext-type">Savings</div>
+        </div>
+        <div class="ext-amt">$8,400</div>
+      </div>
+      <div class="ext-row">
+        <div class="ext-dot"></div>
+        <div class="ext-info">
+          <div class="ext-name">Marcus</div>
+          <div class="ext-type">High-Yield Savings</div>
+        </div>
+        <div class="ext-amt">$15,600</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- 4. MOVE MONEY -->
+  <div class="section">
+    <div class="section-hdr">
+      <span class="section-label">Move Money</span>
+    </div>
+    <div class="action-card" onclick="this.style.borderColor='var(--green)';this.style.boxShadow='var(--shadow-md)'">
+      <div class="action-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
+      </div>
+      <div class="action-info">
+        <div class="action-title">Transfer Funds</div>
+        <div class="action-sub">Between accounts or to investments</div>
+      </div>
+      <span class="action-badge">Ready</span>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- 5. INVESTMENT HEALTH -->
+  <div class="section">
+    <div class="section-hdr">
+      <span class="section-label">Investment Health</span>
+      <span class="section-action">Details</span>
+    </div>
+    <div class="health-grid">
+      <div class="health-card">
+        <div class="ring-wrap">
+          <svg viewBox="0 0 64 64">
+            <circle class="ring-bg" cx="32" cy="32" r="26"/>
+            <circle class="ring-fill" cx="32" cy="32" r="26" stroke="#166f47" stroke-dasharray="163.36" stroke-dashoffset="163.36" data-target="24.5"/>
+          </svg>
+          <div class="ring-val" style="color:#166f47">85</div>
+        </div>
+        <div class="health-label">Diversification</div>
+      </div>
+      <div class="health-card">
+        <div class="ring-wrap">
+          <svg viewBox="0 0 64 64">
+            <circle class="ring-bg" cx="32" cy="32" r="26"/>
+            <circle class="ring-fill" cx="32" cy="32" r="26" stroke="#0369a1" stroke-dasharray="163.36" stroke-dashoffset="163.36" data-target="16.3"/>
+          </svg>
+          <div class="ring-val" style="color:#0369a1">90</div>
+        </div>
+        <div class="health-label">Stability</div>
+      </div>
+      <div class="health-card">
+        <div class="ring-wrap">
+          <svg viewBox="0 0 64 64">
+            <circle class="ring-bg" cx="32" cy="32" r="26"/>
+            <circle class="ring-fill" cx="32" cy="32" r="26" stroke="#7c3aed" stroke-dasharray="163.36" stroke-dashoffset="163.36" data-target="32.7"/>
+          </svg>
+          <div class="ring-val" style="color:#7c3aed">80</div>
+        </div>
+        <div class="health-label">Growth</div>
+      </div>
+      <div class="health-card">
+        <div class="ring-wrap">
+          <svg viewBox="0 0 64 64">
+            <circle class="ring-bg" cx="32" cy="32" r="26"/>
+            <circle class="ring-fill" cx="32" cy="32" r="26" stroke="#c2790a" stroke-dasharray="163.36" stroke-dashoffset="163.36" data-target="19.6"/>
+          </svg>
+          <div class="ring-val" style="color:#c2790a">88</div>
+        </div>
+        <div class="health-label">Tax Efficiency</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- 6. TAX OPTIMIZATION -->
+  <div class="section">
+    <div class="section-hdr">
+      <span class="section-label">Tax Optimization</span>
+    </div>
+    <div class="tax-card">
+      <div class="tax-top">
+        <div class="tax-left">
+          <div class="tax-icon">⚡</div>
+          <div>
+            <div class="tax-sub">Estimated tax savings</div>
+            <div class="tax-amt">$642</div>
+          </div>
+        </div>
+        <span class="status status-warn">63%</span>
+      </div>
+      <div class="tax-bar-track">
+        <div class="tax-bar-fill" id="taxBar" style="width:0%"></div>
+      </div>
+      <button class="tax-expand" id="taxToggle" onclick="document.getElementById('taxDetails').classList.toggle('open');this.textContent=this.textContent==='Show details ▾'?'Hide details ▴':'Show details ▾'">
+        Show details ▾
+      </button>
+      <div class="tax-details" id="taxDetails">
+        <div class="tax-row"><span>Tax-loss harvesting</span><span>$328</span></div>
+        <div class="tax-row"><span>Asset location</span><span>$186</span></div>
+        <div class="tax-row"><span>Long-term gains rate</span><span>$128</span></div>
+        <div class="tax-row" style="border-top:1px solid var(--border);margin-top:4px;padding-top:8px"><span>Total optimization</span><span style="color:var(--green)">$642</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- 7. PORTFOLIO ALLOCATION -->
+  <div class="section">
+    <div class="section-hdr">
+      <span class="section-label">Portfolio Allocation</span>
+    </div>
+    <div class="card" style="padding:18px 20px">
+      <div class="alloc-bar">
+        <div class="alloc-seg vti" style="width:58%"></div>
+        <div class="alloc-seg vxus" style="width:18%"></div>
+        <div class="alloc-seg bnd" style="width:14%"></div>
+        <div class="alloc-seg vnq" style="width:10%"></div>
+      </div>
+      <div class="alloc-legend">
+        <div class="alloc-item">
+          <div class="alloc-dot" style="background:#166f47"></div>
+          <span>VTI</span>
+          <span class="alloc-pct">58%</span>
+        </div>
+        <div class="alloc-item">
+          <div class="alloc-dot" style="background:#0369a1"></div>
+          <span>VXUS</span>
+          <span class="alloc-pct">18%</span>
+        </div>
+        <div class="alloc-item">
+          <div class="alloc-dot" style="background:#7c3aed"></div>
+          <span>BND</span>
+          <span class="alloc-pct">14%</span>
+        </div>
+        <div class="alloc-item">
+          <div class="alloc-dot" style="background:#c2790a"></div>
+          <span>VNQ</span>
+          <span class="alloc-pct">10%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- 8. TOP HOLDINGS -->
+  <div class="section">
+    <div class="section-hdr">
+      <span class="section-label">Top Holdings</span>
+      <span class="section-action">Full List</span>
+    </div>
+    <div class="card" style="padding:14px 18px">
+      <table class="hold-table">
+        <thead>
+          <tr><th>Holding</th><th>Value</th><th>Return</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="hold-name">VTI<span class="hold-ticker">Total Stock</span></span></td>
+            <td>$72,413</td>
+            <td><span class="hold-perf pos">+18.2%</span></td>
+          </tr>
+          <tr>
+            <td><span class="hold-name">VXUS<span class="hold-ticker">Int'l Stock</span></span></td>
+            <td>$22,473</td>
+            <td><span class="hold-perf pos">+9.4%</span></td>
+          </tr>
+          <tr>
+            <td><span class="hold-name">BND<span class="hold-ticker">Bond</span></span></td>
+            <td>$17,479</td>
+            <td><span class="hold-perf pos">+3.1%</span></td>
+          </tr>
+          <tr>
+            <td><span class="hold-name">VNQ<span class="hold-ticker">Real Estate</span></span></td>
+            <td>$12,485</td>
+            <td><span class="hold-perf pos">+5.8%</span></td>
+          </tr>
+          <tr>
+            <td><span class="hold-name">Cash<span class="hold-ticker">Liquid</span></span></td>
+            <td>$4,200</td>
+            <td><span class="hold-perf pos">+0.5%</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- 9. TOP MOVERS -->
+  <div class="section">
+    <div class="section-hdr">
+      <span class="section-label">Top Movers</span>
+      <span class="section-action">View All</span>
+    </div>
+    <div class="card" style="padding:14px 20px">
+      <div class="mover-row">
+        <div class="mover-icon up">VT</div>
+        <div class="mover-info">
+          <div class="mover-name">VTI</div>
+          <div class="mover-impact">+$1,342 impact on portfolio</div>
+        </div>
+        <div class="mover-change">
+          <div class="mover-pct pos">+2.1%</div>
+          <div class="mover-val">Today</div>
+        </div>
+      </div>
+      <div class="mover-row">
+        <div class="mover-icon up">VX</div>
+        <div class="mover-info">
+          <div class="mover-name">VXUS</div>
+          <div class="mover-impact">+$458 impact on portfolio</div>
+        </div>
+        <div class="mover-change">
+          <div class="mover-pct pos">+1.3%</div>
+          <div class="mover-val">Today</div>
+        </div>
+      </div>
+      <div class="mover-row">
+        <div class="mover-icon down">VN</div>
+        <div class="mover-info">
+          <div class="mover-name">VNQ</div>
+          <div class="mover-impact">-$62 impact on portfolio</div>
+        </div>
+        <div class="mover-change">
+          <div class="mover-pct neg">-0.5%</div>
+          <div class="mover-val">Today</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- 10. AI INSIGHT -->
+  <div class="section">
+    <div class="section-hdr">
+      <span class="section-label">AI Insight</span>
+    </div>
+    <div class="ai-card">
+      <div class="ai-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 0 1 4 4v1a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1V6a4 4 0 0 1 4-4z"/><path d="M18 11h-1a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2z"/><path d="M6 11h1a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2z"/></svg>
+        Advizmo AI
+      </div>
+      <div class="ai-text">
+        Your <strong>diversification improved</strong> after yesterday's rebalance. Your allocation is now within 2% of target across all asset classes. Consider increasing international exposure by 3% for optimal risk-adjusted returns.
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-space"></div>
+</div>
+
+<script>
+// Hero chart
+(function(){
+  const chart=document.getElementById('heroChart');
+  const heights=[35,42,38,50,45,55,48,60,52,65,58,70,62,75,68,72,80,78,85,82,88,90,92,88,95];
+  heights.forEach(h=>{
+    const bar=document.createElement('div');
+    bar.className='hero-chart-bar';
+    bar.style.height='0%';
+    bar.style.background='rgba(255,255,255,'+(0.3+h/200)+')';
+    chart.appendChild(bar);
+    requestAnimationFrame(()=>{bar.style.height=h+'%'});
+  });
+})();
+
+// Health rings
+document.querySelectorAll('.ring-fill').forEach(c=>{
+  const target=parseFloat(c.dataset.target);
+  setTimeout(()=>{c.style.strokeDashoffset=target},300);
+});
+
+// Tax bar
+setTimeout(()=>{document.getElementById('taxBar').style.width='63%'},400);
+
+// Time filters
+document.querySelectorAll('.hero-filter').forEach(btn=>{
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.hero-filter').forEach(b=>b.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+// Animate hero numbers
+function animateValue(el,start,end,dur){
+  const range=end-start;
+  const startTime=performance.now();
+  const prefix=el.textContent.startsWith('+')?'+':'';
+  function update(now){
+    const elapsed=now-startTime;
+    const progress=Math.min(elapsed/dur,1);
+    const ease=1-Math.pow(1-progress,3);
+    const current=Math.round(start+range*ease);
+    el.textContent=prefix+'$'+current.toLocaleString();
+    if(progress<1)requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+</script>
+</body>
+</html>

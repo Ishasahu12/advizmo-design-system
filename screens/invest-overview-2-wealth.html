@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advizmo — Invest Overview (Wealth)</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#f8f9fa;--surface:#ffffff;--surface-alt:#fafbfc;
+    --text:#1a1a1a;--text-secondary:#6b7280;--text-tertiary:#9ca3af;
+    --green:#166f47;--green-light:#e8f5ee;--green-muted:#d4edda;
+    --amber:#c2790a;--amber-light:#fff3cd;--amber-muted:#fde9c7;
+    --red:#dc2626;--red-light:#fef2f2;
+    --border:#e5e7eb;--border-light:#f0f1f3;
+    --shadow-sm:0 1px 2px rgba(0,0,0,.04);
+    --shadow-md:0 2px 8px rgba(0,0,0,.06);
+    --shadow-lg:0 4px 16px rgba(0,0,0,.08);
+    --radius:12px;--radius-sm:8px;--radius-lg:16px;
+    --font-primary:'IBM Plex Sans',sans-serif;
+    --font-secondary:'Inter',sans-serif;
+  }
+  html{font-size:16px;-webkit-font-smoothing:antialiased}
+  body{
+    font-family:var(--font-primary);background:var(--bg);
+    color:var(--text);min-height:100vh;
+    display:flex;justify-content:center;padding:0 0 40px;
+  }
+  .phone-frame{
+    width:100%;max-width:430px;min-height:100vh;
+    background:var(--bg);position:relative;overflow:hidden;
+  }
+  
+  /* ─── Top Nav ─── */
+  .top-nav{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:16px 20px 0;position:sticky;top:0;z-index:100;
+    background:var(--bg);
+  }
+  .back-btn{
+    display:flex;align-items:center;gap:6px;
+    font-family:var(--font-secondary);font-size:14px;font-weight:500;
+    color:var(--text);text-decoration:none;
+    background:none;border:none;cursor:pointer;padding:4px 0;
+  }
+  .back-btn svg{width:18px;height:18px}
+  .nav-title{
+    font-family:var(--font-secondary);font-size:13px;font-weight:600;
+    color:var(--text-tertiary);letter-spacing:0.5px;text-transform:uppercase;
+  }
+  .nav-actions{display:flex;gap:8px;align-items:center}
+
+  /* ─── Segmented Nav ─── */
+  .segmented-nav{
+    display:flex;padding:16px 20px 0;gap:4px;
+  }
+  .seg-item{
+    flex:1;text-align:center;padding:8px 0;
+    font-family:var(--font-secondary);font-size:13px;font-weight:500;
+    color:var(--text-tertiary);border-radius:var(--radius-sm);
+    text-decoration:none;cursor:pointer;transition:all .2s;
+    border:1px solid transparent;
+  }
+  .seg-item.active{
+    background:var(--surface);color:var(--text);
+    border-color:var(--border);box-shadow:var(--shadow-sm);
+    font-weight:600;
+  }
+  .seg-item:hover:not(.active){background:rgba(0,0,0,.02)}
+
+  /* ─── Content ─── */
+  .content{padding:16px 20px 0;display:flex;flex-direction:column;gap:20px}
+
+  /* ─── Cards ─── */
+  .card{
+    background:var(--surface);border-radius:var(--radius);
+    border:1px solid var(--border);padding:20px;
+    box-shadow:var(--shadow-sm);transition:box-shadow .2s;
+  }
+  .card:hover{box-shadow:var(--shadow-md)}
+  .card-header{
+    display:flex;align-items:center;justify-content:space-between;
+    margin-bottom:16px;
+  }
+  .card-label{
+    font-family:var(--font-secondary);font-size:11px;font-weight:600;
+    color:var(--text-tertiary);letter-spacing:0.8px;text-transform:uppercase;
+  }
+  .card-badge{
+    font-family:var(--font-secondary);font-size:10px;font-weight:600;
+    padding:3px 8px;border-radius:20px;letter-spacing:0.3px;
+  }
+  .badge-green{background:var(--green-light);color:var(--green)}
+  .badge-amber{background:var(--amber-light);color:var(--amber)}
+  .badge-red{background:var(--red-light);color:var(--red)}
+  .card-action{
+    font-family:var(--font-secondary);font-size:12px;font-weight:500;
+    color:var(--green);background:none;border:none;cursor:pointer;
+    padding:0;text-decoration:underline;text-underline-offset:2px;
+  }
+
+  /* ─── Hero Portfolio ─── */
+  .hero-card{padding:24px 20px;border:none;background:linear-gradient(145deg,#0f4a2f 0%,#166f47 40%,#1a8a55 100%);color:#fff;position:relative;overflow:hidden}
+  .hero-card::before{
+    content:'';position:absolute;top:-60px;right:-60px;
+    width:200px;height:200px;border-radius:50%;
+    background:rgba(255,255,255,.04);
+  }
+  .hero-card::after{
+    content:'';position:absolute;bottom:-40px;left:-40px;
+    width:160px;height:160px;border-radius:50%;
+    background:rgba(255,255,255,.03);
+  }
+  .hero-label{
+    font-family:var(--font-secondary);font-size:11px;font-weight:500;
+    letter-spacing:1px;text-transform:uppercase;
+    color:rgba(255,255,255,.6);margin-bottom:8px;
+  }
+  .hero-value{
+    font-family:var(--font-secondary);font-size:36px;font-weight:700;
+    letter-spacing:-0.5px;margin-bottom:12px;
+  }
+  .hero-value .currency{font-size:22px;font-weight:400;opacity:.7;vertical-align:super;margin-right:2px}
+  .hero-changes{display:flex;gap:16px;margin-bottom:20px}
+  .hero-change{display:flex;flex-direction:column;gap:2px}
+  .change-label{font-family:var(--font-secondary);font-size:10px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:0.5px}
+  .change-value{font-family:var(--font-secondary);font-size:14px;font-weight:600}
+  .change-value.positive{color:#a7f3d0}
+  .hero-chart{position:relative;z-index:1;height:80px;margin:16px -4px 0}
+  .hero-chart svg{width:100%;height:100%}
+  .time-filters{
+    display:flex;gap:4px;margin-top:16px;position:relative;z-index:1;
+  }
+  .time-filter{
+    font-family:var(--font-secondary);font-size:11px;font-weight:500;
+    padding:5px 12px;border-radius:16px;border:none;cursor:pointer;
+    background:rgba(255,255,255,.1);color:rgba(255,255,255,.6);
+    transition:all .2s;
+  }
+  .time-filter.active{background:rgba(255,255,255,.2);color:#fff}
+  .time-filter:hover:not(.active){background:rgba(255,255,255,.15)}
+
+  /* ─── Section Headers ─── */
+  .section-header{
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .section-title{
+    font-family:var(--font-primary);font-size:15px;font-weight:600;
+    color:var(--text);
+  }
+  .section-count{
+    font-family:var(--font-secondary);font-size:11px;font-weight:500;
+    color:var(--text-tertiary);background:var(--border-light);
+    padding:2px 8px;border-radius:10px;
+  }
+
+  /* ─── Account Cards ─── */
+  .account-card{
+    display:flex;align-items:center;gap:14px;
+    padding:14px 16px;border-radius:var(--radius-sm);
+    border:1px solid var(--border-light);background:var(--surface-alt);
+    transition:all .2s;cursor:pointer;
+  }
+  .account-card:hover{border-color:var(--border);box-shadow:var(--shadow-sm)}
+  .account-icon{
+    width:40px;height:40px;border-radius:10px;
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--font-secondary);font-size:14px;font-weight:700;
+    flex-shrink:0;
+  }
+  .icon-green{background:var(--green-light);color:var(--green)}
+  .icon-amber{background:var(--amber-light);color:var(--amber)}
+  .icon-blue{background:#e0f2fe;color:#0369a1}
+  .icon-purple{background:#f3e8ff;color:#7c3aed}
+  .icon-slate{background:#f1f5f9;color:#475569}
+  .account-info{flex:1;min-width:0}
+  .account-name{
+    font-family:var(--font-secondary);font-size:13px;font-weight:600;
+    color:var(--text);margin-bottom:2px;
+  }
+  .account-meta{
+    font-family:var(--font-secondary);font-size:11px;color:var(--text-tertiary);
+  }
+  .account-right{text-align:right;flex-shrink:0}
+  .account-value{
+    font-family:var(--font-secondary);font-size:14px;font-weight:600;
+    color:var(--text);
+  }
+  .account-status{
+    font-family:var(--font-secondary);font-size:10px;font-weight:500;
+    padding:2px 6px;border-radius:8px;margin-top:3px;display:inline-block;
+  }
+  .status-growing{background:var(--green-light);color:var(--green)}
+  .status-ready{background:#e0f2fe;color:#0369a1}
+  .status-investing{background:#f3e8ff;color:#7c3aed}
+  .accounts-list{display:flex;flex-direction:column;gap:8px}
+  .account-action-btn{
+    width:100%;padding:10px;border-radius:var(--radius-sm);
+    font-family:var(--font-secondary);font-size:12px;font-weight:500;
+    border:1px dashed var(--border);background:none;color:var(--text-secondary);
+    cursor:pointer;transition:all .2s;
+  }
+  .account-action-btn:hover{border-color:var(--green);color:var(--green);background:var(--green-light)}
+
+  /* ─── External Accounts ─── */
+  .ext-card{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:var(--radius-sm);border:1px solid var(--border-light);background:var(--surface-alt)}
+  .ext-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--font-secondary);font-size:12px;font-weight:700}
+  .ext-info{flex:1;min-width:0}
+  .ext-name{font-family:var(--font-secondary);font-size:13px;font-weight:600;color:var(--text);margin-bottom:1px}
+  .ext-meta{font-family:var(--font-secondary);font-size:10px;color:var(--text-tertiary);display:flex;align-items:center;gap:4px}
+  .ext-dot{width:5px;height:5px;border-radius:50%;display:inline-block}
+  .dot-green{background:#16a34a}.dot-amber{background:var(--amber)}.dot-gray{background:#9ca3af}
+  .ext-right{text-align:right;flex-shrink:0}
+  .ext-value{font-family:var(--font-secondary);font-size:14px;font-weight:600;color:var(--text)}
+  .ext-action{
+    font-family:var(--font-secondary);font-size:11px;font-weight:500;
+    color:var(--green);background:none;border:none;cursor:pointer;
+    padding:2px 0;text-decoration:underline;text-underline-offset:2px;
+    margin-top:2px;
+  }
+
+  /* ─── Move Money ─── */
+  .move-money-card{border-left:3px solid var(--green)}
+  .move-money-desc{
+    font-family:var(--font-primary);font-size:13px;color:var(--text-secondary);
+    margin-bottom:16px;line-height:1.5;font-style:italic;
+  }
+  .move-flow{display:flex;flex-direction:column;gap:8px}
+  .move-row{display:flex;align-items:center;gap:10px}
+  .move-box{
+    flex:1;padding:10px 14px;border-radius:var(--radius-sm);
+    border:1px solid var(--border-light);background:var(--surface-alt);
+    font-family:var(--font-secondary);font-size:12px;font-weight:500;
+    color:var(--text-secondary);
+  }
+  .move-arrow{
+    color:var(--green);font-size:16px;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+    width:28px;height:28px;border-radius:50%;background:var(--green-light);
+  }
+  .move-btn{
+    width:100%;padding:12px;border-radius:var(--radius-sm);
+    font-family:var(--font-secondary);font-size:13px;font-weight:600;
+    background:var(--green);color:#fff;border:none;cursor:pointer;
+    margin-top:12px;transition:all .2s;
+  }
+  .move-btn:hover{background:#125a3a}
+
+  /* ─── Health Metrics ─── */
+  .health-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .health-item{
+    padding:12px 14px;border-radius:var(--radius-sm);
+    border:1px solid var(--border-light);background:var(--surface-alt);
+  }
+  .health-label{font-family:var(--font-secondary);font-size:10px;font-weight:500;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px}
+  .health-value{font-family:var(--font-secondary);font-size:13px;font-weight:600}
+  .health-bar{
+    width:100%;height:3px;border-radius:2px;background:var(--border-light);
+    margin-top:6px;overflow:hidden;
+  }
+  .health-fill{height:100%;border-radius:2px;transition:width .6s ease}
+  .fill-green{background:var(--green)}.fill-amber{background:var(--amber)}.fill-blue{background:#0369a1}
+
+  /* ─── Tax Optimization ─── */
+  .tax-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+  .tax-icon{
+    width:36px;height:36px;border-radius:8px;
+    background:var(--green-light);color:var(--green);
+    display:flex;align-items:center;justify-content:center;
+    font-size:16px;
+  }
+  .tax-savings{font-family:var(--font-secondary);font-size:20px;font-weight:700;color:var(--green)}
+  .tax-savings-label{font-family:var(--font-secondary);font-size:10px;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.5px}
+  .tax-details{display:flex;gap:12px;margin-top:12px}
+  .tax-detail{
+    flex:1;padding:10px 12px;border-radius:var(--radius-sm);
+    background:var(--surface-alt);border:1px solid var(--border-light);
+    text-align:center;
+  }
+  .tax-detail-label{font-family:var(--font-secondary);font-size:10px;color:var(--text-tertiary);margin-bottom:4px}
+  .tax-detail-value{font-family:var(--font-secondary);font-size:12px;font-weight:600;color:var(--text)}
+  .tax-expand{
+    display:flex;align-items:center;justify-content:center;gap:4px;
+    width:100%;padding:8px;border:none;background:none;
+    font-family:var(--font-secondary);font-size:11px;font-weight:500;
+    color:var(--green);cursor:pointer;margin-top:12px;
+  }
+  .tax-expand svg{width:14px;height:14px;transition:transform .2s}
+  .tax-expand.open svg{transform:rotate(180deg)}
+
+  /* ─── Donut Chart ─── */
+  .donut-container{display:flex;align-items:center;gap:20px}
+  .donut-chart{position:relative;width:120px;height:120px;flex-shrink:0}
+  .donut-chart svg{width:100%;height:100%;transform:rotate(-90deg)}
+  .donut-center{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    text-align:center;
+  }
+  .donut-center-value{font-family:var(--font-secondary);font-size:16px;font-weight:700;color:var(--text)}
+  .donut-center-label{font-family:var(--font-secondary);font-size:9px;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.5px}
+  .donut-legend{display:flex;flex-direction:column;gap:8px;flex:1}
+  .legend-item{display:flex;align-items:center;gap:8px}
+  .legend-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+  .legend-text{flex:1;font-family:var(--font-secondary);font-size:12px;color:var(--text-secondary)}
+  .legend-pct{font-family:var(--font-secondary);font-size:12px;font-weight:600;color:var(--text)}
+
+  /* ─── Holdings Table ─── */
+  .holdings-list{display:flex;flex-direction:column;gap:0}
+  .holding-row{
+    display:flex;align-items:center;gap:12px;
+    padding:12px 0;border-bottom:1px solid var(--border-light);
+  }
+  .holding-row:last-child{border-bottom:none}
+  .holding-ticker{
+    font-family:var(--font-secondary);font-size:13px;font-weight:700;
+    color:var(--text);min-width:44px;
+  }
+  .holding-name{flex:1;font-family:var(--font-secondary);font-size:11px;color:var(--text-tertiary)}
+  .holding-value{font-family:var(--font-secondary);font-size:13px;font-weight:600;color:var(--text);text-align:right;min-width:70px}
+  .holding-return{font-family:var(--font-secondary);font-size:11px;font-weight:600;text-align:right;min-width:50px}
+  .return-pos{color:var(--green)}.return-neg{color:var(--red)}
+
+  /* ─── Movers ─── */
+  .movers-list{display:flex;flex-direction:column;gap:8px}
+  .mover-row{
+    display:flex;align-items:center;gap:12px;
+    padding:12px 14px;border-radius:var(--radius-sm);
+    border:1px solid var(--border-light);background:var(--surface-alt);
+  }
+  .mover-ticker{font-family:var(--font-secondary);font-size:13px;font-weight:700;color:var(--text);min-width:40px}
+  .mover-name{flex:1;font-family:var(--font-secondary);font-size:11px;color:var(--text-tertiary)}
+  .mover-change{
+    font-family:var(--font-secondary);font-size:13px;font-weight:600;
+    padding:4px 10px;border-radius:6px;
+  }
+  .mover-up{background:var(--green-light);color:var(--green)}
+  .mover-down{background:var(--red-light);color:var(--red)}
+  .mover-impact{
+    font-family:var(--font-secondary);font-size:10px;color:var(--text-tertiary);
+    min-width:60px;text-align:right;
+  }
+
+  /* ─── AI Insight ─── */
+  .ai-card{
+    border-left:3px solid var(--green);
+    background:linear-gradient(135deg,var(--green-light) 0%,var(--surface) 100%);
+  }
+  .ai-header{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+  .ai-badge{
+    font-family:var(--font-secondary);font-size:10px;font-weight:600;
+    padding:3px 8px;border-radius:12px;background:var(--green);color:#fff;
+    letter-spacing:0.3px;
+  }
+  .ai-time{font-family:var(--font-secondary);font-size:10px;color:var(--text-tertiary)}
+  .ai-message{
+    font-family:var(--font-primary);font-size:14px;line-height:1.6;
+    color:var(--text-secondary);font-style:italic;
+  }
+  .ai-message strong{color:var(--text);font-weight:600}
+  .ai-actions{display:flex;gap:8px;margin-top:12px}
+  .ai-action{
+    flex:1;padding:8px;border-radius:var(--radius-sm);
+    font-family:var(--font-secondary);font-size:11px;font-weight:500;
+    border:1px solid var(--border);background:var(--surface);color:var(--text);
+    cursor:pointer;transition:all .2s;text-align:center;
+  }
+  .ai-action:hover{border-color:var(--green);color:var(--green)}
+  .ai-action.primary{background:var(--green);color:#fff;border-color:var(--green)}
+  .ai-action.primary:hover{background:#125a3a}
+
+  /* ─── Advisor Note ─── */
+  .advisor-note{
+    padding:14px 16px;border-radius:var(--radius-sm);
+    background:var(--surface-alt);border:1px solid var(--border-light);
+    margin-top:0;
+  }
+  .advisor-note-header{
+    display:flex;align-items:center;gap:6px;margin-bottom:6px;
+  }
+  .advisor-avatar{
+    width:20px;height:20px;border-radius:50%;background:var(--green);
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--font-secondary);font-size:8px;font-weight:700;color:#fff;
+  }
+  .advisor-name{font-family:var(--font-secondary);font-size:11px;font-weight:600;color:var(--text)}
+  .advisor-date{font-family:var(--font-secondary);font-size:10px;color:var(--text-tertiary);margin-left:auto}
+  .advisor-text{font-family:var(--font-primary);font-size:12px;color:var(--text-secondary);line-height:1.5}
+
+  /* ─── Footer ─── */
+  .footer{padding:24px 20px 0;text-align:center}
+  .footer-text{font-family:var(--font-secondary);font-size:10px;color:var(--text-tertiary)}
+
+  /* ─── Animations ─── */
+  @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+  .animate-in{animation:fadeUp .4s ease forwards;opacity:0}
+  .delay-1{animation-delay:.05s}.delay-2{animation-delay:.1s}.delay-3{animation-delay:.15s}
+  .delay-4{animation-delay:.2s}.delay-5{animation-delay:.25s}.delay-6{animation-delay:.3s}
+  .delay-7{animation-delay:.35s}.delay-8{animation-delay:.4s}.delay-9{animation-delay:.45s}
+
+  /* ─── Scrollbar ─── */
+  ::-webkit-scrollbar{width:0;height:0}
+</style>
+</head>
+<body>
+
+<div class="phone-frame">
+
+  <!-- Top Nav -->
+  <nav class="top-nav">
+    <a href="../index.html" class="back-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+      Back
+    </a>
+    <span class="nav-title">Invest</span>
+    <div class="nav-actions">
+      <button style="background:none;border:none;cursor:pointer;padding:4px" aria-label="Notifications">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Segmented Nav -->
+  <div class="segmented-nav">
+    <div class="seg-item active">Overview</div>
+    <div class="seg-item">Activity</div>
+    <div class="seg-item">Documents</div>
+    <div class="seg-item">Math</div>
+  </div>
+
+  <div class="content">
+
+    <!-- 1. Portfolio Overview Hero -->
+    <div class="hero-card animate-in delay-1">
+      <div class="hero-label">Total Portfolio Value</div>
+      <div class="hero-value"><span class="currency">$</span>124,850</div>
+      <div class="hero-changes">
+        <div class="hero-change">
+          <span class="change-label">Today</span>
+          <span class="change-value positive">+$2,330</span>
+        </div>
+        <div class="hero-change">
+          <span class="change-label">All Time</span>
+          <span class="change-value positive">+$18,200 (+17.1%)</span>
+        </div>
+      </div>
+      <div class="hero-chart">
+        <svg viewBox="0 0 400 80" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="chartGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" style="stop-color:rgba(255,255,255,.2)"/>
+              <stop offset="100%" style="stop-color:rgba(255,255,255,0)"/>
+            </linearGradient>
+          </defs>
+          <path d="M0,65 Q20,62 40,58 T80,52 T120,48 T160,42 T200,38 T240,30 T280,25 T320,18 T360,12 T400,8" fill="none" stroke="rgba(255,255,255,.8)" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M0,65 Q20,62 40,58 T80,52 T120,48 T160,42 T200,38 T240,30 T280,25 T320,18 T360,12 T400,8 V80 H0 Z" fill="url(#chartGrad)"/>
+        </svg>
+      </div>
+      <div class="time-filters">
+        <button class="time-filter">1D</button>
+        <button class="time-filter">1W</button>
+        <button class="time-filter">1M</button>
+        <button class="time-filter active">1Y</button>
+        <button class="time-filter">ALL</button>
+      </div>
+    </div>
+
+    <!-- 2. Advizmo Accounts -->
+    <div class="animate-in delay-2">
+      <div class="section-header">
+        <span class="section-title">Advizmo Accounts</span>
+        <span class="section-count">3 accounts</span>
+      </div>
+    </div>
+    <div class="card animate-in delay-2" style="padding:14px 16px">
+      <div class="accounts-list">
+        <div class="account-card">
+          <div class="account-icon icon-green">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 10h20"/></svg>
+          </div>
+          <div class="account-info">
+            <div class="account-name">Cash</div>
+            <div class="account-meta">Everyday spending & bills</div>
+          </div>
+          <div class="account-right">
+            <div class="account-value">$4,200</div>
+            <span class="account-status status-growing">Growing</span>
+          </div>
+        </div>
+        <div class="account-card">
+          <div class="account-icon icon-blue">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+          </div>
+          <div class="account-info">
+            <div class="account-name">Reserve</div>
+            <div class="account-meta">Emergency fund & liquidity</div>
+          </div>
+          <div class="account-right">
+            <div class="account-value">$12,400</div>
+            <span class="account-status status-ready">Ready</span>
+          </div>
+        </div>
+        <div class="account-card">
+          <div class="account-icon icon-purple">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          </div>
+          <div class="account-info">
+            <div class="account-name">Auto Invest</div>
+            <div class="account-meta">Automated wealth building</div>
+          </div>
+          <div class="account-right">
+            <div class="account-value">$85,250</div>
+            <span class="account-status status-investing">Investing</span>
+          </div>
+        </div>
+        <button class="account-action-btn">+ Link External Account</button>
+      </div>
+    </div>
+
+    <!-- 3. External Accounts -->
+    <div class="animate-in delay-3">
+      <div class="section-header">
+        <span class="section-title">External Accounts</span>
+        <span class="section-count">3 linked</span>
+      </div>
+    </div>
+    <div class="card animate-in delay-3" style="padding:14px 16px">
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div class="ext-card">
+          <div class="ext-icon icon-slate" style="background:#e8eaed;color:#1a1a1a;font-family:serif;font-style:italic">Ch</div>
+          <div class="ext-info">
+            <div class="ext-name">Chase</div>
+            <div class="ext-meta"><span class="ext-dot dot-green"></span> Connected · Synced 2m ago</div>
+          </div>
+          <div class="ext-right">
+            <div class="ext-value">$3,200</div>
+            <button class="ext-action">Move Money</button>
+          </div>
+        </div>
+        <div class="ext-card">
+          <div class="ext-icon" style="background:#fee2e2;color:#dc2626;font-weight:800">CO</div>
+          <div class="ext-info">
+            <div class="ext-name">Capital One</div>
+            <div class="ext-meta"><span class="ext-dot dot-green"></span> Connected · Synced 5m ago</div>
+          </div>
+          <div class="ext-right">
+            <div class="ext-value">$8,400</div>
+            <button class="ext-action">Move Money</button>
+          </div>
+        </div>
+        <div class="ext-card">
+          <div class="ext-icon" style="background:#fef3c7;color:#92400e;font-weight:800">Ma</div>
+          <div class="ext-info">
+            <div class="ext-name">Marcus</div>
+            <div class="ext-meta"><span class="ext-dot dot-amber"></span> Connected · Synced 1h ago</div>
+          </div>
+          <div class="ext-right">
+            <div class="ext-value">$15,600</div>
+            <button class="ext-action">Move Money</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Move Money -->
+    <div class="card move-money-card animate-in delay-4">
+      <div class="card-label" style="margin-bottom:8px">Move Money</div>
+      <div class="move-money-desc">"Transfer funds strategically to grow your portfolio. Consider tax implications before large moves."</div>
+      <div class="move-flow">
+        <div class="move-row">
+          <div class="move-box">Chase Checking</div>
+          <div class="move-arrow">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </div>
+          <div class="move-box">Auto Invest</div>
+        </div>
+      </div>
+      <button class="move-btn">Transfer Funds</button>
+    </div>
+
+    <!-- 5. Investment Health -->
+    <div class="animate-in delay-5">
+      <div class="section-header">
+        <span class="section-title">Investment Health</span>
+        <span class="card-badge badge-green">Excellent</span>
+      </div>
+    </div>
+    <div class="card animate-in delay-5">
+      <div class="health-grid">
+        <div class="health-item">
+          <div class="health-label">Overall Health</div>
+          <div class="health-value" style="color:var(--green)">Excellent</div>
+          <div class="health-bar"><div class="health-fill fill-green" style="width:92%"></div></div>
+        </div>
+        <div class="health-item">
+          <div class="health-label">Automation</div>
+          <div class="health-value" style="color:var(--green)">Active</div>
+          <div class="health-bar"><div class="health-fill fill-green" style="width:100%"></div></div>
+        </div>
+        <div class="health-item">
+          <div class="health-label">Diversification</div>
+          <div class="health-value" style="color:var(--amber)">Good</div>
+          <div class="health-bar"><div class="health-fill fill-amber" style="width:75%"></div></div>
+        </div>
+        <div class="health-item">
+          <div class="health-label">Risk Alignment</div>
+          <div class="health-value" style="color:var(--green)">Aligned</div>
+          <div class="health-bar"><div class="health-fill fill-green" style="width:88%"></div></div>
+        </div>
+        <div class="health-item" style="grid-column:span 2">
+          <div class="health-label">Idle Cash</div>
+          <div class="health-value" style="color:var(--green)">Low — 3.4% of portfolio</div>
+          <div class="health-bar"><div class="health-fill fill-green" style="width:34%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. Tax Optimization -->
+    <div class="card animate-in delay-6">
+      <div class="card-header" style="margin-bottom:0">
+        <div class="card-label">Tax Optimization</div>
+        <span class="card-badge badge-green">TLH Active</span>
+      </div>
+      <div style="height:12px"></div>
+      <div class="tax-header">
+        <div class="tax-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        </div>
+        <div>
+          <div class="tax-savings">$642</div>
+          <div class="tax-savings-label">Saved this year</div>
+        </div>
+      </div>
+      <div class="tax-details">
+        <div class="tax-detail">
+          <div class="tax-detail-label">Last Harvest</div>
+          <div class="tax-detail-value">3 days ago</div>
+        </div>
+        <div class="tax-detail">
+          <div class="tax-detail-label">Wash Sale</div>
+          <div class="tax-detail-value">None Detected</div>
+        </div>
+        <div class="tax-detail">
+          <div class="tax-detail-label">Est. Tax Rate</div>
+          <div class="tax-detail-value">22%</div>
+        </div>
+      </div>
+      <button class="tax-expand" onclick="this.classList.toggle('open');this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+        View Details
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div style="display:none;margin-top:12px;padding:12px;background:var(--surface-alt);border-radius:var(--radius-sm);border:1px solid var(--border-light)">
+        <div style="font-family:var(--font-secondary);font-size:12px;color:var(--text-secondary);line-height:1.6">
+          <strong>Tax-Loss Harvesting:</strong> Actively scanning for opportunities. Next review scheduled within 7 days. All harvested losses are reinvested in correlated (non-identical) securities to maintain market exposure while capturing tax benefits.
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. Portfolio Allocation -->
+    <div class="animate-in delay-7">
+      <div class="section-header">
+        <span class="section-title">Portfolio Allocation</span>
+      </div>
+    </div>
+    <div class="card animate-in delay-7">
+      <div class="donut-container">
+        <div class="donut-chart">
+          <svg viewBox="0 0 120 120">
+            <!-- VTI 58% -->
+            <circle cx="60" cy="60" r="48" fill="none" stroke="#166f47" stroke-width="16" stroke-dasharray="174.9 301.6" stroke-dashoffset="0" stroke-linecap="round"/>
+            <!-- VXUS 18% -->
+            <circle cx="60" cy="60" r="48" fill="none" stroke="#0369a1" stroke-width="16" stroke-dasharray="54.3 301.6" stroke-dashoffset="-174.9" stroke-linecap="round"/>
+            <!-- BND 14% -->
+            <circle cx="60" cy="60" r="48" fill="none" stroke="#c2790a" stroke-width="16" stroke-dasharray="42.2 301.6" stroke-dashoffset="-229.2" stroke-linecap="round"/>
+            <!-- VNQ 10% -->
+            <circle cx="60" cy="60" r="48" fill="none" stroke="#7c3aed" stroke-width="16" stroke-dasharray="30.2 301.6" stroke-dashoffset="-271.4" stroke-linecap="round"/>
+          </svg>
+          <div class="donut-center">
+            <div class="donut-center-value">$108,850</div>
+            <div class="donut-center-label">Invested</div>
+          </div>
+        </div>
+        <div class="donut-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#166f47"></div><span class="legend-text">VTI — US Equity</span><span class="legend-pct">58%</span></div>
+          <div class="legend-item"><div class="legend-dot" style="background:#0369a1"></div><span class="legend-text">VXUS — Int'l Equity</span><span class="legend-pct">18%</span></div>
+          <div class="legend-item"><div class="legend-dot" style="background:#c2790a"></div><span class="legend-text">BND — Bonds</span><span class="legend-pct">14%</span></div>
+          <div class="legend-item"><div class="legend-dot" style="background:#7c3aed"></div><span class="legend-text">VNQ — Real Estate</span><span class="legend-pct">10%</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8. Top Holdings -->
+    <div class="animate-in delay-8">
+      <div class="section-header">
+        <span class="section-title">Top Holdings</span>
+      </div>
+    </div>
+    <div class="card animate-in delay-8">
+      <div class="holdings-list">
+        <div class="holding-row">
+          <div class="holding-ticker">VTI</div>
+          <div class="holding-name">Vanguard Total Stock Market</div>
+          <div class="holding-value">$63,133</div>
+          <div class="holding-return return-pos">+18.4%</div>
+        </div>
+        <div class="holding-row">
+          <div class="holding-ticker">VXUS</div>
+          <div class="holding-name">Vanguard Int'l Stock</div>
+          <div class="holding-value">$19,593</div>
+          <div class="holding-return return-pos">+12.7%</div>
+        </div>
+        <div class="holding-row">
+          <div class="holding-ticker">BND</div>
+          <div class="holding-name">Vanguard Total Bond Market</div>
+          <div class="holding-value">$15,239</div>
+          <div class="holding-return return-pos">+4.2%</div>
+        </div>
+        <div class="holding-row">
+          <div class="holding-ticker">VNQ</div>
+          <div class="holding-name">Vanguard Real Estate</div>
+          <div class="holding-value">$10,885</div>
+          <div class="holding-return return-pos">+9.8%</div>
+        </div>
+        <div class="holding-row">
+          <div class="holding-ticker" style="color:var(--text-tertiary)">CASH</div>
+          <div class="holding-name">Uninvested cash</div>
+          <div class="holding-value">$16,000</div>
+          <div class="holding-return" style="color:var(--text-tertiary)">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 9. Top Movers -->
+    <div class="animate-in delay-9">
+      <div class="section-header">
+        <span class="section-title">Top Movers</span>
+        <span class="card-badge badge-amber">Today</span>
+      </div>
+    </div>
+    <div class="card animate-in delay-9">
+      <div class="movers-list">
+        <div class="mover-row">
+          <div class="mover-ticker">VTI</div>
+          <div class="mover-name">US Total Market</div>
+          <div class="mover-change mover-up">+2.1%</div>
+          <div class="mover-impact">+$1,326</div>
+        </div>
+        <div class="mover-row">
+          <div class="mover-ticker">VNQ</div>
+          <div class="mover-name">Real Estate</div>
+          <div class="mover-change mover-down">-0.5%</div>
+          <div class="mover-impact" style="color:var(--red)">-$54</div>
+        </div>
+      </div>
+      <div style="margin-top:14px;padding:12px 14px;border-radius:var(--radius-sm);background:var(--surface-alt);border:1px solid var(--border-light)">
+        <div style="font-family:var(--font-secondary);font-size:11px;color:var(--text-tertiary);margin-bottom:4px">Portfolio Impact</div>
+        <div style="font-family:var(--font-secondary);font-size:14px;font-weight:600;color:var(--green)">+$2,330 today (+1.90%)</div>
+      </div>
+    </div>
+
+    <!-- 10. AI Insight -->
+    <div class="card ai-card animate-in delay-9">
+      <div class="ai-header">
+        <span class="ai-badge">AI Insight</span>
+        <span class="ai-time">Updated 12 minutes ago</span>
+      </div>
+      <div class="ai-message">
+        "Your portfolio remains aligned with your <strong>Moderate Growth</strong> strategy. Bond allocation provides stability during current market volatility. Consider increasing international exposure by 2-3% for better geographic diversification."
+      </div>
+      <div class="ai-actions">
+        <button class="ai-action primary">Apply Suggestion</button>
+        <button class="ai-action">Dismiss</button>
+      </div>
+    </div>
+
+    <!-- Advisor Note -->
+    <div class="advisor-note animate-in delay-9">
+      <div class="advisor-note-header">
+        <div class="advisor-avatar">JW</div>
+        <div class="advisor-name">Advisor Note</div>
+        <div class="advisor-date">Jul 15, 2026</div>
+      </div>
+      <div class="advisor-text">
+        "Your year-to-date performance of +17.1% outpaces the benchmark by 2.3%. The tax-loss harvesting program has contributed $642 in realized savings. No action needed at this time — we're monitoring the real estate allocation closely."
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer animate-in delay-9">
+      <div class="footer-text">Advizmo Financial Operating System · Portfolio data refreshes every 5 minutes</div>
+    </div>
+
+  </div><!-- /content -->
+
+</div><!-- /phone-frame -->
+
+<script>
+  // Time filter toggle
+  document.querySelectorAll('.time-filter').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.time-filter').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+  // Segmented nav toggle
+  document.querySelectorAll('.seg-item').forEach(item => {
+    item.addEventListener('click', () => {
+      document.querySelectorAll('.seg-item').forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+    });
+  });
+
+  // AI action buttons
+  document.querySelector('.ai-action.primary')?.addEventListener('click', function() {
+    this.textContent = 'Applied ✓';
+    this.style.background = '#0d5a3a';
+    setTimeout(() => { this.textContent = 'Apply Suggestion'; this.style.background = ''; }, 2000);
+  });
+
+  document.querySelector('.ai-action:not(.primary)')?.addEventListener('click', function() {
+    this.closest('.ai-card').style.opacity = '0.5';
+    setTimeout(() => { this.closest('.ai-card').style.opacity = '1'; }, 1500);
+  });
+
+  // Transfer button
+  document.querySelector('.move-btn')?.addEventListener('click', function() {
+    this.textContent = 'Preparing Transfer...';
+    setTimeout(() => { this.textContent = 'Transfer Funds'; }, 1500);
+  });
+</script>
+
+</body>
+</html>
