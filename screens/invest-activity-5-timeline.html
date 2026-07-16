@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Invest Activity 5 — Money Movement Timeline</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'IBM Plex Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #f8f9fa;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 0;
+    color: #1a1a2e;
+  }
+
+  .phone-frame {
+    width: 100%;
+    max-width: 430px;
+    min-height: 100vh;
+    background: #f8f9fa;
+    position: relative;
+  }
+
+  .header {
+    background: #fff;
+    padding: 16px 20px 14px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid #e9ecef;
+  }
+
+  .header-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .back-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    border: 1px solid #e2e5ea;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    text-decoration: none;
+    color: #1a1a2e;
+  }
+
+  .back-btn svg {
+    width: 18px;
+    height: 18px;
+    stroke: #1a1a2e;
+  }
+
+  .header-title {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    flex: 1;
+  }
+
+  .segmented-nav {
+    display: flex;
+    gap: 4px;
+    background: #f1f3f5;
+    border-radius: 10px;
+    padding: 3px;
+    margin-bottom: 14px;
+  }
+
+  .segmented-nav a {
+    flex: 1;
+    text-align: center;
+    padding: 8px 10px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #6c757d;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+  }
+
+  .segmented-nav a.active {
+    background: #fff;
+    color: #1a1a2e;
+    font-weight: 600;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+
+  .segmented-nav a:not(.active):hover {
+    color: #495057;
+  }
+
+  .filters {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .filters::-webkit-scrollbar { display: none; }
+
+  .filter-btn {
+    padding: 7px 14px;
+    border-radius: 20px;
+    border: 1px solid #e2e5ea;
+    background: #fff;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: #495057;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .filter-btn.active {
+    background: #1a1a2e;
+    color: #fff;
+    border-color: #1a1a2e;
+  }
+
+  .filter-btn:not(.active):hover {
+    border-color: #1a1a2e;
+    color: #1a1a2e;
+  }
+
+  .feed {
+    padding: 6px 16px 32px;
+  }
+
+  .date-header {
+    padding: 18px 4px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #868e96;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+  }
+
+  .activity-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 16px 18px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    border: 1px solid #f0f0f0;
+  }
+
+  .activity-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+  }
+
+  .activity-card:active {
+    transform: scale(0.99);
+  }
+
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+
+  .activity-label {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1a1a2e;
+    letter-spacing: -0.2px;
+  }
+
+  .activity-amount {
+    font-size: 16px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: -0.3px;
+    text-align: right;
+    line-height: 1.2;
+  }
+
+  .amount-positive { color: #166f47; }
+  .amount-neutral { color: #1a1a2e; }
+  .amount-amber { color: #c2790a; }
+  .amount-green { color: #166f47; }
+
+  .card-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .activity-summary {
+    font-size: 13px;
+    color: #6c757d;
+    font-weight: 400;
+    flex: 1;
+    margin-right: 10px;
+    line-height: 1.35;
+  }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .status-completed {
+    background: #e6f5ed;
+    color: #166f47;
+  }
+
+  .status-scheduled {
+    background: #fff4e6;
+    color: #c2790a;
+  }
+
+  .status-monitoring {
+    background: #e7f5ff;
+    color: #1971c2;
+  }
+
+  .status-icon {
+    width: 14px;
+    height: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    line-height: 1;
+  }
+
+  .chevron {
+    width: 16px;
+    height: 16px;
+    color: #ced4da;
+    margin-left: 8px;
+    flex-shrink: 0;
+    align-self: center;
+  }
+
+  .card-inner {
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+
+  .card-main {
+    flex: 1;
+    min-width: 0;
+  }
+
+  @media (max-width: 380px) {
+    .activity-amount { font-size: 15px; }
+    .activity-card { padding: 14px 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="phone-frame">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-top">
+      <a href="index.html" class="back-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </a>
+      <div class="header-title">Activity</div>
+    </div>
+
+    <div class="segmented-nav">
+      <a href="#">Overview</a>
+      <a href="#" class="active">Activity</a>
+      <a href="#">Documents</a>
+      <a href="#">Math</a>
+    </div>
+
+    <div class="filters">
+      <button class="filter-btn active">All</button>
+      <button class="filter-btn">Deposits</button>
+      <button class="filter-btn">Investments</button>
+      <button class="filter-btn">Automation</button>
+    </div>
+  </div>
+
+  <!-- ACTIVITY FEED -->
+  <div class="feed">
+
+    <!-- TODAY -->
+    <div class="date-header">Today &mdash; December 30, 2024</div>
+
+    <!-- Activity 1: Auto Invest Completed -->
+    <div class="activity-card">
+      <div class="card-top">
+        <div class="activity-label">Auto Invest Completed</div>
+        <div class="activity-amount amount-neutral">$520.00</div>
+      </div>
+      <div class="card-bottom">
+        <div class="card-inner">
+          <span class="activity-summary">Invested in VTI, VXUS, BND, VNQ</span>
+          <span class="status-badge status-completed">
+            <span class="status-icon">&#10003;</span> Completed
+          </span>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+    </div>
+
+    <!-- Activity 2: Deposit Received -->
+    <div class="activity-card">
+      <div class="card-top">
+        <div class="activity-label">Deposit Received</div>
+        <div class="activity-amount amount-positive">+$2,400.00</div>
+      </div>
+      <div class="card-bottom">
+        <div class="card-inner">
+          <span class="activity-summary">From Capital One Checking</span>
+          <span class="status-badge status-completed">
+            <span class="status-icon">&#10003;</span> Available
+          </span>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+    </div>
+
+    <!-- YESTERDAY -->
+    <div class="date-header">Yesterday &mdash; December 29, 2024</div>
+
+    <!-- Activity 3: Tax Optimization -->
+    <div class="activity-card">
+      <div class="card-top">
+        <div class="activity-label">Tax Optimization</div>
+        <div class="activity-amount amount-green">$81.60</div>
+      </div>
+      <div class="card-bottom">
+        <div class="card-inner">
+          <span class="activity-summary">Tax-loss harvested VXUS &rarr; IXUS</span>
+          <span class="status-badge status-completed">
+            <span class="status-icon">&#10003;</span> Completed
+          </span>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+    </div>
+
+    <!-- Activity 4: Reserve Transfer -->
+    <div class="activity-card">
+      <div class="card-top">
+        <div class="activity-label">Reserve Transfer</div>
+        <div class="activity-amount amount-neutral">$200.00</div>
+      </div>
+      <div class="card-bottom">
+        <div class="card-inner">
+          <span class="activity-summary">To emergency reserve (84% complete)</span>
+          <span class="status-badge status-completed">
+            <span class="status-icon">&#10003;</span> Completed
+          </span>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+    </div>
+
+    <!-- DECEMBER 28 -->
+    <div class="date-header">December 28, 2024</div>
+
+    <!-- Activity 5: Investment Scheduled -->
+    <div class="activity-card">
+      <div class="card-top">
+        <div class="activity-label">Investment Scheduled</div>
+        <div class="activity-amount amount-amber">$520.00</div>
+      </div>
+      <div class="card-bottom">
+        <div class="card-inner">
+          <span class="activity-summary">Queued for market open</span>
+          <span class="status-badge status-scheduled">
+            <span class="status-icon">&#9675;</span> Scheduled for Jan 3
+          </span>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+    </div>
+
+    <!-- Activity 6: Dividend Received -->
+    <div class="activity-card">
+      <div class="card-top">
+        <div class="activity-label">Dividend Received</div>
+        <div class="activity-amount amount-positive">+$42.18</div>
+      </div>
+      <div class="card-bottom">
+        <div class="card-inner">
+          <span class="activity-summary">VTI quarterly dividend</span>
+          <span class="status-badge status-completed">
+            <span class="status-icon">&#10003;</span> Reinvested
+          </span>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+    </div>
+
+    <!-- DECEMBER 27 -->
+    <div class="date-header">December 27, 2024</div>
+
+    <!-- Activity 7: Portfolio Rebalancing -->
+    <div class="activity-card">
+      <div class="card-top">
+        <div class="activity-label">Portfolio Rebalancing</div>
+        <div class="activity-amount amount-neutral" style="font-size:13px;font-weight:500;color:#6c757d;">—</div>
+      </div>
+      <div class="card-bottom">
+        <div class="card-inner">
+          <span class="activity-summary">VTI 60%→58%, BND 12%→14%</span>
+          <span class="status-badge status-completed">
+            <span class="status-icon">&#10003;</span> Completed
+          </span>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+    </div>
+
+    <!-- Activity 8: Idle Cash Alert -->
+    <div class="activity-card">
+      <div class="card-top">
+        <div class="activity-label">Idle Cash Alert</div>
+        <div class="activity-amount amount-neutral">$1,850</div>
+      </div>
+      <div class="card-bottom">
+        <div class="card-inner">
+          <span class="activity-summary">Earning 4.1% APY in sweep account</span>
+          <span class="status-badge status-monitoring">
+            <span class="status-icon">&#9679;</span> Monitoring
+          </span>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advizmo - Money Movement Activity</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'IBM Plex Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f8f9fa;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 430px;
+            width: 100%;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .header {
+            background: #fff;
+            border-bottom: 1px solid #e9ecef;
+            padding: 16px 20px;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .back-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: #f1f3f5;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .back-btn:hover {
+            background: #e9ecef;
+        }
+
+        .back-btn svg {
+            width: 18px;
+            height: 18px;
+            stroke: #1a1a1a;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+            flex: 1;
+        }
+
+        .nav-segment {
+            display: flex;
+            background: #f1f3f5;
+            border-radius: 10px;
+            padding: 3px;
+            gap: 2px;
+        }
+
+        .nav-segment a {
+            flex: 1;
+            padding: 8px 12px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 500;
+            color: #6c757d;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .nav-segment a.active {
+            background: #fff;
+            color: #166f47;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+
+        .nav-segment a:hover:not(.active) {
+            color: #495057;
+        }
+
+        .content {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .activity-card {
+            background: #fff;
+            border: 1px solid #e9ecef;
+            border-radius: 14px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .activity-card.deposit {
+            border-left: 4px solid #166f47;
+        }
+
+        .activity-card.withdrawal {
+            border-left: 4px solid #c2790a;
+        }
+
+        .amount-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .amount {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .amount.positive {
+            color: #166f47;
+        }
+
+        .amount.negative {
+            color: #b91c1c;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .status-badge.completed {
+            background: #d4edda;
+            color: #166f47;
+        }
+
+        .status-badge.processing {
+            background: #fff3cd;
+            color: #c2790a;
+        }
+
+        .status-badge.pending {
+            background: #e2e3e5;
+            color: #6c757d;
+        }
+
+        .status-icon {
+            font-size: 10px;
+        }
+
+        .date {
+            font-size: 13px;
+            color: #6c757d;
+            margin-top: 4px;
+        }
+
+        .flow-visualization {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .flow-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .flow-label {
+            font-size: 11px;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .flow-account {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .flow-balance {
+            font-size: 12px;
+            color: #6c757d;
+        }
+
+        .flow-arrow {
+            font-size: 18px;
+            color: #6c757d;
+            flex-shrink: 0;
+        }
+
+        .availability {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            background: #d4edda;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #166f47;
+            font-weight: 500;
+        }
+
+        .availability.pending {
+            background: #fff3cd;
+            color: #c2790a;
+        }
+
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 14px;
+            position: relative;
+            padding-bottom: 16px;
+        }
+
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+
+        .timeline-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #e9ecef;
+            border: 2px solid #fff;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .timeline-dot.completed {
+            background: #166f47;
+        }
+
+        .timeline-dot.active {
+            background: #c2790a;
+            box-shadow: 0 0 0 3px rgba(194, 121, 10, 0.2);
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 5px;
+            top: 14px;
+            width: 2px;
+            height: calc(100% - 14px);
+            background: #e9ecef;
+        }
+
+        .timeline-item:last-child .timeline-line {
+            display: none;
+        }
+
+        .timeline-content {
+            flex: 1;
+        }
+
+        .timeline-time {
+            font-size: 12px;
+            color: #6c757d;
+            margin-bottom: 2px;
+        }
+
+        .timeline-event {
+            font-size: 14px;
+            font-weight: 500;
+            color: #1a1a1a;
+        }
+
+        .details-section {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding-top: 16px;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .detail-label {
+            font-size: 13px;
+            color: #6c757d;
+        }
+
+        .detail-value {
+            font-size: 13px;
+            font-weight: 500;
+            color: #1a1a1a;
+        }
+
+        .section-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .divider {
+            height: 1px;
+            background: #e9ecef;
+            margin: 4px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-top">
+                <button class="back-btn" onclick="window.location.href='index.html'" aria-label="Go back">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M15 18l-6-6 6-6"/>
+                    </svg>
+                </button>
+                <h1 class="header-title">Money Movement</h1>
+            </div>
+            <nav class="nav-segment" aria-label="Activity navigation">
+                <a href="#">Overview</a>
+                <a href="#" class="active" aria-current="page">Activity</a>
+                <a href="#">Documents</a>
+                <a href="#">Math</a>
+            </nav>
+        </div>
+
+        <div class="content">
+            <!-- Deposit Card -->
+            <div class="activity-card deposit">
+                <div class="amount-section">
+                    <div>
+                        <div class="amount positive">$2,400.00</div>
+                        <div class="date">December 30, 2024</div>
+                    </div>
+                    <span class="status-badge completed">
+                        <span class="status-icon">✓</span>
+                        Completed
+                    </span>
+                </div>
+
+                <div class="flow-visualization">
+                    <div class="flow-item">
+                        <span class="flow-label">From</span>
+                        <span class="flow-account">Capital One Checking</span>
+                        <span class="flow-balance">$12,400</span>
+                    </div>
+                    <span class="flow-arrow">→</span>
+                    <div class="flow-item">
+                        <span class="flow-label">To</span>
+                        <span class="flow-account">Advizmo Cash</span>
+                        <span class="flow-balance">$1,850</span>
+                    </div>
+                </div>
+
+                <div class="availability">
+                    <span>✓</span>
+                    Available now
+                </div>
+
+                <div>
+                    <div class="section-title">Timeline</div>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-dot completed"></div>
+                            <div class="timeline-line"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-time">Dec 28, 9:00 AM</div>
+                                <div class="timeline-event">Initiated</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot completed"></div>
+                            <div class="timeline-line"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-time">Dec 29, 2:30 PM</div>
+                                <div class="timeline-event">Processing</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot completed"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-time">Dec 30, 10:15 AM</div>
+                                <div class="timeline-event">Completed ✓</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="details-section">
+                    <div class="detail-row">
+                        <span class="detail-label">Transfer Type</span>
+                        <span class="detail-value">Bank Transfer</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Confirmation</span>
+                        <span class="detail-value">ADV-2024-12-30-001</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Fee</span>
+                        <span class="detail-value">$0.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Withdrawal Card -->
+            <div class="activity-card withdrawal">
+                <div class="amount-section">
+                    <div>
+                        <div class="amount negative">-$500.00</div>
+                        <div class="date">December 31, 2024</div>
+                    </div>
+                    <span class="status-badge processing">
+                        <span class="status-icon">●</span>
+                        Processing
+                    </span>
+                </div>
+
+                <div class="flow-visualization">
+                    <div class="flow-item">
+                        <span class="flow-label">From</span>
+                        <span class="flow-account">Advizmo Cash</span>
+                        <span class="flow-balance">$1,850</span>
+                    </div>
+                    <span class="flow-arrow">→</span>
+                    <div class="flow-item">
+                        <span class="flow-label">To</span>
+                        <span class="flow-account">Chase Checking</span>
+                        <span class="flow-balance">$12,400</span>
+                    </div>
+                </div>
+
+                <div class="availability pending">
+                    <span>⏳</span>
+                    Available Jan 2, 2025
+                </div>
+
+                <div>
+                    <div class="section-title">Timeline</div>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-dot completed"></div>
+                            <div class="timeline-line"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-time">Dec 31, 11:00 AM</div>
+                                <div class="timeline-event">Initiated</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot active"></div>
+                            <div class="timeline-line"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-time">Dec 31, 11:00 AM</div>
+                                <div class="timeline-event">Processing (current)</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-time">Jan 2, 2025</div>
+                                <div class="timeline-event">Expected completion</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="details-section">
+                    <div class="detail-row">
+                        <span class="detail-label">Transfer Type</span>
+                        <span class="detail-value">Bank Transfer</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Confirmation</span>
+                        <span class="detail-value">ADV-2024-12-31-002</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Fee</span>
+                        <span class="detail-value">$0.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

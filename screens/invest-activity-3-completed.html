@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Investment Completed | Advizmo</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'IBM Plex Sans','Inter',system-ui,sans-serif;background:#f8f9fa;color:#1a1a1a;-webkit-font-smoothing:antialiased}
+  .phone{max-width:430px;margin:0 auto;background:#f8f9fa;min-height:100vh}
+
+  /* Header */
+  .header{background:#fff;padding:16px 20px 0;border-bottom:1px solid #e9ecef}
+  .header-top{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+  .back-btn{width:36px;height:36px;border-radius:10px;background:#f8f9fa;border:1px solid #e9ecef;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#1a1a1a;font-size:18px;text-decoration:none;flex-shrink:0}
+  .header-title{font-size:18px;font-weight:700;letter-spacing:-0.3px}
+  .segmented-nav{display:flex;gap:4px;background:#f1f3f5;border-radius:10px;padding:4px}
+  .segmented-nav a{flex:1;text-align:center;padding:8px 6px;border-radius:8px;font-size:13px;font-weight:500;color:#6c757d;text-decoration:none;transition:all .2s}
+  .segmented-nav a.active{background:#fff;color:#1a1a1a;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+
+  /* Content */
+  .content{padding:20px}
+  .detail-card{background:#fff;border-radius:14px;padding:24px 20px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+
+  /* Status Banner */
+  .status-banner{display:flex;align-items:center;gap:10px;padding:14px 16px;border-radius:10px;background:#eaf7ef;margin-bottom:20px}
+  .status-icon{width:36px;height:36px;border-radius:50%;background:#166f47;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;flex-shrink:0}
+  .status-text{font-size:15px;font-weight:600;color:#166f47}
+  .status-text span{font-weight:400;color:#4a7c5c;font-size:13px;display:block;margin-top:2px}
+
+  /* Amount Header */
+  .amount-header{margin-bottom:24px}
+  .amount-label{font-size:13px;color:#6c757d;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px;font-weight:500}
+  .amount-value{font-size:32px;font-weight:700;color:#1a1a1a;letter-spacing:-0.5px}
+  .amount-meta{display:flex;gap:16px;margin-top:8px}
+  .meta-item{font-size:13px;color:#6c757d}
+  .meta-item strong{color:#495057}
+
+  /* Divider */
+  .divider{height:1px;background:#e9ecef;margin:20px 0}
+
+  /* Section */
+  .section-label{font-size:13px;font-weight:600;color:#6c757d;text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px}
+  .portfolio-name{font-size:16px;font-weight:600;color:#1a1a1a;margin-bottom:16px}
+
+  /* ETF List */
+  .etf-list{display:flex;flex-direction:column;gap:0}
+  .etf-item{padding:16px 0;border-bottom:1px solid #f1f3f5}
+  .etf-item:last-child{border-bottom:none;padding-bottom:0}
+  .etf-item:first-child{padding-top:0}
+  .etf-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+  .etf-ticker{font-size:16px;font-weight:700;color:#1a1a1a}
+  .etf-allocation{font-size:13px;font-weight:600;color:#166f47;background:#eaf7ef;padding:3px 10px;border-radius:20px}
+  .etf-name{font-size:13px;color:#6c757d;margin-bottom:10px}
+  .etf-details{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+  .etf-detail-label{font-size:11px;color:#adb5bd;text-transform:uppercase;letter-spacing:.3px;font-weight:500}
+  .etf-detail-value{font-size:15px;font-weight:600;color:#1a1a1a;margin-top:2px}
+
+  /* Summary Grid */
+  .summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .summary-item{padding:14px;background:#f8f9fa;border-radius:10px}
+  .summary-item.full{grid-column:1/-1}
+  .summary-label{font-size:12px;color:#6c757d;font-weight:500;margin-bottom:4px}
+  .summary-value{font-size:16px;font-weight:700;color:#1a1a1a}
+  .summary-value.green{color:#166f47}
+
+  /* Info Box */
+  .info-box{background:#fff;border-radius:14px;padding:20px;margin-bottom:16px;border:1px solid #e9ecef;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+  .info-title{font-size:14px;font-weight:700;color:#1a1a1a;margin-bottom:8px}
+  .info-text{font-size:14px;color:#495057;line-height:1.6}
+
+  /* Footer spacer */
+  .footer-spacer{height:40px}
+</style>
+</head>
+<body>
+<div class="phone">
+  <!-- Header -->
+  <div class="header">
+    <div class="header-top">
+      <a href="index.html" class="back-btn">&#8592;</a>
+      <div class="header-title">Investment Completed</div>
+    </div>
+    <nav class="segmented-nav">
+      <a href="#">Overview</a>
+      <a href="#" class="active">Activity</a>
+      <a href="#">Documents</a>
+      <a href="#">Math</a>
+    </nav>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+
+    <!-- Detail Card -->
+    <div class="detail-card">
+
+      <!-- Status -->
+      <div class="status-banner">
+        <div class="status-icon">&#10003;</div>
+        <div class="status-text">Completed <span>Fully executed &amp; confirmed</span></div>
+      </div>
+
+      <!-- Amount -->
+      <div class="amount-header">
+        <div class="amount-label">Amount</div>
+        <div class="amount-value">$520.00</div>
+        <div class="amount-meta">
+          <span class="meta-item"><strong>December 30, 2024</strong></span>
+          <span class="meta-item"><strong>9:32 AM ET</strong></span>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Portfolio -->
+      <div class="section-label">Portfolio</div>
+      <div class="portfolio-name">Aggressive Growth Portfolio</div>
+
+      <div class="divider"></div>
+
+      <!-- Purchased ETFs -->
+      <div class="section-label">Purchased ETFs</div>
+      <div class="etf-list">
+
+        <!-- VTI -->
+        <div class="etf-item">
+          <div class="etf-header">
+            <span class="etf-ticker">VTI</span>
+            <span class="etf-allocation">58%</span>
+          </div>
+          <div class="etf-name">Vanguard Total Stock Market</div>
+          <div class="etf-details">
+            <div>
+              <div class="etf-detail-label">Shares</div>
+              <div class="etf-detail-value">1.52</div>
+            </div>
+            <div>
+              <div class="etf-detail-label">Purchased at</div>
+              <div class="etf-detail-value">$198.42</div>
+            </div>
+            <div>
+              <div class="etf-detail-label">Total</div>
+              <div class="etf-detail-value">$301.60</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- VXUS -->
+        <div class="etf-item">
+          <div class="etf-header">
+            <span class="etf-ticker">VXUS</span>
+            <span class="etf-allocation">18%</span>
+          </div>
+          <div class="etf-name">Vanguard Total International</div>
+          <div class="etf-details">
+            <div>
+              <div class="etf-detail-label">Shares</div>
+              <div class="etf-detail-value">1.65</div>
+            </div>
+            <div>
+              <div class="etf-detail-label">Purchased at</div>
+              <div class="etf-detail-value">$56.80</div>
+            </div>
+            <div>
+              <div class="etf-detail-label">Total</div>
+              <div class="etf-detail-value">$93.72</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BND -->
+        <div class="etf-item">
+          <div class="etf-header">
+            <span class="etf-ticker">BND</span>
+            <span class="etf-allocation">14%</span>
+          </div>
+          <div class="etf-name">Vanguard Total Bond Market</div>
+          <div class="etf-details">
+            <div>
+              <div class="etf-detail-label">Shares</div>
+              <div class="etf-detail-value">1.00</div>
+            </div>
+            <div>
+              <div class="etf-detail-label">Purchased at</div>
+              <div class="etf-detail-value">$72.40</div>
+            </div>
+            <div>
+              <div class="etf-detail-label">Total</div>
+              <div class="etf-detail-value">$72.40</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- VNQ -->
+        <div class="etf-item">
+          <div class="etf-header">
+            <span class="etf-ticker">VNQ</span>
+            <span class="etf-allocation">10%</span>
+          </div>
+          <div class="etf-name">Vanguard Real Estate</div>
+          <div class="etf-details">
+            <div>
+              <div class="etf-detail-label">Shares</div>
+              <div class="etf-detail-value">0.63</div>
+            </div>
+            <div>
+              <div class="etf-detail-label">Purchased at</div>
+              <div class="etf-detail-value">$82.60</div>
+            </div>
+            <div>
+              <div class="etf-detail-label">Total</div>
+              <div class="etf-detail-value">$52.04</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Summary -->
+      <div class="section-label">Summary</div>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <div class="summary-label">Total Invested</div>
+          <div class="summary-value green">$520.00</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-label">Total Shares</div>
+          <div class="summary-value">4.80</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-label">Purchased at</div>
+          <div class="summary-value">9:32 AM ET</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-label">Available by</div>
+          <div class="summary-value">Jan 2, 2025</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- What This Means -->
+    <div class="info-box">
+      <div class="info-title">What This Means</div>
+      <div class="info-text">Your $520 has been invested across 4 ETFs according to your portfolio allocation. These investments will settle in 2 business days and begin earning returns.</div>
+    </div>
+
+    <div class="footer-spacer"></div>
+  </div>
+</div>
+</body>
+</html>
