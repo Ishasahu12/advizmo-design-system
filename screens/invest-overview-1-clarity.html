@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Invest Overview – Advizmo</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:#f8f9fa;font-family:'Inter',sans-serif;color:#1c1c1e;max-width:430px;margin:0 auto;min-height:100vh;padding-bottom:100px}
+
+/* Status bar */
+.sb{height:44px;padding:14px 20px 0;display:flex;justify-content:space-between;align-items:center;background:#f8f9fa;position:sticky;top:0;z-index:100}
+.sbt{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600}
+
+/* Nav header */
+.nh{display:flex;align-items:center;padding:8px 16px 10px;background:#f8f9fa;position:sticky;top:44px;z-index:99}
+.nh .back{width:36px;height:36px;border-radius:50%;background:rgba(120,120,128,.08);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.nh .back svg{width:18px;height:18px;fill:none;stroke:#1c1c1e;stroke-width:2.5;stroke-linecap:round}
+.nh .title{flex:1;text-align:center;font-family:'IBM Plex Sans',sans-serif;font-size:17px;font-weight:600}
+.nh .spacer{width:36px}
+
+/* Segmented nav */
+.snav{display:flex;gap:4px;padding:4px 20px 12px;background:#f8f9fa;position:sticky;top:82px;z-index:98}
+.snav button{flex:1;padding:8px 0;border-radius:10px;border:none;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+.snav .on{background:#1c1c1e;color:#fff}
+.snav .off{background:transparent;color:#8e8e93}
+
+/* Sections */
+.section{padding:0 20px;margin-bottom:16px}
+.section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.section-title{font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:.06em}
+
+/* Card base */
+.card{background:#fff;border-radius:14px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.04);margin-bottom:10px}
+
+/* ========== PORTFOLIO HERO ========== */
+.hero-card{background:#fff;border-radius:14px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.04);margin-bottom:10px}
+.hero-val{font-family:'IBM Plex Sans',sans-serif;font-size:32px;font-weight:700;color:#1c1c1e;letter-spacing:-.02em}
+.hero-row{display:flex;align-items:center;gap:12px;margin-top:6px;flex-wrap:wrap}
+.hero-change{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:8px;font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600}
+.hero-change.pos{background:#eefbf4;color:#166f47}
+.hero-change.neg{background:#fee2e2;color:#b91c1c}
+.hero-sub{font-size:13px;color:#6b7280;margin-top:2px}
+.hero-sub strong{color:#1c1c1e;font-weight:600}
+
+/* Graph */
+.graph-wrap{position:relative;margin-top:12px;height:100px;background:#f8f9fa;border-radius:10px;overflow:hidden}
+.graph-canvas{width:100%;height:100%;display:block}
+.graph-overlay{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none}
+
+/* Timeframe filters */
+.tf{display:flex;gap:4px;margin-top:10px;justify-content:center}
+.tf button{padding:6px 0;border-radius:8px;border:none;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;cursor:pointer;background:transparent;color:#8e8e93;min-width:40px;transition:all .15s}
+.tf button.on{background:#1c1c1e;color:#fff}
+
+/* ========== ACCOUNTS ========== */
+.acct-list{display:flex;flex-direction:column;gap:8px}
+.acct-row{display:flex;align-items:center;gap:12px;padding:12px 14px;background:#fff;border-radius:12px;border:1px solid rgba(0,0,0,.04)}
+.acct-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
+.acct-icon.adv{background:#eefbf4;color:#166f47}
+.acct-icon.ext{background:#e0efff;color:#1551a8}
+.acct-info{flex:1;min-width:0}
+.acct-name{font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600;color:#1c1c1e}
+.acct-tag{font-size:11px;color:#8e8e93;margin-top:1px}
+.acct-bal{text-align:right}
+.acct-amt{font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600;color:#1c1c1e}
+.acct-apy{font-size:11px;color:#166f47;font-weight:500}
+
+/* ========== HOLDINGS (TABS) ========== */
+.tabs{display:flex;gap:4px;margin-bottom:10px;background:rgba(0,0,0,.04);border-radius:10px;padding:3px}
+.tabs button{flex:1;padding:8px 0;border:none;border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;background:transparent;color:#8e8e93;transition:all .15s}
+.tabs button.on{background:#fff;color:#1c1c1e;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.hold-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid rgba(0,0,0,.04)}
+.hold-item:last-child{border-bottom:none}
+.hold-ticker{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:700;color:#1c1c1e;width:48px}
+.hold-name{font-size:12px;color:#8e8e93;flex:1}
+.hold-pct{font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600;color:#1c1c1e;text-align:right;width:44px}
+.hold-val{text-align:right;min-width:60px}
+.hold-amt{font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600}
+.hold-amt.up{color:#166f47}
+.hold-amt.down{color:#b91c1c}
+.hold-sub{font-size:11px;color:#8e8e93}
+
+/* ========== TAX OPTIMIZATION ========== */
+.tax-card{background:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 1px 3px rgba(0,0,0,.04);margin-bottom:10px;cursor:pointer;transition:all .15s}
+.tax-card:active{transform:scale(.98)}
+.tax-row{display:flex;align-items:center;justify-content:space-between}
+.tax-left{display:flex;align-items:center;gap:10px}
+.tax-icon{width:32px;height:32px;border-radius:8px;background:#eefbf4;color:#166f47;display:flex;align-items:center;justify-content:center}
+.tax-icon svg{width:16px;height:16px}
+.tax-title{font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600;color:#1c1c1e}
+.tax-subtitle{font-size:12px;color:#8e8e93;margin-top:1px}
+.tax-val{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:700;color:#166f47}
+.tax-chevron{color:#c7c7cc;font-size:16px;margin-left:8px;transition:transform .2s}
+.tax-chevron.open{transform:rotate(90deg)}
+.tax-details{margin-top:12px;padding-top:12px;border-top:1px solid rgba(0,0,0,.06);display:none}
+.tax-details.show{display:block}
+.tax-event{display:flex;align-items:center;justify-content:space-between;padding:8px 0}
+.tax-event+ .tax-event{border-top:1px solid rgba(0,0,0,.04)}
+.tax-event-left{display:flex;align-items:center;gap:8px}
+.tax-dot{width:8px;height:8px;border-radius:50%}
+.tax-dot.done{background:#166f47}
+.tax-dot.pending{background:#c2790a}
+.tax-event-name{font-size:13px;color:#1c1c1e}
+.tax-event-date{font-size:11px;color:#8e8e93}
+.tax-event-amt{font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#166f47}
+.tax-event-st{font-size:11px;font-weight:600;padding:2px 8px;border-radius:6px}
+.tax-event-st.done{background:#eefbf4;color:#166f47}
+.tax-event-st.pending{background:#fef3c7;color:#c2790a}
+
+/* ========== INVESTMENT HEALTH ========== */
+.health-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.health-item{background:#fff;border-radius:12px;padding:14px 12px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.health-dot{width:8px;height:8px;border-radius:50%;margin:0 auto 8px}
+.health-dot.green{background:#166f47}
+.health-dot.amber{background:#c2790a}
+.health-dot.blue{background:#1551a8}
+.health-label{font-size:11px;color:#8e8e93;margin-bottom:4px}
+.health-val{font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:700;color:#1c1c1e}
+
+/* ========== MOVE MONEY CTA ========== */
+.cta-card{background:#1c1c1e;border-radius:14px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,.12);margin-bottom:10px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .15s}
+.cta-card:active{transform:scale(.98)}
+.cta-icon{width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cta-icon svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:2}
+.cta-text{flex:1}
+.cta-title{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600;color:#fff}
+.cta-sub{font-size:13px;color:rgba(255,255,255,.6);margin-top:2px}
+.cta-arrow{color:rgba(255,255,255,.4);font-size:18px}
+
+/* ========== AI INSIGHT ========== */
+.ai-card{background:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 1px 3px rgba(0,0,0,.04);display:flex;gap:10px;align-items:flex-start}
+.ai-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#166f47,#1551a8);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ai-avatar svg{width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2}
+.ai-text{font-size:13px;color:#6b7280;line-height:1.5;flex:1}
+.ai-label{font-size:10px;font-weight:700;color:#8e8e93;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+</style>
+</head>
+<body>
+
+<!-- Status Bar -->
+<div class="sb"><span class="sbt">9:41</span><div style="display:flex;gap:5px;align-items:center"><svg width="16" height="12" viewBox="0 0 16 12" fill="#1c1c1e"><path d="M1 7.5c1.5-2 3.5-3 5.5-3s4 1 5.5 3" stroke="#1c1c1e" stroke-width="1.5" fill="none" stroke-linecap="round"/><circle cx="7" cy="12" r="1.2"/></svg><svg width="28" height="13" viewBox="0 0 28 13" fill="#1c1c1e"><rect x="0" y=".5" width="23" height="12" rx="3" stroke="#1c1c1e" stroke-width="1" fill="none"/><rect x="24" y="4" width="2.5" height="5" rx="1" fill="#1c1c1e" opacity=".3"/><rect x="1.5" y="2" width="18" height="9" rx="1.5" fill="#1c1c1e"/></svg></div></div>
+
+<!-- Nav Header -->
+<div class="nh">
+  <button class="back" onclick="location.href='index.html'"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+  <div class="title">Invest Overview</div>
+  <div class="spacer"></div>
+</div>
+
+<!-- Segmented Nav -->
+<div class="snav">
+  <button class="on">Overview</button>
+  <button class="off">Activity</button>
+  <button class="off">Documents</button>
+  <button class="off">How It's Calculated</button>
+</div>
+
+<!-- ========== PORTFOLIO HERO ========== -->
+<div class="section">
+  <div class="hero-card">
+    <div class="hero-val">$42,850</div>
+    <div class="hero-row">
+      <div class="hero-change pos">+$182 today</div>
+      <div class="hero-sub"><strong>+$4,230</strong> total (+11.0%)</div>
+    </div>
+    <div class="graph-wrap">
+      <canvas id="perfGraph" class="graph-canvas"></canvas>
+    </div>
+    <div class="tf">
+      <button class="on" data-tf="1D">1D</button>
+      <button data-tf="1W">1W</button>
+      <button data-tf="1M">1M</button>
+      <button data-tf="3M">3M</button>
+      <button data-tf="6M">6M</button>
+      <button data-tf="1Y">1Y</button>
+      <button data-tf="ALL">ALL</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== ACCOUNTS ========== -->
+<div class="section">
+  <div class="section-hdr">
+    <span class="section-title">Accounts</span>
+    <span style="font-size:12px;color:#8e8e93;font-weight:500">6 accounts</span>
+  </div>
+  <div class="acct-list">
+    <div class="acct-row">
+      <div class="acct-icon adv">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 12h8M12 8v8"/></svg>
+      </div>
+      <div class="acct-info">
+        <div class="acct-name">Advizmo Cash</div>
+        <div class="acct-tag">Advizmo account</div>
+      </div>
+      <div class="acct-bal">
+        <div class="acct-amt">$1,850</div>
+        <div class="acct-apy">4.1% APY</div>
+      </div>
+    </div>
+    <div class="acct-row">
+      <div class="acct-icon adv">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <div class="acct-info">
+        <div class="acct-name">Advizmo Reserve</div>
+        <div class="acct-tag">Advizmo account · 84% target</div>
+      </div>
+      <div class="acct-bal">
+        <div class="acct-amt">$8,120</div>
+      </div>
+    </div>
+    <div class="acct-row">
+      <div class="acct-icon adv">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+      </div>
+      <div class="acct-info">
+        <div class="acct-name">Advizmo Auto Invest</div>
+        <div class="acct-tag">Advizmo account</div>
+      </div>
+      <div class="acct-bal">
+        <div class="acct-amt">$32,880</div>
+      </div>
+    </div>
+    <div class="acct-row">
+      <div class="acct-icon ext">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+      </div>
+      <div class="acct-info">
+        <div class="acct-name">Chase Checking</div>
+        <div class="acct-tag">External account</div>
+      </div>
+      <div class="acct-bal">
+        <div class="acct-amt">$12,400</div>
+      </div>
+    </div>
+    <div class="acct-row">
+      <div class="acct-icon ext">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      </div>
+      <div class="acct-info">
+        <div class="acct-name">Capital One Savings</div>
+        <div class="acct-tag">External account</div>
+      </div>
+      <div class="acct-bal">
+        <div class="acct-amt">$8,900</div>
+      </div>
+    </div>
+    <div class="acct-row">
+      <div class="acct-icon ext">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M3 7v1a3 3 0 006 0V7M9 7v1a3 3 0 006 0V7M15 7v1a3 3 0 006 0V7M3 7h18"/></svg>
+      </div>
+      <div class="acct-info">
+        <div class="acct-name">Marcus</div>
+        <div class="acct-tag">External account</div>
+      </div>
+      <div class="acct-bal">
+        <div class="acct-amt">$15,200</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== HOLDINGS (TABS) ========== -->
+<div class="section">
+  <div class="section-hdr">
+    <span class="section-title">Holdings</span>
+  </div>
+  <div class="card">
+    <div class="tabs">
+      <button class="on" data-tab="holdings">Holdings</button>
+      <button data-tab="movers">Movers</button>
+    </div>
+
+    <div id="tab-holdings" class="tab-content">
+      <div class="hold-item">
+        <div class="hold-ticker">VTI</div>
+        <div class="hold-name">Vanguard Total Stock Market</div>
+        <div class="hold-pct">58%</div>
+      </div>
+      <div class="hold-item">
+        <div class="hold-ticker">VXUS</div>
+        <div class="hold-name">Vanguard Intl Stock</div>
+        <div class="hold-pct">18%</div>
+      </div>
+      <div class="hold-item">
+        <div class="hold-ticker">BND</div>
+        <div class="hold-name">Vanguard Total Bond</div>
+        <div class="hold-pct">14%</div>
+      </div>
+      <div class="hold-item">
+        <div class="hold-ticker">VNQ</div>
+        <div class="hold-name">Vanguard Real Estate</div>
+        <div class="hold-pct">10%</div>
+      </div>
+    </div>
+
+    <div id="tab-movers" class="tab-content" style="display:none">
+      <div class="hold-item">
+        <div class="hold-ticker">VTI</div>
+        <div class="hold-name">Vanguard Total Stock Market</div>
+        <div class="hold-val">
+          <div class="hold-amt up">+$42</div>
+          <div class="hold-sub">+0.31%</div>
+        </div>
+      </div>
+      <div class="hold-item">
+        <div class="hold-ticker">VNQ</div>
+        <div class="hold-name">Vanguard Real Estate</div>
+        <div class="hold-val">
+          <div class="hold-amt down">-$18</div>
+          <div class="hold-sub">-0.24%</div>
+        </div>
+      </div>
+      <div class="hold-item">
+        <div class="hold-ticker">BND</div>
+        <div class="hold-name">Vanguard Total Bond</div>
+        <div class="hold-val">
+          <div class="hold-amt up">+$8</div>
+          <div class="hold-sub">+0.12%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== TAX OPTIMIZATION ========== -->
+<div class="section">
+  <div class="section-hdr">
+    <span class="section-title">Tax Optimization</span>
+  </div>
+  <div class="tax-card" id="taxCard">
+    <div class="tax-row">
+      <div class="tax-left">
+        <div class="tax-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        </div>
+        <div>
+          <div class="tax-title">Estimated Tax Savings</div>
+          <div class="tax-subtitle">Last harvest: Dec 15</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center">
+        <div class="tax-val">$482</div>
+        <span class="tax-chevron" id="taxChev">›</span>
+      </div>
+    </div>
+    <div class="tax-details" id="taxDetails">
+      <div class="tax-event">
+        <div class="tax-event-left">
+          <div class="tax-dot done"></div>
+          <div>
+            <div class="tax-event-name">VXUS → SCHF swap</div>
+            <div class="tax-event-date">Dec 15, 2025</div>
+          </div>
+        </div>
+        <div style="text-align:right">
+          <div class="tax-event-amt">$148</div>
+          <span class="tax-event-st done">Saved</span>
+        </div>
+      </div>
+      <div class="tax-event">
+        <div class="tax-event-left">
+          <div class="tax-dot done"></div>
+          <div>
+            <div class="tax-event-name">BND → AGG swap</div>
+            <div class="tax-event-date">Nov 28, 2025</div>
+          </div>
+        </div>
+        <div style="text-align:right">
+          <div class="tax-event-amt">$92</div>
+          <span class="tax-event-st done">Saved</span>
+        </div>
+      </div>
+      <div class="tax-event">
+        <div class="tax-event-left">
+          <div class="tax-dot done"></div>
+          <div>
+            <div class="tax-event-name">VNQ → IYR swap</div>
+            <div class="tax-event-date">Nov 12, 2025</div>
+          </div>
+        </div>
+        <div style="text-align:right">
+          <div class="tax-event-amt">$68</div>
+          <span class="tax-event-st done">Saved</span>
+        </div>
+      </div>
+      <div class="tax-event">
+        <div class="tax-event-left">
+          <div class="tax-dot pending"></div>
+          <div>
+            <div class="tax-event-name">VTI → ITOT (pending)</div>
+            <div class="tax-event-date">Monitoring</div>
+          </div>
+        </div>
+        <div style="text-align:right">
+          <div class="tax-event-amt">~$174</div>
+          <span class="tax-event-st pending">Watching</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== INVESTMENT HEALTH ========== -->
+<div class="section">
+  <div class="section-hdr">
+    <span class="section-title">Investment Health</span>
+  </div>
+  <div class="health-grid">
+    <div class="health-item">
+      <div class="health-dot green"></div>
+      <div class="health-label">Portfolio</div>
+      <div class="health-val">Good</div>
+    </div>
+    <div class="health-item">
+      <div class="health-dot blue"></div>
+      <div class="health-label">Automation</div>
+      <div class="health-val">Active</div>
+    </div>
+    <div class="health-item">
+      <div class="health-dot green"></div>
+      <div class="health-label">Risk</div>
+      <div class="health-val">On Track</div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== MOVE MONEY CTA ========== -->
+<div class="section">
+  <div class="cta-card">
+    <div class="cta-icon">
+      <svg viewBox="0 0 24 24" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </div>
+    <div class="cta-text">
+      <div class="cta-title">Move money to grow your portfolio</div>
+      <div class="cta-sub">Transfer from linked accounts</div>
+    </div>
+    <div class="cta-arrow">›</div>
+  </div>
+</div>
+
+<!-- ========== AI INSIGHT ========== -->
+<div class="section" style="margin-bottom:20px">
+  <div class="ai-card">
+    <div class="ai-avatar">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg>
+    </div>
+    <div class="ai-text">
+      <div class="ai-label">AI Insight</div>
+      Your portfolio remains aligned with your <strong>Moderate Growth</strong> strategy. International allocation (18%) is within target. Consider increasing bond allocation if you anticipate higher volatility.
+    </div>
+  </div>
+</div>
+
+<script>
+// ========== GRAPH DATASETS ==========
+const datasets = {
+  '1D': [42668,42690,42710,42705,42730,42745,42720,42755,42780,42770,42800,42820,42810,42830,42850],
+  '1W': [42520,42580,42610,42550,42640,42700,42680,42730,42710,42760,42790,42810,42800,42830,42850],
+  '1M': [41800,41950,42100,42050,41900,42000,42200,42350,42280,42100,42250,42400,42500,42600,42850],
+  '3M': [40500,40800,41200,41600,41400,41100,41300,41700,42000,42200,42100,42300,42500,42700,42850],
+  '6M': [38200,38800,39500,40200,40800,41200,40900,41300,41800,42200,42000,42300,42500,42700,42850],
+  '1Y': [36000,37500,38800,40000,41200,42500,41800,40500,41200,42000,42800,42200,42500,42700,42850],
+  'ALL': [28000,30000,32000,34000,36000,38000,40000,42000,38000,40000,42000,41000,42500,42700,42850]
+};
+
+let currentTF = '1D';
+let currentData = [...datasets['1D']];
+let animFrame;
+
+const canvas = document.getElementById('perfGraph');
+const ctx = canvas.getContext('2d');
+
+function resizeCanvas(){
+  const r = window.devicePixelRatio || 1;
+  canvas.width = canvas.offsetWidth * r;
+  canvas.height = canvas.offsetHeight * r;
+  ctx.scale(r, r);
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+function drawLine(data, color, alpha){
+  const w = canvas.offsetWidth;
+  const h = canvas.offsetHeight;
+  const pad = 8;
+  const min = Math.min(...data);
+  const max = Math.max(...data);
+  const range = max - min || 1;
+  const step = (w - pad*2) / (data.length - 1);
+
+  ctx.clearRect(0, 0, w, h);
+
+  // gradient fill
+  const grad = ctx.createLinearGradient(0, 0, 0, h);
+  grad.addColorStop(0, color.replace('1)', alpha * 0.2 + ')'));
+  grad.addColorStop(1, color.replace('1)', '0)'));
+
+  ctx.beginPath();
+  ctx.moveTo(pad, h - pad - ((data[0] - min) / range) * (h - pad*2));
+  for(let i = 1; i < data.length; i++){
+    const x = pad + i * step;
+    const y = h - pad - ((data[i] - min) / range) * (h - pad*2);
+    ctx.lineTo(x, y);
+  }
+
+  // stroke
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2;
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+  ctx.stroke();
+
+  // fill
+  ctx.lineTo(pad + (data.length-1) * step, h);
+  ctx.lineTo(pad, h);
+  ctx.closePath();
+  ctx.fillStyle = grad;
+  ctx.fill();
+}
+
+function animateTo(newData){
+  const start = [...currentData];
+  const duration = 500;
+  const startTime = performance.now();
+
+  function tick(now){
+    const t = Math.min((now - startTime) / duration, 1);
+    const ease = t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
+    const interpolated = start.map((v, i) => v + (newData[i] - v) * ease);
+    drawLine(interpolated, 'rgba(22,111,71,1)', 1);
+    if(t < 1) animFrame = requestAnimationFrame(tick);
+  }
+  cancelAnimationFrame(animFrame);
+  animFrame = requestAnimationFrame(tick);
+  currentData = [...newData];
+}
+
+// initial draw
+drawLine(datasets['1D'], 'rgba(22,111,71,1)', 1);
+
+// ========== TIMEFRAME BUTTONS ==========
+document.querySelectorAll('.tf button').forEach(btn => {
+  btn.addEventListener('click', function(){
+    document.querySelectorAll('.tf button').forEach(b => b.classList.remove('on'));
+    this.classList.add('on');
+    currentTF = this.dataset.tf;
+    animateTo(datasets[currentTF]);
+  });
+});
+
+// ========== HOLDINGS TABS ==========
+document.querySelectorAll('.tabs button').forEach(btn => {
+  btn.addEventListener('click', function(){
+    document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('on'));
+    this.classList.add('on');
+    document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
+    document.getElementById('tab-' + this.dataset.tab).style.display = '';
+  });
+});
+
+// ========== TAX EXPAND/COLLAPSE ==========
+document.getElementById('taxCard').addEventListener('click', function(){
+  const details = document.getElementById('taxDetails');
+  const chev = document.getElementById('taxChev');
+  details.classList.toggle('show');
+  chev.classList.toggle('open');
+});
+
+// ========== SEGMENTED NAV ==========
+document.querySelectorAll('.snav button').forEach(btn => {
+  btn.addEventListener('click', function(){
+    document.querySelectorAll('.snav button').forEach(b => {
+      b.classList.remove('on');
+      b.classList.add('off');
+    });
+    this.classList.remove('off');
+    this.classList.add('on');
+  });
+});
+</script>
+</body>
+</html>
