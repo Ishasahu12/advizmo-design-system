@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invest Overview 3: Portfolio Story Expanded</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+            background: #f8f9fa;
+            color: #1a1a1a;
+            line-height: 1.5;
+            padding-bottom: 80px;
+        }
+
+        .container {
+            max-width: 430px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-bottom: 1px solid #e5e7eb;
+            background: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: #166f47;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .back-btn:hover {
+            background: #f0f9f4;
+        }
+
+        .title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .nav-spacer {
+            width: 40px;
+        }
+
+        .segmented-nav {
+            display: flex;
+            background: #f3f4f6;
+            margin: 16px 20px;
+            border-radius: 12px;
+            padding: 4px;
+        }
+
+        .nav-item {
+            flex: 1;
+            text-align: center;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #6b7280;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-item.active {
+            background: white;
+            color: #166f47;
+            font-weight: 600;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-item:not(.active):hover {
+            color: #374151;
+        }
+
+        .hero-section {
+            padding: 24px 20px;
+            background: linear-gradient(135deg, #166f47 0%, #145a39 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .hero-narrative {
+            font-size: 14px;
+            margin-bottom: 8px;
+            opacity: 0.9;
+        }
+
+        .portfolio-value {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .daily-change {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .change-positive {
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        .change-negative {
+            color: #ef4444;
+            font-weight: 600;
+        }
+
+        .total-return {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .time-filters {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+
+        .time-filter {
+            padding: 6px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            font-size: 12px;
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .time-filter:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .time-filter.active {
+            background: white;
+            color: #166f47;
+            font-weight: 600;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e5e7eb;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #166f47;
+        }
+
+        .card-subtitle {
+            font-size: 13px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+
+        .narrative-tag {
+            background: #f0fdf4;
+            color: #166f47;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .accounts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .account-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #f0fdf4 100%);
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid #e5e7eb;
+            transition: all 0.2s;
+        }
+
+        .account-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(22, 111, 71, 0.15);
+        }
+
+        .account-title {
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+
+        .account-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #166f47;
+            margin-bottom: 4px;
+        }
+
+        .account-subtitle {
+            font-size: 11px;
+            color: #9ca3af;
+        }
+
+        .external-badge {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-left: 8px;
+        }
+
+        .external-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .external-item:last-child {
+            border-bottom: none;
+        }
+
+        .external-name {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .external-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #166f47;
+        }
+
+        .external-sync {
+            font-size: 11px;
+            color: #9ca3af;
+        }
+
+        .action-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #166f47 0%, #145a39 100%);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 16px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(22, 111, 71, 0.3);
+        }
+
+        .health-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .health-indicator:last-child {
+            border-bottom: none;
+        }
+
+        .health-label {
+            font-size: 14px;
+            color: #374151;
+        }
+
+        .health-value {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .health-value.good {
+            color: #10b981;
+        }
+
+        .health-value.on-track {
+            color: #166f47;
+        }
+
+        .tax-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 12px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .tax-item:last-child {
+            border-bottom: none;
+        }
+
+        .tax-label {
+            font-size: 14px;
+            color: #374151;
+            flex: 1;
+        }
+
+        .tax-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #166f47;
+            text-align: right;
+            margin-left: 8px;
+        }
+
+        .allocation-visual {
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .donut-chart {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+
+        .donut-ring {
+            stroke: #166f47;
+            fill: none;
+            stroke-width: 20;
+            transform-origin: center;
+            transform: rotate(-90deg);
+        }
+
+        .donut-segment {
+            fill: none;
+            stroke: #166f47;
+            stroke-width: 20;
+            transform-origin: center;
+            transform: rotate(-90deg);
+            transition: stroke-dasharray 0.5s ease;
+        }
+
+        .allocation-narrative {
+            text-align: center;
+            font-size: 13px;
+            color: #6b7280;
+            margin-top: 16px;
+        }
+
+        .holdings-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .holdings-item:last-child {
+            border-bottom: none;
+        }
+
+        .holding-info {
+            flex: 1;
+        }
+
+        .holding-name {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .holding-stats {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .holding-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: #166f47;
+            text-align: right;
+            margin-left: 8px;
+        }
+
+        .mover-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .mover-item:last-child {
+            border-bottom: none;
+        }
+
+        .mover-name {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .mover-stats {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .mover-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #166f47;
+            text-align: right;
+        }
+
+        .mover-value.positive {
+            color: #10b981;
+        }
+
+        .mover-value.negative {
+            color: #ef4444;
+        }
+
+        .ai-insight {
+            background: linear-gradient(135deg, #f0fdf4 0%, #e6f7ee 100%);
+            border-left: 4px solid #166f47;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .ai-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #166f47;
+            margin-bottom: 8px;
+        }
+
+        .ai-text {
+            font-size: 14px;
+            color: #374151;
+            font-style: italic;
+        }
+
+        .flow-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 8px 0;
+            color: #166f47;
+            font-size: 12px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: #1a1a1a;
+                color: #e5e7eb;
+            }
+
+            .container {
+                background: #242424;
+            }
+
+            .card {
+                background: #2d2d2d;
+                border-color: #404040;
+            }
+
+            .nav {
+                background: #242424;
+                border-bottom-color: #404040;
+            }
+
+            .segmented-nav {
+                background: #1a1a1a;
+            }
+
+            .nav-item:not(.active) {
+                color: #9ca3af;
+            }
+
+            .account-card {
+                background: linear-gradient(135deg, #2d2d2d 0%, #166f47 100%);
+                border-color: #404040;
+            }
+
+            .account-title {
+                color: #9ca3af;
+            }
+
+            .hero-section {
+                background: linear-gradient(135deg, #145a39 0%, #0f3e2d 100%);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav">
+            <div class="nav-left">
+                <button class="back-btn" onclick="window.location.href='index.html'">←</button>
+                <div class="title">Invest Overview</div>
+            </div>
+            <div class="nav-spacer"></div>
+        </div>
+
+        <div class="segmented-nav">
+            <div class="nav-item active">Overview</div>
+            <div class="nav-item">Activity</div>
+            <div class="nav-item">Documents</div>
+            <div class="nav-item">Math</div>
+        </div>
+
+        <div class="hero-section">
+            <div class="hero-narrative">Portfolio Position →</div>
+            <div class="portfolio-value">$42,850</div>
+            <div class="daily-change">
+                <span class="change-positive">+$182 (+$4,230)</span>
+                <span class="change-positive">+11.0%</span>
+            </div>
+            <div class="total-return">
+                <span class="change-positive">+$4,230</span>
+                <span>+11.0%</span>
+                <span class="narrative-tag">Since Inception</span>
+            </div>
+            <div class="flow-arrow">↓ Financial Network →</div>
+            <div class="time-filters">
+                <button class="time-filter">1D</button>
+                <button class="time-filter">1W</button>
+                <button class="time-filter">1M</button>
+                <button class="time-filter">3M</button>
+                <button class="time-filter">6M</button>
+                <button class="time-filter">1Y</button>
+                <button class="time-filter">ALL</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <div class="card-title">Advizmo Accounts</div>
+                    <div class="card-subtitle">Your story unfolds within our ecosystem</div>
+                </div>
+                <span class="narrative-tag">Active</span>
+            </div>
+            <div class="accounts-grid">
+                <div class="account-card">
+                    <div class="account-title">Cash</div>
+                    <div class="account-value">$1,850</div>
+                    <div class="account-subtitle">4.1% APY</div>
+                </div>
+                <div class="account-card">
+                    <div class="account-title">Reserve</div>
+                    <div class="account-value">$8,120</div>
+                    <div class="account-subtitle">84% target</div>
+                </div>
+                <div class="account-card">
+                    <div class="account-title">Auto Invest</div>
+                    <div class="account-value">$32,880</div>
+                    <div class="account-subtitle">24 holdings</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <div class="card-title">External Accounts</div>
+                    <div class="card-subtitle">Connected ecosystem partners</div>
+                </div>
+                <span class="narrative-tag">External</span>
+            </div>
+            <div class="external-item">
+                <div class="external-name">Chase <span class="external-badge">External</span></div>
+                <div>
+                    <div class="external-value">$12,400</div>
+                    <div class="external-sync">synced 2h ago</div>
+                </div>
+            </div>
+            <div class="external-item">
+                <div class="external-name">Capital One <span class="external-badge">External</span></div>
+                <div>
+                    <div class="external-value">$8,900</div>
+                    <div class="external-sync">synced 1h ago</div>
+                </div>
+            </div>
+            <div class="external-item">
+                <div class="external-name">Marcus <span class="external-badge">External</span></div>
+                <div>
+                    <div class="external-value">$15,200</div>
+                    <div class="external-sync">synced 3h ago</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Move Money</div>
+            <div class="card-subtitle">"Move money to evolve your financial story."</div>
+            <button class="action-btn">Move Money</button>
+            <div class="flow-arrow">↓ Money Movement →</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Investment Health</div>
+            <div class="card-subtitle">Your portfolio's vital signs</div>
+            <div class="health-indicator">
+                <div class="health-label">Portfolio Health</div>
+                <div class="health-value good">Good</div>
+            </div>
+            <div class="health-indicator">
+                <div class="health-label">Automation</div>
+                <div class="health-value on-track">Active</div>
+            </div>
+            <div class="health-indicator">
+                <div class="health-label">Diversification</div>
+                <div class="health-value on-track">Balanced</div>
+            </div>
+            <div class="health-indicator">
+                <div class="health-label">Risk Alignment</div>
+                <div class="health-value on-track">On Track</div>
+            </div>
+            <div class="health-indicator">
+                <div class="health-label">Reserve Progress</div>
+                <div class="health-value on-track">84%</div>
+            </div>
+            <div class="health-indicator">
+                <div class="health-label">Idle Cash Status</div>
+                <div class="health-value on-track">Low</div>
+            </div>
+            <div class="flow-arrow">↓ Health Indicators →</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Tax Optimization</div>
+            <div class="card-subtitle">Strategic tax narrative</div>
+            <div class="tax-item">
+                <div class="tax-label">Estimated Tax Savings</div>
+                <div class="tax-value">$482</div>
+            </div>
+            <div class="tax-item">
+                <div class="tax-label">Savings This Year</div>
+                <div class="tax-value">$482</div>
+            </div>
+            <div class="tax-item">
+                <div class="tax-label">Tax-Loss Harvesting</div>
+                <div class="tax-value">Active</div>
+            </div>
+            <div class="tax-item">
+                <div class="tax-label">Last Harvest</div>
+                <div class="tax-value">Dec 15, 2024</div>
+            </div>
+            <div class="tax-item">
+                <div class="tax-label">Next Opportunity</div>
+                <div class="tax-value">Jan 15, 2025</div>
+            </div>
+            <div class="tax-item">
+                <div class="tax-label">Updated Time</div>
+                <div class="tax-value">Today</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Portfolio Allocation</div>
+            <div class="card-subtitle">Transforming from cash to investments</div>
+            <div class="allocation-visual">
+                <div class="donut-chart">
+                    <svg width="200" height="200">
+                        <circle class="donut-ring" cx="100" cy="100" r="80"></circle>
+                        <circle class="donut-segment" id="segment-1" cx="100" cy="100" r="80" stroke-dasharray="0, 502.65" stroke="#166f47"></circle>
+                        <circle class="donut-segment" id="segment-2" cx="100" cy="100" r="80" stroke-dasharray="167.65, 335.0" stroke="#c2790a"></circle>
+                        <circle class="donut-segment" id="segment-3" cx="100" cy="100" r="80" stroke-dasharray="251.48, 251.48" stroke="#10b981"></circle>
+                    </svg>
+                </div>
+                <div class="allocation-narrative">Cash (16%) → investments (84%)</div>
+                <div class="flow-arrow">↓ Active Holdings →</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Top Holdings</div>
+            <div class="card-subtitle">Your commanding positions</div>
+            <div class="holdings-item">
+                <div class="holding-info">
+                    <div class="holding-name">VTI</div>
+                    <div class="holding-stats">58% - $14,820 +$42 (+8.2%)</div>
+                </div>
+                <div class="holding-value">$14,820</div>
+            </div>
+            <div class="holdings-item">
+                <div class="holding-info">
+                    <div class="holding-name">VXUS</div>
+                    <div class="holding-stats">18% - $4,580 +$29 (+5.1%)</div>
+                </div>
+                <div class="holding-value">$4,580</div>
+            </div>
+            <div class="holdings-item">
+                <div class="holding-info">
+                    <div class="holding-name">BND</div>
+                    <div class="holding-stats">14% - $3,560 +$18 (+2.3%)</div>
+                </div>
+                <div class="holding-value">$3,560</div>
+            </div>
+            <div class="holdings-item">
+                <div class="holding-info">
+                    <div class="holding-name">VNQ</div>
+                    <div class="holding-stats">10% - $2,540 -$18 (-1.2%)</div>
+                </div>
+                <div class="holding-value">$2,540</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Top Movers</div>
+            <div class="card-subtitle">Market dynamics at play</div>
+            <div class="mover-item">
+                <div>
+                    <div class="mover-name">VTI</div>
+                    <div class="mover-stats">+$42 (+0.8% to portfolio)</div>
+                </div>
+                <div class="mover-value positive">+$42</div>
+            </div>
+            <div class="mover-item">
+                <div>
+                    <div class="mover-name">VNQ</div>
+                    <div class="mover-stats">-$18 (-0.4% to portfolio)</div>
+                </div>
+                <div class="mover-value negative">-$18</div>
+            </div>
+            <div class="mover-item">
+                <div>
+                    <div class="mover-name">BND</div>
+                    <div class="mover-stats">+$8 (+0.2% to portfolio)</div>
+                </div>
+                <div class="mover-value positive">+$8</div>
+            </div>
+        </div>
+
+        <div class="ai-insight">
+            <div class="ai-title">AI Insight</div>
+            <div class="ai-text">"Your portfolio remains aligned with your Moderate Growth strategy."</div>
+        </div>
+    </div>
+
+    <script>
+        const timeFilters = document.querySelectorAll('.time-filter');
+        const segments = document.querySelectorAll('.donut-segment');
+
+        timeFilters.forEach(filter => {
+            filter.addEventListener('click', function() {
+                timeFilters.forEach(f => f.classList.remove('active'));
+                this.classList.add('active');
+
+                const text = this.textContent;
+                const duration = parseFloat(text);
+
+                if (duration === 1 || duration === 7) {
+                    this.style.transform = 'scale(1.05)';
+                    setTimeout(() => this.style.transform = '', 200);
+                }
+            });
+        });
+
+        const colors = ['#166f47', '#c2790a', '#10b981', '#3b82f6', '#8b5cf6'];
+
+        segments.forEach((segment, index) => {
+            const percentage = [16, 50, 34][index];
+            const radius = 80;
+            const circumference = 2 * Math.PI * radius;
+            const dashArray = `${(percentage / 100) * circumference}, ${circumference}`;
+            segment.style.strokeDasharray = dashArray;
+
+            if (segment.id === 'segment-1') {
+                segment.style.stroke = colors[0];
+            } else if (segment.id === 'segment-2') {
+                segment.style.stroke = colors[1];
+            }
+        });
+
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+
+                    if (entry.target.classList.contains('card')) {
+                        entry.target.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                    }
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            observer.observe(card);
+        });
+
+        document.querySelectorAll('.account-card').forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(10px)';
+            observer.observe(card);
+
+            setTimeout(() => {
+                card.style.transition = 'opacity 0.4s ease, transform 0.4s ease, transform 0.2s';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, index * 100);
+        });
+
+        const headerObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const progressBars = entry.target.querySelectorAll('.health-indicator');
+                    progressBars.forEach((bar, index) => {
+                        setTimeout(() => {
+                            bar.style.transition = 'opacity 0.3s ease';
+                            bar.style.opacity = '1';
+                        }, index * 50);
+                    });
+                }
+            });
+        }, { threshold: 0.5 });
+
+        const healthCard = document.querySelectorAll('.card')[5];
+        if (healthCard) {
+            const healthIndicators = healthCard.querySelectorAll('.health-indicator');
+            healthIndicators.forEach(indicator => indicator.style.opacity = '0');
+            headerObserver.observe(healthCard);
+        }
+
+        let lastScrollY = window.scrollY;
+        const header = document.querySelector('.nav');
+
+        window.addEventListener('scroll', () => {
+            const currentScrollY = window.scrollY;
+
+            if (Math.abs(currentScrollY - lastScrollY) > 10) {
+                if (currentScrollY > lastScrollY) {
+                    header.style.transform = 'translateY(-100%)';
+                } else {
+                    header.style.transform = 'translateY(0)';
+                }
+                header.style.transition = 'transform 0.3s ease';
+                lastScrollY = currentScrollY;
+            }
+        });
+
+        function animateValue(obj, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                obj.innerHTML = '$' + Math.floor(progress * (end - start) + start);
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        const valueDisplay = document.querySelector('.portfolio-value');
+        if (valueDisplay) {
+            animateValue(valueDisplay, 0, 42850, 1000);
+        }
+    </script>
+</body>
+</html>
