@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Invest Overview — Automation First — Advizmo</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --green:#166f47;--amber:#c2790a;--red:#b91c1c;--blue:#1551a8;--purple:#6b21a8;
+    --bg:#f8f9fa;--card:#fff;--text:#1a1a1a;--muted:#6b7280;--border:#e5e7eb;
+    --font-heading:'IBM Plex Sans',sans-serif;--font-body:'Inter',sans-serif;
+  }
+  html{font-size:16px;-webkit-font-smoothing:antialiased}
+  body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh}
+  .phone{max-width:430px;margin:0 auto;padding:0 20px 40px;background:var(--bg)}
+
+  .nav-header{position:sticky;top:0;z-index:100;background:var(--bg);padding:16px 0 0;border-bottom:1px solid var(--border)}
+  .nav-top{display:flex;align-items:center;gap:12px;padding-bottom:12px}
+  .nav-back{font-family:var(--font-body);font-size:15px;color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:4px;font-weight:500}
+  .nav-back svg{width:18px;height:18px;stroke:var(--blue);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .nav-title{font-family:var(--font-heading);font-size:13px;font-weight:600;color:var(--muted);letter-spacing:0.5px;text-transform:uppercase;margin-left:auto}
+  .seg-nav{display:flex;gap:0;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .seg-nav::-webkit-scrollbar{display:none}
+  .seg-nav a{font-family:var(--font-body);font-size:13px;font-weight:500;padding:10px 16px;color:var(--muted);text-decoration:none;white-space:nowrap;border-bottom:2px solid transparent;transition:color .2s,border-color .2s}
+  .seg-nav a.active{color:var(--text);border-bottom-color:var(--text)}
+  .seg-nav a:hover{color:var(--text)}
+
+  section{padding:24px 0}
+  section+section{border-top:1px solid var(--border)}
+  .section-label{font-family:var(--font-heading);font-size:11px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+
+  .card{background:var(--card);border-radius:14px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04),0 0 0 1px rgba(0,0,0,.03)}
+
+  .account-grid{display:flex;flex-direction:column;gap:12px}
+  .account-card{display:flex;flex-direction:column;gap:10px;padding:18px 20px;background:var(--card);border-radius:14px;box-shadow:0 1px 3px rgba(0,0,0,.04),0 0 0 1px rgba(0,0,0,.03)}
+  .account-card.hero-primary{padding:22px 20px;background:linear-gradient(135deg,#f0fdf4 0%,#dcfce7 100%);border:1px solid #bbf7d0}
+  .account-top{display:flex;justify-content:space-between;align-items:flex-start}
+  .account-icon{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-size:16px;font-weight:700;color:#fff}
+  .account-icon.cash{background:var(--green)}
+  .account-icon.reserve{background:var(--blue)}
+  .account-icon.auto{background:var(--purple)}
+  .account-icon.ext{background:#475569}
+  .account-name{font-family:var(--font-heading);font-size:16px;font-weight:600}
+  .account-sub{font-size:13px;color:var(--muted)}
+  .account-balance{font-family:var(--font-heading);font-size:24px;font-weight:700;text-align:right}
+  .account-balance-sub{font-size:12px;color:var(--muted);text-align:right;margin-top:2px}
+  .account-desc{font-size:13px;color:var(--muted);line-height:1.5}
+  .badge{display:inline-block;font-size:11px;font-weight:600;padding:3px 8px;border-radius:6px}
+  .badge.connected{background:#dcfce7;color:var(--green)}
+  .badge.automated{background:#ede9fe;color:var(--purple)}
+  .account-ctas{display:flex;gap:8px;margin-top:4px}
+  .btn{font-family:var(--font-body);font-size:13px;font-weight:600;padding:8px 14px;border-radius:8px;border:none;cursor:pointer;transition:all .15s}
+  .btn-primary{background:var(--text);color:#fff}
+  .btn-primary:hover{background:#333}
+  .btn-secondary{background:transparent;color:var(--text);border:1px solid var(--border)}
+  .btn-secondary:hover{background:#f5f5f5}
+  .btn-green{background:var(--green);color:#fff}
+  .btn-green:hover{background:#155e3b}
+
+  .health-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .health-item{display:flex;flex-direction:column;gap:4px;padding:14px;border-radius:10px;background:#f8f9fa}
+  .health-label{font-size:12px;color:var(--muted);font-weight:500}
+  .health-value{font-family:var(--font-heading);font-size:14px;font-weight:600;display:flex;align-items:center;gap:6px}
+  .dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+  .dot.green{background:var(--green)}
+  .dot.amber{background:var(--amber)}
+  .dot.blue{background:var(--blue)}
+
+  .donut-wrap{display:flex;flex-direction:column;align-items:center;gap:16px}
+  .donut-container{position:relative;width:140px;height:140px}
+  .donut-container svg{width:100%;height:100%;transform:rotate(-90deg)}
+  .donut-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+  .donut-center-value{font-family:var(--font-heading);font-size:16px;font-weight:700}
+  .donut-center-label{font-size:10px;color:var(--muted)}
+  .legend{display:flex;flex-wrap:wrap;gap:10px 16px;justify-content:center}
+  .legend-item{display:flex;align-items:center;gap:5px;font-size:12px}
+  .legend-swatch{width:9px;height:9px;border-radius:3px}
+  .legend-pct{font-family:var(--font-heading);font-weight:600}
+
+  .list-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #f1f1f1}
+  .list-item:last-child{border-bottom:none}
+  .list-icon{width:32px;height:32px;border-radius:8px;background:#f1f1f1;display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-size:11px;font-weight:700;color:#555;flex-shrink:0}
+  .list-info{flex:1;min-width:0}
+  .list-name{font-family:var(--font-heading);font-size:13px;font-weight:600}
+  .list-sub{font-size:11px;color:var(--muted)}
+  .list-right{text-align:right}
+  .list-value{font-family:var(--font-heading);font-size:13px;font-weight:600}
+  .list-change{font-size:11px;font-weight:600;margin-top:2px}
+  .list-change.positive{color:var(--green)}
+  .list-change.negative{color:var(--red)}
+  .sparkline{width:36px;height:18px;flex-shrink:0}
+
+  .tax-expand{display:flex;flex-direction:column;gap:12px}
+  .tax-head{display:flex;justify-content:space-between;align-items:center}
+  .tax-savings{font-family:var(--font-heading);font-size:28px;font-weight:700;color:var(--green)}
+  .tax-detail{font-size:13px;color:var(--muted);line-height:1.5}
+  .tax-status{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--green);margin-top:4px}
+  .tax-harvest{display:flex;gap:10px;margin-top:4px}
+  .tax-harvest-item{flex:1;padding:10px 12px;background:#f8f9fa;border-radius:8px}
+  .tax-harvest-label{font-size:11px;color:var(--muted);font-weight:500}
+  .tax-harvest-value{font-family:var(--font-heading);font-size:13px;font-weight:600;margin-top:2px}
+
+  .ai-card{background:linear-gradient(135deg,#f0f4ff 0%,#f8f0ff 100%);border:1px solid #e0e7ff;border-radius:14px;padding:20px;display:flex;gap:14px;align-items:flex-start}
+  .ai-icon{width:36px;height:36px;border-radius:9px;background:var(--purple);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .ai-icon svg{width:18px;height:18px;fill:#fff}
+  .ai-text{font-size:14px;line-height:1.6;color:#1a1a1a}
+  .ai-text strong{font-weight:600}
+  .ai-badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:4px 8px;border-radius:6px;background:#ede9fe;color:var(--purple);margin-top:8px}
+
+  .move-money-card{display:flex;flex-direction:column;gap:10px;padding:20px;background:var(--card);border-radius:14px;box-shadow:0 1px 3px rgba(0,0,0,.04),0 0 0 1px rgba(0,0,0,.03)}
+  .move-money-text{font-size:14px;color:var(--muted);line-height:1.5}
+
+  .time-filters{display:flex;gap:4px;margin-top:14px;padding:3px;background:#f1f1f1;border-radius:7px}
+  .time-filters button{flex:1;font-family:var(--font-body);font-size:11px;font-weight:600;padding:6px 0;border:none;border-radius:5px;background:transparent;color:var(--muted);cursor:pointer;transition:all .2s}
+  .time-filters button.active{background:var(--card);color:var(--text);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+
+  .hero-card{background:var(--card);border-radius:14px;padding:20px 24px;box-shadow:0 1px 3px rgba(0,0,0,.04),0 0 0 1px rgba(0,0,0,.03);position:relative}
+  .hero-value{font-family:var(--font-heading);font-size:36px;font-weight:700;letter-spacing:-1px;line-height:1.1}
+  .hero-change{display:flex;align-items:center;gap:8px;margin-top:4px}
+  .hero-change-value{font-family:var(--font-heading);font-size:15px;font-weight:600}
+  .hero-change-value.positive{color:var(--green)}
+  .hero-change-value.negative{color:var(--red)}
+  .hero-growth-icon{width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;display:inline-block;transition:all .3s}
+  .hero-growth-icon.up{border-bottom:7px solid var(--green)}
+  .hero-growth-icon.down{border-top:7px solid var(--red);border-bottom:none}
+  .hero-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+  .hero-meta-item{display:flex;flex-direction:column}
+  .hero-meta-label{font-size:11px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:0.3px}
+  .hero-meta-value{font-family:var(--font-heading);font-size:14px;font-weight:600;margin-top:2px}
+  .hero-meta-value.positive{color:var(--green)}
+  .hero-meta-value.negative{color:var(--red)}
+
+  .graph-area{height:100px;margin-top:12px;position:relative;overflow:hidden;touch-action:none;cursor:crosshair}
+  .graph-svg{width:100%;height:100%}
+  .graph-crosshair-line{stroke:var(--muted);stroke-width:1;stroke-dasharray:3,3;opacity:0;transition:opacity .15s}
+  .graph-crosshair-dot{fill:var(--green);stroke:#fff;stroke-width:2.5;opacity:0;transition:opacity .15s}
+  .graph-tooltip{position:absolute;background:var(--text);color:#fff;font-family:var(--font-heading);font-size:11px;font-weight:600;padding:5px 8px;border-radius:5px;pointer-events:none;opacity:0;transition:opacity .15s;white-space:nowrap;z-index:10;transform:translateX(-50%)}
+  .graph-tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:4px solid transparent;border-top-color:var(--text)}
+
+  .auto-status-list{display:flex;flex-direction:column;gap:10px}
+  .auto-status-item{display:flex;align-items:center;gap:12px;padding:14px 16px;background:#f8f9fa;border-radius:10px}
+  .auto-status-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .auto-status-icon svg{width:16px;height:16px}
+  .auto-status-info{flex:1;min-width:0}
+  .auto-status-title{font-family:var(--font-heading);font-size:13px;font-weight:600}
+  .auto-status-sub{font-size:11px;color:var(--muted);margin-top:1px}
+  .auto-status-badge{font-size:10px;font-weight:600;padding:3px 8px;border-radius:5px;flex-shrink:0}
+  .auto-status-badge.active{background:#dcfce7;color:var(--green)}
+  .auto-status-badge.building{background:#ede9fe;color:var(--purple)}
+  .auto-status-badge.monitoring{background:#fef3c7;color:var(--amber)}
+</style>
+</head>
+<body>
+<div class="phone">
+
+  <header class="nav-header">
+    <div class="nav-top">
+      <a href="../index.html" class="nav-back">
+        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+        Back
+      </a>
+      <span class="nav-title">Advizmo</span>
+    </div>
+    <nav class="seg-nav">
+      <a href="#" class="active">Overview</a>
+      <a href="#">Activity</a>
+      <a href="#">Documents</a>
+      <a href="#">Math</a>
+    </nav>
+  </header>
+
+  <!-- 1. PORTFOLIO (SUPPORTING) — Compact secondary role -->
+  <section>
+    <div class="hero-card">
+      <div class="hero-value" id="portfolioValue">$42,850</div>
+      <div class="hero-change">
+        <span class="hero-growth-icon up" id="growthIcon"></span>
+        <span class="hero-change-value positive" id="todayChange">+$182 today</span>
+      </div>
+      <div class="hero-meta">
+        <div class="hero-meta-item">
+          <span class="hero-meta-label">Total Return</span>
+          <span class="hero-meta-value positive" id="totalReturn">+$4,230</span>
+        </div>
+        <div class="hero-meta-item">
+          <span class="hero-meta-label">Return %</span>
+          <span class="hero-meta-value positive" id="returnPct">+11.0%</span>
+        </div>
+      </div>
+      <div class="time-filters">
+        <button onclick="setTimeframe('1D',this)">1D</button>
+        <button onclick="setTimeframe('1W',this)">1W</button>
+        <button onclick="setTimeframe('1M',this)">1M</button>
+        <button onclick="setTimeframe('3M',this)" class="active">3M</button>
+        <button onclick="setTimeframe('6M',this)">6M</button>
+        <button onclick="setTimeframe('1Y',this)">1Y</button>
+        <button onclick="setTimeframe('ALL',this)">ALL</button>
+      </div>
+      <div class="graph-area" id="graphArea">
+        <svg class="graph-svg" viewBox="0 0 400 100" preserveAspectRatio="none" id="graphSvg">
+          <defs>
+            <linearGradient id="graphGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#166f47" stop-opacity="0.18"/>
+              <stop offset="100%" stop-color="#166f47" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <path id="graphAreaFill" d="" fill="url(#graphGrad)"/>
+          <path id="graphLine" d="" fill="none" stroke="#166f47" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <line class="graph-crosshair-line" id="crosshairLine" x1="0" y1="0" x2="0" y2="100"/>
+          <circle class="graph-crosshair-dot" id="crosshairDot" cx="0" cy="0" r="4"/>
+        </svg>
+        <div class="graph-tooltip" id="graphTooltip">$42,850</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. ADVIZMO ACCOUNTS (HERO) — The Product -->
+  <section>
+    <div class="section-label">Advizmo Accounts</div>
+    <div class="account-grid">
+      <div class="account-card hero-primary">
+        <div class="account-top">
+          <div style="display:flex;gap:12px;align-items:center">
+            <div class="account-icon auto">A</div>
+            <div>
+              <div class="account-name">Auto Invest</div>
+              <div class="account-sub">Automatic investing & rebalancing</div>
+            </div>
+          </div>
+          <div class="account-balance">$32,880</div>
+        </div>
+        <div class="account-desc">Advizmo automatically invests, rebalances, and optimizes your portfolio. No manual trading needed.</div>
+        <div class="account-ctas">
+          <span class="badge automated">Active</span>
+          <button class="btn btn-green">Invest More</button>
+          <button class="btn btn-secondary">Details</button>
+        </div>
+      </div>
+      <div class="account-card">
+        <div class="account-top">
+          <div style="display:flex;gap:12px;align-items:center">
+            <div class="account-icon reserve">R</div>
+            <div>
+              <div class="account-name">Reserve</div>
+              <div class="account-sub">Emergency fund · 84% of target</div>
+            </div>
+          </div>
+          <div class="account-balance">$8,120</div>
+        </div>
+        <div class="account-desc">Automatically builds your safety net before investing more.</div>
+        <div class="account-ctas">
+          <span class="badge automated">Auto-building</span>
+          <button class="btn btn-secondary">Details</button>
+        </div>
+      </div>
+      <div class="account-card">
+        <div class="account-top">
+          <div style="display:flex;gap:12px;align-items:center">
+            <div class="account-icon cash">$</div>
+            <div>
+              <div class="account-name">Cash</div>
+              <div class="account-sub">4.1% APY · Idle cash monitoring</div>
+            </div>
+          </div>
+          <div class="account-balance">$1,850</div>
+        </div>
+        <div class="account-desc">Excess cash is automatically moved to earn higher yields.</div>
+        <div class="account-ctas">
+          <span class="badge connected">Monitoring</span>
+          <button class="btn btn-secondary">Details</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. MOVE MONEY (PROMINENT) — Primary User Action -->
+  <section>
+    <div class="section-label">Move Money</div>
+    <div class="move-money-card">
+      <div style="display:flex;gap:12px;align-items:center">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 7l-5-5-5 5"/></svg>
+        <div>
+          <div class="account-name">Move money to grow your portfolio</div>
+        </div>
+      </div>
+      <div class="move-money-text">Transfer from external accounts or add new funds. Advizmo will automatically allocate to the right accounts.</div>
+      <div><button class="btn btn-green" style="width:100%">Move Money</button></div>
+    </div>
+  </section>
+
+  <!-- 4. TAX OPTIMIZATION (FEATURED) — Automation Value -->
+  <section>
+    <div class="section-label">Tax Optimization</div>
+    <div class="card">
+      <div class="tax-expand">
+        <div class="tax-head">
+          <div>
+            <div class="health-label">Estimated Tax Savings</div>
+            <div class="tax-savings">$482 this year</div>
+          </div>
+          <span class="badge automated">Automated</span>
+        </div>
+        <div class="tax-status">
+          <span class="dot green"></span> Tax-Loss Harvesting: Active
+        </div>
+        <div class="tax-detail">Advizmo automatically harvests losses to offset gains. No action needed on your end.</div>
+        <div class="tax-harvest">
+          <div class="tax-harvest-item">
+            <div class="tax-harvest-label">Last Harvest</div>
+            <div class="tax-harvest-value">Dec 15</div>
+          </div>
+          <div class="tax-harvest-item">
+            <div class="tax-harvest-label">Next Opportunity</div>
+            <div class="tax-harvest-value">Jan 15</div>
+          </div>
+          <div class="tax-harvest-item">
+            <div class="tax-harvest-label">Status</div>
+            <div class="tax-harvest-value" style="color:var(--green)">Monitoring</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. AUTOMATION STATUS (NEW) — What Advizmo is Doing -->
+  <section>
+    <div class="section-label">Automation Status</div>
+    <div class="auto-status-list">
+      <div class="auto-status-item">
+        <div class="auto-status-icon" style="background:#ede9fe">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 7l-5-5-5 5"/></svg>
+        </div>
+        <div class="auto-status-info">
+          <div class="auto-status-title">Auto-investing $520/month</div>
+          <div class="auto-status-sub">Next deposit: Jan 1</div>
+        </div>
+        <span class="auto-status-badge active">Active</span>
+      </div>
+      <div class="auto-status-item">
+        <div class="auto-status-icon" style="background:#dbeafe">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path d="M9 12l2 2 4-4"/></svg>
+        </div>
+        <div class="auto-status-info">
+          <div class="auto-status-title">Rebalancing quarterly</div>
+          <div class="auto-status-sub">Next review: Jan 15</div>
+        </div>
+        <span class="auto-status-badge active">Active</span>
+      </div>
+      <div class="auto-status-item">
+        <div class="auto-status-icon" style="background:#dcfce7">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="auto-status-info">
+          <div class="auto-status-title">Harvesting tax losses</div>
+          <div class="auto-status-sub">Saved $482 this year</div>
+        </div>
+        <span class="auto-status-badge active">Active</span>
+      </div>
+      <div class="auto-status-item">
+        <div class="auto-status-icon" style="background:#fef3c7">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+        <div class="auto-status-info">
+          <div class="auto-status-title">Monitoring idle cash</div>
+          <div class="auto-status-sub">$1,850 earning 4.1% APY</div>
+        </div>
+        <span class="auto-status-badge monitoring">Monitoring</span>
+      </div>
+      <div class="auto-status-item">
+        <div class="auto-status-icon" style="background:#fee2e2">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="auto-status-info">
+          <div class="auto-status-title">Protecting emergency fund</div>
+          <div class="auto-status-sub">$8,120 · 84% of target</div>
+        </div>
+        <span class="auto-status-badge building">Building</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. EXTERNAL ACCOUNTS (SECONDARY) -->
+  <section>
+    <div class="section-label">External Accounts</div>
+    <div class="account-grid">
+      <div class="account-card" style="padding:14px 18px">
+        <div class="account-top">
+          <div style="display:flex;gap:10px;align-items:center">
+            <div class="account-icon ext" style="width:32px;height:32px;font-size:12px">C</div>
+            <div>
+              <div class="account-name" style="font-size:14px">Chase</div>
+              <div class="account-sub" style="font-size:11px">Synced 2h ago</div>
+            </div>
+          </div>
+          <div style="text-align:right">
+            <div class="account-balance" style="font-size:18px">$12,400</div>
+            <span class="badge connected" style="font-size:10px;padding:2px 6px">Connected</span>
+          </div>
+        </div>
+      </div>
+      <div class="account-card" style="padding:14px 18px">
+        <div class="account-top">
+          <div style="display:flex;gap:10px;align-items:center">
+            <div class="account-icon ext" style="width:32px;height:32px;font-size:10px">CO</div>
+            <div>
+              <div class="account-name" style="font-size:14px">Capital One</div>
+              <div class="account-sub" style="font-size:11px">Synced 1h ago</div>
+            </div>
+          </div>
+          <div style="text-align:right">
+            <div class="account-balance" style="font-size:18px">$8,900</div>
+            <span class="badge connected" style="font-size:10px;padding:2px 6px">Connected</span>
+          </div>
+        </div>
+      </div>
+      <div class="account-card" style="padding:14px 18px">
+        <div class="account-top">
+          <div style="display:flex;gap:10px;align-items:center">
+            <div class="account-icon ext" style="width:32px;height:32px;font-size:12px">M</div>
+            <div>
+              <div class="account-name" style="font-size:14px">Marcus</div>
+              <div class="account-sub" style="font-size:11px">Synced 3h ago</div>
+            </div>
+          </div>
+          <div style="text-align:right">
+            <div class="account-balance" style="font-size:18px">$15,200</div>
+            <span class="badge connected" style="font-size:10px;padding:2px 6px">Connected</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. PORTFOLIO ALLOCATION (SECONDARY) -->
+  <section>
+    <div class="section-label">Portfolio Allocation</div>
+    <div class="card">
+      <div class="donut-wrap">
+        <div class="donut-container">
+          <svg viewBox="0 0 140 140">
+            <circle cx="70" cy="70" r="55" fill="none" stroke="#f1f1f1" stroke-width="20"/>
+            <circle id="arc-vti" cx="70" cy="70" r="55" fill="none" stroke="#166f47" stroke-width="20" stroke-dasharray="0 346" stroke-linecap="round"/>
+            <circle id="arc-vxus" cx="70" cy="70" r="55" fill="none" stroke="#1551a8" stroke-width="20" stroke-dasharray="0 346" stroke-linecap="round"/>
+            <circle id="arc-bnd" cx="70" cy="70" r="55" fill="none" stroke="#c2790a" stroke-width="20" stroke-dasharray="0 346" stroke-linecap="round"/>
+            <circle id="arc-vnq" cx="70" cy="70" r="55" fill="none" stroke="#6b21a8" stroke-width="20" stroke-dasharray="0 346" stroke-linecap="round"/>
+          </svg>
+          <div class="donut-center">
+            <div class="donut-center-value">$42,850</div>
+            <div class="donut-center-label">Total</div>
+          </div>
+        </div>
+        <div class="legend">
+          <div class="legend-item"><span class="legend-swatch" style="background:#166f47"></span>VTI <span class="legend-pct">58%</span></div>
+          <div class="legend-item"><span class="legend-swatch" style="background:#1551a8"></span>VXUS <span class="legend-pct">18%</span></div>
+          <div class="legend-item"><span class="legend-swatch" style="background:#c2790a"></span>BND <span class="legend-pct">14%</span></div>
+          <div class="legend-item"><span class="legend-swatch" style="background:#6b21a8"></span>VNQ <span class="legend-pct">10%</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. TOP HOLDINGS (SECONDARY) -->
+  <section>
+    <div class="section-label">Top Holdings</div>
+    <div class="card" style="padding:4px 18px">
+      <div class="list-item">
+        <div class="list-icon">VTI</div>
+        <div class="list-info">
+          <div class="list-name">Vanguard Total Stock Market ETF</div>
+          <div class="list-sub">58% · $14,820</div>
+        </div>
+        <div class="list-right">
+          <div class="list-value">$14,820</div>
+          <div class="list-change positive">+$42</div>
+        </div>
+      </div>
+      <div class="list-item">
+        <div class="list-icon">VX</div>
+        <div class="list-info">
+          <div class="list-name">Vanguard Total Intl Stock ETF</div>
+          <div class="list-sub">18% · $4,580</div>
+        </div>
+        <div class="list-right">
+          <div class="list-value">$4,580</div>
+          <div class="list-change positive">+$29</div>
+        </div>
+      </div>
+      <div class="list-item">
+        <div class="list-icon">BN</div>
+        <div class="list-info">
+          <div class="list-name">Vanguard Total Bond Market ETF</div>
+          <div class="list-sub">14% · $3,560</div>
+        </div>
+        <div class="list-right">
+          <div class="list-value">$3,560</div>
+          <div class="list-change positive">+$18</div>
+        </div>
+      </div>
+      <div class="list-item">
+        <div class="list-icon">VN</div>
+        <div class="list-info">
+          <div class="list-name">Vanguard Real Estate ETF</div>
+          <div class="list-sub">10% · $2,540</div>
+        </div>
+        <div class="list-right">
+          <div class="list-value">$2,540</div>
+          <div class="list-change negative">-$18</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. TOP MOVERS (SECONDARY) -->
+  <section>
+    <div class="section-label">Top Movers</div>
+    <div class="card" style="padding:4px 18px">
+      <div class="list-item">
+        <div class="list-icon" style="background:#dcfce7;color:var(--green)">VTI</div>
+        <div class="list-info">
+          <div class="list-name">VTI</div>
+          <div class="list-sub">Today's change</div>
+        </div>
+        <svg class="sparkline" viewBox="0 0 40 20"><polyline points="2,16 8,12 14,14 20,8 26,10 32,4 38,6" fill="none" stroke="#166f47" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="list-right">
+          <div class="list-change positive">+$42</div>
+        </div>
+      </div>
+      <div class="list-item">
+        <div class="list-icon" style="background:#fee2e2;color:var(--red)">VN</div>
+        <div class="list-info">
+          <div class="list-name">VNQ</div>
+          <div class="list-sub">Today's change</div>
+        </div>
+        <svg class="sparkline" viewBox="0 0 40 20"><polyline points="2,6 8,10 14,8 20,14 26,12 32,16 38,14" fill="none" stroke="#b91c1c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="list-right">
+          <div class="list-change negative">-$18</div>
+        </div>
+      </div>
+      <div class="list-item">
+        <div class="list-icon" style="background:#dcfce7;color:var(--green)">BN</div>
+        <div class="list-info">
+          <div class="list-name">BND</div>
+          <div class="list-sub">Today's change</div>
+        </div>
+        <svg class="sparkline" viewBox="0 0 40 20"><polyline points="2,14 8,10 14,12 20,8 26,9 32,6 38,7" fill="none" stroke="#166f47" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="list-right">
+          <div class="list-change positive">+$8</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. AI INSIGHT (SECONDARY) — Automation-Focused -->
+  <section>
+    <div class="section-label">AI Insight</div>
+    <div class="ai-card">
+      <div class="ai-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 017 7h1a1 1 0 011 1v3a1 1 0 01-1 1h-1v1a2 2 0 01-2 2H5a2 2 0 01-2-2v-1H2a1 1 0 01-1-1v-3a1 1 0 011-1h1a7 7 0 017-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 012-2zM9.5 13a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm5 0a1.5 1.5 0 100 3 1.5 1.5 0 000-3z"/></svg>
+      </div>
+      <div>
+        <div class="ai-text">
+          Your portfolio is being <strong>automatically rebalanced</strong>. Tax-loss harvesting has saved you <strong>$482</strong> this year. Advizmo is monitoring for the next optimization opportunity on Jan 15.
+        </div>
+        <div class="ai-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          All automations active
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function(){
+  var GRAPH_W = 400, GRAPH_H = 100, PAD = 12;
+
+  var state = {
+    timeframe: '3M',
+    currentPoints: [],
+    currentValue: 42850,
+    currentChange: 4650,
+    currentReturn: 4230,
+    currentPct: 11.0
+  };
+
+  var timeData = {
+    '1D': {
+      value: 42850, startVal: 42668, change: 182, totalReturn: 182, pct: 0.43,
+      changeLabel: '+$182 today', returnLabel: '+$182', pctLabel: '+0.43%',
+      points: generatePoints(42668, 42850, 28, 0.004)
+    },
+    '1W': {
+      value: 42850, startVal: 42320, change: 530, totalReturn: 530, pct: 1.25,
+      changeLabel: '+$530 this week', returnLabel: '+$530', pctLabel: '+1.25%',
+      points: generatePoints(42320, 42850, 28, 0.01)
+    },
+    '1M': {
+      value: 42850, startVal: 40520, change: 2330, totalReturn: 2330, pct: 5.75,
+      changeLabel: '+$2,330 this month', returnLabel: '+$2,330', pctLabel: '+5.75%',
+      points: generatePoints(40520, 42850, 28, 0.025)
+    },
+    '3M': {
+      value: 42850, startVal: 38600, change: 4650, totalReturn: 4230, pct: 11.0,
+      changeLabel: '+$4,650 this quarter', returnLabel: '+$4,230', pctLabel: '+11.0%',
+      points: generatePoints(38600, 42850, 28, 0.04)
+    },
+    '6M': {
+      value: 42850, startVal: 35800, change: 7050, totalReturn: 6200, pct: 17.3,
+      changeLabel: '+$7,050 this half', returnLabel: '+$6,200', pctLabel: '+17.3%',
+      points: generatePoints(35800, 42850, 30, 0.06)
+    },
+    '1Y': {
+      value: 42850, startVal: 32100, change: 10750, totalReturn: 9500, pct: 29.6,
+      changeLabel: '+$10,750 this year', returnLabel: '+$9,500', pctLabel: '+29.6%',
+      points: generatePoints(32100, 42850, 30, 0.08)
+    },
+    'ALL': {
+      value: 42850, startVal: 25000, change: 17850, totalReturn: 15400, pct: 61.6,
+      changeLabel: '+$17,850 all time', returnLabel: '+$15,400', pctLabel: '+61.6%',
+      points: generatePoints(25000, 42850, 32, 0.12)
+    }
+  };
+
+  function generatePoints(start, end, count, volatility) {
+    var pts = [];
+    var range = end - start;
+    var trendSlope = range / (count - 1);
+    for (var i = 0; i < count; i++) {
+      var trendVal = start + trendSlope * i;
+      var noise = (Math.random() - 0.45) * range * volatility;
+      var val = trendVal + noise;
+      if (i === count - 1) val = end;
+      if (i === 0) val = start;
+      pts.push(Math.round(val));
+    }
+    return pts;
+  }
+
+  function interpolatePoints(from, to, t) {
+    var result = [];
+    var len = Math.max(from.length, to.length);
+    for (var i = 0; i < len; i++) {
+      var f = from[Math.min(i, from.length - 1)];
+      var t2 = to[Math.min(i, to.length - 1)];
+      result.push(f + (t2 - f) * t);
+    }
+    return result;
+  }
+
+  function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+
+  function pointsToPath(pts) {
+    if (pts.length < 2) return '';
+    var minY = Math.min.apply(null, pts);
+    var maxY = Math.max.apply(null, pts);
+    var range = maxY - minY || 1;
+    var usableH = GRAPH_H - PAD * 2;
+    var stepX = (GRAPH_W - PAD * 2) / (pts.length - 1);
+    var mapped = pts.map(function(v, i) {
+      return { x: PAD + i * stepX, y: PAD + usableH - ((v - minY) / range) * usableH };
+    });
+    var d = 'M' + mapped[0].x + ',' + mapped[0].y;
+    for (var i = 1; i < mapped.length; i++) {
+      var prev = mapped[i - 1], curr = mapped[i];
+      var cpx1 = prev.x + (curr.x - prev.x) * 0.4;
+      var cpx2 = curr.x - (curr.x - prev.x) * 0.4;
+      d += ' C' + cpx1 + ',' + prev.y + ' ' + cpx2 + ',' + curr.y + ' ' + curr.x + ',' + curr.y;
+    }
+    return d;
+  }
+
+  function pointsToAreaPath(pts) {
+    var linePath = pointsToPath(pts);
+    if (!linePath) return '';
+    var usableH = GRAPH_H - PAD * 2;
+    var stepX = (GRAPH_W - PAD * 2) / (pts.length - 1);
+    var lastX = PAD + (pts.length - 1) * stepX;
+    var firstX = PAD, bottom = PAD + usableH;
+    return linePath + ' L' + lastX + ',' + bottom + ' L' + firstX + ',' + bottom + ' Z';
+  }
+
+  function morphGraph(oldPts, newPts, duration) {
+    var startTime = null;
+    var lineEl = document.getElementById('graphLine');
+    var areaEl = document.getElementById('graphAreaFill');
+    function frame(ts) {
+      if (!startTime) startTime = ts;
+      var progress = Math.min((ts - startTime) / duration, 1);
+      var eased = easeOutCubic(progress);
+      var interp = interpolatePoints(oldPts, newPts, eased);
+      lineEl.setAttribute('d', pointsToPath(interp));
+      areaEl.setAttribute('d', pointsToAreaPath(interp));
+      if (progress < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function animateValue(elementId, from, to, prefix, duration) {
+    prefix = prefix || '';
+    duration = duration || 400;
+    var el = document.getElementById(elementId);
+    var startTime = null;
+    function frame(ts) {
+      if (!startTime) startTime = ts;
+      var progress = Math.min((ts - startTime) / duration, 1);
+      var eased = easeOutCubic(progress);
+      var current = from + (to - from) * eased;
+      if (Math.abs(to) >= 1000) {
+        el.textContent = prefix + '$' + Math.round(current).toLocaleString();
+      } else if (Math.abs(to) >= 1) {
+        el.textContent = prefix + '$' + current.toFixed(2);
+      } else {
+        el.textContent = prefix + current.toFixed(2) + '%';
+      }
+      if (progress < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function updateCrosshair(pts) {
+    var svg = document.getElementById('graphSvg');
+    var crosshairLine = document.getElementById('crosshairLine');
+    var crosshairDot = document.getElementById('crosshairDot');
+    var tooltip = document.getElementById('graphTooltip');
+    var minY = Math.min.apply(null, pts);
+    var maxY = Math.max.apply(null, pts);
+    var range = maxY - minY || 1;
+    var usableH = GRAPH_H - PAD * 2;
+    var stepX = (GRAPH_W - PAD * 2) / (pts.length - 1);
+    var mapped = pts.map(function(v, i) {
+      return { x: PAD + i * stepX, y: PAD + usableH - ((v - minY) / range) * usableH, val: v };
+    });
+    function getPointerPos(e) {
+      var rect = svg.getBoundingClientRect();
+      var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      return (clientX - rect.left) * (GRAPH_W / rect.width);
+    }
+    function findNearest(x) {
+      var closest = mapped[0], minDist = Infinity;
+      for (var i = 0; i < mapped.length; i++) {
+        var dist = Math.abs(mapped[i].x - x);
+        if (dist < minDist) { minDist = dist; closest = mapped[i]; }
+      }
+      return closest;
+    }
+    function showCrosshair(point) {
+      var rect = svg.getBoundingClientRect();
+      var displayX = (point.x / GRAPH_W) * rect.width;
+      var displayY = (point.y / GRAPH_H) * rect.height;
+      crosshairLine.setAttribute('x1', point.x);
+      crosshairLine.setAttribute('y1', PAD);
+      crosshairLine.setAttribute('x2', point.x);
+      crosshairLine.setAttribute('y2', PAD + usableH);
+      crosshairLine.style.opacity = '1';
+      crosshairDot.setAttribute('cx', point.x);
+      crosshairDot.setAttribute('cy', point.y);
+      crosshairDot.style.opacity = '1';
+      tooltip.textContent = '$' + Math.round(point.val).toLocaleString();
+      tooltip.style.left = displayX + 'px';
+      tooltip.style.top = (displayY - 10) + 'px';
+      tooltip.style.opacity = '1';
+    }
+    function hideCrosshair() {
+      crosshairLine.style.opacity = '0';
+      crosshairDot.style.opacity = '0';
+      tooltip.style.opacity = '0';
+    }
+    var graphArea = document.getElementById('graphArea');
+    graphArea.addEventListener('touchstart', function(e) {
+      e.preventDefault();
+      showCrosshair(findNearest(getPointerPos(e)));
+    }, {passive: false});
+    graphArea.addEventListener('touchmove', function(e) {
+      e.preventDefault();
+      showCrosshair(findNearest(getPointerPos(e)));
+    }, {passive: false});
+    graphArea.addEventListener('touchend', hideCrosshair);
+    graphArea.addEventListener('mousemove', function(e) {
+      showCrosshair(findNearest(getPointerPos(e)));
+    });
+    graphArea.addEventListener('mouseleave', hideCrosshair);
+  }
+
+  window.setTimeframe = function(tf, btn) {
+    if (state.timeframe === tf) return;
+    document.querySelectorAll('.time-filters button').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    var oldData = timeData[state.timeframe];
+    var newData = timeData[tf];
+    var oldPoints = state.currentPoints.length ? state.currentPoints : oldData.points;
+    state.timeframe = tf;
+    state.currentPoints = newData.points.slice();
+    animateValue('portfolioValue', state.currentValue, newData.value, '$');
+    animateValue('todayChange', state.currentChange, newData.change, '+$');
+    animateValue('totalReturn', state.currentReturn, newData.totalReturn, '+$');
+    animateValue('returnPct', state.currentPct, newData.pct, '+');
+    state.currentValue = newData.value;
+    state.currentChange = newData.change;
+    state.currentReturn = newData.totalReturn;
+    state.currentPct = newData.pct;
+    var icon = document.getElementById('growthIcon');
+    icon.className = 'hero-growth-icon ' + (newData.pct >= 0 ? 'up' : 'down');
+    var todayEl = document.getElementById('todayChange');
+    todayEl.className = 'hero-change-value ' + (newData.pct >= 0 ? 'positive' : 'negative');
+    todayEl.textContent = newData.changeLabel;
+    var returnEl = document.getElementById('totalReturn');
+    returnEl.className = 'hero-meta-value ' + (newData.totalReturn >= 0 ? 'positive' : 'negative');
+    returnEl.textContent = newData.returnLabel;
+    var pctEl = document.getElementById('returnPct');
+    pctEl.className = 'hero-meta-value ' + (newData.pct >= 0 ? 'positive' : 'negative');
+    pctEl.textContent = newData.pctLabel;
+    morphGraph(oldPoints, newData.points, 500);
+    updateCrosshair(newData.points);
+  };
+
+  function drawDonut() {
+    var segs = [
+      {id:'arc-vti',pct:58},
+      {id:'arc-vxus',pct:18},
+      {id:'arc-bnd',pct:14},
+      {id:'arc-vnq',pct:10}
+    ];
+    var circ = 2 * Math.PI * 55;
+    var offset = 0;
+    segs.forEach(function(s) {
+      var arc = (s.pct / 100) * circ;
+      var el = document.getElementById(s.id);
+      el.setAttribute('stroke-dasharray', arc + ' ' + (circ - arc));
+      el.setAttribute('stroke-dashoffset', -offset);
+      offset += arc;
+    });
+  }
+
+  function init() {
+    state.currentPoints = timeData['3M'].points.slice();
+    morphGraph([], timeData['3M'].points, 0);
+    updateCrosshair(timeData['3M'].points);
+    drawDonut();
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>

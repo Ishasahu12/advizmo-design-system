@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invest Overview — Executive Summary — Advizmo</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --green:#166f47;--amber:#c2790a;--red:#b91c1c;--blue:#1551a8;--purple:#6b21a8;
+      --bg:#f8f9fa;--card:#fff;--text:#1a1a1a;--muted:#6b7280;--border:#e5e7eb;
+      --font-heading:'IBM Plex Sans',sans-serif;--font-body:'Inter',sans-serif;
+    }
+    html{font-size:16px;-webkit-font-smoothing:antialiased}
+    body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh}
+    .phone{max-width:430px;margin:0 auto;padding:0 16px 40px;background:var(--bg)}
+
+    /* ── NAV HEADER ── */
+    .nav-header{position:sticky;top:0;z-index:100;background:var(--bg);padding:12px 0 0;border-bottom:1px solid var(--border)}
+    .nav-top{display:flex;align-items:center;gap:10px;padding-bottom:10px}
+    .nav-back{font-family:var(--font-body);font-size:14px;color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:3px;font-weight:500}
+    .nav-back svg{width:16px;height:16px;stroke:var(--blue);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+    .nav-title{font-family:var(--font-heading);font-size:12px;font-weight:600;color:var(--muted);letter-spacing:0.5px;text-transform:uppercase;margin-left:auto}
+    .seg-nav{display:flex;gap:0;overflow-x:auto;scrollbar-width:none}
+    .seg-nav::-webkit-scrollbar{display:none}
+    .seg-nav a{font-family:var(--font-body);font-size:12px;font-weight:500;padding:8px 14px;color:var(--muted);text-decoration:none;white-space:nowrap;border-bottom:2px solid transparent;transition:color .2s,border-color .2s}
+    .seg-nav a.active{color:var(--text);border-bottom-color:var(--text)}
+
+    /* ── SECTIONS ── */
+    section{padding:12px 0}
+    section+section{border-top:1px solid var(--border)}
+    .section-label{font-family:var(--font-heading);font-size:10px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+
+    /* ── HERO CARD ── */
+    .hero-card{background:var(--card);border-radius:14px;padding:16px 18px;box-shadow:0 1px 3px rgba(0,0,0,.04),0 0 0 1px rgba(0,0,0,.03)}
+    .hero-row{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+    .hero-value{font-family:var(--font-heading);font-size:32px;font-weight:700;letter-spacing:-0.8px;line-height:1}
+    .hero-today{display:flex;align-items:center;gap:5px}
+    .hero-growth-icon{width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;display:inline-block}
+    .hero-growth-icon.up{border-bottom:6px solid var(--green)}
+    .hero-growth-icon.down{border-top:6px solid var(--red);border-bottom:none}
+    .hero-change-val{font-family:var(--font-heading);font-size:13px;font-weight:600}
+    .hero-change-val.positive{color:var(--green)}
+    .hero-change-val.negative{color:var(--red)}
+    .hero-meta{display:flex;gap:14px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+    .hero-meta-item{display:flex;flex-direction:column}
+    .hero-meta-label{font-size:10px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:0.3px}
+    .hero-meta-value{font-family:var(--font-heading);font-size:13px;font-weight:600;margin-top:1px}
+    .hero-meta-value.positive{color:var(--green)}
+    .hero-meta-value.negative{color:var(--red)}
+
+    /* ── TIME FILTERS ── */
+    .time-filters{display:flex;gap:3px;margin-top:10px;padding:3px;background:#f1f1f1;border-radius:7px}
+    .time-filters button{flex:1;font-family:var(--font-body);font-size:11px;font-weight:600;padding:6px 0;border:none;border-radius:5px;background:transparent;color:var(--muted);cursor:pointer;transition:all .2s}
+    .time-filters button.active{background:var(--card);color:var(--text);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+
+    /* ── GRAPH ── */
+    .graph-area{height:120px;margin-top:10px;position:relative;overflow:hidden;touch-action:none;cursor:crosshair}
+    .graph-svg{width:100%;height:100%}
+    .graph-crosshair-line{stroke:var(--muted);stroke-width:1;stroke-dasharray:3,3;opacity:0;transition:opacity .15s}
+    .graph-crosshair-dot{fill:var(--green);stroke:#fff;stroke-width:2.5;opacity:0;transition:opacity .15s}
+    .graph-tooltip{position:absolute;background:var(--text);color:#fff;font-family:var(--font-heading);font-size:11px;font-weight:600;padding:5px 8px;border-radius:5px;pointer-events:none;opacity:0;transition:opacity .15s;white-space:nowrap;z-index:10;transform:translateX(-50%)}
+    .graph-tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:3px solid transparent;border-top-color:var(--text)}
+    .graph-date-label{position:absolute;bottom:2px;font-size:9px;color:var(--muted);pointer-events:none;opacity:0;transition:opacity .15s;transform:translateX(-50%)}
+
+    /* ── INVESTMENT HEALTH 2x3 GRID ── */
+    .health-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+    .health-item{background:var(--card);border-radius:10px;padding:10px 12px;box-shadow:0 1px 3px rgba(0,0,0,.04),0 0 0 1px rgba(0,0,0,.03)}
+    .health-dot{width:6px;height:6px;border-radius:50%;display:inline-block;margin-right:5px}
+    .health-dot.green{background:var(--green)}
+    .health-dot.amber{background:var(--amber)}
+    .health-dot.red{background:var(--red)}
+    .health-label{font-size:10px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:0.3px}
+    .health-value{font-family:var(--font-heading);font-size:12px;font-weight:600;margin-top:2px;display:flex;align-items:center}
+    .health-value.green-text{color:var(--green)}
+    .health-value.amber-text{color:var(--amber)}
+
+    /* ── TAX OPTIMIZATION ── */
+    .tax-card{background:var(--card);border-radius:14px;padding:14px 16px;box-shadow:0 1px 3px rgba(0,0,0,.04),0 0 0 1px rgba(0,0,0,.03)}
+    .tax-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+    .tax-pill{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;background:#f0fdf4;border-radius:6px}
+    .tax-pill-val{font-family:var(--font-heading);font-size:14px;font-weight:700;color:var(--green)}
+    .tax-pill-label{font-size:10px;color:var(--muted)}
+    .tax-status{display:flex;align-items:center;gap:4px}
+    .tax-dot{width:6px;height:6px;border-radius:50%;background:var(--amber)}
+    .tax-status-text{font-size:11px;font-weight:600;color:var(--amber)}
+    .tax-details{display:flex;gap:16px}
+    .tax-detail{font-size:11px;color:var(--muted)}
+    .tax-detail span{font-weight:600;color:var(--text)}
+
+    /* ── TOP HOLDINGS ── */
+    .holdings-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .holding-card{background:var(--card);border-radius:10px;padding:12px;box-shadow:0 1px 3px rgba(0,0,0,.04),0 0 0 1px rgba(0,0,0,.03)}
+    .holding-ticker{font-family:var(--font-heading);font-size:13px;font-weight:700;margin-bottom:4px}
+    .holding-meta{display:flex;justify-content:space-between;align-items:baseline}
+    .holding-pct{font-family:var(--font-heading);font-size:11px;font-weight:600;color:var(--muted)}
+    .holding-change{font-family:var(--font-heading);font-size:11px;font-weight:600}
+    .holding-change.positive{color:var(--green)}
+    .holding-change.negative{color:var(--red)}
+    .holding-bar{height:3px;background:#f1f1f1;border-radius:2px;margin-top:8px;overflow:hidden}
+    .holding-bar-fill{height:100%;border-radius:2px}
+
+    /* ── AI INSIGHT ── */
+    .ai-card{background:linear-gradient(135deg,#f0f4ff 0%,#f8f0ff 100%);border:1px solid #e0e7ff;border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:10px}
+    .ai-icon{width:24px;height:24px;border-radius:6px;background:var(--blue);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .ai-icon svg{width:12px;height:12px;fill:#fff}
+    .ai-text{font-size:12px;color:var(--text);font-weight:500;line-height:1.4}
+
+    /* ── SECONDARY SECTIONS (BELOW FOLD) ── */
+    .secondary-card{background:var(--card);border-radius:14px;padding:14px 16px;box-shadow:0 1px 3px rgba(0,0,0,.04),0 0 0 1px rgba(0,0,0,.03)}
+    .acct-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+    .acct-mini{text-align:center}
+    .acct-mini-icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-size:11px;font-weight:700;color:#fff;margin:0 auto 6px}
+    .acct-mini-icon.cash{background:var(--green)}
+    .acct-mini-icon.reserve{background:var(--blue)}
+    .acct-mini-icon.auto{background:var(--purple)}
+    .acct-mini-val{font-family:var(--font-heading);font-size:14px;font-weight:700}
+    .acct-mini-label{font-size:10px;color:var(--muted);margin-top:1px}
+    .acct-mini-sub{font-size:9px;color:var(--amber);font-weight:600;margin-top:1px}
+
+    .ext-list{display:flex;flex-direction:column;gap:6px}
+    .ext-row{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--card);border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,.04),0 0 0 1px rgba(0,0,0,.03)}
+    .ext-icon{width:30px;height:30px;border-radius:8px;background:#475569;display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+    .ext-info{flex:1;min-width:0}
+    .ext-name{font-family:var(--font-heading);font-size:13px;font-weight:600}
+    .ext-badge{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:0.4px;color:var(--blue);background:rgba(21,81,168,.1);padding:2px 5px;border-radius:3px;margin-left:6px}
+    .ext-status{font-size:10px;color:var(--green);display:flex;align-items:center;gap:3px}
+    .ext-status .dot{width:5px;height:5px;border-radius:50%;background:var(--green)}
+    .ext-val{font-family:var(--font-heading);font-size:14px;font-weight:700;flex-shrink:0}
+
+    .move-cta{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--card);border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,.04),0 0 0 1px rgba(0,0,0,.03);text-decoration:none;color:var(--text);transition:background .15s}
+    .move-cta:hover{background:#f5f5f5}
+    .move-cta-text{font-family:var(--font-heading);font-size:13px;font-weight:600}
+    .move-cta-sub{font-size:11px;color:var(--muted)}
+    .move-cta-arrow{font-size:16px;color:var(--muted)}
+
+    .alloc-wrap{display:flex;align-items:center;gap:16px}
+    .donut-sm{position:relative;width:80px;height:80px;flex-shrink:0}
+    .donut-sm svg{width:100%;height:100%;transform:rotate(-90deg)}
+    .donut-sm-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+    .donut-sm-val{font-family:var(--font-heading);font-size:12px;font-weight:700}
+    .donut-sm-label{font-size:8px;color:var(--muted)}
+    .alloc-legend{display:flex;flex-direction:column;gap:4px}
+    .alloc-legend-item{display:flex;align-items:center;gap:5px;font-size:11px}
+    .alloc-swatch{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+    .alloc-pct{font-family:var(--font-heading);font-weight:600;margin-left:auto;min-width:28px;text-align:right}
+
+    .mover-row{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--card);border-bottom:1px solid #f1f1f1}
+    .mover-row:last-child{border-bottom:none}
+    .mover-icon{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-size:10px;font-weight:700;flex-shrink:0}
+    .mover-icon.up{background:#dcfce7;color:var(--green)}
+    .mover-icon.down{background:#fee2e2;color:var(--red)}
+    .mover-info{flex:1;min-width:0}
+    .mover-ticker{font-family:var(--font-heading);font-size:12px;font-weight:600}
+    .mover-sub{font-size:10px;color:var(--muted)}
+    .sparkline{width:36px;height:18px;flex-shrink:0}
+    .mover-chg{font-family:var(--font-heading);font-size:12px;font-weight:600;flex-shrink:0}
+    .mover-chg.positive{color:var(--green)}
+    .mover-chg.negative{color:var(--red)}
+  </style>
+</head>
+<body>
+  <div class="phone">
+
+    <!-- Nav Header -->
+    <header class="nav-header">
+      <div class="nav-top">
+        <a href="index.html" class="nav-back">
+          <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+          Back
+        </a>
+        <span class="nav-title">Advizmo</span>
+      </div>
+      <nav class="seg-nav">
+        <a href="#" class="active">Overview</a>
+        <a href="#">Activity</a>
+        <a href="#">Documents</a>
+        <a href="#">Math</a>
+      </nav>
+    </header>
+
+    <!-- 1. PORTFOLIO HERO (SHORT) -->
+    <section>
+      <div class="hero-card">
+        <div class="hero-row">
+          <div class="hero-value" id="portfolioValue">$42,850</div>
+          <div class="hero-today">
+            <span class="hero-growth-icon up" id="growthIcon"></span>
+            <span class="hero-change-val positive" id="todayChange">+$182 today</span>
+          </div>
+        </div>
+        <div class="hero-meta">
+          <div class="hero-meta-item">
+            <span class="hero-meta-label">Total Return</span>
+            <span class="hero-meta-value positive" id="totalReturn">+$4,230</span>
+          </div>
+          <div class="hero-meta-item">
+            <span class="hero-meta-label">Return %</span>
+            <span class="hero-meta-value positive" id="returnPct">+11.0%</span>
+          </div>
+        </div>
+        <div class="time-filters">
+          <button onclick="setTimeframe('1D',this)">1D</button>
+          <button onclick="setTimeframe('1W',this)">1W</button>
+          <button onclick="setTimeframe('1M',this)" class="active">1M</button>
+          <button onclick="setTimeframe('3M',this)">3M</button>
+          <button onclick="setTimeframe('6M',this)">6M</button>
+          <button onclick="setTimeframe('1Y',this)">1Y</button>
+          <button onclick="setTimeframe('ALL',this)">ALL</button>
+        </div>
+        <div class="graph-area" id="graphArea">
+          <svg class="graph-svg" viewBox="0 0 400 120" preserveAspectRatio="none" id="graphSvg">
+            <defs>
+              <linearGradient id="graphGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#166f47" stop-opacity="0.18"/>
+                <stop offset="100%" stop-color="#166f47" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <path id="graphAreaFill" d="" fill="url(#graphGrad)"/>
+            <path id="graphLine" d="" fill="none" stroke="#166f47" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <line class="graph-crosshair-line" id="crosshairLine" x1="0" y1="0" x2="0" y2="120"/>
+            <circle class="graph-crosshair-dot" id="crosshairDot" cx="0" cy="0" r="4"/>
+          </svg>
+          <div class="graph-tooltip" id="graphTooltip">$42,850</div>
+          <div class="graph-date-label" id="graphDateLabel"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. INVESTMENT HEALTH (2x3 GRID) -->
+    <section>
+      <div class="section-label">Investment Health</div>
+      <div class="health-grid">
+        <div class="health-item">
+          <div class="health-label">Portfolio</div>
+          <div class="health-value green-text"><span class="health-dot green"></span>Good</div>
+        </div>
+        <div class="health-item">
+          <div class="health-label">Automation</div>
+          <div class="health-value green-text"><span class="health-dot green"></span>Active</div>
+        </div>
+        <div class="health-item">
+          <div class="health-label">Diversification</div>
+          <div class="health-value green-text"><span class="health-dot green"></span>Balanced</div>
+        </div>
+        <div class="health-item">
+          <div class="health-label">Risk</div>
+          <div class="health-value green-text"><span class="health-dot green"></span>On Track</div>
+        </div>
+        <div class="health-item">
+          <div class="health-label">Reserve</div>
+          <div class="health-value amber-text"><span class="health-dot amber"></span>84%</div>
+        </div>
+        <div class="health-item">
+          <div class="health-label">Idle Cash</div>
+          <div class="health-value green-text"><span class="health-dot green"></span>Low</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. TAX OPTIMIZATION -->
+    <section>
+      <div class="section-label">Tax Optimization</div>
+      <div class="tax-card">
+        <div class="tax-top">
+          <div class="tax-pill">
+            <div class="tax-pill-val">$482</div>
+            <div class="tax-pill-label">saved</div>
+          </div>
+          <div class="tax-status">
+            <span class="tax-dot"></span>
+            <span class="tax-status-text">TLH Active</span>
+          </div>
+        </div>
+        <div class="tax-details">
+          <div class="tax-detail">Last Harvest: <span>Dec 15</span></div>
+          <div class="tax-detail">Next: <span>Jan 15</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. TOP HOLDINGS -->
+    <section>
+      <div class="section-label">Top Holdings</div>
+      <div class="holdings-grid">
+        <div class="holding-card">
+          <div class="holding-ticker">VTI</div>
+          <div class="holding-meta">
+            <span class="holding-pct">58%</span>
+            <span class="holding-change positive">+$42</span>
+          </div>
+          <div class="holding-bar"><div class="holding-bar-fill" style="width:58%;background:var(--green)"></div></div>
+        </div>
+        <div class="holding-card">
+          <div class="holding-ticker">VXUS</div>
+          <div class="holding-meta">
+            <span class="holding-pct">18%</span>
+            <span class="holding-change positive">+$29</span>
+          </div>
+          <div class="holding-bar"><div class="holding-bar-fill" style="width:18%;background:var(--blue)"></div></div>
+        </div>
+        <div class="holding-card">
+          <div class="holding-ticker">BND</div>
+          <div class="holding-meta">
+            <span class="holding-pct">14%</span>
+            <span class="holding-change positive">+$18</span>
+          </div>
+          <div class="holding-bar"><div class="holding-bar-fill" style="width:14%;background:var(--amber)"></div></div>
+        </div>
+        <div class="holding-card">
+          <div class="holding-ticker">VNQ</div>
+          <div class="holding-meta">
+            <span class="holding-pct">10%</span>
+            <span class="holding-change negative">-$18</span>
+          </div>
+          <div class="holding-bar"><div class="holding-bar-fill" style="width:10%;background:var(--red)"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. AI INSIGHT -->
+    <section>
+      <div class="ai-card">
+        <div class="ai-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 017 7h1a1 1 0 011 1v3a1 1 0 01-1 1h-1v1a2 2 0 01-2 2H5a2 2 0 01-2-2v-1H2a1 1 0 01-1-1v-3a1 1 0 011-1h1a7 7 0 017-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 012-2zM9.5 13a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm5 0a1.5 1.5 0 100 3 1.5 1.5 0 000-3z"/></svg>
+        </div>
+        <div class="ai-text">Your portfolio remains aligned with your Moderate Growth strategy.</div>
+      </div>
+    </section>
+
+    <!-- ═══════ BELOW FOLD ═══════ -->
+
+    <!-- 6. ADVIZMO ACCOUNTS -->
+    <section>
+      <div class="section-label">Advizmo Accounts</div>
+      <div class="secondary-card">
+        <div class="acct-row">
+          <div class="acct-mini">
+            <div class="acct-mini-icon cash">$</div>
+            <div class="acct-mini-val">$1,850</div>
+            <div class="acct-mini-label">Cash</div>
+            <div class="acct-mini-sub">4.1% APY</div>
+          </div>
+          <div class="acct-mini">
+            <div class="acct-mini-icon reserve">R</div>
+            <div class="acct-mini-val">$8,120</div>
+            <div class="acct-mini-label">Reserve</div>
+            <div class="acct-mini-sub">84% target</div>
+          </div>
+          <div class="acct-mini">
+            <div class="acct-mini-icon auto">A</div>
+            <div class="acct-mini-val">$32,880</div>
+            <div class="acct-mini-label">Auto Invest</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. EXTERNAL ACCOUNTS -->
+    <section>
+      <div class="section-label">External Accounts</div>
+      <div class="ext-list">
+        <div class="ext-row">
+          <div class="ext-icon">C</div>
+          <div class="ext-info">
+            <div class="ext-name">Chase <span class="ext-badge">External</span></div>
+            <div class="ext-status"><span class="dot"></span> Synced 2h ago</div>
+          </div>
+          <div class="ext-val">$12,400</div>
+        </div>
+        <div class="ext-row">
+          <div class="ext-icon">CO</div>
+          <div class="ext-info">
+            <div class="ext-name">Capital One <span class="ext-badge">External</span></div>
+            <div class="ext-status"><span class="dot"></span> Synced 1h ago</div>
+          </div>
+          <div class="ext-val">$8,900</div>
+        </div>
+        <div class="ext-row">
+          <div class="ext-icon">M</div>
+          <div class="ext-info">
+            <div class="ext-name">Marcus <span class="ext-badge">External</span></div>
+            <div class="ext-status"><span class="dot"></span> Synced 3h ago</div>
+          </div>
+          <div class="ext-val">$15,200</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. MOVE MONEY -->
+    <section>
+      <a href="#" class="move-cta">
+        <div>
+          <div class="move-cta-text">Move money → Grow portfolio</div>
+          <div class="move-cta-sub">Transfer from external accounts</div>
+        </div>
+        <span class="move-cta-arrow">›</span>
+      </a>
+    </section>
+
+    <!-- 9. PORTFOLIO ALLOCATION -->
+    <section>
+      <div class="section-label">Portfolio Allocation</div>
+      <div class="secondary-card">
+        <div class="alloc-wrap">
+          <div class="donut-sm">
+            <svg viewBox="0 0 80 80">
+              <circle cx="40" cy="40" r="30" fill="none" stroke="#f1f1f1" stroke-width="10"/>
+              <circle id="arc-vti" cx="40" cy="40" r="30" fill="none" stroke="#166f47" stroke-width="10" stroke-dasharray="0 188.5" stroke-linecap="round"/>
+              <circle id="arc-vxus" cx="40" cy="40" r="30" fill="none" stroke="#1551a8" stroke-width="10" stroke-dasharray="0 188.5" stroke-linecap="round"/>
+              <circle id="arc-bnd" cx="40" cy="40" r="30" fill="none" stroke="#c2790a" stroke-width="10" stroke-dasharray="0 188.5" stroke-linecap="round"/>
+              <circle id="arc-vnq" cx="40" cy="40" r="30" fill="none" stroke="#6b21a8" stroke-width="10" stroke-dasharray="0 188.5" stroke-linecap="round"/>
+            </svg>
+            <div class="donut-sm-center">
+              <div class="donut-sm-val">$42.8k</div>
+              <div class="donut-sm-label">Total</div>
+            </div>
+          </div>
+          <div class="alloc-legend">
+            <div class="alloc-legend-item"><span class="alloc-swatch" style="background:#166f47"></span>VTI <span class="alloc-pct">58%</span></div>
+            <div class="alloc-legend-item"><span class="alloc-swatch" style="background:#1551a8"></span>VXUS <span class="alloc-pct">18%</span></div>
+            <div class="alloc-legend-item"><span class="alloc-swatch" style="background:#c2790a"></span>BND <span class="alloc-pct">14%</span></div>
+            <div class="alloc-legend-item"><span class="alloc-swatch" style="background:#6b21a8"></span>VNQ <span class="alloc-pct">10%</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. TOP MOVERS -->
+    <section>
+      <div class="section-label">Top Movers</div>
+      <div class="secondary-card" style="padding:0;overflow:hidden">
+        <div class="mover-row">
+          <div class="mover-icon up">VTI</div>
+          <div class="mover-info">
+            <div class="mover-ticker">VTI</div>
+            <div class="mover-sub">Today</div>
+          </div>
+          <svg class="sparkline" viewBox="0 0 36 18"><polyline points="2,14 6,10 10,12 14,6 18,8 22,3 26,5 30,2 34,4" fill="none" stroke="#166f47" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div class="mover-chg positive">+$42</div>
+        </div>
+        <div class="mover-row">
+          <div class="mover-icon down">VN</div>
+          <div class="mover-info">
+            <div class="mover-ticker">VNQ</div>
+            <div class="mover-sub">Today</div>
+          </div>
+          <svg class="sparkline" viewBox="0 0 36 18"><polyline points="2,4 6,8 10,6 14,12 18,10 22,14 26,12 30,16 34,14" fill="none" stroke="#b91c1c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div class="mover-chg negative">-$18</div>
+        </div>
+        <div class="mover-row">
+          <div class="mover-icon up">BN</div>
+          <div class="mover-info">
+            <div class="mover-ticker">BND</div>
+            <div class="mover-sub">Today</div>
+          </div>
+          <svg class="sparkline" viewBox="0 0 36 18"><polyline points="2,12 6,8 10,10 14,6 18,7 22,4 26,5 30,3 34,4" fill="none" stroke="#166f47" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div class="mover-chg positive">+$8</div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+  (function(){
+    var END_VAL = 42850;
+    var GRAPH_W = 400, GRAPH_H = 120, PAD = 10;
+
+    var state = {
+      timeframe: '1M',
+      currentPoints: [],
+      currentValue: END_VAL,
+      currentChange: 182,
+      currentReturn: 4230,
+      currentPct: 11.0
+    };
+
+    function generatePoints(start, end, count, volatility, seed) {
+      var pts = [];
+      var range = end - start;
+      var trendSlope = range / (count - 1);
+      var s = seed || 42;
+      function rng() { s = (s * 16807 + 0) % 2147483647; return s / 2147483647; }
+      for (var i = 0; i < count; i++) {
+        var trendVal = start + trendSlope * i;
+        var noise = (rng() - 0.45) * range * volatility;
+        var val = trendVal + noise;
+        if (i === count - 1) val = end;
+        if (i === 0) val = start;
+        pts.push(Math.round(val));
+      }
+      return pts;
+    }
+
+    /* Each timeframe has unique characteristics:
+       1D = rapid intraday fluctuations (18 points, low volatility)
+       1W = moderate volatility over week (20 points)
+       1M = noticeable swings over month (22 points, medium vol)
+       3M = medium trend with pullbacks (24 points)
+       6M = longer trend with market cycles (26 points)
+       1Y = market cycles visible (28 points, high vol)
+       ALL = years of growth with major corrections (30 points, highest vol) */
+    var timeData = {
+      '1D': {
+        value: 42850, change: 182, totalReturn: 4230, pct: 11.0,
+        changeLabel: '+$182 today', returnLabel: '+$4,230', pctLabel: '+11.0%',
+        points: generatePoints(42668, 42850, 18, 0.004, 101)
+      },
+      '1W': {
+        value: 42850, change: 530, totalReturn: 4230, pct: 11.0,
+        changeLabel: '+$530 this week', returnLabel: '+$4,230', pctLabel: '+11.0%',
+        points: generatePoints(42320, 42850, 20, 0.008, 202)
+      },
+      '1M': {
+        value: 42850, change: 2330, totalReturn: 4230, pct: 11.0,
+        changeLabel: '+$2,330 this month', returnLabel: '+$4,230', pctLabel: '+11.0%',
+        points: generatePoints(40520, 42850, 22, 0.015, 303)
+      },
+      '3M': {
+        value: 42850, change: 4650, totalReturn: 4230, pct: 11.0,
+        changeLabel: '+$4,650 this quarter', returnLabel: '+$4,230', pctLabel: '+11.0%',
+        points: generatePoints(38200, 42850, 24, 0.03, 404)
+      },
+      '6M': {
+        value: 42850, change: 7050, totalReturn: 4230, pct: 11.0,
+        changeLabel: '+$7,050 this half', returnLabel: '+$4,230', pctLabel: '+11.0%',
+        points: generatePoints(35800, 42850, 26, 0.05, 505)
+      },
+      '1Y': {
+        value: 42850, change: 10750, totalReturn: 4230, pct: 11.0,
+        changeLabel: '+$10,750 this year', returnLabel: '+$4,230', pctLabel: '+11.0%',
+        points: generatePoints(32100, 42850, 28, 0.07, 606)
+      },
+      'ALL': {
+        value: 42850, change: 17850, totalReturn: 4230, pct: 11.0,
+        changeLabel: '+$17,850 all time', returnLabel: '+$4,230', pctLabel: '+11.0%',
+        points: generatePoints(25000, 42850, 30, 0.10, 707)
+      }
+    };
+
+    function interpolatePoints(from, to, t) {
+      var result = [];
+      var len = Math.max(from.length, to.length);
+      for (var i = 0; i < len; i++) {
+        var f = from[Math.min(i, from.length - 1)];
+        var t2 = to[Math.min(i, to.length - 1)];
+        result.push(f + (t2 - f) * t);
+      }
+      return result;
+    }
+
+    function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+
+    function pointsToPath(pts) {
+      if (pts.length < 2) return '';
+      var minY = Math.min.apply(null, pts);
+      var maxY = Math.max.apply(null, pts);
+      var range = maxY - minY || 1;
+      var usableH = GRAPH_H - PAD * 2;
+      var stepX = (GRAPH_W - PAD * 2) / (pts.length - 1);
+      var mapped = pts.map(function(v, i) {
+        return { x: PAD + i * stepX, y: PAD + usableH - ((v - minY) / range) * usableH };
+      });
+      var d = 'M' + mapped[0].x + ',' + mapped[0].y;
+      for (var i = 1; i < mapped.length; i++) {
+        var prev = mapped[i - 1], curr = mapped[i];
+        var cpx1 = prev.x + (curr.x - prev.x) * 0.4;
+        var cpx2 = curr.x - (curr.x - prev.x) * 0.4;
+        d += ' C' + cpx1 + ',' + prev.y + ' ' + cpx2 + ',' + curr.y + ' ' + curr.x + ',' + curr.y;
+      }
+      return d;
+    }
+
+    function pointsToAreaPath(pts) {
+      var linePath = pointsToPath(pts);
+      if (!linePath) return '';
+      var usableH = GRAPH_H - PAD * 2;
+      var stepX = (GRAPH_W - PAD * 2) / (pts.length - 1);
+      var lastX = PAD + (pts.length - 1) * stepX;
+      var bottom = PAD + usableH;
+      return linePath + ' L' + lastX + ',' + bottom + ' L' + PAD + ',' + bottom + ' Z';
+    }
+
+    function morphGraph(oldPts, newPts, duration) {
+      var startTime = null;
+      var lineEl = document.getElementById('graphLine');
+      var areaEl = document.getElementById('graphAreaFill');
+      function frame(ts) {
+        if (!startTime) startTime = ts;
+        var progress = Math.min((ts - startTime) / duration, 1);
+        var eased = easeOutCubic(progress);
+        var interp = interpolatePoints(oldPts, newPts, eased);
+        lineEl.setAttribute('d', pointsToPath(interp));
+        areaEl.setAttribute('d', pointsToAreaPath(interp));
+        if (progress < 1) requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    }
+
+    function updateCrosshair(pts) {
+      var svg = document.getElementById('graphSvg');
+      var crosshairLine = document.getElementById('crosshairLine');
+      var crosshairDot = document.getElementById('crosshairDot');
+      var tooltip = document.getElementById('graphTooltip');
+      var minY = Math.min.apply(null, pts);
+      var maxY = Math.max.apply(null, pts);
+      var range = maxY - minY || 1;
+      var usableH = GRAPH_H - PAD * 2;
+      var stepX = (GRAPH_W - PAD * 2) / (pts.length - 1);
+      var mapped = pts.map(function(v, i) {
+        return { x: PAD + i * stepX, y: PAD + usableH - ((v - minY) / range) * usableH, val: v };
+      });
+      function getPointerPos(e) {
+        var rect = svg.getBoundingClientRect();
+        var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        return (clientX - rect.left) * (GRAPH_W / rect.width);
+      }
+      function findNearest(x) {
+        var closest = mapped[0], minDist = Infinity;
+        for (var i = 0; i < mapped.length; i++) {
+          var dist = Math.abs(mapped[i].x - x);
+          if (dist < minDist) { minDist = dist; closest = mapped[i]; }
+        }
+        return closest;
+      }
+      function showCrosshair(point) {
+        var rect = svg.getBoundingClientRect();
+        var displayX = (point.x / GRAPH_W) * rect.width;
+        var displayY = (point.y / GRAPH_H) * rect.height;
+        crosshairLine.setAttribute('x1', point.x); crosshairLine.setAttribute('y1', PAD);
+        crosshairLine.setAttribute('x2', point.x); crosshairLine.setAttribute('y2', PAD + usableH);
+        crosshairLine.style.opacity = '1';
+        crosshairDot.setAttribute('cx', point.x); crosshairDot.setAttribute('cy', point.y);
+        crosshairDot.style.opacity = '1';
+        tooltip.textContent = '$' + Math.round(point.val).toLocaleString();
+        tooltip.style.left = displayX + 'px'; tooltip.style.top = (displayY - 10) + 'px';
+        tooltip.style.opacity = '1';
+      }
+      function hideCrosshair() {
+        crosshairLine.style.opacity = '0'; crosshairDot.style.opacity = '0'; tooltip.style.opacity = '0';
+      }
+      var ga = document.getElementById('graphArea');
+      ga.addEventListener('touchstart', function(e) { e.preventDefault(); showCrosshair(findNearest(getPointerPos(e))); }, {passive:false});
+      ga.addEventListener('touchmove', function(e) { e.preventDefault(); showCrosshair(findNearest(getPointerPos(e))); }, {passive:false});
+      ga.addEventListener('touchend', hideCrosshair);
+      ga.addEventListener('mousemove', function(e) { showCrosshair(findNearest(getPointerPos(e))); });
+      ga.addEventListener('mouseleave', hideCrosshair);
+    }
+
+    window.setTimeframe = function(tf, btn) {
+      if (state.timeframe === tf) return;
+      document.querySelectorAll('.time-filters button').forEach(function(b) { b.classList.remove('active') });
+      btn.classList.add('active');
+      var newData = timeData[tf];
+      var oldPoints = state.currentPoints.length ? state.currentPoints : timeData[state.timeframe].points;
+      state.timeframe = tf;
+      state.currentPoints = newData.points.slice();
+      state.currentValue = newData.value;
+      state.currentChange = newData.change;
+      state.currentReturn = newData.totalReturn;
+      state.currentPct = newData.pct;
+      document.getElementById('portfolioValue').textContent = '$' + newData.value.toLocaleString();
+      var todayEl = document.getElementById('todayChange');
+      todayEl.className = 'hero-change-val ' + (newData.change >= 0 ? 'positive' : 'negative');
+      todayEl.textContent = newData.changeLabel;
+      document.getElementById('growthIcon').className = 'hero-growth-icon ' + (newData.change >= 0 ? 'up' : 'down');
+      var retEl = document.getElementById('totalReturn');
+      retEl.className = 'hero-meta-value ' + (newData.totalReturn >= 0 ? 'positive' : 'negative');
+      retEl.textContent = newData.returnLabel;
+      var pctEl = document.getElementById('returnPct');
+      pctEl.className = 'hero-meta-value ' + (newData.pct >= 0 ? 'positive' : 'negative');
+      pctEl.textContent = newData.pctLabel;
+      morphGraph(oldPoints, newData.points, 500);
+      updateCrosshair(newData.points);
+    };
+
+    function drawDonut() {
+      var segs = [
+        {id:'arc-vti',pct:58,color:'#166f47'},
+        {id:'arc-vxus',pct:18,color:'#1551a8'},
+        {id:'arc-bnd',pct:14,color:'#c2790a'},
+        {id:'arc-vnq',pct:10,color:'#6b21a8'}
+      ];
+      var circ = 2 * Math.PI * 30;
+      var offset = 0;
+      segs.forEach(function(s) {
+        var arc = (s.pct / 100) * circ;
+        var el = document.getElementById(s.id);
+        el.setAttribute('stroke-dasharray', arc + ' ' + (circ - arc));
+        el.setAttribute('stroke-dashoffset', -offset);
+        offset += arc;
+      });
+    }
+
+    function init() {
+      state.currentPoints = timeData['1M'].points.slice();
+      morphGraph([], timeData['1M'].points, 0);
+      updateCrosshair(timeData['1M'].points);
+      drawDonut();
+    }
+
+    init();
+  })();
+  </script>
+</body>
+</html>
