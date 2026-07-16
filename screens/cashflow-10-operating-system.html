@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cash Flow Overview — Advizmo</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --green:#166f47;--green-light:#e6f5ee;--green-50:#f0faf4;
+    --amber:#c2790a;--amber-light:#fef3cd;--amber-50:#fffbe6;
+    --bg:#f8f9fa;--card:#fff;--card-shadow:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+    --text:#1a1a2e;--text-secondary:#6b7280;--text-muted:#9ca3af;
+    --border:#e5e7eb;--radius:14px;--radius-sm:10px;--radius-xs:8px;
+    --font-primary:'IBM Plex Sans',system-ui,sans-serif;
+    --font-body:'Inter',system-ui,sans-serif;
+  }
+  html{font-size:16px;-webkit-font-smoothing:antialiased}
+  body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:40px}
+  a{text-decoration:none;color:inherit}
+
+  /* Top Bar */
+  .top-bar{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border)}
+  .back-btn{display:flex;align-items:center;gap:6px;font-family:var(--font-primary);font-size:14px;font-weight:500;color:var(--text-secondary);cursor:pointer;transition:color .15s}
+  .back-btn:hover{color:var(--text)}
+  .back-btn svg{width:18px;height:18px}
+  .top-bar-title{font-family:var(--font-primary);font-size:15px;font-weight:600;color:var(--text)}
+
+  /* Segmented Nav */
+  .segmented-nav{display:flex;margin:16px 20px 0;background:var(--card);border-radius:var(--radius-sm);padding:3px;box-shadow:var(--card-shadow);border:1px solid var(--border)}
+  .segmented-nav button{flex:1;padding:8px 0;font-family:var(--font-primary);font-size:13px;font-weight:500;border:none;background:none;color:var(--text-secondary);border-radius:var(--radius-xs);cursor:pointer;transition:all .2s}
+  .segmented-nav button.active{background:var(--green);color:#fff;box-shadow:0 1px 3px rgba(22,111,71,.25)}
+
+  /* Container */
+  .container{max-width:430px;margin:0 auto;padding:16px 16px 0}
+
+  /* Section Label */
+  .section-label{font-family:var(--font-primary);font-size:11px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px}
+
+  /* Card base */
+  .card{background:var(--card);border-radius:var(--radius);padding:20px;box-shadow:var(--card-shadow);border:1px solid var(--border);margin-bottom:12px}
+
+  /* ===== SECTION 1: CASH FLOW HERO ===== */
+  .hero-card{background:linear-gradient(135deg,#166f47 0%,#1a7f52 50%,#1e8f5c 100%);color:#fff;border:none;position:relative;overflow:hidden}
+  .hero-card::after{content:'';position:absolute;top:-40px;right:-40px;width:120px;height:120px;background:rgba(255,255,255,.06);border-radius:50%}
+  .hero-card::before{content:'';position:absolute;bottom:-30px;left:-20px;width:80px;height:80px;background:rgba(255,255,255,.04);border-radius:50%}
+  .hero-label{font-size:12px;font-weight:500;opacity:.8;margin-bottom:4px;display:flex;align-items:center;gap:5px}
+  .hero-label svg{width:14px;height:14px}
+  .hero-amount{font-family:var(--font-primary);font-size:36px;font-weight:700;letter-spacing:-.5px;margin-bottom:12px}
+  .hero-row{display:flex;gap:12px;margin-bottom:14px}
+  .hero-pill{background:rgba(255,255,255,.15);backdrop-filter:blur(8px);border-radius:8px;padding:8px 12px;flex:1}
+  .hero-pill-label{font-size:10px;font-weight:500;opacity:.75;margin-bottom:2px}
+  .hero-pill-value{font-family:var(--font-primary);font-size:15px;font-weight:600}
+  .hero-meta{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+  .hero-trend{display:flex;align-items:center;gap:4px;font-size:12px;font-weight:500;background:rgba(255,255,255,.15);padding:4px 10px;border-radius:20px}
+  .hero-status{display:flex;align-items:center;gap:4px;font-size:12px;font-weight:500;background:rgba(255,255,255,.15);padding:4px 10px;border-radius:20px}
+  .hero-status svg{width:12px;height:12px}
+  .hero-message{font-size:13px;opacity:.85;padding-top:12px;border-top:1px solid rgba(255,255,255,.15);line-height:1.4}
+
+  /* ===== SECTION 2: FORECAST ===== */
+  .forecast-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+  .forecast-item{background:var(--bg);border-radius:var(--radius-xs);padding:12px}
+  .forecast-item.highlight{background:var(--green-50);border:1px solid #c6e8d5}
+  .forecast-item-label{font-size:11px;color:var(--text-secondary);margin-bottom:4px;font-weight:500}
+  .forecast-item-value{font-family:var(--font-primary);font-size:17px;font-weight:600;color:var(--text)}
+  .forecast-item-value.green{color:var(--green)}
+  .forecast-item-sub{font-size:11px;color:var(--text-muted);margin-top:2px}
+  .upcoming-list{list-style:none;padding:0}
+  .upcoming-list li{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-top:1px solid var(--border);font-size:13px}
+  .upcoming-list li:first-child{border-top:none}
+  .upcoming-dot{width:8px;height:8px;border-radius:50%;margin-right:10px;flex-shrink:0}
+  .upcoming-dot.income{background:var(--green)}
+  .upcoming-dot.bills{background:var(--amber)}
+  .upcoming-info{display:flex;align-items:center;flex:1}
+  .upcoming-date{color:var(--text-muted);font-size:12px;font-weight:500}
+  .upcoming-amount{font-family:var(--font-primary);font-weight:600}
+  .upcoming-amount.green{color:var(--green)}
+  .upcoming-amount.amber{color:var(--amber)}
+
+  /* ===== SECTION 3: SAVINGS & INVESTING ===== */
+  .savings-top{display:flex;gap:10px;margin-bottom:14px}
+  .savings-stat{flex:1;text-align:center;padding:14px 8px;background:var(--bg);border-radius:var(--radius-xs)}
+  .savings-stat-value{font-family:var(--font-primary);font-size:20px;font-weight:700;color:var(--green)}
+  .savings-stat-label{font-size:11px;color:var(--text-secondary);margin-top:2px;font-weight:500}
+  .savings-meta{display:flex;gap:8px;margin-bottom:14px}
+  .savings-badge{display:flex;align-items:center;gap:4px;font-size:12px;font-weight:500;padding:5px 10px;border-radius:20px;background:var(--green-50);color:var(--green)}
+  .savings-badge.trend{background:#eef2ff;color:#4f46e5}
+  .goal-track{margin-top:4px}
+  .goal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+  .goal-header span{font-size:12px;color:var(--text-secondary);font-weight:500}
+  .goal-header strong{font-family:var(--font-primary);font-size:13px;font-weight:600;color:var(--text)}
+  .progress-bar{width:100%;height:8px;background:#e5e7eb;border-radius:4px;overflow:hidden}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--green),#22c55e);border-radius:4px;transition:width .6s ease}
+
+  /* ===== SECTION 4: INCOME ===== */
+  .income-row{display:flex;gap:10px;margin-bottom:14px}
+  .income-card{flex:1;padding:14px;border-radius:var(--radius-xs);text-align:center}
+  .income-card.recurring{background:var(--green-50);border:1px solid #c6e8d5}
+  .income-card.onetime{background:#eef2ff;border:1px solid #c7d2fe}
+  .income-card.total{background:var(--bg);border:1px solid var(--border)}
+  .income-card-label{font-size:11px;color:var(--text-secondary);font-weight:500;margin-bottom:4px}
+  .income-card-value{font-family:var(--font-primary);font-size:18px;font-weight:700;color:var(--text)}
+  .income-card-value.green{color:var(--green)}
+  .income-card-sub{font-size:11px;color:var(--text-muted);margin-top:2px}
+
+  /* ===== SECTION 5: EXPENSES ===== */
+  .expense-list{list-style:none;padding:0}
+  .expense-item{display:flex;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)}
+  .expense-item:last-child{border-bottom:none}
+  .expense-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-right:12px;flex-shrink:0;font-size:16px}
+  .expense-icon.housing{background:#fef3cd;color:#c2790a}
+  .expense-icon.food{background:#fee2e2;color:#dc2626}
+  .expense-icon.transport{background:#dbeafe;color:#2563eb}
+  .expense-info{flex:1}
+  .expense-name{font-size:13px;font-weight:600;color:var(--text)}
+  .expense-detail{font-size:11px;color:var(--text-muted);margin-top:1px}
+  .expense-right{text-align:right}
+  .expense-amount{font-family:var(--font-primary);font-size:14px;font-weight:600;color:var(--text)}
+  .expense-trend{font-size:11px;font-weight:500;margin-top:1px}
+  .expense-trend.down{color:var(--green)}
+  .expense-trend.up{color:#dc2626}
+  .view-all-link{display:flex;align-items:center;justify-content:center;gap:4px;margin-top:10px;padding:10px;background:var(--bg);border-radius:var(--radius-xs);font-size:13px;font-weight:500;color:var(--green);cursor:pointer;transition:background .15s;border:1px solid var(--border)}
+  .view-all-link:hover{background:#e8f5e9}
+  .view-all-link svg{width:14px;height:14px}
+
+  /* ===== SECTION 6: AI INSIGHTS ===== */
+  .insights-card{background:linear-gradient(135deg,#f0f4ff 0%,#f5f0ff 100%);border:1px solid #e0e7ff}
+  .insights-header{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+  .insights-icon{width:28px;height:28px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border-radius:8px;display:flex;align-items:center;justify-content:center}
+  .insights-icon svg{width:16px;height:16px;color:#fff}
+  .insights-title{font-family:var(--font-primary);font-size:14px;font-weight:600;color:var(--text)}
+  .insight-item{display:flex;gap:10px;padding:10px 12px;background:rgba(255,255,255,.7);border-radius:var(--radius-xs);margin-bottom:8px;backdrop-filter:blur(4px)}
+  .insight-item:last-child{margin-bottom:0}
+  .insight-bullet{width:6px;height:6px;border-radius:50%;background:#6366f1;flex-shrink:0;margin-top:5px}
+  .insight-text{font-size:12.5px;color:var(--text);line-height:1.5}
+
+  /* ===== INCOME VS EXPENSES CHART ===== */
+  .chart-card{padding-bottom:14px}
+  .chart-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+  .chart-title{font-family:var(--font-primary);font-size:14px;font-weight:600;color:var(--text)}
+  .timeframe-filters{display:flex;background:var(--bg);border-radius:8px;padding:2px;border:1px solid var(--border)}
+  .timeframe-filters button{padding:5px 10px;font-size:11px;font-weight:500;border:none;background:none;color:var(--text-muted);border-radius:6px;cursor:pointer;font-family:var(--font-body);transition:all .15s}
+  .timeframe-filters button.active{background:var(--card);color:var(--text);box-shadow:0 1px 2px rgba(0,0,0,.06)}
+  .chart-area{position:relative;height:160px;display:flex;align-items:flex-end;gap:6px;padding:0 4px}
+  .chart-bar-group{flex:1;display:flex;gap:3px;align-items:flex-end}
+  .chart-bar{border-radius:4px 4px 0 0;flex:1;transition:height .4s ease}
+  .chart-bar.income{background:var(--green)}
+  .chart-bar.expense{background:#e5e7eb}
+  .chart-labels{display:flex;justify-content:space-between;padding:8px 4px 0;margin-top:4px}
+  .chart-labels span{font-size:10px;color:var(--text-muted);font-weight:500}
+  .chart-legend{display:flex;gap:14px;margin-top:10px;padding:0 4px}
+  .chart-legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-secondary);font-weight:500}
+  .chart-legend-dot{width:8px;height:8px;border-radius:2px}
+  .chart-legend-dot.income{background:var(--green)}
+  .chart-legend-dot.expense{background:#d1d5db}
+
+  /* ===== TRANSFERS ===== */
+  .transfers-card{display:flex;align-items:flex-start;gap:10px;background:var(--bg);border:1px solid var(--border)}
+  .transfers-icon{width:32px;height:32px;background:var(--card);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--border)}
+  .transfers-icon svg{width:16px;height:16px;color:var(--text-muted)}
+  .transfers-text{font-size:12.5px;color:var(--text-secondary);line-height:1.5}
+  .transfers-text strong{color:var(--text);font-weight:600}
+
+  /* Footer */
+  .screen-footer{text-align:center;padding:20px;font-size:11px;color:var(--text-muted)}
+</style>
+</head>
+<body>
+
+<!-- Top Bar -->
+<header class="top-bar">
+  <a href="index.html" class="back-btn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    Back
+  </a>
+  <span class="top-bar-title">Cash Flow</span>
+  <span style="width:18px"></span>
+</header>
+
+<!-- Segmented Nav -->
+<nav class="segmented-nav" style="max-width:430px;margin:16px auto 0">
+  <button class="active">Overview</button>
+  <button>Forecast</button>
+  <button>Savings</button>
+  <button>Income</button>
+  <button>Expenses</button>
+  <button>Insights</button>
+</nav>
+
+<div class="container">
+
+  <!-- ===== SECTION 1: CASH FLOW HERO ===== -->
+  <section style="margin-top:16px">
+    <div class="card hero-card">
+      <div class="hero-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        Net Cash Flow
+      </div>
+      <div class="hero-amount">+$2,330</div>
+      <div class="hero-row">
+        <div class="hero-pill">
+          <div class="hero-pill-label">Money In</div>
+          <div class="hero-pill-value">$8,450</div>
+        </div>
+        <div class="hero-pill">
+          <div class="hero-pill-label">Money Out</div>
+          <div class="hero-pill-value">$6,120</div>
+        </div>
+      </div>
+      <div class="hero-meta">
+        <span class="hero-trend">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12"><path d="M7 17l5-5 5 5M7 7l5 5 5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          +12%
+        </span>
+        <span class="hero-status">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Healthy ✓
+        </span>
+      </div>
+      <div class="hero-message">Your cash flow is healthy this month.</div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 2: FORECAST ===== -->
+  <section>
+    <div class="section-label">Forecast</div>
+    <div class="card">
+      <div class="forecast-grid">
+        <div class="forecast-item highlight">
+          <div class="forecast-item-label">Projected Balance</div>
+          <div class="forecast-item-value green">$128,700</div>
+        </div>
+        <div class="forecast-item">
+          <div class="forecast-item-label">Bills Remaining</div>
+          <div class="forecast-item-value">$1,850</div>
+        </div>
+        <div class="forecast-item">
+          <div class="forecast-item-label">Expected Savings</div>
+          <div class="forecast-item-value green">$2,330</div>
+        </div>
+        <div class="forecast-item">
+          <div class="forecast-item-label">Safe to Invest</div>
+          <div class="forecast-item-value" style="color:#6366f1">$620</div>
+        </div>
+      </div>
+      <div class="section-label" style="margin-top:4px;margin-bottom:6px">Upcoming</div>
+      <ul class="upcoming-list">
+        <li>
+          <div class="upcoming-info">
+            <span class="upcoming-dot income"></span>
+            <span>Income — Jan 3</span>
+          </div>
+          <span class="upcoming-amount green">$4,200</span>
+        </li>
+        <li>
+          <div class="upcoming-info">
+            <span class="upcoming-dot bills"></span>
+            <span>Bills — Jan 5–15</span>
+          </div>
+          <span class="upcoming-amount amber">$1,850</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 3: SAVINGS & INVESTING ===== -->
+  <section>
+    <div class="section-label">Savings &amp; Investing</div>
+    <div class="card">
+      <div class="savings-top">
+        <div class="savings-stat">
+          <div class="savings-stat-value">$2,330</div>
+          <div class="savings-stat-label">Saved</div>
+        </div>
+        <div class="savings-stat">
+          <div class="savings-stat-value">$520</div>
+          <div class="savings-stat-label">Invested</div>
+        </div>
+      </div>
+      <div class="savings-meta">
+        <span class="savings-badge">28% Savings Rate</span>
+        <span class="savings-badge trend">+12% Trend</span>
+      </div>
+      <div class="goal-track">
+        <div class="goal-header">
+          <span>Goal Progress</span>
+          <strong>82% to $100K</strong>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width:82%"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 4: INCOME ===== -->
+  <section>
+    <div class="section-label">Income</div>
+    <div class="card">
+      <div class="income-row">
+        <div class="income-card recurring">
+          <div class="income-card-label">Recurring</div>
+          <div class="income-card-value">$7,500</div>
+          <div class="income-card-sub">Salary</div>
+        </div>
+        <div class="income-card onetime">
+          <div class="income-card-label">One-Time</div>
+          <div class="income-card-value">$950</div>
+          <div class="income-card-sub">Freelance</div>
+        </div>
+        <div class="income-card total">
+          <div class="income-card-label">Total</div>
+          <div class="income-card-value green">$8,450</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 5: EXPENSES ===== -->
+  <section>
+    <div class="section-label">Expenses</div>
+    <div class="card">
+      <ul class="expense-list">
+        <li class="expense-item">
+          <div class="expense-icon housing">🏠</div>
+          <div class="expense-info">
+            <div class="expense-name">Housing</div>
+            <div class="expense-detail">34% of total</div>
+          </div>
+          <div class="expense-right">
+            <div class="expense-amount">$2,100</div>
+            <div class="expense-trend down">↓ 2%</div>
+          </div>
+        </li>
+        <li class="expense-item">
+          <div class="expense-icon food">🍔</div>
+          <div class="expense-info">
+            <div class="expense-name">Food</div>
+            <div class="expense-detail">15% of total</div>
+          </div>
+          <div class="expense-right">
+            <div class="expense-amount">$890</div>
+            <div class="expense-trend up">↑ 3%</div>
+          </div>
+        </li>
+        <li class="expense-item">
+          <div class="expense-icon transport">🚗</div>
+          <div class="expense-info">
+            <div class="expense-name">Transport</div>
+            <div class="expense-detail">7% of total</div>
+          </div>
+          <div class="expense-right">
+            <div class="expense-amount">$420</div>
+            <div class="expense-trend down">↓ 1%</div>
+          </div>
+        </li>
+      </ul>
+      <a href="expenses.html" class="view-all-link">
+        View All → Spending
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 6: AI INSIGHTS ===== -->
+  <section>
+    <div class="section-label">AI Insights</div>
+    <div class="card insights-card">
+      <div class="insights-header">
+        <div class="insights-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 017 7c0 2.5-1.5 4.5-3 6h-8c-1.5-1.5-3-3.5-3-6a7 7 0 017-7z"/><path d="M9 21h6M10 17h4"/></svg>
+        </div>
+        <div class="insights-title">Smart Insights</div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-bullet"></div>
+        <div class="insight-text">You're on track to save 18% more this month.</div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-bullet" style="background:#c2790a"></div>
+        <div class="insight-text">Dining spending increased 12% — consider budget adjustment.</div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-bullet" style="background:#166f47"></div>
+        <div class="insight-text">Increase Auto Invest by $200 to reach $100K faster.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== INCOME VS EXPENSES CHART ===== -->
+  <section>
+    <div class="section-label">Income vs Expenses</div>
+    <div class="card chart-card">
+      <div class="chart-header">
+        <div class="chart-title">Monthly Overview</div>
+        <div class="timeframe-filters">
+          <button>1M</button>
+          <button class="active">3M</button>
+          <button>6M</button>
+          <button>1Y</button>
+        </div>
+      </div>
+      <div class="chart-area">
+        <div class="chart-bar-group">
+          <div class="chart-bar income" style="height:55%"></div>
+          <div class="chart-bar expense" style="height:42%"></div>
+        </div>
+        <div class="chart-bar-group">
+          <div class="chart-bar income" style="height:62%"></div>
+          <div class="chart-bar expense" style="height:48%"></div>
+        </div>
+        <div class="chart-bar-group">
+          <div class="chart-bar income" style="height:70%"></div>
+          <div class="chart-bar expense" style="height:50%"></div>
+        </div>
+        <div class="chart-bar-group">
+          <div class="chart-bar income" style="height:58%"></div>
+          <div class="chart-bar expense" style="height:45%"></div>
+        </div>
+        <div class="chart-bar-group">
+          <div class="chart-bar income" style="height:75%"></div>
+          <div class="chart-bar expense" style="height:52%"></div>
+        </div>
+        <div class="chart-bar-group">
+          <div class="chart-bar income" style="height:82%"></div>
+          <div class="chart-bar expense" style="height:55%"></div>
+        </div>
+        <div class="chart-bar-group">
+          <div class="chart-bar income" style="height:68%"></div>
+          <div class="chart-bar expense" style="height:48%"></div>
+        </div>
+        <div class="chart-bar-group">
+          <div class="chart-bar income" style="height:85%"></div>
+          <div class="chart-bar expense" style="height:58%"></div>
+        </div>
+        <div class="chart-bar-group">
+          <div class="chart-bar income" style="height:78%"></div>
+          <div class="chart-bar expense" style="height:50%"></div>
+        </div>
+        <div class="chart-bar-group">
+          <div class="chart-bar income" style="height:90%"></div>
+          <div class="chart-bar expense" style="height:60%"></div>
+        </div>
+        <div class="chart-bar-group">
+          <div class="chart-bar income" style="height:72%"></div>
+          <div class="chart-bar expense" style="height:47%"></div>
+        </div>
+        <div class="chart-bar-group">
+          <div class="chart-bar income" style="height:88%"></div>
+          <div class="chart-bar expense" style="height:56%"></div>
+        </div>
+      </div>
+      <div class="chart-labels">
+        <span>Oct</span><span>Nov</span><span>Dec</span>
+      </div>
+      <div class="chart-legend">
+        <div class="chart-legend-item"><div class="chart-legend-dot income"></div> Income</div>
+        <div class="chart-legend-item"><div class="chart-legend-dot expense"></div> Expenses</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TRANSFERS ===== -->
+  <section>
+    <div class="section-label">Transfers</div>
+    <div class="card transfers-card">
+      <div class="transfers-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4"/></svg>
+      </div>
+      <div class="transfers-text">
+        <strong>$200</strong> to Reserve, <strong>$520</strong> to Auto Invest — doesn't affect cash flow
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<div class="screen-footer">Advizmo Financial Operating System</div>
+
+</body>
+</html>

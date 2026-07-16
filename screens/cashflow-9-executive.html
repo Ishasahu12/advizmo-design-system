@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cash Flow — Executive Summary | Advizmo</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'IBM Plex Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #f8f9fa;
+    color: #1a1a1a;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  .phone {
+    width: 430px;
+    max-width: 100%;
+    background: #f8f9fa;
+    min-height: 100vh;
+    position: relative;
+    padding-bottom: 24px;
+  }
+
+  /* HEADER */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px 8px;
+  }
+
+  .back {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #1a1a1a;
+    text-decoration: none;
+    transition: opacity 0.15s;
+  }
+
+  .back:hover { opacity: 0.6; }
+
+  .back svg {
+    width: 18px;
+    height: 18px;
+    stroke: currentColor;
+    stroke-width: 2;
+    fill: none;
+  }
+
+  .header-title {
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+  }
+
+  .header-dots {
+    width: 18px;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  /* SEGMENTED NAV */
+  .segmented-nav {
+    display: flex;
+    margin: 4px 20px 12px;
+    background: #e9eaec;
+    border-radius: 10px;
+    padding: 3px;
+  }
+
+  .segmented-nav a {
+    flex: 1;
+    text-align: center;
+    padding: 8px 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: #6b6b6b;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.2s;
+  }
+
+  .segmented-nav a.active {
+    background: #fff;
+    color: #1a1a1a;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+
+  /* HERO */
+  .hero {
+    margin: 0 20px 12px;
+    background: #fff;
+    border-radius: 14px;
+    padding: 20px 20px 18px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  }
+
+  .hero-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 6px;
+  }
+
+  .hero-amount {
+    font-size: 38px;
+    font-weight: 700;
+    color: #166f47;
+    letter-spacing: -1px;
+    line-height: 1.1;
+  }
+
+  .hero-flow {
+    display: flex;
+    gap: 24px;
+    margin-top: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #555;
+  }
+
+  .hero-flow strong {
+    color: #1a1a1a;
+    font-weight: 600;
+  }
+
+  .hero-status {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 10px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .trend-up {
+    color: #166f47;
+  }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: #166f47;
+    font-weight: 600;
+  }
+
+  .status-badge svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* 2x2 GRID */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 0 20px 12px;
+  }
+
+  .metric-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  }
+
+  .metric-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+
+  .metric-value {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1a1a1a;
+    letter-spacing: -0.5px;
+    line-height: 1.15;
+  }
+
+  .metric-card.green .metric-value { color: #166f47; }
+  .metric-card.amber .metric-value { color: #c2790a; }
+
+  /* AI INSIGHT */
+  .ai-insight {
+    margin: 0 20px 12px;
+    background: linear-gradient(135deg, #f0f7ff 0%, #f5f0ff 100%);
+    border-radius: 14px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  }
+
+  .ai-icon {
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .ai-icon svg {
+    width: 16px;
+    height: 16px;
+    fill: #fff;
+  }
+
+  .ai-text {
+    font-size: 13px;
+    font-weight: 500;
+    color: #444;
+    line-height: 1.4;
+  }
+
+  .ai-text strong {
+    color: #1a1a1a;
+    font-weight: 600;
+  }
+
+  /* SECTION */
+  .section {
+    margin: 0 20px 12px;
+    background: #fff;
+    border-radius: 14px;
+    padding: 16px 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a1a1a;
+    letter-spacing: -0.2px;
+  }
+
+  .section-link {
+    font-size: 13px;
+    font-weight: 500;
+    color: #6366f1;
+    text-decoration: none;
+    transition: opacity 0.15s;
+  }
+
+  .section-link:hover { opacity: 0.7; }
+
+  /* COMPACT ROWS */
+  .compact-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .compact-items {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .compact-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .compact-item-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: #888;
+    letter-spacing: 0.3px;
+  }
+
+  .compact-item-value {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a1a1a;
+    letter-spacing: -0.3px;
+  }
+
+  .compact-trend {
+    font-size: 13px;
+    font-weight: 600;
+    color: #166f47;
+    white-space: nowrap;
+  }
+
+  /* EXPENSES */
+  .expense-chips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .expense-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #f5f5f5;
+    border-radius: 20px;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #444;
+  }
+
+  .expense-chip strong {
+    font-weight: 700;
+    color: #1a1a1a;
+  }
+
+  /* MINI CHART */
+  .chart-container {
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    height: 60px;
+    padding: 8px 0;
+  }
+
+  .chart-bar-group {
+    flex: 1;
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 100%;
+  }
+
+  .chart-bar {
+    flex: 1;
+    border-radius: 3px 3px 0 0;
+    min-height: 4px;
+    transition: opacity 0.15s;
+  }
+
+  .chart-bar.income { background: #166f47; opacity: 0.75; }
+  .chart-bar.expense { background: #c2790a; opacity: 0.6; }
+  .chart-bar:hover { opacity: 1; }
+
+  .chart-filters {
+    display: flex;
+    gap: 6px;
+    margin-top: 10px;
+  }
+
+  .chart-filter {
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #888;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .chart-filter.active {
+    background: #f0f0f0;
+    color: #1a1a1a;
+  }
+
+  .chart-legend {
+    display: flex;
+    gap: 16px;
+    margin-top: 6px;
+  }
+
+  .chart-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 500;
+    color: #888;
+  }
+
+  .chart-legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+  }
+
+  .chart-legend-dot.in { background: #166f47; }
+  .chart-legend-dot.out { background: #c2790a; }
+
+  /* TRANSFER LINE */
+  .transfer-line {
+    margin: 0 20px;
+    background: #fff;
+    border-radius: 14px;
+    padding: 14px 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    font-size: 13px;
+    color: #666;
+    line-height: 1.5;
+  }
+
+  .transfer-line strong {
+    color: #1a1a1a;
+    font-weight: 600;
+  }
+
+  .transfer-line .muted {
+    color: #999;
+  }
+</style>
+</head>
+<body>
+<div class="phone">
+
+  <!-- HEADER -->
+  <div class="header">
+    <a href="../index.html" class="back">
+      <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+    </a>
+    <span class="header-title">Cash Flow</span>
+    <span class="header-dots">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <circle cx="9" cy="4" r="1.5" fill="#888"/>
+        <circle cx="9" cy="9" r="1.5" fill="#888"/>
+        <circle cx="9" cy="14" r="1.5" fill="#888"/>
+      </svg>
+    </span>
+  </div>
+
+  <!-- SEGMENTED NAV -->
+  <nav class="segmented-nav">
+    <a href="#overview" class="active">Overview</a>
+    <a href="#trends">Trends</a>
+    <a href="#breakdown">Breakdown</a>
+    <a href="#forecast">Forecast</a>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-label">Net Cash Flow</div>
+    <div class="hero-amount">+$2,330</div>
+    <div class="hero-flow">
+      <span>Money In <strong>$8,450</strong></span>
+      <span>Money Out <strong>$6,120</strong></span>
+    </div>
+    <div class="hero-status">
+      <span class="trend-up">+12%</span>
+      <span class="status-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Healthy
+      </span>
+    </div>
+  </div>
+
+  <!-- 2x2 METRICS -->
+  <div class="metrics-grid">
+    <div class="metric-card">
+      <div class="metric-label">Forecast</div>
+      <div class="metric-value">$128,700</div>
+    </div>
+    <div class="metric-card green">
+      <div class="metric-label">Savings Rate</div>
+      <div class="metric-value">28%</div>
+    </div>
+    <div class="metric-card amber">
+      <div class="metric-label">Safe to Invest</div>
+      <div class="metric-value">$620</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Bills Remaining</div>
+      <div class="metric-value">$1,850</div>
+    </div>
+  </div>
+
+  <!-- AI INSIGHT -->
+  <div class="ai-insight">
+    <div class="ai-icon">
+      <svg viewBox="0 0 24 24"><path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 017 7h1.27c.34-.6.99-1 1.73-1a2 2 0 110 4c-.74 0-1.39-.4-1.73-1H20a7 7 0 01-7 7v1.27c.6.34 1 .99 1 1.73a2 2 0 11-4 0c0-.74.4-1.39 1-1.73V20a7 7 0 01-7-7H2.73c-.34.6-.99 1-1.73 1a2 2 0 110-4c.74 0 1.39.4 1.73 1H4a7 7 0 017-7V5.73c-.6-.34-1-.99-1-1.73a2 2 0 012-2z"/></svg>
+    </div>
+    <div class="ai-text">Save <strong>18% more</strong> this month. Increase Auto Invest by <strong>$200</strong>.</div>
+  </div>
+
+  <!-- SAVED & INVESTED -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">Saved &amp; Invested</span>
+    </div>
+    <div class="compact-row">
+      <div class="compact-items">
+        <div class="compact-item">
+          <span class="compact-item-label">Saved</span>
+          <span class="compact-item-value">$2,330</span>
+        </div>
+        <div class="compact-item">
+          <span class="compact-item-label">Invested</span>
+          <span class="compact-item-value">$520</span>
+        </div>
+      </div>
+      <span class="compact-trend">+12%</span>
+    </div>
+  </div>
+
+  <!-- INCOME -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">Income</span>
+    </div>
+    <div class="compact-items">
+      <div class="compact-item">
+        <span class="compact-item-label">Recurring</span>
+        <span class="compact-item-value">$7,500</span>
+      </div>
+      <div class="compact-item">
+        <span class="compact-item-label">One-Time</span>
+        <span class="compact-item-value">$950</span>
+      </div>
+      <div class="compact-item">
+        <span class="compact-item-label">Total</span>
+        <span class="compact-item-value" style="color:#166f47;">$8,450</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXPENSES -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">Expenses</span>
+      <a href="#viewall" class="section-link">View All →</a>
+    </div>
+    <div class="expense-chips">
+      <span class="expense-chip"><strong>Housing</strong> $2,100</span>
+      <span class="expense-chip"><strong>Food</strong> $890</span>
+      <span class="expense-chip"><strong>Transport</strong> $420</span>
+    </div>
+  </div>
+
+  <!-- INCOME VS EXPENSES CHART -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">Income vs Expenses</span>
+    </div>
+    <div class="chart-container">
+      <div class="chart-bar-group"><div class="chart-bar income" style="height:55%"></div><div class="chart-bar expense" style="height:38%"></div></div>
+      <div class="chart-bar-group"><div class="chart-bar income" style="height:62%"></div><div class="chart-bar expense" style="height:42%"></div></div>
+      <div class="chart-bar-group"><div class="chart-bar income" style="height:50%"></div><div class="chart-bar expense" style="height:44%"></div></div>
+      <div class="chart-bar-group"><div class="chart-bar income" style="height:70%"></div><div class="chart-bar expense" style="height:40%"></div></div>
+      <div class="chart-bar-group"><div class="chart-bar income" style="height:58%"></div><div class="chart-bar expense" style="height:46%"></div></div>
+      <div class="chart-bar-group"><div class="chart-bar income" style="height:75%"></div><div class="chart-bar expense" style="height:35%"></div></div>
+      <div class="chart-bar-group"><div class="chart-bar income" style="height:82%"></div><div class="chart-bar expense" style="height:50%"></div></div>
+      <div class="chart-bar-group"><div class="chart-bar income" style="height:68%"></div><div class="chart-bar expense" style="height:48%"></div></div>
+      <div class="chart-bar-group"><div class="chart-bar income" style="height:90%"></div><div class="chart-bar expense" style="height:42%"></div></div>
+      <div class="chart-bar-group"><div class="chart-bar income" style="height:85%"></div><div class="chart-bar expense" style="height:52%"></div></div>
+      <div class="chart-bar-group"><div class="chart-bar income" style="height:95%"></div><div class="chart-bar expense" style="height:45%"></div></div>
+      <div class="chart-bar-group"><div class="chart-bar income" style="height:100%"></div><div class="chart-bar expense" style="height:48%"></div></div>
+    </div>
+    <div class="chart-legend">
+      <span class="chart-legend-item"><span class="chart-legend-dot in"></span> Income</span>
+      <span class="chart-legend-item"><span class="chart-legend-dot out"></span> Expenses</span>
+    </div>
+    <div class="chart-filters">
+      <button class="chart-filter">1W</button>
+      <button class="chart-filter">1M</button>
+      <button class="chart-filter active">3M</button>
+      <button class="chart-filter">6M</button>
+      <button class="chart-filter">1Y</button>
+    </div>
+  </div>
+
+  <!-- TRANSFERS -->
+  <div class="transfer-line">
+    <strong>$200</strong> to Reserve, <strong>$520</strong> to Auto Invest <span class="muted">— doesn't affect cash flow</span>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cash Flow Overview — Financial Pulse</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --green: #166f47;
+    --green-light: #e8f5ee;
+    --amber: #c2790a;
+    --amber-light: #fef3cd;
+    --red: #b91c1c;
+    --red-light: #fee2e2;
+    --bg: #f8f9fa;
+    --card: #ffffff;
+    --text-primary: #1a1a2e;
+    --text-secondary: #6b7280;
+    --text-muted: #9ca3af;
+    --border: #e5e7eb;
+    --radius: 14px;
+    --radius-sm: 10px;
+    --radius-xs: 8px;
+  }
+
+  body {
+    font-family: 'IBM Plex Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 16px;
+  }
+
+  .phone-frame {
+    width: 100%;
+    max-width: 430px;
+    background: var(--bg);
+    position: relative;
+    padding-bottom: 24px;
+  }
+
+  /* ── Header ── */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0 12px;
+  }
+
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--green);
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .back-btn svg { width: 18px; height: 18px; }
+
+  .header-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .header-action {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .header-action svg { width: 18px; height: 18px; color: var(--text-secondary); }
+
+  /* ── Segmented Nav ── */
+  .segmented-nav {
+    display: flex;
+    background: #e9ecef;
+    border-radius: var(--radius-sm);
+    padding: 3px;
+    margin-bottom: 16px;
+  }
+
+  .segmented-nav button {
+    flex: 1;
+    padding: 8px 0;
+    font-size: 13px;
+    font-weight: 500;
+    font-family: inherit;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: transparent;
+    color: var(--text-secondary);
+  }
+
+  .segmented-nav button.active {
+    background: var(--card);
+    color: var(--text-primary);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    font-weight: 600;
+  }
+
+  /* ── Hero Card ── */
+  .hero-card {
+    background: var(--green);
+    border-radius: var(--radius);
+    padding: 20px;
+    color: #fff;
+    margin-bottom: 12px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-card::before {
+    content: '';
+    position: absolute;
+    top: -30px;
+    right: -30px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+  }
+
+  .hero-card::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: -20px;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+  }
+
+  .hero-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 14px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-label {
+    font-size: 12px;
+    font-weight: 500;
+    opacity: 0.85;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  .hero-amount {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+  }
+
+  .hero-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-status .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #4ade80;
+  }
+
+  .hero-breakdown {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-stat {
+    background: rgba(255,255,255,0.12);
+    border-radius: var(--radius-xs);
+    padding: 10px 12px;
+  }
+
+  .hero-stat-label {
+    font-size: 11px;
+    opacity: 0.8;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  .hero-stat-value {
+    font-size: 17px;
+    font-weight: 600;
+  }
+
+  .hero-stat-value.income { color: #86efac; }
+  .hero-stat-value.expense { color: #fca5a5; }
+
+  .hero-trend {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #86efac;
+  }
+
+  /* ── Card Base ── */
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 12px;
+    border: 1px solid var(--border);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+
+  .card-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .card-title svg {
+    width: 16px;
+    height: 16px;
+    color: var(--green);
+  }
+
+  .card-action {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--green);
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-family: inherit;
+  }
+
+  /* ── Forecast ── */
+  .forecast-highlight {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+    border: 1px solid #bbf7d0;
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    margin-bottom: 12px;
+  }
+
+  .forecast-left .forecast-label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: 2px;
+  }
+
+  .forecast-left .forecast-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--green);
+  }
+
+  .forecast-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 3px;
+  }
+
+  .forecast-tag {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: var(--green-light);
+    color: var(--green);
+  }
+
+  .forecast-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .forecast-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: var(--radius-xs);
+    background: #f9fafb;
+  }
+
+  .forecast-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .forecast-icon svg { width: 14px; height: 14px; }
+
+  .forecast-icon.bills { background: var(--amber-light); color: var(--amber); }
+  .forecast-icon.savings { background: var(--green-light); color: var(--green); }
+  .forecast-icon.invest { background: #ede9fe; color: #7c3aed; }
+  .forecast-icon.income { background: #dbeafe; color: #2563eb; }
+
+  .forecast-item-label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    line-height: 1.2;
+  }
+
+  .forecast-item-value {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.2;
+  }
+
+  /* ── AI Insight ── */
+  .ai-insight {
+    background: linear-gradient(135deg, #fefce8 0%, #fef9c3 50%, #fef3c7 100%);
+    border: 1px solid #fde68a;
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .ai-badge {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: var(--amber);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .ai-content {
+    flex: 1;
+  }
+
+  .ai-message {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+    line-height: 1.4;
+    margin-bottom: 6px;
+  }
+
+  .ai-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--amber);
+    cursor: pointer;
+  }
+
+  .ai-action svg { width: 14px; height: 14px; }
+
+  /* ── Savings & Invested ── */
+  .savings-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .savings-item {
+    padding: 14px;
+    border-radius: var(--radius-sm);
+    background: #f9fafb;
+    border: 1px solid var(--border);
+  }
+
+  .savings-item-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  .savings-item-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+
+  .savings-item-badge {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .savings-item-badge svg { width: 12px; height: 12px; }
+  .savings-item-badge.saved { background: var(--green-light); color: var(--green); }
+  .savings-item-badge.invested { background: #ede9fe; color: #7c3aed; }
+
+  .savings-item-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+
+  .savings-item-rate {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--green);
+  }
+
+  .savings-rate-bar {
+    margin-top: 10px;
+    padding: 12px 14px;
+    background: var(--green-light);
+    border-radius: var(--radius-xs);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .savings-rate-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--green);
+  }
+
+  .savings-rate-value {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--green);
+  }
+
+  .savings-rate-trend {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--green);
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+
+  /* ── Income & Expenses ── */
+  .split-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .mini-list {
+    list-style: none;
+  }
+
+  .mini-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #f3f4f6;
+  }
+
+  .mini-list li:last-child { border-bottom: none; }
+
+  .mini-list-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  .mini-list-value {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .mini-list-value.sub {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--text-muted);
+  }
+
+  /* ── Expense Bars ── */
+  .expense-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .expense-row:last-child { margin-bottom: 0; }
+
+  .expense-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 14px;
+    background: #f3f4f6;
+  }
+
+  .expense-info { flex: 1; min-width: 0; }
+
+  .expense-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+
+  .expense-name {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .expense-amount {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .expense-bar-track {
+    height: 5px;
+    background: #e5e7eb;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .expense-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.3s;
+  }
+
+  .expense-bar-fill.housing { background: var(--green); }
+  .expense-bar-fill.food { background: var(--amber); }
+  .expense-bar-fill.transport { background: #3b82f6; }
+
+  .expense-meta {
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-top: 3px;
+    display: flex;
+    gap: 6px;
+  }
+
+  .expense-pct { color: var(--text-secondary); font-weight: 500; }
+
+  /* ── Chart Section ── */
+  .chart-controls {
+    display: flex;
+    gap: 4px;
+    background: #f3f4f6;
+    border-radius: 7px;
+    padding: 3px;
+  }
+
+  .chart-controls button {
+    padding: 5px 12px;
+    font-size: 11px;
+    font-weight: 500;
+    font-family: inherit;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background: transparent;
+    color: var(--text-secondary);
+    transition: all 0.2s;
+  }
+
+  .chart-controls button.active {
+    background: var(--card);
+    color: var(--text-primary);
+    font-weight: 600;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+  }
+
+  .chart-area {
+    width: 100%;
+    height: 140px;
+    margin-top: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .chart-area svg { width: 100%; height: 100%; }
+
+  .chart-legend {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 10px;
+  }
+
+  .chart-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    color: var(--text-secondary);
+  }
+
+  .chart-legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  /* ── Transfers ── */
+  .transfers-note {
+    font-size: 11px;
+    color: var(--text-muted);
+    line-height: 1.4;
+    margin-bottom: 10px;
+    padding: 8px 10px;
+    background: #f9fafb;
+    border-radius: var(--radius-xs);
+    border-left: 3px solid var(--border);
+  }
+
+  .transfer-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+  }
+
+  .transfer-row + .transfer-row { border-top: 1px solid #f3f4f6; }
+
+  .transfer-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .transfer-icon svg { width: 14px; height: 14px; color: var(--text-secondary); }
+
+  .transfer-info { flex: 1; }
+
+  .transfer-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .transfer-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .transfer-amount {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  /* ── Utilities ── */
+  .trend-up { color: var(--green); }
+  .trend-down { color: var(--red); }
+  .trend-flat { color: var(--amber); }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  .tag.up { background: var(--green-light); color: var(--green); }
+  .tag.down { background: var(--red-light); color: var(--red); }
+</style>
+</head>
+<body>
+<div class="phone-frame">
+
+  <!-- Header -->
+  <div class="header">
+    <a href="index.html" class="back-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      Back
+    </a>
+    <span class="header-title">Cash Flow</span>
+    <button class="header-action" aria-label="Notifications">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+    </button>
+  </div>
+
+  <!-- Segmented Nav -->
+  <div class="segmented-nav">
+    <button class="active">Overview</button>
+    <button>Accounts</button>
+    <button>Goals</button>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero-card">
+    <div class="hero-top">
+      <div>
+        <div class="hero-label">Net Cash Flow</div>
+        <div class="hero-amount">+$2,330</div>
+      </div>
+      <div class="hero-status">
+        <span class="dot"></span>
+        Healthy
+      </div>
+    </div>
+    <div class="hero-breakdown">
+      <div class="hero-stat">
+        <div class="hero-stat-label">Money In</div>
+        <div class="hero-stat-value income">$8,450</div>
+        <div class="hero-trend">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
+          +12% vs last month
+        </div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-label">Money Out</div>
+        <div class="hero-stat-value expense">$6,120</div>
+        <div class="hero-trend" style="color: #fca5a5;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/></svg>
+          -3% vs last month
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORECAST -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Forecast
+      </div>
+      <span class="card-action">Details →</span>
+    </div>
+    <div class="forecast-highlight">
+      <div class="forecast-left">
+        <div class="forecast-label">Projected End-of-Month</div>
+        <div class="forecast-value">$128,700</div>
+      </div>
+      <div class="forecast-right">
+        <span class="forecast-tag">↑ +$3,850</span>
+      </div>
+    </div>
+    <div class="forecast-details">
+      <div class="forecast-item">
+        <div class="forecast-icon bills">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 10h20"/></svg>
+        </div>
+        <div>
+          <div class="forecast-item-label">Bills Remaining</div>
+          <div class="forecast-item-value">$1,850</div>
+        </div>
+      </div>
+      <div class="forecast-item">
+        <div class="forecast-icon savings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+        </div>
+        <div>
+          <div class="forecast-item-label">Expected Savings</div>
+          <div class="forecast-item-value">$2,330</div>
+        </div>
+      </div>
+      <div class="forecast-item">
+        <div class="forecast-icon invest">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div>
+          <div class="forecast-item-label">Safe to Invest</div>
+          <div class="forecast-item-value">$620</div>
+        </div>
+      </div>
+      <div class="forecast-item">
+        <div class="forecast-icon income">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        </div>
+        <div>
+          <div class="forecast-item-label">Upcoming Income</div>
+          <div class="forecast-item-value">$4,200</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI INSIGHT -->
+  <div class="ai-insight">
+    <div class="ai-badge">AI</div>
+    <div class="ai-content">
+      <div class="ai-message">You're on track to save <strong>18% more</strong> this month.</div>
+      <div class="ai-action">
+        Increase Auto Invest by $200
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- SAVED & INVESTED -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Saved &amp; Invested
+      </div>
+      <span class="card-action">View All →</span>
+    </div>
+    <div class="savings-grid">
+      <div class="savings-item">
+        <div class="savings-item-header">
+          <span class="savings-item-label">Saved</span>
+          <span class="savings-item-badge saved">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+          </span>
+        </div>
+        <div class="savings-item-value">$2,330</div>
+        <div class="savings-item-rate trend-up">↑ +12%</div>
+      </div>
+      <div class="savings-item">
+        <div class="savings-item-header">
+          <span class="savings-item-label">Invested</span>
+          <span class="savings-item-badge invested">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </span>
+        </div>
+        <div class="savings-item-value">$520</div>
+        <div class="savings-item-rate trend-up">↑ +8%</div>
+      </div>
+    </div>
+    <div class="savings-rate-bar">
+      <div>
+        <div class="savings-rate-label">Savings Rate</div>
+        <div class="savings-rate-value">28%</div>
+      </div>
+      <div class="savings-rate-trend">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
+        +12% monthly trend
+      </div>
+    </div>
+  </div>
+
+  <!-- INCOME -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        Income
+      </div>
+      <span class="card-action">History →</span>
+    </div>
+    <ul class="mini-list">
+      <li>
+        <span class="mini-list-label">Recurring</span>
+        <span class="mini-list-value">$7,500 <span class="mini-list-value sub">Salary</span></span>
+      </li>
+      <li>
+        <span class="mini-list-label">One-Time</span>
+        <span class="mini-list-value">$950 <span class="mini-list-value sub">Freelance</span></span>
+      </li>
+      <li style="border-top: 2px solid var(--border); padding-top: 10px;">
+        <span class="mini-list-label" style="font-weight:600; color:var(--text-primary);">Total</span>
+        <span class="mini-list-value" style="font-size:15px; color:var(--green);">$8,450</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- EXPENSES -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Expenses
+      </div>
+      <a href="#" class="card-action">View All → Spending</a>
+    </div>
+
+    <div class="expense-row">
+      <div class="expense-icon">🏠</div>
+      <div class="expense-info">
+        <div class="expense-top">
+          <span class="expense-name">Housing</span>
+          <span class="expense-amount">$2,100</span>
+        </div>
+        <div class="expense-bar-track">
+          <div class="expense-bar-fill housing" style="width: 34%"></div>
+        </div>
+        <div class="expense-meta">
+          <span class="expense-pct">34%</span>
+          <span class="trend-down">↓ 2%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="expense-row">
+      <div class="expense-icon">🍽️</div>
+      <div class="expense-info">
+        <div class="expense-top">
+          <span class="expense-name">Food</span>
+          <span class="expense-amount">$890</span>
+        </div>
+        <div class="expense-bar-track">
+          <div class="expense-bar-fill food" style="width: 15%"></div>
+        </div>
+        <div class="expense-meta">
+          <span class="expense-pct">15%</span>
+          <span class="trend-up" style="color:var(--red);">↑ 3%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="expense-row">
+      <div class="expense-icon">🚗</div>
+      <div class="expense-info">
+        <div class="expense-top">
+          <span class="expense-name">Transport</span>
+          <span class="expense-amount">$420</span>
+        </div>
+        <div class="expense-bar-track">
+          <div class="expense-bar-fill transport" style="width: 7%"></div>
+        </div>
+        <div class="expense-meta">
+          <span class="expense-pct">7%</span>
+          <span class="trend-down">↓ 1%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INCOME VS EXPENSES CHART -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
+        Income vs Expenses
+      </div>
+      <div class="chart-controls">
+        <button class="active">1M</button>
+        <button>3M</button>
+        <button>6M</button>
+        <button>1Y</button>
+      </div>
+    </div>
+    <div class="chart-area">
+      <svg viewBox="0 0 380 120" preserveAspectRatio="none">
+        <!-- Income area -->
+        <defs>
+          <linearGradient id="incomeGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#166f47" stop-opacity="0.25"/>
+            <stop offset="100%" stop-color="#166f47" stop-opacity="0.02"/>
+          </linearGradient>
+          <linearGradient id="expenseGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#b91c1c" stop-opacity="0.15"/>
+            <stop offset="100%" stop-color="#b91c1c" stop-opacity="0.02"/>
+          </linearGradient>
+        </defs>
+        <!-- Income fill -->
+        <path d="M0,70 C30,65 60,50 90,45 C120,40 150,35 180,30 C210,25 240,22 270,18 C300,15 330,12 360,10 L360,120 L0,120 Z" fill="url(#incomeGrad)"/>
+        <!-- Income line -->
+        <path d="M0,70 C30,65 60,50 90,45 C120,40 150,35 180,30 C210,25 240,22 270,18 C300,15 330,12 360,10" fill="none" stroke="#166f47" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- Expense fill -->
+        <path d="M0,90 C30,88 60,85 90,82 C120,80 150,78 180,76 C210,74 240,72 270,70 C300,68 330,66 360,64 L360,120 L0,120 Z" fill="url(#expenseGrad)"/>
+        <!-- Expense line -->
+        <path d="M0,90 C30,88 60,85 90,82 C120,80 150,78 180,76 C210,74 240,72 270,70 C300,68 330,66 360,64" fill="none" stroke="#b91c1c" stroke-width="2" stroke-dasharray="6 3" stroke-linecap="round"/>
+        <!-- Dots -->
+        <circle cx="0" cy="70" r="3" fill="#166f47"/>
+        <circle cx="90" cy="45" r="3" fill="#166f47"/>
+        <circle cx="180" cy="30" r="3" fill="#166f47"/>
+        <circle cx="270" cy="18" r="3" fill="#166f47"/>
+        <circle cx="360" cy="10" r="3.5" fill="#166f47" stroke="#fff" stroke-width="1.5"/>
+        <circle cx="0" cy="90" r="2.5" fill="#b91c1c"/>
+        <circle cx="90" cy="82" r="2.5" fill="#b91c1c"/>
+        <circle cx="180" cy="76" r="2.5" fill="#b91c1c"/>
+        <circle cx="270" cy="70" r="2.5" fill="#b91c1c"/>
+        <circle cx="360" cy="64" r="3" fill="#b91c1c" stroke="#fff" stroke-width="1.5"/>
+      </svg>
+    </div>
+    <div class="chart-legend">
+      <div class="chart-legend-item">
+        <div class="chart-legend-dot" style="background:var(--green);"></div>
+        Income
+      </div>
+      <div class="chart-legend-item">
+        <div class="chart-legend-dot" style="background:var(--red);"></div>
+        Expenses
+      </div>
+    </div>
+  </div>
+
+  <!-- TRANSFERS -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
+        Transfers
+      </div>
+    </div>
+    <div class="transfers-note">Transfers between your accounts don't affect cash flow.</div>
+    <div class="transfer-row">
+      <div class="transfer-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+      </div>
+      <div class="transfer-info">
+        <div class="transfer-label">To Reserve</div>
+        <div class="transfer-sub">Savings account</div>
+      </div>
+      <div class="transfer-amount">$200</div>
+    </div>
+    <div class="transfer-row">
+      <div class="transfer-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+      <div class="transfer-info">
+        <div class="transfer-label">To Auto Invest</div>
+        <div class="transfer-sub">Investment account</div>
+      </div>
+      <div class="transfer-amount">$520</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
