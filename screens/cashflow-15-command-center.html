@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cash Flow Command Center — Advizmo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --green:#166f47;--green-light:#e8f5ee;--green-50:#f0faf4;
+    --amber:#c2790a;--amber-light:#fef3e2;--amber-50:#fff8ed;
+    --bg:#f8f9fa;--card:#fff;--text:#1a1a2e;--muted:#6b7280;
+    --border:#e5e7eb;--radius:14px;--radius-sm:10px;
+    --shadow:0 1px 3px rgba(0,0,0,.06);
+  }
+  html{font-size:14px;-webkit-font-smoothing:antialiased}
+  body{font-family:'IBM Plex Sans','Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:24px}
+
+  /* HEADER */
+  .header{background:#fff;border-bottom:1px solid var(--border);padding:12px 16px;position:sticky;top:0;z-index:50}
+  .header-top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .back{font-size:18px;color:var(--text);text-decoration:none;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:8px;transition:background .15s}
+  .back:hover{background:var(--bg)}
+  .header-title{font-size:15px;font-weight:600;flex:1}
+  .header-badge{font-size:11px;font-weight:600;background:var(--green);color:#fff;padding:3px 8px;border-radius:20px}
+
+  /* SEGMENTED NAV */
+  .seg-nav{display:flex;background:var(--bg);border-radius:8px;padding:2px;gap:2px}
+  .seg-nav a{flex:1;text-align:center;padding:6px 8px;border-radius:6px;font-size:12px;font-weight:500;color:var(--muted);text-decoration:none;transition:all .15s}
+  .seg-nav a.active{background:#fff;color:var(--text);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+
+  /* MAIN */
+  .main{max-width:430px;margin:0 auto;padding:12px 12px 0}
+  .section{margin-bottom:10px}
+
+  /* CARDS */
+  .card{background:var(--card);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow);border:1px solid var(--border)}
+  .card-sm{padding:10px 14px}
+  .card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+  .card-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--muted)}
+  .card-icon{width:18px;height:18px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:10px}
+  .card-icon.green{background:var(--green-light);color:var(--green)}
+  .card-icon.amber{background:var(--amber-light);color:var(--amber)}
+
+  /* HERO */
+  .hero{position:relative;overflow:hidden}
+  .hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start}
+  .hero-main{grid-column:1/-1}
+  .hero-net{font-size:28px;font-weight:700;letter-spacing:-.5px;line-height:1.1}
+  .hero-net.positive{color:var(--green)}
+  .hero-month{font-size:11px;color:var(--muted);margin-bottom:2px}
+  .hero-row{display:flex;gap:16px;margin-top:6px}
+  .hero-row .item{display:flex;flex-direction:column}
+  .hero-row .item-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+  .hero-row .item-value{font-size:13px;font-weight:600}
+  .hero-row .item-value.green{color:var(--green)}
+  .hero-status{display:flex;align-items:center;gap:6px;margin-top:8px}
+  .status-pill{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 8px;border-radius:20px}
+  .status-pill.healthy{background:var(--green-light);color:var(--green)}
+  .trend-pill{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:600;color:var(--green)}
+  .sparkline{margin-top:8px}
+  .sparkline svg{width:100%;height:32px}
+
+  /* INLINE METRICS ROW */
+  .metric-row{display:flex;gap:8px}
+  .metric-row .metric{flex:1;text-align:center;padding:8px 4px;background:var(--bg);border-radius:var(--radius-sm)}
+  .metric .m-value{font-size:15px;font-weight:700;line-height:1.2}
+  .metric .m-label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-top:2px}
+  .metric .m-value.green{color:var(--green)}
+  .metric .m-value.amber{color:var(--amber)}
+
+  /* COMPACT GRID */
+  .compact-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+  .compact-grid .c-item{background:var(--bg);border-radius:8px;padding:8px 6px;text-align:center}
+  .compact-grid .c-value{font-size:14px;font-weight:700;line-height:1.2}
+  .compact-grid .c-label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;margin-top:2px}
+
+  /* AI SUMMARY */
+  .ai-bar{background:linear-gradient(135deg,var(--green-light),#f0faf4);border:1px solid #d1e8d9;border-radius:var(--radius);padding:10px 14px;display:flex;align-items:center;gap:8px}
+  .ai-bar .ai-icon{width:20px;height:20px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+  .ai-bar .ai-text{font-size:12px;font-weight:500;color:var(--green);line-height:1.3}
+
+  /* CHART AREA */
+  .chart-container{position:relative;height:80px;margin:6px 0}
+  .chart-container svg{width:100%;height:100%}
+  .chart-tabs{display:flex;gap:4px}
+  .chart-tab{padding:3px 10px;border-radius:12px;font-size:10px;font-weight:500;color:var(--muted);background:transparent;border:1px solid transparent;cursor:pointer}
+  .chart-tab.active{background:#fff;color:var(--text);border-color:var(--border);font-weight:600}
+
+  /* BARS */
+  .bar-row{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+  .bar-row:last-child{margin-bottom:0}
+  .bar-label{font-size:11px;width:50px;flex-shrink:0;color:var(--muted)}
+  .bar-track{flex:1;height:8px;background:var(--bg);border-radius:4px;overflow:hidden}
+  .bar-fill{height:100%;border-radius:4px;transition:width .4s}
+  .bar-fill.green{background:var(--green)}
+  .bar-fill.amber{background:var(--amber)}
+  .bar-fill.teal{background:#0d9488}
+  .bar-fill.blue{background:#2563eb}
+  .bar-fill.purple{background:#7c3aed}
+  .bar-val{font-size:11px;font-weight:600;width:42px;text-align:right;flex-shrink:0}
+
+  /* SAVINGS GAUGE */
+  .gauge-row{display:flex;align-items:center;gap:12px}
+  .gauge{width:56px;height:56px;position:relative;flex-shrink:0}
+  .gauge svg{width:100%;height:100%;transform:rotate(-90deg)}
+  .gauge circle{fill:none;stroke-width:5;stroke-linecap:round}
+  .gauge .track{stroke:var(--border)}
+  .gauge .fill{stroke:var(--green);transition:stroke-dashoffset .5s}
+  .gauge-text{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .gauge-text .pct{font-size:13px;font-weight:700;color:var(--green);line-height:1}
+  .gauge-text .lbl{font-size:8px;color:var(--muted);margin-top:1px}
+  .gauge-stats{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:4px}
+  .gauge-stat{background:var(--bg);border-radius:6px;padding:5px 6px;text-align:center}
+  .gauge-stat .gs-val{font-size:12px;font-weight:700;line-height:1.2}
+  .gauge-stat .gs-lbl{font-size:9px;color:var(--muted);margin-top:1px}
+  .gauge-stat .gs-val.green{color:var(--green)}
+  .gauge-stat .gs-val.amber{color:var(--amber)}
+
+  /* BREAKDOWN */
+  .breakdown-row{display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--bg)}
+  .breakdown-row:last-child{border-bottom:none}
+  .breakdown-row .bd-left{display:flex;align-items:center;gap:6px}
+  .bd-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+  .bd-dot.green{background:var(--green)}
+  .bd-dot.amber{background:var(--amber)}
+  .bd-dot.teal{background:#0d9488}
+  .bd-dot.blue{background:#2563eb}
+  .bd-dot.purple{background:#7c3aed}
+  .bd-name{font-size:12px;font-weight:500}
+  .bd-val{font-size:12px;font-weight:600}
+  .bd-pct{font-size:10px;color:var(--muted);margin-left:4px}
+
+  /* TRANSFER LINE */
+  .transfer-line{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
+  .transfer-line strong{color:var(--text)}
+
+  /* INSIGHTS */
+  .insight-item{display:flex;gap:6px;align-items:flex-start;margin-bottom:5px}
+  .insight-item:last-child{margin-bottom:0}
+  .insight-bullet{width:5px;height:5px;border-radius:50%;background:var(--green);flex-shrink:0;margin-top:4px}
+  .insight-text{font-size:12px;line-height:1.35}
+
+  /* ACTIONS */
+  .action-item{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--bg)}
+  .action-item:last-child{border-bottom:none}
+  .action-text{font-size:12px;font-weight:500;flex:1;padding-right:8px}
+  .action-btn{font-size:10px;font-weight:600;padding:5px 12px;border-radius:8px;border:none;cursor:pointer;white-space:nowrap;transition:all .15s}
+  .action-btn.primary{background:var(--green);color:#fff}
+  .action-btn.primary:hover{background:#125a3a}
+  .action-btn.secondary{background:var(--bg);color:var(--text)}
+  .action-btn.secondary:hover{background:var(--border)}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-top">
+    <a href="index.html" class="back" aria-label="Back">←</a>
+    <div class="header-title">Cash Flow</div>
+    <span class="header-badge">Healthy</span>
+  </div>
+  <nav class="seg-nav">
+    <a href="#" class="active">Overview</a>
+    <a href="#">Income</a>
+    <a href="#">Expenses</a>
+    <a href="#">Forecast</a>
+    <a href="#">History</a>
+  </nav>
+</div>
+
+<div class="main">
+
+  <!-- 1. CASH FLOW OVERVIEW HERO -->
+  <div class="section">
+    <div class="card hero">
+      <div class="hero-month">December 2024</div>
+      <div class="hero-main">
+        <div class="hero-net positive">+$2,330</div>
+        <div class="hero-row">
+          <div class="item">
+            <span class="item-label">Money In</span>
+            <span class="item-value green">$8,450</span>
+          </div>
+          <div class="item">
+            <span class="item-label">Money Out</span>
+            <span class="item-value">$6,120</span>
+          </div>
+        </div>
+        <div class="hero-status">
+          <span class="status-pill healthy">✓ Healthy</span>
+          <span class="trend-pill">↑ +12%</span>
+        </div>
+      </div>
+      <div class="sparkline">
+        <svg viewBox="0 0 200 32" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="sparkGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#166f47" stop-opacity="0.2"/>
+              <stop offset="100%" stop-color="#166f47" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <path d="M0,24 L20,20 L40,22 L60,16 L80,18 L100,12 L120,14 L140,8 L160,10 L180,6 L200,4" fill="none" stroke="#166f47" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M0,24 L20,20 L40,22 L60,16 L80,18 L100,12 L120,14 L140,8 L160,10 L180,6 L200,4 L200,32 L0,32Z" fill="url(#sparkGrad)"/>
+          <circle cx="200" cy="4" r="3" fill="#166f47"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. CASH FLOW FORECAST -->
+  <div class="section">
+    <div class="card card-sm">
+      <div class="card-header">
+        <span class="card-label">Forecast</span>
+        <span style="font-size:10px;font-weight:600;color:var(--green);background:var(--green-light);padding:2px 8px;border-radius:10px">94% confidence</span>
+      </div>
+      <div class="metric-row">
+        <div class="metric">
+          <div class="m-value green">$128,700</div>
+          <div class="m-label">Projected</div>
+        </div>
+        <div class="metric">
+          <div class="m-value">$1,850</div>
+          <div class="m-label">Bills Due</div>
+        </div>
+        <div class="metric">
+          <div class="m-value green">$620</div>
+          <div class="m-label">Safe to Invest</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. AI CASH FLOW SUMMARY -->
+  <div class="section">
+    <div class="ai-bar">
+      <div class="ai-icon">✦</div>
+      <div class="ai-text">Save 18% more. Increase Auto Invest by $200.</div>
+    </div>
+  </div>
+
+  <!-- 4. INCOME VS EXPENSES TREND -->
+  <div class="section">
+    <div class="card card-sm">
+      <div class="card-header">
+        <span class="card-label">Income vs Expenses</span>
+        <div class="chart-tabs">
+          <button class="chart-tab active">1M</button>
+          <button class="chart-tab">3M</button>
+          <button class="chart-tab">6M</button>
+          <button class="chart-tab">1Y</button>
+        </div>
+      </div>
+      <div class="chart-container">
+        <svg viewBox="0 0 240 80" preserveAspectRatio="none">
+          <!-- Income area -->
+          <path d="M0,60 Q30,50 60,45 T120,30 T180,20 T240,12" fill="none" stroke="#166f47" stroke-width="1.5"/>
+          <path d="M0,60 Q30,50 60,45 T120,30 T180,20 T240,12 L240,80 L0,80Z" fill="#166f47" fill-opacity="0.08"/>
+          <!-- Expenses area -->
+          <path d="M0,55 Q30,52 60,50 T120,42 T180,38 T240,35" fill="none" stroke="#c2790a" stroke-width="1.5" stroke-dasharray="3,2"/>
+          <path d="M0,55 Q30,52 60,50 T120,42 T180,38 T240,35 L240,80 L0,80Z" fill="#c2790a" fill-opacity="0.05"/>
+        </svg>
+      </div>
+      <div style="display:flex;gap:12px;justify-content:center;margin-top:2px">
+        <span style="font-size:10px;display:flex;align-items:center;gap:4px;color:var(--muted)"><span style="width:8px;height:2px;background:#166f47;border-radius:1px;display:inline-block"></span>Income</span>
+        <span style="font-size:10px;display:flex;align-items:center;gap:4px;color:var(--muted)"><span style="width:8px;height:2px;background:#c2790a;border-radius:1px;display:inline-block;border:none;background-image:repeating-linear-gradient(90deg,#c2790a 0 3px,transparent 3px 5px)"></span>Expenses</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. INCOME -->
+  <div class="section">
+    <div class="card card-sm">
+      <div class="card-header">
+        <span class="card-label">Income — Dec 2024</span>
+        <span style="font-size:14px;font-weight:700;color:var(--green)">$8,450</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">Recurring</span>
+        <div class="bar-track"><div class="bar-fill green" style="width:89%"></div></div>
+        <span class="bar-val">$7,500</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">One-Time</span>
+        <div class="bar-track"><div class="bar-fill teal" style="width:11%"></div></div>
+        <span class="bar-val">$950</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. EXPENSES -->
+  <div class="section">
+    <div class="card card-sm">
+      <div class="card-header">
+        <span class="card-label">Expenses — Dec 2024</span>
+        <a href="#" style="font-size:11px;color:var(--green);text-decoration:none;font-weight:600">See all →</a>
+      </div>
+      <div class="compact-grid" style="grid-template-columns:1fr 1fr 1fr">
+        <div class="c-item">
+          <div class="c-value">$2,100</div>
+          <div class="c-label">Housing</div>
+        </div>
+        <div class="c-item">
+          <div class="c-value">$890</div>
+          <div class="c-label">Food</div>
+        </div>
+        <div class="c-item">
+          <div class="c-value">$420</div>
+          <div class="c-label">Transport</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. SAVINGS & INVESTING -->
+  <div class="section">
+    <div class="card card-sm">
+      <div class="card-header">
+        <span class="card-label">Savings & Investing</span>
+      </div>
+      <div class="gauge-row">
+        <div class="gauge">
+          <svg viewBox="0 0 44 44">
+            <circle class="track" cx="22" cy="22" r="18"/>
+            <circle class="fill" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="20.36"/>
+          </svg>
+          <div class="gauge-text">
+            <span class="pct">28%</span>
+            <span class="lbl">Rate</span>
+          </div>
+        </div>
+        <div class="gauge-stats">
+          <div class="gauge-stat">
+            <div class="gs-val green">$2,330</div>
+            <div class="gs-lbl">Saved</div>
+          </div>
+          <div class="gauge-stat">
+            <div class="gs-val">$520</div>
+            <div class="gs-lbl">Auto Invest</div>
+          </div>
+          <div class="gauge-stat">
+            <div class="gs-val">$200</div>
+            <div class="gs-lbl">Reserve</div>
+          </div>
+          <div class="gauge-stat">
+            <div class="gs-val amber">82%</div>
+            <div class="gs-lbl">Goal</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:8px">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:3px">
+          <span>Savings Trend</span><span style="color:var(--green);font-weight:600">↑ +12%</span>
+        </div>
+        <div style="height:4px;background:var(--border);border-radius:2px;overflow:hidden">
+          <div style="height:100%;width:82%;background:var(--green);border-radius:2px"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. CASH FLOW BREAKDOWN -->
+  <div class="section">
+    <div class="card card-sm">
+      <div class="card-header">
+        <span class="card-label">Cash Flow Breakdown</span>
+      </div>
+      <div class="breakdown-row">
+        <div class="bd-left"><span class="bd-dot amber"></span><span class="bd-name">Bills</span></div>
+        <div><span class="bd-val">$1,850</span><span class="bd-pct">30%</span></div>
+      </div>
+      <div class="breakdown-row">
+        <div class="bd-left"><span class="bd-dot blue"></span><span class="bd-name">Expenses</span></div>
+        <div><span class="bd-val">$2,890</span><span class="bd-pct">47%</span></div>
+      </div>
+      <div class="breakdown-row">
+        <div class="bd-left"><span class="bd-dot green"></span><span class="bd-name">Savings</span></div>
+        <div><span class="bd-val">$2,330</span><span class="bd-pct">38%</span></div>
+      </div>
+      <div class="breakdown-row">
+        <div class="bd-left"><span class="bd-dot teal"></span><span class="bd-name">Auto Invest</span></div>
+        <div><span class="bd-val">$520</span><span class="bd-pct">9%</span></div>
+      </div>
+      <div class="breakdown-row">
+        <div class="bd-left"><span class="bd-dot purple"></span><span class="bd-name">Remaining</span></div>
+        <div><span class="bd-val green">$860</span><span class="bd-pct">14%</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9. TRANSFERS -->
+  <div class="section">
+    <div class="card card-sm">
+      <div class="transfer-line">
+        <span style="font-size:14px">↔</span>
+        <span><strong>$720</strong> in 3 transfers — doesn't affect cash flow</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10. MONTHLY INSIGHTS -->
+  <div class="section">
+    <div class="card card-sm">
+      <div class="card-header">
+        <span class="card-label">Monthly Insights</span>
+      </div>
+      <div class="insight-item">
+        <span class="insight-bullet"></span>
+        <span class="insight-text">Income up 12% from November — one-time bonus of $950 boosted total.</span>
+      </div>
+      <div class="insight-item">
+        <span class="insight-bullet"></span>
+        <span class="insight-text">Food spending decreased 8% — meal prep strategy is paying off.</span>
+      </div>
+      <div class="insight-item">
+        <span class="insight-bullet"></span>
+        <span class="insight-text">Savings rate at 28% — on track to hit 30% goal by January.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 11. SUGGESTED ACTIONS -->
+  <div class="section">
+    <div class="card card-sm">
+      <div class="card-header">
+        <span class="card-label">Suggested Actions</span>
+      </div>
+      <div class="action-item">
+        <span class="action-text">Increase Auto Invest by $200/mo</span>
+        <button class="action-btn primary">Apply</button>
+      </div>
+      <div class="action-item">
+        <span class="action-text">Move $860 remaining to emergency fund</span>
+        <button class="action-btn primary">Move</button>
+      </div>
+      <div class="action-item">
+        <span class="action-text">Review $1,850 in recurring bills</span>
+        <button class="action-btn secondary">Review</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
