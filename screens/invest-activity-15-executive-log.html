@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Activity — Executive Log</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --green: #166f47;
+    --green-bg: #e8f5ee;
+    --green-light: #d1f0dd;
+    --amber: #c2790a;
+    --amber-bg: #fef3e0;
+    --amber-light: #fdeab8;
+    --red: #b91c1c;
+    --red-bg: #fde8e8;
+    --red-light: #fcd5d5;
+    --blue: #1d4ed8;
+    --blue-bg: #e0e7ff;
+    --blue-light: #c7d2fe;
+    --gray-50: #f8f9fa;
+    --gray-100: #f1f3f5;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-400: #9ca3af;
+    --gray-500: #6b7280;
+    --gray-600: #4b5563;
+    --gray-700: #374151;
+    --gray-800: #1f2937;
+    --gray-900: #111827;
+    --card: #ffffff;
+    --radius: 14px;
+    --radius-sm: 10px;
+    --radius-xs: 6px;
+  }
+
+  body {
+    font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--gray-50);
+    color: var(--gray-900);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+  }
+
+  .phone-frame {
+    max-width: 430px;
+    margin: 0 auto;
+    background: var(--gray-50);
+    min-height: 100vh;
+    position: relative;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--card);
+    padding: 0 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid var(--gray-200);
+  }
+
+  .header-top {
+    display: flex;
+    align-items: center;
+    padding: 16px 0 12px;
+    gap: 12px;
+  }
+
+  .back-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    border: 1px solid var(--gray-200);
+    background: var(--card);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s;
+    flex-shrink: 0;
+  }
+
+  .back-btn:hover { background: var(--gray-100); }
+
+  .back-btn svg {
+    width: 18px;
+    height: 18px;
+    stroke: var(--gray-700);
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .header-title {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    color: var(--gray-900);
+  }
+
+  .segmented-nav {
+    display: flex;
+    gap: 0;
+    background: var(--gray-100);
+    border-radius: 10px;
+    padding: 3px;
+    margin-bottom: 14px;
+  }
+
+  .segmented-nav a {
+    flex: 1;
+    text-align: center;
+    padding: 7px 6px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--gray-500);
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.2s;
+    letter-spacing: -0.1px;
+  }
+
+  .segmented-nav a.active {
+    background: var(--card);
+    color: var(--gray-900);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+
+  .segmented-nav a:hover:not(.active) { color: var(--gray-700); }
+
+  /* FILTER BAR */
+  .filter-bar {
+    display: flex;
+    gap: 6px;
+    padding: 12px 20px 14px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .filter-bar::-webkit-scrollbar { display: none; }
+
+  .filter-chip {
+    padding: 6px 14px;
+    font-size: 12.5px;
+    font-weight: 600;
+    border-radius: 20px;
+    border: 1.5px solid var(--gray-200);
+    background: var(--card);
+    color: var(--gray-600);
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: -0.1px;
+  }
+
+  .filter-chip.active {
+    background: var(--gray-900);
+    color: var(--card);
+    border-color: var(--gray-900);
+  }
+
+  .filter-chip:hover:not(.active) {
+    border-color: var(--gray-300);
+    background: var(--gray-100);
+  }
+
+  /* SUMMARY BAR */
+  .summary-bar {
+    margin: 16px 20px 0;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    color: var(--card);
+  }
+
+  .summary-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #94a3b8;
+    margin-bottom: 10px;
+  }
+
+  .summary-items {
+    display: flex;
+    gap: 0;
+  }
+
+  .summary-item {
+    flex: 1;
+    text-align: center;
+    position: relative;
+  }
+
+  .summary-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 2px;
+    bottom: 2px;
+    width: 1px;
+    background: rgba(255,255,255,0.12);
+  }
+
+  .summary-value {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    margin-bottom: 2px;
+  }
+
+  .summary-value.green { color: #4ade80; }
+  .summary-value.blue { color: #60a5fa; }
+  .summary-value.emerald { color: #34d399; }
+
+  .summary-desc {
+    font-size: 10.5px;
+    color: #94a3b8;
+    font-weight: 500;
+  }
+
+  /* CONTENT */
+  .content {
+    padding: 16px 20px 100px;
+  }
+
+  /* DATE GROUP */
+  .date-group { margin-bottom: 20px; }
+
+  .date-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    padding-top: 4px;
+  }
+
+  .date-text {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--gray-800);
+    letter-spacing: -0.2px;
+  }
+
+  .date-line {
+    flex: 1;
+    height: 1px;
+    background: var(--gray-200);
+  }
+
+  /* ACTIVITY CARD */
+  .activity-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    margin-bottom: 8px;
+    border: 1px solid var(--gray-200);
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .activity-card:hover {
+    border-color: var(--gray-300);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+
+  .activity-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3.5px;
+    border-radius: 3px 0 0 3px;
+  }
+
+  .activity-card.type-deposit::before { background: var(--green); }
+  .activity-card.type-buy::before { background: var(--blue); }
+  .activity-card.type-sell::before { background: var(--amber); }
+  .activity-card.type-dividend::before { background: var(--green); }
+  .activity-card.type-transfer::before { background: var(--amber); }
+  .activity-card.type-tax-harvest::before { background: var(--green); }
+  .activity-card.type-rebalance::before { background: var(--blue); }
+  .activity-card.type-scheduled::before { background: var(--blue); }
+  .activity-card.type-market-closed::before { background: var(--gray-400); }
+  .activity-card.type-settlement::before { background: var(--blue); }
+  .activity-card.type-interest::before { background: var(--green); }
+  .activity-card.type-cancelled::before { background: var(--red); }
+  .activity-card.type-failed::before { background: var(--red); }
+
+  .activity-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .activity-left { flex: 1; min-width: 0; }
+
+  .activity-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .type-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 9px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .type-badge.deposit { background: var(--green-bg); color: var(--green); }
+  .type-badge.buy { background: var(--blue-bg); color: var(--blue); }
+  .type-badge.sell { background: var(--amber-bg); color: var(--amber); }
+  .type-badge.dividend { background: var(--green-bg); color: var(--green); }
+  .type-badge.transfer { background: var(--amber-bg); color: var(--amber); }
+  .type-badge.tax-harvest { background: var(--green-bg); color: var(--green); }
+  .type-badge.rebalance { background: var(--blue-bg); color: var(--blue); }
+  .type-badge.scheduled { background: var(--blue-bg); color: var(--blue); }
+  .type-badge.market-closed { background: var(--gray-100); color: var(--gray-500); }
+  .type-badge.settlement { background: var(--blue-bg); color: var(--blue); }
+  .type-badge.interest { background: var(--green-bg); color: var(--green); }
+  .type-badge.cancelled { background: var(--red-bg); color: var(--red); }
+  .type-badge.failed { background: var(--red-bg); color: var(--red); }
+
+  .type-badge svg {
+    width: 11px;
+    height: 11px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .activity-key {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--gray-900);
+    letter-spacing: -0.3px;
+    line-height: 1.2;
+    margin-bottom: 3px;
+  }
+
+  .activity-supporting {
+    font-size: 12.5px;
+    color: var(--gray-500);
+    font-weight: 500;
+    letter-spacing: -0.1px;
+    line-height: 1.4;
+  }
+
+  .activity-right {
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .activity-amount {
+    font-size: 15.5px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    line-height: 1.2;
+    margin-bottom: 4px;
+  }
+
+  .activity-amount.positive { color: var(--green); }
+  .activity-amount.negative { color: var(--gray-900); }
+  .activity-amount.saved { color: var(--green); }
+
+  .activity-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--gray-400);
+  }
+
+  .activity-status .check {
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .activity-status .check svg {
+    width: 8px;
+    height: 8px;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+  }
+
+  .status-available .check { background: var(--green-bg); }
+  .status-available .check svg { stroke: var(--green); }
+
+  .status-settled .check { background: var(--green-bg); }
+  .status-settled .check svg { stroke: var(--green); }
+
+  .status-completed .check { background: var(--green-bg); }
+  .status-completed .check svg { stroke: var(--green); }
+
+  .status-reinvested .check { background: var(--green-bg); }
+  .status-reinvested .check svg { stroke: var(--green); }
+
+  .status-pending .check { background: var(--amber-bg); }
+  .status-pending .check svg { stroke: var(--amber); }
+
+  .status-failed .check { background: var(--red-bg); }
+  .status-failed .check svg { stroke: var(--red); }
+
+  .status-cancelled .check { background: var(--red-bg); }
+  .status-cancelled .check svg { stroke: var(--red); }
+
+  /* SCHEDULED / PENDING CARD VARIANT */
+  .activity-card.type-scheduled .activity-key,
+  .activity-card.type-market-closed .activity-key {
+    font-weight: 600;
+    color: var(--gray-700);
+  }
+
+  .activity-card.type-cancelled,
+  .activity-card.type-failed {
+    opacity: 0.85;
+  }
+
+  .activity-card.type-cancelled::after,
+  .activity-card.type-failed::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 8px,
+      rgba(0,0,0,0.012) 8px,
+      rgba(0,0,0,0.012) 16px
+    );
+    pointer-events: none;
+  }
+
+  /* TIMESTAMP */
+  .activity-time {
+    font-size: 11px;
+    color: var(--gray-400);
+    font-weight: 500;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--gray-100);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .activity-time svg {
+    width: 11px;
+    height: 11px;
+    stroke: var(--gray-400);
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* DIVIDER */
+  .activity-divider {
+    height: 1px;
+    background: var(--gray-100);
+    margin: 0 0 8px;
+  }
+
+  /* EMPTY STATE */
+  .empty-state {
+    text-align: center;
+    padding: 48px 20px;
+    color: var(--gray-400);
+  }
+
+  .empty-state svg {
+    width: 48px;
+    height: 48px;
+    stroke: var(--gray-300);
+    fill: none;
+    stroke-width: 1.5;
+    margin-bottom: 12px;
+  }
+
+  .empty-state p {
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 430px) {
+    .phone-frame { max-width: 100%; }
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 0; height: 0; }
+</style>
+</head>
+<body>
+<div class="phone-frame">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-top">
+      <a href="index.html" class="back-btn">
+        <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+      </a>
+      <span class="header-title">Activity</span>
+    </div>
+    <div class="segmented-nav">
+      <a href="#">Overview</a>
+      <a href="#" class="active">Activity</a>
+      <a href="#">Documents</a>
+      <a href="#">Math</a>
+    </div>
+  </div>
+
+  <!-- FILTER BAR -->
+  <div class="filter-bar">
+    <button class="filter-chip active">All</button>
+    <button class="filter-chip">Deposits</button>
+    <button class="filter-chip">Investments</button>
+    <button class="filter-chip">Transfers</button>
+    <button class="filter-chip">Automation</button>
+  </div>
+
+  <!-- SUMMARY BAR -->
+  <div class="summary-bar">
+    <div class="summary-label">This Month</div>
+    <div class="summary-items">
+      <div class="summary-item">
+        <div class="summary-value green">+$2,920</div>
+        <div class="summary-desc">deposited</div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-value blue">$520</div>
+        <div class="summary-desc">invested</div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-value emerald">$81.60</div>
+        <div class="summary-desc">tax saved</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- TODAY — DECEMBER 30, 2024 -->
+    <div class="date-group">
+      <div class="date-header">
+        <span class="date-text">Today — December 30, 2024</span>
+        <div class="date-line"></div>
+      </div>
+
+      <!-- Activity 1: Deposit -->
+      <div class="activity-card type-deposit">
+        <div class="activity-row">
+          <div class="activity-left">
+            <div class="activity-top">
+              <span class="type-badge deposit">
+                <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+                Deposit
+              </span>
+            </div>
+            <div class="activity-key">From Capital One Checking</div>
+            <div class="activity-supporting">ACH Transfer · Ref ADV-2024-12-30-001</div>
+          </div>
+          <div class="activity-right">
+            <div class="activity-amount positive">+$2,400.00</div>
+            <div class="activity-status status-available">
+              <span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>
+              Available
+            </div>
+          </div>
+        </div>
+        <div class="activity-time">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          9:14 AM EST
+        </div>
+      </div>
+
+      <!-- Activity 2: Buy — VTI -->
+      <div class="activity-card type-buy">
+        <div class="activity-row">
+          <div class="activity-left">
+            <div class="activity-top">
+              <span class="type-badge buy">
+                <svg viewBox="0 0 24 24"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
+                Buy
+              </span>
+            </div>
+            <div class="activity-key">VTI</div>
+            <div class="activity-supporting">Vanguard Total Stock Market · 1.52 shares @ $198.42</div>
+          </div>
+          <div class="activity-right">
+            <div class="activity-amount negative">$301.60</div>
+            <div class="activity-status status-settled">
+              <span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>
+              Settled
+            </div>
+          </div>
+        </div>
+        <div class="activity-time">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          9:14 AM EST
+        </div>
+      </div>
+
+      <!-- Activity 3: Buy — VXUS -->
+      <div class="activity-card type-buy">
+        <div class="activity-row">
+          <div class="activity-left">
+            <div class="activity-top">
+              <span class="type-badge buy">
+                <svg viewBox="0 0 24 24"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
+                Buy
+              </span>
+            </div>
+            <div class="activity-key">VXUS</div>
+            <div class="activity-supporting">Vanguard Total International · 1.65 shares @ $56.80</div>
+          </div>
+          <div class="activity-right">
+            <div class="activity-amount negative">$93.72</div>
+            <div class="activity-status status-settled">
+              <span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>
+              Settled
+            </div>
+          </div>
+        </div>
+        <div class="activity-time">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          9:14 AM EST
+        </div>
+      </div>
+
+      <!-- Activity 4: Buy — BND -->
+      <div class="activity-card type-buy">
+        <div class="activity-row">
+          <div class="activity-left">
+            <div class="activity-top">
+              <span class="type-badge buy">
+                <svg viewBox="0 0 24 24"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
+                Buy
+              </span>
+            </div>
+            <div class="activity-key">BND</div>
+            <div class="activity-supporting">Vanguard Total Bond Market · 1.00 shares @ $72.40</div>
+          </div>
+          <div class="activity-right">
+            <div class="activity-amount negative">$72.40</div>
+            <div class="activity-status status-settled">
+              <span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>
+              Settled
+            </div>
+          </div>
+        </div>
+        <div class="activity-time">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          9:14 AM EST
+        </div>
+      </div>
+
+      <!-- Activity 5: Buy — VNQ -->
+      <div class="activity-card type-buy">
+        <div class="activity-row">
+          <div class="activity-left">
+            <div class="activity-top">
+              <span class="type-badge buy">
+                <svg viewBox="0 0 24 24"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
+                Buy
+              </span>
+            </div>
+            <div class="activity-key">VNQ</div>
+            <div class="activity-supporting">Vanguard Real Estate · 0.63 shares @ $82.60</div>
+          </div>
+          <div class="activity-right">
+            <div class="activity-amount negative">$52.04</div>
+            <div class="activity-status status-settled">
+              <span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>
+              Settled
+            </div>
+          </div>
+        </div>
+        <div class="activity-time">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          9:14 AM EST
+        </div>
+      </div>
+
+    </div>
+
+    <!-- YESTERDAY — DECEMBER 29, 2024 -->
+    <div class="date-group">
+      <div class="date-header">
+        <span class="date-text">Yesterday — December 29, 2024</span>
+        <div class="date-line"></div>
+      </div>
+
+      <!-- Activity 6: Tax Loss Harvesting -->
+      <div class="activity-card type-tax-harvest">
+        <div class="activity-row">
+          <div class="activity-left">
+            <div class="activity-top">
+              <span class="type-badge tax-harvest">
+                <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                Tax Optimization
+              </span>
+            </div>
+            <div class="activity-key">VXUS → IXUS</div>
+            <div class="activity-supporting">Loss captured: $340</div>
+          </div>
+          <div class="activity-right">
+            <div class="activity-amount saved">$81.60 saved</div>
+            <div class="activity-status status-completed">
+              <span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>
+              Completed
+            </div>
+          </div>
+        </div>
+        <div class="activity-time">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          4:30 PM EST
+        </div>
+      </div>
+
+      <!-- Activity 7: Transfer -->
+      <div class="activity-card type-transfer">
+        <div class="activity-row">
+          <div class="activity-left">
+            <div class="activity-top">
+              <span class="type-badge transfer">
+                <svg viewBox="0 0 24 24"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                Transfer
+              </span>
+            </div>
+            <div class="activity-key">To Advizmo Reserve</div>
+            <div class="activity-supporting">Emergency fund</div>
+          </div>
+          <div class="activity-right">
+            <div class="activity-amount negative">$200.00</div>
+            <div class="activity-status status-completed">
+              <span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>
+              Completed
+            </div>
+          </div>
+        </div>
+        <div class="activity-time">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          2:15 PM EST
+        </div>
+      </div>
+
+      <!-- Activity 8: Dividend -->
+      <div class="activity-card type-dividend">
+        <div class="activity-row">
+          <div class="activity-left">
+            <div class="activity-top">
+              <span class="type-badge dividend">
+                <svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                Dividend
+              </span>
+            </div>
+            <div class="activity-key">VTI quarterly dividend</div>
+            <div class="activity-supporting">Reinvested</div>
+          </div>
+          <div class="activity-right">
+            <div class="activity-amount positive">+$42.18</div>
+            <div class="activity-status status-reinvested">
+              <span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>
+              Reinvested
+            </div>
+          </div>
+        </div>
+        <div class="activity-time">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          10:00 AM EST
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // Filter chip interaction
+  document.querySelectorAll('.filter-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+    });
+  });
+
+  // Segmented nav interaction
+  document.querySelectorAll('.segmented-nav a').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      document.querySelectorAll('.segmented-nav a').forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>

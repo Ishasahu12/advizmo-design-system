@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advizmo — Activity</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green: #166f47;
+    --green-light: #d1fae5;
+    --green-bg: #ecfdf5;
+    --amber: #c2790a;
+    --amber-light: #fef3c7;
+    --amber-bg: #fffbeb;
+    --red: #b91c1c;
+    --red-light: #fee2e2;
+    --red-bg: #fef2f2;
+    --blue: #1d4ed8;
+    --blue-light: #dbeafe;
+    --blue-bg: #eff6ff;
+    --purple: #7c3aed;
+    --purple-light: #ede9fe;
+    --purple-bg: #f5f3ff;
+    --slate-50: #f8f9fa;
+    --slate-100: #f1f3f5;
+    --slate-200: #e9ecef;
+    --slate-300: #dee2e6;
+    --slate-400: #adb5bd;
+    --slate-500: #6c757d;
+    --slate-600: #495057;
+    --slate-700: #343a40;
+    --slate-800: #212529;
+    --white: #ffffff;
+    --card-radius: 14px;
+  }
+
+  body {
+    font-family: 'IBM Plex Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--slate-50);
+    color: var(--slate-800);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 430px;
+    margin: 0 auto;
+    background: var(--slate-50);
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  .header {
+    background: var(--white);
+    padding: 0 16px;
+    border-bottom: 1px solid var(--slate-200);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .header-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0 10px;
+  }
+
+  .back-btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 8px;
+    color: var(--slate-700);
+    font-size: 18px;
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+  .back-btn:hover { background: var(--slate-100); }
+
+  .header-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--slate-800);
+    flex: 1;
+  }
+
+  .segmented-nav {
+    display: flex;
+    gap: 2px;
+    padding: 4px 16px 10px;
+    background: var(--white);
+  }
+
+  .nav-pill {
+    flex: 1;
+    padding: 7px 0;
+    text-align: center;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--slate-400);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    background: none;
+    text-decoration: none;
+  }
+  .nav-pill.active {
+    background: var(--slate-800);
+    color: var(--white);
+  }
+  .nav-pill:not(.active):hover {
+    background: var(--slate-100);
+    color: var(--slate-600);
+  }
+
+  /* ── Filters ── */
+  .filters-bar {
+    padding: 10px 16px;
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .filters-bar::-webkit-scrollbar { display: none; }
+
+  .filter-chip {
+    flex-shrink: 0;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    border: 1.5px solid var(--slate-200);
+    background: var(--white);
+    color: var(--slate-500);
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .filter-chip.active {
+    border-color: var(--slate-800);
+    background: var(--slate-800);
+    color: var(--white);
+  }
+  .filter-chip:not(.active):hover {
+    border-color: var(--slate-300);
+    background: var(--slate-50);
+  }
+
+  /* ── Feed ── */
+  .feed { padding: 0 16px 32px; }
+
+  .date-group { margin-top: 20px; }
+
+  .date-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--slate-500);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    padding: 0 2px 8px;
+  }
+
+  /* ── Activity Cards ── */
+  .activity-card {
+    background: var(--white);
+    border-radius: var(--card-radius);
+    padding: 14px 16px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: box-shadow 0.2s, transform 0.15s;
+    border: 1px solid transparent;
+    text-decoration: none;
+    color: inherit;
+  }
+  .activity-card:hover {
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    transform: translateY(-1px);
+  }
+  .activity-card:active {
+    transform: scale(0.985);
+  }
+
+  .icon-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .card-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .card-top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 2px;
+  }
+
+  .activity-type {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--slate-800);
+    line-height: 1.2;
+  }
+
+  .activity-amount {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--slate-800);
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .card-key-info {
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--slate-600);
+    margin-bottom: 1px;
+  }
+
+  .card-supporting {
+    font-size: 12px;
+    color: var(--slate-400);
+  }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 6px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 4px;
+  }
+
+  .status-badge .check {
+    font-size: 10px;
+    line-height: 1;
+  }
+
+  .status-available { background: var(--green-bg); color: var(--green); }
+  .status-settled   { background: var(--blue-bg);   color: var(--blue);   }
+  .status-completed { background: var(--green-bg);  color: var(--green);  }
+  .status-reinvested{ background: var(--purple-bg); color: var(--purple); }
+  .status-pending   { background: var(--amber-bg);  color: var(--amber);  }
+  .status-failed    { background: var(--red-bg);    color: var(--red);    }
+  .status-processing{ background: var(--amber-bg);  color: var(--amber);  }
+
+  .status-badge.pending  { background: var(--amber-bg); color: var(--amber); }
+  .status-badge.failed   { background: var(--red-bg);   color: var(--red);   }
+
+  .card-chevron {
+    flex-shrink: 0;
+    color: var(--slate-300);
+    font-size: 14px;
+  }
+
+  /* ── Icon Colors ── */
+  .icon-green  { background: var(--green-bg); color: var(--green); }
+  .icon-blue   { background: var(--blue-bg);  color: var(--blue);  }
+  .icon-amber  { background: var(--amber-bg); color: var(--amber); }
+  .icon-red    { background: var(--red-bg);   color: var(--red);   }
+  .icon-purple { background: var(--purple-bg); color: var(--purple); }
+  .icon-slate  { background: var(--slate-100); color: var(--slate-500); }
+
+  .amount-green  { color: var(--green); }
+  .amount-red    { color: var(--red); }
+  .amount-amber  { color: var(--amber); }
+  .amount-purple { color: var(--purple); }
+  .amount-slate  { color: var(--slate-700); }
+
+  /* ── Card bottom meta row ── */
+  .card-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+  }
+
+  /* ── Section Divider ── */
+  .section-divider {
+    height: 1px;
+    background: var(--slate-200);
+    margin: 24px 16px 0;
+  }
+
+  /* ── Empty state placeholder ── */
+  .empty-placeholder {
+    text-align: center;
+    padding: 48px 32px;
+    color: var(--slate-400);
+    font-size: 14px;
+  }
+
+  /* ── Bottom Safe ── */
+  @supports (padding-bottom: env(safe-area-inset-bottom)) {
+    .page { padding-bottom: env(safe-area-inset-bottom); }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- ── HEADER ── -->
+  <header class="header">
+    <div class="header-top">
+      <a href="../index.html" class="back-btn" aria-label="Back">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <div class="header-title">Activity</div>
+    </div>
+    <nav class="segmented-nav" role="tablist">
+      <a href="invest-overview.html" class="nav-pill" role="tab">Overview</a>
+      <a href="#" class="nav-pill active" role="tab" aria-selected="true">Activity</a>
+      <a href="invest-documents.html" class="nav-pill" role="tab">Documents</a>
+      <a href="invest-math.html" class="nav-pill" role="tab">Math</a>
+    </nav>
+  </header>
+
+  <!-- ── FILTERS ── -->
+  <div class="filters-bar" role="toolbar" aria-label="Filter activities">
+    <button class="filter-chip active">All</button>
+    <button class="filter-chip">Deposits</button>
+    <button class="filter-chip">Investments</button>
+    <button class="filter-chip">Transfers</button>
+    <button class="filter-chip">Automation</button>
+  </div>
+
+  <!-- ── FEED ── -->
+  <div class="feed">
+
+    <!-- ═══════ TODAY ═══════ -->
+    <div class="date-group">
+      <div class="date-label">Today — December 30, 2024</div>
+
+      <!-- Card 1: Deposit -->
+      <a href="invest-detail-deposit.html" class="activity-card">
+        <div class="icon-circle icon-green">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 3v14M10 17l-5-5M10 17l5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="card-content">
+          <div class="card-top-row">
+            <span class="activity-type">Deposit</span>
+            <span class="activity-amount amount-green">+$2,400.00</span>
+          </div>
+          <div class="card-key-info">From Capital One Checking</div>
+          <div class="card-meta-row">
+            <span class="card-supporting">ACH Transfer</span>
+            <span class="status-badge status-available"><span class="check">✓</span> Available</span>
+          </div>
+        </div>
+        <span class="card-chevron">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+
+      <!-- Card 2: Buy VTI -->
+      <a href="invest-detail-buy.html" class="activity-card">
+        <div class="icon-circle icon-blue">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M13 6l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="card-content">
+          <div class="card-top-row">
+            <span class="activity-type">Buy</span>
+            <span class="activity-amount amount-slate">$301.60</span>
+          </div>
+          <div class="card-key-info">VTI</div>
+          <div class="card-meta-row">
+            <span class="card-supporting">1.52 shares @ $198.42</span>
+            <span class="status-badge status-settled"><span class="check">✓</span> Settled</span>
+          </div>
+        </div>
+        <span class="card-chevron">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+
+      <!-- Card 3: Buy VXUS -->
+      <a href="invest-detail-buy.html" class="activity-card">
+        <div class="icon-circle icon-blue">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M13 6l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="card-content">
+          <div class="card-top-row">
+            <span class="activity-type">Buy</span>
+            <span class="activity-amount amount-slate">$93.72</span>
+          </div>
+          <div class="card-key-info">VXUS</div>
+          <div class="card-meta-row">
+            <span class="card-supporting">1.65 shares @ $56.80</span>
+            <span class="status-badge status-settled"><span class="check">✓</span> Settled</span>
+          </div>
+        </div>
+        <span class="card-chevron">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+
+      <!-- Card 4: Buy BND -->
+      <a href="invest-detail-buy.html" class="activity-card">
+        <div class="icon-circle icon-blue">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M13 6l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="card-content">
+          <div class="card-top-row">
+            <span class="activity-type">Buy</span>
+            <span class="activity-amount amount-slate">$72.40</span>
+          </div>
+          <div class="card-key-info">BND</div>
+          <div class="card-meta-row">
+            <span class="card-supporting">1.00 shares @ $72.40</span>
+            <span class="status-badge status-settled"><span class="check">✓</span> Settled</span>
+          </div>
+        </div>
+        <span class="card-chevron">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+
+      <!-- Card 5: Buy VNQ -->
+      <a href="invest-detail-buy.html" class="activity-card">
+        <div class="icon-circle icon-blue">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M13 6l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="card-content">
+          <div class="card-top-row">
+            <span class="activity-type">Buy</span>
+            <span class="activity-amount amount-slate">$52.04</span>
+          </div>
+          <div class="card-key-info">VNQ</div>
+          <div class="card-meta-row">
+            <span class="card-supporting">0.63 shares @ $82.60</span>
+            <span class="status-badge status-settled"><span class="check">✓</span> Settled</span>
+          </div>
+        </div>
+        <span class="card-chevron">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+
+    </div>
+
+    <!-- ═══════ YESTERDAY ═══════ -->
+    <div class="date-group">
+      <div class="date-label">Yesterday — December 29, 2024</div>
+
+      <!-- Card 6: Tax Loss Harvesting -->
+      <a href="invest-detail-taxloss.html" class="activity-card">
+        <div class="icon-circle icon-green">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 10l3.5 3.5L15 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="card-content">
+          <div class="card-top-row">
+            <span class="activity-type">Tax Loss Harvesting</span>
+            <span class="activity-amount amount-green">$81.60 saved</span>
+          </div>
+          <div class="card-key-info">VXUS → IXUS</div>
+          <div class="card-meta-row">
+            <span class="card-supporting">Loss captured: $340</span>
+            <span class="status-badge status-completed"><span class="check">✓</span> Completed</span>
+          </div>
+        </div>
+        <span class="card-chevron">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+
+      <!-- Card 7: Transfer -->
+      <a href="invest-detail-transfer.html" class="activity-card">
+        <div class="icon-circle icon-amber">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M13 6l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="card-content">
+          <div class="card-top-row">
+            <span class="activity-type">Transfer</span>
+            <span class="activity-amount amount-amber">$200.00</span>
+          </div>
+          <div class="card-key-info">To Advizmo Reserve</div>
+          <div class="card-meta-row">
+            <span class="card-supporting">Emergency fund</span>
+            <span class="status-badge status-completed"><span class="check">✓</span> Completed</span>
+          </div>
+        </div>
+        <span class="card-chevron">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+
+      <!-- Card 8: Dividend -->
+      <a href="invest-detail-dividend.html" class="activity-card">
+        <div class="icon-circle icon-green">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><text x="3" y="15" font-size="14" font-weight="700" fill="currentColor" font-family="IBM Plex Sans, sans-serif">$</text></svg>
+        </div>
+        <div class="card-content">
+          <div class="card-top-row">
+            <span class="activity-type">Dividend</span>
+            <span class="activity-amount amount-green">+$42.18</span>
+          </div>
+          <div class="card-key-info">VTI quarterly dividend</div>
+          <div class="card-meta-row">
+            <span class="card-supporting">Reinvested</span>
+            <span class="status-badge status-reinvested"><span class="check">✓</span> Reinvested</span>
+          </div>
+        </div>
+        <span class="card-chevron">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+
+    </div>
+
+    <!-- ═══════ REMAINING 14 TYPES — Showcase cards ═══════ -->
+    <div class="date-group">
+      <div class="date-label">December 28, 2024</div>
+
+      <!-- Card 9: Withdrawal -->
+      <a href="invest-detail-withdrawal.html" class="activity-card">
+        <div class="icon-circle icon-amber">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 3v14M10 3l-5 5M10 3l5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="card-content">
+          <div class="card-top-row">
+            <span class="activity-type">Withdrawal</span>
+            <span class="activity-amount amount-red">−$500.00</span>
+          </div>
+          <div class="card-key-info">To Capital One Checking</div>
+          <div class="card-meta-row">
+            <span class="card-supporting">ACH Transfer</span>
+            <span class="status-badge status-completed"><span class="check">✓</span> Completed</span>
+          </div>
+        </div>
+        <span class="card-chevron">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+
+      <!-- Card 10: Sell -->
+      <a href="invest-detail-sell.html" class="activity-card">
+        <div class="icon-circle icon-red">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M15 10H5M7 6l-4 4 4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="card-content">
+          <div class="card-top-row">
+            <span class="activity-type">Sell</span>
+            <span class="activity-amount amount-green">+$1,250.00</span>
+          </div>
+          <div class="card-key-info">AAPL</div>
+          <div class="card-meta-row">
+            <span class="card-supporting">5.00 shares @ $250.00</span>
+            <span class="status-badge status-settled"><span class="check">✓</span> Settled</span>
+          </div>
+        </div>
+        <span class="card-chevron">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+
+      <!-- Card 11: Scheduled Investment -->
+      <a href="invest-detail-scheduled.html" class="activity-card">
+        <div class="icon-circle icon-purple">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="2"/><path d="M10 6v4.5l3 1.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="card-content">
+          <div class="card-top-row">
+            <span class="activity-type">Scheduled Investment</span>
+            <span class="activity-amount amount-purple">$150.00</span>
+          </div>
+          <div class="card-key-info">Weekly auto-invest</div>
+          <div class="card-meta-row">
+            <span class="card-supporting">VTI · VXUS · BND</span>
+            <span class="status-badge status-pending"><span class="check">⏱</span> Pending</span>
+          </div>
+        </div>
+        <span class="card-chevron">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+
+      <!-- Card 12: Market Closed -->
+      <a href="invest-detail-market.html" class="activity-card">
+        <div class="icon-circle icon-slate">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="2"/><path d="M10 6v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="10" cy="13.5" r="1" fill="currentColor"/></svg>
+        </div>
+        <div class="card-content">
+          <div class="card-top-row">
+            <span class="activity-type">Market Closed</span>
+            <span class="activity-amount amount-slate">—</span>
+          </div>
+          <div class="card-key-info">US market holiday — Christmas</div>
+          <div class="card-meta-row">
+            <span class="card-supporting">All trades queued for next session</span>
+          </div>
+        </div>
+        <span class="card-chevron">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+
+      <!-- Card 13: Trade Settlement -->
+      <a href="invest-detail-settlement.html" class="activity-card">
+        <div class="icon-circle icon-blue">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="3" y="4" width="14" height="12" rx="2" stroke="currentColor" stroke-width="2"/><path d="M3 8h14" stroke="currentColor" stroke-width="2"/><path d="M7 12h3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <div class="card-content">
+          <div class="card-top-row">
+            <span class="activity-type">Trade Settlement</span>
+            <span class="activity-amount amount-slate">$524.76</span>
+          </div>
+          <div class="card-key-info">VTI · VXUS · BND</div>
+          <div class="card-meta-row">
+            <span class="card-supporting">3 trades settled — T+1</span>
+            <span class="status-badge status-completed"><span class="check">✓</span> Completed</span>
+          </div>
+        </div>
+        <span class="card-chevron">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+
+      <!-- Card 14: Interest -->
+      <a href="invest-detail-interest.html" class="activity-card">
+        <div class="icon-circle icon-green">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><text x="3" y="15" font-size="14" font-weight="700" fill="currentColor" font-family="IBM Plex Sans, sans-serif">%</text></svg>
+        </div>
+        <div class="card-content">
+          <div class="card-top-row">
+            <span class="activity-type">Interest</span>
+            <span class="activity-amount amount-green">+$3.42</span>
+          </div>
+          <div class="card-key-info">Cash balance interest</div>
+          <div class="card-meta-row">
+            <span class="card-supporting">5.00% APY on $2,480</span>
+            <span class="status-badge status-available"><span class="check">✓</span> Available</span>
+          </div>
+        </div>
+        <span class="card-chevron">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+
+      <!-- Card 15: Portfolio Rebalance -->
+      <a href="invest-detail-rebalance.html" class="activity-card">
+        <div class="icon-circle icon-purple">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M6 10l4-6 4 6M6 14l4 6 4-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="card-content">
+          <div class="card-top-row">
+            <span class="activity-type">Portfolio Rebalance</span>
+            <span class="activity-amount amount-slate">$0.00</span>
+          </div>
+          <div class="card-key-info">VTI · VXUS · BND · VNQ</div>
+          <div class="card-meta-row">
+            <span class="card-supporting">Target: 40 / 25 / 25 / 10</span>
+            <span class="status-badge status-completed"><span class="check">✓</span> Completed</span>
+          </div>
+        </div>
+        <span class="card-chevron">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+
+    </div>
+
+    <!-- ═══════ ERRORS ═══════ -->
+    <div class="date-group">
+      <div class="date-label">December 27, 2024</div>
+
+      <!-- Card 16: Cancelled Request -->
+      <a href="invest-detail-cancelled.html" class="activity-card">
+        <div class="icon-circle icon-red">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M6 6l8 8M14 6l-8 8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </div>
+        <div class="card-content">
+          <div class="card-top-row">
+            <span class="activity-type">Cancelled Request</span>
+            <span class="activity-amount amount-red">−$1,000.00</span>
+          </div>
+          <div class="card-key-info">Deposit cancelled</div>
+          <div class="card-meta-row">
+            <span class="card-supporting">Requested by you</span>
+            <span class="status-badge status-failed"><span class="check">✕</span> Cancelled</span>
+          </div>
+        </div>
+        <span class="card-chevron">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+
+      <!-- Card 17: Failed Request -->
+      <a href="invest-detail-failed.html" class="activity-card">
+        <div class="icon-circle icon-red">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="2"/><path d="M10 6v5M10 13.5v.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <div class="card-content">
+          <div class="card-top-row">
+            <span class="activity-type">Failed Request</span>
+            <span class="activity-amount amount-red">$250.00</span>
+          </div>
+          <div class="card-key-info">Deposit failed</div>
+          <div class="card-meta-row">
+            <span class="card-supporting">Insufficient funds at source</span>
+            <span class="status-badge status-failed"><span class="check">✕</span> Failed</span>
+          </div>
+        </div>
+        <span class="card-chevron">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+
+    </div>
+
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.filter-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelector('.filter-chip.active')?.classList.remove('active');
+    chip.classList.add('active');
+  });
+});
+</script>
+
+</body>
+</html>

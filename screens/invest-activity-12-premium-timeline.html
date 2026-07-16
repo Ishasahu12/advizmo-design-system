@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Activity — Premium Timeline</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --green:#166f47;--green-bg:rgba(22,111,71,.08);--green-dot:#166f47;
+    --blue:#2563eb;--blue-bg:rgba(37,99,235,.08);--blue-dot:#2563eb;
+    --amber:#c2790a;--amber-bg:rgba(194,121,10,.08);--amber-dot:#c2790a;
+    --red:#b91c1c;--red-bg:rgba(185,28,28,.08);--red-dot:#b91c1c;
+    --gray:#6b7280;--gray-bg:rgba(107,114,128,.08);--gray-dot:#9ca3af;
+    --bg:#f8f9fa;--card:#fff;--text:#111827;--text-sec:#6b7280;--text-ter:#9ca3af;
+    --border:#e5e7eb;--radius:14px;--timeline-left:98px;
+  }
+  html{font-size:16px;-webkit-font-smoothing:antialiased}
+  body{
+    font-family:'IBM Plex Sans','Inter',system-ui,sans-serif;
+    background:var(--bg);color:var(--text);
+    max-width:430px;margin:0 auto;min-height:100vh;
+    padding:0 0 80px;position:relative;overflow-x:hidden;
+  }
+
+  /* ── HEADER ── */
+  .header{background:var(--card);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+  .header-top{display:flex;align-items:center;padding:12px 20px 0}
+  .back-btn{
+    width:32px;height:32px;border:none;background:none;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;border-radius:8px;
+    color:var(--text);transition:background .15s;
+  }
+  .back-btn:hover{background:rgba(0,0,0,.05)}
+  .back-btn svg{width:20px;height:20px}
+  .header-title{flex:1;text-align:center;font-size:17px;font-weight:600;letter-spacing:-.01em}
+  .header-spacer{width:32px}
+
+  .seg-nav{display:flex;gap:0;padding:14px 20px 0}
+  .seg-nav button{
+    flex:1;padding:8px 0;border:none;background:none;
+    font-family:inherit;font-size:13px;font-weight:500;color:var(--text-sec);
+    cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;
+    letter-spacing:-.01em;
+  }
+  .seg-nav button.active{color:var(--text);border-bottom-color:var(--text)}
+  .seg-nav button:hover:not(.active){color:var(--text)}
+
+  .filter-row{display:flex;gap:6px;padding:12px 20px 12px;overflow-x:auto;scrollbar-width:none}
+  .filter-row::-webkit-scrollbar{display:none}
+  .filter-chip{
+    flex-shrink:0;padding:6px 14px;border:1px solid var(--border);border-radius:100px;
+    background:var(--card);font-family:inherit;font-size:12.5px;font-weight:500;
+    color:var(--text-sec);cursor:pointer;transition:all .15s;white-space:nowrap;
+  }
+  .filter-chip:hover{border-color:#d1d5db;color:var(--text)}
+  .filter-chip.active{background:var(--text);color:#fff;border-color:var(--text)}
+
+  /* ── TIMELINE ── */
+  .timeline{padding:8px 20px 0 0}
+  .day-label{
+    font-size:12px;font-weight:600;color:var(--text-sec);letter-spacing:.04em;
+    text-transform:uppercase;padding:18px 0 10px 20px;position:relative;
+  }
+  .day-label::after{
+    content:'';position:absolute;left:20px;right:20px;bottom:0;
+    height:1px;background:var(--border);
+  }
+
+  .tl-item{
+    display:flex;gap:0;position:relative;
+    padding:14px 0 14px 0;margin-left:20px;
+  }
+  /* vertical connecting line */
+  .tl-item::before{
+    content:'';position:absolute;
+    left:9px;top:0;bottom:0;width:2px;background:var(--border);
+  }
+  .tl-item:first-of-type::before{top:50%}
+  .tl-item:last-of-type::before{bottom:50%}
+
+  .tl-dot-wrap{
+    width:20px;flex-shrink:0;display:flex;align-items:flex-start;
+    padding-top:18px;position:relative;z-index:2;
+  }
+  .tl-dot{
+    width:12px;height:12px;border-radius:50%;
+    border:2.5px solid var(--green-dot);background:var(--card);
+  }
+  .tl-dot.filled{background:var(--green-dot)}
+  .tl-item.blue .tl-dot{border-color:var(--blue-dot)}
+  .tl-item.blue .tl-dot.filled{background:var(--blue-dot)}
+  .tl-item.amber .tl-dot{border-color:var(--amber-dot)}
+  .tl-item.amber .tl-dot.filled{background:var(--amber-dot)}
+  .tl-item.red .tl-dot{border-color:var(--red-dot)}
+  .tl-item.red .tl-dot.filled{background:var(--red-dot)}
+  .tl-item.gray .tl-dot{border-color:var(--gray-dot)}
+  .tl-item.gray .tl-dot.filled{background:var(--gray-dot)}
+
+  .tl-time{
+    width:56px;flex-shrink:0;padding-top:18px;
+    font-size:11.5px;font-weight:500;color:var(--text-ter);
+    text-align:right;padding-right:12px;line-height:1.2;
+  }
+
+  .tl-card{
+    flex:1;background:var(--card);border-radius:var(--radius);
+    padding:14px 16px;box-shadow:0 1px 3px rgba(0,0,0,.04),0 0 0 1px rgba(0,0,0,.03);
+    cursor:pointer;transition:box-shadow .15s,transform .15s;position:relative;
+  }
+  .tl-card:hover{box-shadow:0 2px 8px rgba(0,0,0,.07);transform:translateY(-1px)}
+  .tl-card:active{transform:translateY(0)}
+
+  .card-header{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+  .card-icon{
+    width:28px;height:28px;border-radius:8px;display:flex;align-items:center;
+    justify-content:center;flex-shrink:0;
+  }
+  .card-icon svg{width:16px;height:16px}
+  .card-icon.green{background:var(--green-bg);color:var(--green)}
+  .card-icon.blue{background:var(--blue-bg);color:var(--blue)}
+  .card-icon.amber{background:var(--amber-bg);color:var(--amber)}
+  .card-icon.red{background:var(--red-bg);color:var(--red)}
+  .card-icon.gray{background:var(--gray-bg);color:var(--gray)}
+
+  .card-type{font-size:13px;font-weight:600;color:var(--text);letter-spacing:-.01em}
+  .card-amount{
+    font-size:17px;font-weight:700;letter-spacing:-.02em;margin-left:auto;
+  }
+  .card-amount.green{color:var(--green)}
+  .card-amount.blue{color:var(--blue)}
+  .card-amount.amber{color:var(--amber)}
+  .card-amount.red{color:var(--red)}
+  .card-amount.dark{color:var(--text)}
+
+  .card-detail{font-size:12.5px;color:var(--text-sec);line-height:1.5;margin-top:2px}
+  .card-badge{
+    display:inline-flex;align-items:center;gap:4px;
+    font-size:11px;font-weight:600;margin-top:6px;padding:3px 8px;
+    border-radius:6px;letter-spacing:.01em;
+  }
+  .card-badge.ok{background:var(--green-bg);color:var(--green)}
+  .card-badge.pending{background:var(--amber-bg);color:var(--amber)}
+  .card-badge.failed{background:var(--red-bg);color:var(--red)}
+  .card-badge.scheduled{background:var(--gray-bg);color:var(--gray)}
+  .card-badge svg{width:12px;height:12px}
+
+  .card-sub{font-size:12px;color:var(--text-ter);margin-top:4px}
+
+  /* ── CHEVRON ── */
+  .tl-card::after{
+    content:'';position:absolute;right:14px;top:50%;transform:translateY(-50%);
+    width:6px;height:6px;border-right:1.5px solid #d1d5db;border-bottom:1.5px solid #d1d5db;
+    transform:translateY(-50%) rotate(-45deg);
+  }
+
+  /* ── BOTTOM NAV ── */
+  .bottom-nav{
+    position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+    width:100%;max-width:430px;background:var(--card);
+    border-top:1px solid var(--border);
+    display:flex;padding:8px 0 env(safe-area-inset-bottom,8px);
+    z-index:100;
+  }
+  .bn-item{
+    flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;
+    padding:4px 0;cursor:pointer;
+  }
+  .bn-item svg{width:22px;height:22px;color:var(--text-ter)}
+  .bn-item span{font-size:10px;font-weight:500;color:var(--text-ter);letter-spacing:.01em}
+  .bn-item.active svg{color:var(--text)}
+  .bn-item.active span{color:var(--text);font-weight:600}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-top">
+    <a href="index.html" class="back-btn" aria-label="Back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </a>
+    <div class="header-title">Activity</div>
+    <div class="header-spacer"></div>
+  </div>
+  <nav class="seg-nav">
+    <button>Overview</button>
+    <button class="active">Activity</button>
+    <button>Documents</button>
+    <button>Math</button>
+  </nav>
+  <div class="filter-row">
+    <button class="filter-chip active">All</button>
+    <button class="filter-chip">Deposits</button>
+    <button class="filter-chip">Investments</button>
+    <button class="filter-chip">Transfers</button>
+    <button class="filter-chip">Automation</button>
+  </div>
+</header>
+
+<!-- TIMELINE -->
+<div class="timeline">
+
+  <!-- TODAY -->
+  <div class="day-label">Today — December 30, 2024</div>
+
+  <!-- Deposit -->
+  <div class="tl-item">
+    <div class="tl-dot-wrap"><div class="tl-dot filled"></div></div>
+    <div class="tl-time">10:15<br>AM</div>
+    <div class="tl-card">
+      <div class="card-header">
+        <div class="card-icon green">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        </div>
+        <div class="card-type">Deposit</div>
+        <div class="card-amount green">+$2,400.00</div>
+      </div>
+      <div class="card-detail">From Capital One Checking</div>
+      <div class="card-badge ok">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+        Available
+      </div>
+    </div>
+  </div>
+
+  <!-- Buy: VTI -->
+  <div class="tl-item blue">
+    <div class="tl-dot-wrap"><div class="tl-dot filled"></div></div>
+    <div class="tl-time">9:32<br>AM</div>
+    <div class="tl-card">
+      <div class="card-header">
+        <div class="card-icon blue">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        </div>
+        <div class="card-type">Buy: VTI</div>
+        <div class="card-amount blue">$301.60</div>
+      </div>
+      <div class="card-detail">1.52 shares @ $198.42</div>
+      <div class="card-badge ok">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+        Settled
+      </div>
+    </div>
+  </div>
+
+  <!-- Buy: VXUS -->
+  <div class="tl-item blue">
+    <div class="tl-dot-wrap"><div class="tl-dot filled"></div></div>
+    <div class="tl-time">9:32<br>AM</div>
+    <div class="tl-card">
+      <div class="card-header">
+        <div class="card-icon blue">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+        </div>
+        <div class="card-type">Buy: VXUS</div>
+        <div class="card-amount blue">$93.72</div>
+      </div>
+      <div class="card-detail">1.65 shares @ $56.80</div>
+      <div class="card-badge ok">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+        Settled
+      </div>
+    </div>
+  </div>
+
+  <!-- Buy: BND -->
+  <div class="tl-item blue">
+    <div class="tl-dot-wrap"><div class="tl-dot filled"></div></div>
+    <div class="tl-time">9:32<br>AM</div>
+    <div class="tl-card">
+      <div class="card-header">
+        <div class="card-icon blue">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+        </div>
+        <div class="card-type">Buy: BND</div>
+        <div class="card-amount blue">$72.40</div>
+      </div>
+      <div class="card-detail">1.00 shares @ $72.40</div>
+      <div class="card-badge ok">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+        Settled
+      </div>
+    </div>
+  </div>
+
+  <!-- Buy: VNQ -->
+  <div class="tl-item blue">
+    <div class="tl-dot-wrap"><div class="tl-dot filled"></div></div>
+    <div class="tl-time">9:32<br>AM</div>
+    <div class="tl-card">
+      <div class="card-header">
+        <div class="card-icon blue">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <div class="card-type">Buy: VNQ</div>
+        <div class="card-amount blue">$52.04</div>
+      </div>
+      <div class="card-detail">0.63 shares @ $82.60</div>
+      <div class="card-badge ok">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+        Settled
+      </div>
+    </div>
+  </div>
+
+  <!-- YESTERDAY -->
+  <div class="day-label">Yesterday — December 29, 2024</div>
+
+  <!-- Tax Loss Harvesting -->
+  <div class="tl-item">
+    <div class="tl-dot-wrap"><div class="tl-dot filled"></div></div>
+    <div class="tl-time">2:30<br>PM</div>
+    <div class="tl-card">
+      <div class="card-header">
+        <div class="card-icon green">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6M23 11h-6"/></svg>
+        </div>
+        <div class="card-type">Tax Loss Harvesting</div>
+        <div class="card-amount green">$81.60 saved</div>
+      </div>
+      <div class="card-detail">VXUS → IXUS</div>
+      <div class="card-badge ok">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+        Completed
+      </div>
+    </div>
+  </div>
+
+  <!-- Transfer -->
+  <div class="tl-item amber">
+    <div class="tl-dot-wrap"><div class="tl-dot filled"></div></div>
+    <div class="tl-time">11:00<br>AM</div>
+    <div class="tl-card">
+      <div class="card-header">
+        <div class="card-icon amber">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
+        </div>
+        <div class="card-type">Transfer</div>
+        <div class="card-amount amber">$200.00</div>
+      </div>
+      <div class="card-detail">To Advizmo Reserve</div>
+      <div class="card-badge ok">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+        Completed
+      </div>
+    </div>
+  </div>
+
+  <!-- Dividend -->
+  <div class="tl-item">
+    <div class="tl-dot-wrap"><div class="tl-dot filled"></div></div>
+    <div class="tl-time">9:00<br>AM</div>
+    <div class="tl-card">
+      <div class="card-header">
+        <div class="card-icon green">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        </div>
+        <div class="card-type">Dividend</div>
+        <div class="card-amount green">+$42.18</div>
+      </div>
+      <div class="card-detail">VTI quarterly</div>
+      <div class="card-badge ok">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+        Reinvested
+      </div>
+    </div>
+  </div>
+
+  <!-- DECEMBER 28 -->
+  <div class="day-label">December 28, 2024</div>
+
+  <!-- Scheduled Investment -->
+  <div class="tl-item gray">
+    <div class="tl-dot-wrap"><div class="tl-dot"></div></div>
+    <div class="tl-time">4:00<br>PM</div>
+    <div class="tl-card">
+      <div class="card-header">
+        <div class="card-icon gray">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="card-type">Scheduled Investment</div>
+        <div class="card-amount dark">$520.00</div>
+      </div>
+      <div class="card-detail">Queued for market open</div>
+      <div class="card-badge scheduled">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg>
+        Scheduled
+      </div>
+    </div>
+  </div>
+
+  <!-- Interest -->
+  <div class="tl-item">
+    <div class="tl-dot-wrap"><div class="tl-dot filled"></div></div>
+    <div class="tl-time">12:00<br>PM</div>
+    <div class="tl-card">
+      <div class="card-header">
+        <div class="card-icon green">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        </div>
+        <div class="card-type">Interest</div>
+        <div class="card-amount green">+$12.40</div>
+      </div>
+      <div class="card-detail">Cash sweep 4.1% APY</div>
+      <div class="card-badge ok">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+        Added
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <a class="bn-item" href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    <span>Home</span>
+  </a>
+  <a class="bn-item" href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+    <span>Portfolio</span>
+  </a>
+  <a class="bn-item" href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+    <span>Invest</span>
+  </a>
+  <a class="bn-item active" href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+    <span>Activity</span>
+  </a>
+  <a class="bn-item" href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    <span>Profile</span>
+  </a>
+</nav>
+
+</body>
+</html>
