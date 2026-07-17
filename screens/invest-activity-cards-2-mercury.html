@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Activity Cards — Mercury Banking · Advizmo</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:#fafafa;color:#1a1a1a;-webkit-font-smoothing:antialiased;max-width:430px;margin:0 auto;min-height:100vh}
+.header{position:sticky;top:0;z-index:100;background:rgba(250,250,250,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:12px 20px 0}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.back-btn{display:flex;align-items:center;gap:4px;color:#0a84ff;font-size:17px;font-family:'IBM Plex Sans',sans-serif;font-weight:500;text-decoration:none;background:none;border:none;cursor:pointer;padding:4px 0}
+.back-btn svg{width:20px;height:20px}
+.header-title{font-family:'IBM Plex Sans',sans-serif;font-size:34px;font-weight:700;letter-spacing:-0.5px;color:#1a1a1a}
+.segmented-nav{display:flex;background:#e8e8ed;border-radius:9px;padding:2px;margin-bottom:12px}
+.segmented-nav button{flex:1;padding:8px 0;border:none;background:transparent;font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#636366;border-radius:7px;cursor:pointer;transition:all 0.2s}
+.segmented-nav button.active{background:#fff;color:#1a1a1a;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
+.filter-bar{display:flex;gap:8px;overflow-x:auto;padding-bottom:12px;-ms-overflow-style:none;scrollbar-width:none}
+.filter-bar::-webkit-scrollbar{display:none}
+.filter-chip{white-space:nowrap;padding:7px 14px;border-radius:20px;font-size:13px;font-weight:500;background:#fff;color:#636366;border:1px solid #d1d1d6;cursor:pointer;transition:all 0.2s}
+.filter-chip.active{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+.summary{margin:0 20px 16px;background:#1a1a1a;border-radius:16px;padding:20px;color:#fff}
+.summary h3{font-family:'IBM Plex Sans',sans-serif;font-size:11px;font-weight:600;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px}
+.summary-row{display:flex;justify-content:space-between}
+.summary-item .value{font-family:'IBM Plex Sans',sans-serif;font-size:20px;font-weight:700;letter-spacing:-0.3px}
+.summary-item .value.green{color:#34d399}
+.summary-item .value.white{color:#fff}
+.summary-item .label{font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px}
+.date-group{padding:0 20px;margin-bottom:24px}
+.date-label{font-family:'IBM Plex Sans',sans-serif;font-size:12px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px}
+/* Mercury Card */
+.m-card{background:#fff;border:1px solid #e8e8ed;border-radius:12px;margin-bottom:6px;overflow:hidden;cursor:pointer;transition:all 0.15s ease}
+.m-card:active{transform:scale(0.99);border-color:#d1d1d6}
+.m-card-inner{padding:14px 16px;display:flex;align-items:center;gap:12px}
+.m-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.m-icon.deposit{background:#ecfdf5;color:#166f47}
+.m-icon.buy{background:#eff6ff;color:#2563eb}
+.m-icon.sell{background:#f5f3ff;color:#7c3aed}
+.m-icon.dividend{background:#ecfdf5;color:#166f47}
+.m-icon.interest{background:#ecfdf5;color:#166f47}
+.m-icon.scheduled{background:#fffbeb;color:#d97706}
+.m-icon.rebalance{background:#eff6ff;color:#2563eb}
+.m-icon.transfer{background:#fffbeb;color:#d97706}
+.m-icon.withdrawal{background:#fef2f2;color:#dc2626}
+.m-icon.tax-harvest{background:#ecfdf5;color:#166f47}
+.m-body{flex:1;min-width:0}
+.m-title{font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600;color:#1a1a1a;line-height:1.2}
+.m-meta{font-size:12px;color:#8e8e93;margin-top:2px}
+.m-right{text-align:right;flex-shrink:0}
+.m-amount{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:700;letter-spacing:-0.1px}
+.m-amount.positive{color:#166f47}
+.m-amount.negative{color:#1a1a1a}
+.m-status{font-size:11px;margin-top:2px;font-weight:500}
+.m-status.completed{color:#166f47}
+.m-status.scheduled{color:#d97706}
+.m-chevron{color:#d1d1d6;font-size:15px;flex-shrink:0;margin-left:2px}
+.m-detail-row{display:flex;gap:16px;padding:0 16px 10px 64px}
+.m-detail-row span{font-size:12px;color:#8e8e93}
+.nav-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(250,250,250,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:0.5px solid #d1d1d6;display:flex;padding:8px 0 28px;z-index:100}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;color:#8e8e93;font-size:10px;font-weight:500;text-decoration:none;cursor:pointer}
+.nav-item.active{color:#0a84ff}
+.nav-item svg{width:24px;height:24px}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <a href="index.html" class="back-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>Hub</a>
+  </div>
+  <div class="header-title">Activity</div>
+  <div class="segmented-nav">
+    <button onclick="location.href='invest-overview-1-clarity.html'">Overview</button>
+    <button class="active">Activity</button>
+    <button onclick="location.href='invest-documents-1-files.html'">Documents</button>
+    <button onclick="location.href='invest-math-1-command.html'">Math</button>
+  </div>
+  <div class="filter-bar">
+    <div class="filter-chip active">All</div>
+    <div class="filter-chip">Deposits</div>
+    <div class="filter-chip">Investments</div>
+    <div class="filter-chip">Transfers</div>
+    <div class="filter-chip">Automation</div>
+  </div>
+</div>
+
+<div class="summary" style="margin-top:150px">
+  <h3>This Month</h3>
+  <div class="summary-row">
+    <div class="summary-item"><div class="value green">+$6,368</div><div class="label">Deposited</div></div>
+    <div class="summary-item"><div class="value white">$520</div><div class="label">Invested</div></div>
+    <div class="summary-item"><div class="value green">$164</div><div class="label">Returns</div></div>
+    <div class="summary-item"><div class="value green">$82</div><div class="label">Tax Saved</div></div>
+  </div>
+</div>
+
+<div class="date-group">
+  <div class="date-label">Today · Monday, January 6</div>
+
+  <div class="m-card">
+    <div class="m-card-inner">
+      <div class="m-icon deposit">↓</div>
+      <div class="m-body">
+        <div class="m-title">Deposited from Capital One</div>
+        <div class="m-meta">ACH Transfer</div>
+      </div>
+      <div class="m-right">
+        <div class="m-amount positive">+$2,400.00</div>
+        <div class="m-status completed">Available</div>
+      </div>
+      <div class="m-chevron">›</div>
+    </div>
+  </div>
+
+  <div class="m-card">
+    <div class="m-card-inner">
+      <div class="m-icon buy">↗</div>
+      <div class="m-body">
+        <div class="m-title">Bought VTI</div>
+        <div class="m-meta">Vanguard Total Stock Market</div>
+      </div>
+      <div class="m-right">
+        <div class="m-amount negative">$301.60</div>
+        <div class="m-status completed">Settled</div>
+      </div>
+      <div class="m-chevron">›</div>
+    </div>
+    <div class="m-detail-row"><span>1.52 shares</span><span>@ $198.42</span></div>
+  </div>
+
+  <div class="m-card">
+    <div class="m-card-inner">
+      <div class="m-icon buy">↗</div>
+      <div class="m-body">
+        <div class="m-title">Bought VXUS</div>
+        <div class="m-meta">Vanguard Total International</div>
+      </div>
+      <div class="m-right">
+        <div class="m-amount negative">$93.72</div>
+        <div class="m-status completed">Settled</div>
+      </div>
+      <div class="m-chevron">›</div>
+    </div>
+    <div class="m-detail-row"><span>1.65 shares</span><span>@ $56.80</span></div>
+  </div>
+
+  <div class="m-card">
+    <div class="m-card-inner">
+      <div class="m-icon buy">↗</div>
+      <div class="m-body">
+        <div class="m-title">Bought BND</div>
+        <div class="m-meta">Vanguard Total Bond Market</div>
+      </div>
+      <div class="m-right">
+        <div class="m-amount negative">$72.40</div>
+        <div class="m-status completed">Settled</div>
+      </div>
+      <div class="m-chevron">›</div>
+    </div>
+    <div class="m-detail-row"><span>1.00 share</span><span>@ $72.40</span></div>
+  </div>
+
+  <div class="m-card">
+    <div class="m-card-inner">
+      <div class="m-icon buy">↗</div>
+      <div class="m-body">
+        <div class="m-title">Bought VNQ</div>
+        <div class="m-meta">Vanguard Real Estate</div>
+      </div>
+      <div class="m-right">
+        <div class="m-amount negative">$52.04</div>
+        <div class="m-status completed">Settled</div>
+      </div>
+      <div class="m-chevron">›</div>
+    </div>
+    <div class="m-detail-row"><span>0.63 shares</span><span>@ $82.60</span></div>
+  </div>
+</div>
+
+<div class="date-group">
+  <div class="date-label">Yesterday · Sunday, January 5</div>
+
+  <div class="m-card">
+    <div class="m-card-inner">
+      <div class="m-icon tax-harvest">✓</div>
+      <div class="m-body">
+        <div class="m-title">Tax Optimization Completed</div>
+        <div class="m-meta">VXUS → IXUS · Loss captured: $340</div>
+      </div>
+      <div class="m-right">
+        <div class="m-amount positive">$81.60 saved</div>
+        <div class="m-status completed">Completed</div>
+      </div>
+      <div class="m-chevron">›</div>
+    </div>
+  </div>
+
+  <div class="m-card">
+    <div class="m-card-inner">
+      <div class="m-icon transfer">↔</div>
+      <div class="m-body">
+        <div class="m-title">Moved to Reserve</div>
+        <div class="m-meta">Advizmo Cash → Reserve</div>
+      </div>
+      <div class="m-right">
+        <div class="m-amount negative">$200.00</div>
+        <div class="m-status completed">Completed</div>
+      </div>
+      <div class="m-chevron">›</div>
+    </div>
+  </div>
+
+  <div class="m-card">
+    <div class="m-card-inner">
+      <div class="m-icon dividend">$</div>
+      <div class="m-body">
+        <div class="m-title">Dividend Received from VTI</div>
+        <div class="m-meta">Quarterly dividend · Reinvested</div>
+      </div>
+      <div class="m-right">
+        <div class="m-amount positive">+$42.18</div>
+        <div class="m-status completed">Reinvested</div>
+      </div>
+      <div class="m-chevron">›</div>
+    </div>
+  </div>
+</div>
+
+<div class="date-group">
+  <div class="date-label">Saturday, January 4</div>
+
+  <div class="m-card">
+    <div class="m-card-inner">
+      <div class="m-icon scheduled">◷</div>
+      <div class="m-body">
+        <div class="m-title">Investment Scheduled</div>
+        <div class="m-meta">Queued for market open · Jan 6</div>
+      </div>
+      <div class="m-right">
+        <div class="m-amount negative">$520.00</div>
+        <div class="m-status scheduled">Scheduled</div>
+      </div>
+      <div class="m-chevron">›</div>
+    </div>
+  </div>
+
+  <div class="m-card">
+    <div class="m-card-inner">
+      <div class="m-icon interest">%</div>
+      <div class="m-body">
+        <div class="m-title">Interest Earned</div>
+        <div class="m-meta">Money Market · 4.1% APY</div>
+      </div>
+      <div class="m-right">
+        <div class="m-amount positive">+$12.40</div>
+        <div class="m-status completed">Added</div>
+      </div>
+      <div class="m-chevron">›</div>
+    </div>
+  </div>
+</div>
+
+<div class="date-group">
+  <div class="date-label">Friday, January 3</div>
+
+  <div class="m-card">
+    <div class="m-card-inner">
+      <div class="m-icon rebalance">⟳</div>
+      <div class="m-body">
+        <div class="m-title">Portfolio Rebalanced</div>
+        <div class="m-meta">Allocation drifted 2.3% · Auto-corrected</div>
+      </div>
+      <div class="m-right">
+        <div class="m-amount positive">+$18.40</div>
+        <div class="m-status completed">Completed</div>
+      </div>
+      <div class="m-chevron">›</div>
+    </div>
+  </div>
+</div>
+
+<div class="date-group" style="margin-bottom:80px">
+  <div class="date-label">Thursday, January 2</div>
+
+  <div class="m-card">
+    <div class="m-card-inner">
+      <div class="m-icon withdrawal">↑</div>
+      <div class="m-body">
+        <div class="m-title">Withdrew to Capital One</div>
+        <div class="m-meta">ACH Transfer</div>
+      </div>
+      <div class="m-right">
+        <div class="m-amount negative">-$1,000.00</div>
+        <div class="m-status completed">Completed</div>
+      </div>
+      <div class="m-chevron">›</div>
+    </div>
+  </div>
+</div>
+
+<nav class="nav-bar">
+  <a class="nav-item" href="overview.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</a>
+  <a class="nav-item" href="invest-overview-1-clarity.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Portfolio</a>
+  <a class="nav-item active" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Activity</a>
+  <a class="nav-item" href="invest-documents-1-files.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>Docs</a>
+  <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</a>
+</nav>
+
+</body>
+</html>
