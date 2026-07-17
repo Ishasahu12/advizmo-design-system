@@ -3,100 +3,126 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Market Closed · Activity Detail · Advizmo</title>
+<title>Investment Scheduled · Market Closed · Advizmo</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:#f2f2f7;color:#1c1c1e;-webkit-font-smoothing:antialiased;max-width:430px;margin:0 auto;min-height:100vh}
-.header{position:sticky;top:0;z-index:100;background:rgba(242,242,247,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:12px 20px 14px}
-.header-top{display:flex;align-items:center;justify-content:space-between}
-.back-btn{display:flex;align-items:center;gap:4px;color:#007aff;font-size:17px;font-family:'IBM Plex Sans',sans-serif;font-weight:500;text-decoration:none;background:none;border:none;cursor:pointer;padding:4px 0}
-.back-btn svg{width:20px;height:20px}
-.header-title{font-family:'IBM Plex Sans',sans-serif;font-size:17px;font-weight:600}
-.hero{padding:24px 20px;text-align:center}
-.hero .icon{width:64px;height:64px;border-radius:16px;background:rgba(255,159,10,0.12);color:#ff9f0a;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 12px}
-.hero .amount{font-family:'IBM Plex Sans',sans-serif;font-size:42px;font-weight:700;color:#1c1c1e;letter-spacing:-1px}
-.hero .label{font-size:15px;color:#ff9f0a;margin-top:4px;font-weight:500}
-.card{background:#fff;border-radius:14px;padding:0 16px;margin:0 20px 12px;overflow:hidden}
-.card-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:0.5px solid #e5e5ea}
-.card-row:last-child{border-bottom:none}
-.card-row .label{font-size:15px;color:#8e8e93}
-.card-row .value{font-size:15px;font-weight:500;color:#1c1c1e;text-align:right;max-width:55%}
-.status-badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:8px;font-size:13px;font-weight:600}
-.status-badge.scheduled{background:rgba(142,142,147,0.12);color:#8e8e93}
-.section-title{font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:0.5px;padding:20px 20px 8px}
-.allocation{margin:0 20px 20px;background:#fff;border-radius:14px;padding:16px}
-.allocation h4{font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px}
-.alloc-row{display:flex;align-items:center;gap:12px;padding:8px 0}
-.alloc-bar{flex:1;height:8px;background:#e5e5ea;border-radius:4px;overflow:hidden}
-.alloc-fill{height:100%;border-radius:4px}
+.hdr{position:sticky;top:0;z-index:100;background:rgba(242,242,247,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:12px 20px 14px}
+.hdr-top{display:flex;align-items:center;justify-content:space-between}
+.back{display:flex;align-items:center;gap:4px;color:#007aff;font-size:17px;font-family:'IBM Plex Sans',sans-serif;font-weight:500;text-decoration:none;background:none;border:none;cursor:pointer;padding:4px 0}
+.back svg{width:20px;height:20px}
+.hdr-title{font-family:'IBM Plex Sans',sans-serif;font-size:17px;font-weight:600}
+.hero{padding:16px 20px;text-align:center;border-bottom:.5px solid #e5e5ea;background:#fff}
+.hero-icon{width:48px;height:48px;border-radius:12px;background:#fff5e6;color:#c2790a;display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 8px}
+.hero-title{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600;color:#1c1c1e;margin-bottom:2px}
+.hero-amount{font-family:'IBM Plex Sans',sans-serif;font-size:36px;font-weight:700;color:#1c1c1e;letter-spacing:-.8px}
+.hero-status{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:8px;font-size:12px;font-weight:600;background:#fff5e6;color:#c2790a;margin-top:6px}
+.hero-time{font-size:12px;color:#8e8e93;margin-top:4px}
+.sec{background:#fff;margin-top:8px;padding:0 20px}
+.sec-title{font-family:'IBM Plex Sans',sans-serif;font-size:12px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:.5px;padding:14px 0 6px}
+.row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:.5px solid #f2f2f7}
+.row:last-child{border-bottom:none}
+.row .k{font-size:14px;color:#8e8e93}
+.row .v{font-size:14px;font-weight:500;color:#1c1c1e;text-align:right}
+.row .v.amber{color:#c2790a}
+.alloc{margin-top:8px;background:#fff;padding:0 20px 16px}
+.alloc-bar{height:8px;background:#f2f2f7;border-radius:4px;overflow:hidden;margin:8px 0;display:flex}
+.alloc-fill{height:100%}
 .alloc-fill.vti{background:#0a84ff}
 .alloc-fill.vxus{background:#bf5af2}
-.alloc-fill.bnd{background:#30d158}
-.alloc-fill.vnq{background:#ff9f0a}
-.alloc-label{font-size:14px;font-weight:600;color:#1c1c1e;width:48px}
-.alloc-pct{font-size:13px;color:#8e8e93;width:40px;text-align:right}
-.help-btn{display:block;margin:20px;padding:16px;background:#fff;border-radius:14px;text-align:center;color:#007aff;font-size:17px;font-weight:500;text-decoration:none;border:none;width:calc(100% - 40px);cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
+.alloc-fill.bnd{background:#166f47}
+.alloc-fill.vnq{background:#c2790a}
+.alloc-legend{display:flex;gap:12px;flex-wrap:wrap}
+.alloc-legend span{font-size:12px;color:#8e8e93;display:flex;align-items:center;gap:4px}
+.alloc-legend span::before{content:'';width:8px;height:8px;border-radius:2px}
+.alloc-legend .l-vti::before{background:#0a84ff}
+.alloc-legend .l-vxus::before{background:#bf5af2}
+.alloc-legend .l-bnd::before{background:#166f47}
+.alloc-legend .l-vnq::before{background:#c2790a}
+.tl{background:#fff;margin-top:8px;padding:0 20px 20px}
+.tl-title{font-family:'IBM Plex Sans',sans-serif;font-size:12px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:.5px;padding:14px 0 10px}
+.tl-item{display:flex;gap:12px;padding-bottom:12px;position:relative}
+.tl-item:last-child{padding-bottom:0}
+.tl-item::before{content:'';position:absolute;left:5px;top:16px;bottom:0;width:1.5px;background:#e5e5ea}
+.tl-item:last-child::before{display:none}
+.tl-dot{width:11px;height:11px;border-radius:50%;border:2px solid #c2790a;background:#fff;flex-shrink:0;z-index:1;margin-top:2px}
+.tl-text .time{font-size:12px;color:#8e8e93}
+.tl-text .msg{font-size:14px;color:#1c1c1e;margin-top:1px}
+.nb{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(242,242,247,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:.5px solid #d1d1d6;display:flex;padding:8px 0 28px;z-index:100}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;color:#8e8e93;font-size:10px;font-weight:500;text-decoration:none;cursor:pointer}
+.ni.on{color:#007aff}
+.ni svg{width:24px;height:24px}
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="header-top">
-    <a href="javascript:history.back()" class="back-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>Back</a>
-    <div class="header-title">Investment Scheduled</div>
+<div class="hdr">
+  <div class="hdr-top">
+    <a href="javascript:history.back()" class="back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>Back</a>
+    <div class="hdr-title">Scheduled Investment</div>
     <div style="width:50px"></div>
   </div>
 </div>
 
 <div class="hero">
-  <div class="icon">◷</div>
-  <div class="amount">$520.00</div>
-  <div class="label">Waiting for market to open</div>
+  <div class="hero-icon">◷</div>
+  <div class="hero-title">Investment Scheduled for Market Open</div>
+  <div class="hero-amount">$520.00</div>
+  <div class="hero-status">○ Waiting for Market Open</div>
+  <div class="hero-time">Expected: Jan 6, 9:30 AM ET</div>
 </div>
 
-<div class="card">
-  <div class="card-row"><span class="label">Status</span><span class="value"><span class="status-badge scheduled">○ Scheduled</span></span></div>
-  <div class="card-row"><span class="label">Amount</span><span class="value">$520.00</span></div>
-  <div class="card-row"><span class="label">Source</span><span class="value">Advizmo Cash</span></div>
-  <div class="card-row"><span class="label">Portfolio</span><span class="value">Growth Portfolio</span></div>
-  <div class="card-row"><span class="label">Expected Execution</span><span class="value" style="color:#ff9f0a">Mon, Jan 6 · 9:30 AM ET</span></div>
-  <div class="card-row"><span class="label">Market Status</span><span class="value" style="color:#ff9f0a">Closed · Opens in 14h 28m</span></div>
+<div class="sec">
+  <div class="sec-title">Investment Details</div>
+  <div class="row"><span class="k">Amount</span><span class="v">$520.00</span></div>
+  <div class="row"><span class="k">Source</span><span class="v">Advizmo Cash</span></div>
+  <div class="row"><span class="k">Portfolio</span><span class="v">Growth Portfolio</span></div>
+  <div class="row"><span class="k">Expected Execution</span><span class="v amber">Jan 6, 9:30 AM</span></div>
+  <div class="row"><span class="k">Market Status</span><span class="v amber">Closed</span></div>
 </div>
 
-<div class="section-title">Estimated Allocation</div>
-<div class="allocation">
-  <div class="alloc-row">
-    <span class="alloc-label">VTI</span>
-    <div class="alloc-bar"><div class="alloc-fill vti" style="width:58%"></div></div>
-    <span class="alloc-pct">58%</span>
+<div class="alloc">
+  <div class="sec-title" style="padding-left:0">Estimated Allocation</div>
+  <div class="alloc-bar">
+    <div class="alloc-fill vti" style="width:58%"></div>
+    <div class="alloc-fill vxus" style="width:18%"></div>
+    <div class="alloc-fill bnd" style="width:14%"></div>
+    <div class="alloc-fill vnq" style="width:10%"></div>
   </div>
-  <div class="alloc-row">
-    <span class="alloc-label">VXUS</span>
-    <div class="alloc-bar"><div class="alloc-fill vxus" style="width:18%"></div></div>
-    <span class="alloc-pct">18%</span>
-  </div>
-  <div class="alloc-row">
-    <span class="alloc-label">BND</span>
-    <div class="alloc-bar"><div class="alloc-fill bnd" style="width:14%"></div></div>
-    <span class="alloc-pct">14%</span>
-  </div>
-  <div class="alloc-row">
-    <span class="alloc-label">VNQ</span>
-    <div class="alloc-bar"><div class="alloc-fill vnq" style="width:10%"></div></div>
-    <span class="alloc-pct">10%</span>
+  <div class="alloc-legend">
+    <span class="l-vti">VTI 58%</span>
+    <span class="l-vxus">VXUS 18%</span>
+    <span class="l-bnd">BND 14%</span>
+    <span class="l-vnq">VNQ 10%</span>
   </div>
 </div>
 
-<div class="card">
-  <div class="card-row"><span class="label">What happened?</span><span class="value" style="font-size:14px;font-weight:400;color:#636366">Your $520.00 is queued and ready to invest. Since the market is closed, the order will execute when trading opens on Monday.</span></div>
-  <div class="card-row"><span class="label">What's next?</span><span class="value" style="font-size:14px;font-weight:400;color:#636366">At 9:30 AM ET on Monday, Advizmo will place the order. Exact prices may vary slightly from estimates.</span></div>
-  <div class="card-row"><span class="label">Can I cancel?</span><span class="value" style="font-size:14px;font-weight:400;color:#636366">Yes. You can cancel anytime before market open by tapping the button below.</span></div>
+<div class="sec">
+  <div class="sec-title">What Happens Next</div>
+  <div class="row"><span class="k">At market open</span><span class="v">Advizmo places the order</span></div>
+  <div class="row"><span class="k">Settlement</span><span class="v">Same day, 4:00 PM</span></div>
+  <div class="row"><span class="k">Cancel</span><span class="v" style="color:#b91c1c">Available until market open</span></div>
 </div>
 
-<button class="help-btn" style="color:#ff453a;border:1px solid #ff453a">Cancel Order</button>
-<button class="help-btn">Need Help?</button>
+<div class="tl">
+  <div class="tl-title">Activity Timeline</div>
+  <div class="tl-item">
+    <div class="tl-dot"></div>
+    <div class="tl-text"><div class="time">Jan 6 · 9:30 AM (expected)</div><div class="msg">Order will execute at market open</div></div>
+  </div>
+  <div class="tl-item">
+    <div class="tl-dot"></div>
+    <div class="tl-text"><div class="time">Jan 4 · 4:00 PM</div><div class="msg">Investment queued</div></div>
+  </div>
+</div>
 
-<div style="height:40px"></div>
+<nav class="nb">
+  <a class="ni" href="overview.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</a>
+  <a class="ni" href="invest-overview-1-clarity.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Portfolio</a>
+  <a class="ni on" href="invest-activity-final-1-apple.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Activity</a>
+  <a class="ni" href="invest-documents-1-files.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>Docs</a>
+  <a class="ni" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</a>
+</nav>
 
 </body>
 </html>

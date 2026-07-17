@@ -3,98 +3,101 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Deposit · Activity Detail · Advizmo</title>
+<title>Funds Added · Deposit Details · Advizmo</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:#f2f2f7;color:#1c1c1e;-webkit-font-smoothing:antialiased;max-width:430px;margin:0 auto;min-height:100vh}
-.header{position:sticky;top:0;z-index:100;background:rgba(242,242,247,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:12px 20px 14px}
-.header-top{display:flex;align-items:center;justify-content:space-between}
-.back-btn{display:flex;align-items:center;gap:4px;color:#007aff;font-size:17px;font-family:'IBM Plex Sans',sans-serif;font-weight:500;text-decoration:none;background:none;border:none;cursor:pointer;padding:4px 0}
-.back-btn svg{width:20px;height:20px}
-.header-title{font-family:'IBM Plex Sans',sans-serif;font-size:17px;font-weight:600}
-.hero{padding:24px 20px;text-align:center}
-.hero .icon{width:64px;height:64px;border-radius:16px;background:rgba(48,209,88,0.12);color:#30d158;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 12px}
-.hero .amount{font-family:'IBM Plex Sans',sans-serif;font-size:42px;font-weight:700;color:#30d158;letter-spacing:-1px}
-.hero .label{font-size:15px;color:#8e8e93;margin-top:4px}
-.card{background:#fff;border-radius:14px;padding:0 16px;margin:0 20px 12px;overflow:hidden}
-.card-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:0.5px solid #e5e5ea}
-.card-row:last-child{border-bottom:none}
-.card-row .label{font-size:15px;color:#8e8e93}
-.card-row .value{font-size:15px;font-weight:500;color:#1c1c1e;text-align:right;max-width:55%}
-.card-row .value.green{color:#30d158}
-.status-badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:8px;font-size:13px;font-weight:600}
-.status-badge.completed{background:rgba(48,209,88,0.12);color:#30d158}
-.status-badge.pending{background:rgba(255,159,10,0.12);color:#ff9f0a}
-.section-title{font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:0.5px;padding:20px 20px 8px}
-.timeline{margin:0 20px 20px;background:#fff;border-radius:14px;padding:16px}
-.timeline-item{display:flex;gap:12px;padding-bottom:16px;position:relative}
-.timeline-item:last-child{padding-bottom:0}
-.timeline-item::before{content:'';position:absolute;left:7px;top:18px;bottom:0;width:1px;background:#e5e5ea}
-.timeline-item:last-child::before{display:none}
-.timeline-dot{width:15px;height:15px;border-radius:50%;border:2px solid #30d158;background:#fff;flex-shrink:0;z-index:1}
-.timeline-dot.active{background:#30d158}
-.timeline-content .time{font-size:12px;color:#8e8e93}
-.timeline-content .text{font-size:14px;color:#1c1c1e;margin-top:2px}
-.help-btn{display:block;margin:20px;padding:16px;background:#fff;border-radius:14px;text-align:center;color:#007aff;font-size:17px;font-weight:500;text-decoration:none;border:none;width:calc(100% - 40px);cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
+.hdr{position:sticky;top:0;z-index:100;background:rgba(242,242,247,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:12px 20px 14px}
+.hdr-top{display:flex;align-items:center;justify-content:space-between}
+.back{display:flex;align-items:center;gap:4px;color:#007aff;font-size:17px;font-family:'IBM Plex Sans',sans-serif;font-weight:500;text-decoration:none;background:none;border:none;cursor:pointer;padding:4px 0}
+.back svg{width:20px;height:20px}
+.hdr-title{font-family:'IBM Plex Sans',sans-serif;font-size:17px;font-weight:600}
+/* Hero - compact 120-140px */
+.hero{padding:16px 20px;text-align:center;border-bottom:.5px solid #e5e5ea;background:#fff}
+.hero-icon{width:48px;height:48px;border-radius:12px;background:#e8f8ec;color:#166f47;display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 8px}
+.hero-title{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600;color:#1c1c1e;margin-bottom:2px}
+.hero-amount{font-family:'IBM Plex Sans',sans-serif;font-size:36px;font-weight:700;color:#166f47;letter-spacing:-.8px}
+.hero-status{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:8px;font-size:12px;font-weight:600;background:#e8f8ec;color:#166f47;margin-top:6px}
+.hero-time{font-size:12px;color:#8e8e93;margin-top:4px}
+/* Sections */
+.sec{background:#fff;margin-top:8px;padding:0 20px}
+.sec-title{font-family:'IBM Plex Sans',sans-serif;font-size:12px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:.5px;padding:14px 0 6px}
+.row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:.5px solid #f2f2f7}
+.row:last-child{border-bottom:none}
+.row .k{font-size:14px;color:#8e8e93}
+.row .v{font-size:14px;font-weight:500;color:#1c1c1e;text-align:right}
+.row .v.green{color:#166f47}
+.row .v.mono{font-family:monospace;font-size:13px}
+/* Timeline */
+.tl{background:#fff;margin-top:8px;padding:0 20px 20px}
+.tl-title{font-family:'IBM Plex Sans',sans-serif;font-size:12px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:.5px;padding:14px 0 10px}
+.tl-item{display:flex;gap:12px;padding-bottom:12px;position:relative}
+.tl-item:last-child{padding-bottom:0}
+.tl-item::before{content:'';position:absolute;left:5px;top:16px;bottom:0;width:1.5px;background:#e5e5ea}
+.tl-item:last-child::before{display:none}
+.tl-dot{width:11px;height:11px;border-radius:50%;border:2px solid #166f47;background:#fff;flex-shrink:0;z-index:1;margin-top:2px}
+.tl-dot.active{background:#166f47}
+.tl-dot.pending{border-color:#c2790a}
+.tl-text .time{font-size:12px;color:#8e8e93}
+.tl-text .msg{font-size:14px;color:#1c1c1e;margin-top:1px}
+/* Nav */
+.nb{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(242,242,247,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:.5px solid #d1d1d6;display:flex;padding:8px 0 28px;z-index:100}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;color:#8e8e93;font-size:10px;font-weight:500;text-decoration:none;cursor:pointer}
+.ni.on{color:#007aff}
+.ni svg{width:24px;height:24px}
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="header-top">
-    <a href="javascript:history.back()" class="back-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>Back</a>
-    <div class="header-title">Deposit</div>
+<div class="hdr">
+  <div class="hdr-top">
+    <a href="javascript:history.back()" class="back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>Back</a>
+    <div class="hdr-title">Deposit Details</div>
     <div style="width:50px"></div>
   </div>
 </div>
 
 <div class="hero">
-  <div class="icon">↓</div>
-  <div class="amount">+$2,400.00</div>
-  <div class="label">Money deposited into your account</div>
+  <div class="hero-icon">↓</div>
+  <div class="hero-title">Funds Added from Capital One</div>
+  <div class="hero-amount">+$2,400.00</div>
+  <div class="hero-status">✓ Available</div>
+  <div class="hero-time">Jan 6, 2025 · 10:15 AM</div>
 </div>
 
-<div class="card">
-  <div class="card-row"><span class="label">Status</span><span class="value"><span class="status-badge completed">✓ Available</span></span></div>
-  <div class="card-row"><span class="label">From</span><span class="value">Capital One Checking<br><span style="font-size:13px;color:#8e8e93">****4821</span></span></div>
-  <div class="card-row"><span class="label">To</span><span class="value">Advizmo Cash</span></div>
-  <div class="card-row"><span class="label">Method</span><span class="value">ACH Transfer</span></div>
-  <div class="card-row"><span class="label">Reference</span><span class="value" style="font-family:monospace;font-size:13px">ADV-2025-01-06-001</span></div>
+<div class="sec">
+  <div class="sec-title">Transfer Details</div>
+  <div class="row"><span class="k">Amount</span><span class="v green">+$2,400.00</span></div>
+  <div class="row"><span class="k">Status</span><span class="v" style="color:#166f47">Available</span></div>
+  <div class="row"><span class="k">Source</span><span class="v">Capital One Checking<br><span style="font-size:12px;color:#8e8e93">****4821</span></span></div>
+  <div class="row"><span class="k">Destination</span><span class="v">Advizmo Cash</span></div>
+  <div class="row"><span class="k">Method</span><span class="v">ACH Transfer</span></div>
+  <div class="row"><span class="k">Reference</span><span class="v mono">ADV-2025-01-06-001</span></div>
 </div>
 
-<div class="section-title">Timeline</div>
-<div class="timeline">
-  <div class="timeline-item">
-    <div class="timeline-dot active"></div>
-    <div class="timeline-content">
-      <div class="time">Mon, Jan 6 · 10:15 AM</div>
-      <div class="text">Deposit completed · Funds available</div>
-    </div>
+<div class="tl">
+  <div class="tl-title">Activity Timeline</div>
+  <div class="tl-item">
+    <div class="tl-dot active"></div>
+    <div class="tl-text"><div class="time">Jan 6 · 10:15 AM</div><div class="msg">Funds available in Advizmo Cash</div></div>
   </div>
-  <div class="timeline-item">
-    <div class="timeline-dot active"></div>
-    <div class="timeline-content">
-      <div class="time">Mon, Jan 6 · 9:30 AM</div>
-      <div class="text">ACH transfer initiated</div>
-    </div>
+  <div class="tl-item">
+    <div class="tl-dot active"></div>
+    <div class="tl-text"><div class="time">Jan 6 · 9:30 AM</div><div class="msg">ACH transfer initiated</div></div>
   </div>
-  <div class="timeline-item">
-    <div class="timeline-dot"></div>
-    <div class="timeline-content">
-      <div class="time">Sun, Jan 5 · 8:00 PM</div>
-      <div class="text">Deposit scheduled</div>
-    </div>
+  <div class="tl-item">
+    <div class="tl-dot"></div>
+    <div class="tl-text"><div class="time">Jan 5 · 8:00 PM</div><div class="msg">Deposit scheduled</div></div>
   </div>
 </div>
 
-<div class="card">
-  <div class="card-row"><span class="label">What happened?</span><span class="value" style="font-size:14px;font-weight:400;color:#636366">You moved $2,400.00 from your Capital One Checking account into your Advizmo Cash account via ACH transfer.</span></div>
-  <div class="card-row"><span class="label">What's next?</span><span class="value" style="font-size:14px;font-weight:400;color:#636366">This money is now available for investing. Advizmo will use it in the next optimization cycle.</span></div>
-</div>
-
-<button class="help-btn">Need Help?</button>
-
-<div style="height:40px"></div>
+<nav class="nb">
+  <a class="ni" href="overview.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</a>
+  <a class="ni" href="invest-overview-1-clarity.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Portfolio</a>
+  <a class="ni on" href="invest-activity-final-1-apple.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Activity</a>
+  <a class="ni" href="invest-documents-1-files.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>Docs</a>
+  <a class="ni" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</a>
+</nav>
 
 </body>
 </html>

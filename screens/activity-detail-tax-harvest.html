@@ -3,96 +3,109 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tax Loss Harvesting · Activity Detail · Advizmo</title>
+<title>Tax Loss Harvesting · Automation Details · Advizmo</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:#f2f2f7;color:#1c1c1e;-webkit-font-smoothing:antialiased;max-width:430px;margin:0 auto;min-height:100vh}
-.header{position:sticky;top:0;z-index:100;background:rgba(242,242,247,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:12px 20px 14px}
-.header-top{display:flex;align-items:center;justify-content:space-between}
-.back-btn{display:flex;align-items:center;gap:4px;color:#007aff;font-size:17px;font-family:'IBM Plex Sans',sans-serif;font-weight:500;text-decoration:none;background:none;border:none;cursor:pointer;padding:4px 0}
-.back-btn svg{width:20px;height:20px}
-.header-title{font-family:'IBM Plex Sans',sans-serif;font-size:17px;font-weight:600}
-.hero{padding:24px 20px;text-align:center}
-.hero .icon{width:64px;height:64px;border-radius:16px;background:rgba(48,209,88,0.12);color:#30d158;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 12px}
-.hero .amount{font-family:'IBM Plex Sans',sans-serif;font-size:42px;font-weight:700;color:#30d158;letter-spacing:-1px}
-.hero .label{font-size:15px;color:#8e8e93;margin-top:4px}
-.card{background:#fff;border-radius:14px;padding:0 16px;margin:0 20px 12px;overflow:hidden}
-.card-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:0.5px solid #e5e5ea}
-.card-row:last-child{border-bottom:none}
-.card-row .label{font-size:15px;color:#8e8e93}
-.card-row .value{font-size:15px;font-weight:500;color:#1c1c1e;text-align:right;max-width:55%}
-.card-row .value.green{color:#30d158}
-.card-row .value.red{color:#ff453a}
-.status-badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:8px;font-size:13px;font-weight:600}
-.status-badge.completed{background:rgba(48,209,88,0.12);color:#30d158}
-.section-title{font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:0.5px;padding:20px 20px 8px}
-.swap-flow{margin:0 20px 20px;background:#fff;border-radius:14px;padding:16px}
-.swap-step{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:0.5px solid #e5e5ea}
-.swap-step:last-child{border-bottom:none}
-.swap-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;background:rgba(10,132,255,0.12);color:#0a84ff}
-.swap-text .title{font-size:14px;font-weight:600;color:#1c1c1e}
-.swap-text .desc{font-size:12px;color:#8e8e93}
-.help-btn{display:block;margin:20px;padding:16px;background:#fff;border-radius:14px;text-align:center;color:#007aff;font-size:17px;font-weight:500;text-decoration:none;border:none;width:calc(100% - 40px);cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
+.hdr{position:sticky;top:0;z-index:100;background:rgba(242,242,247,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:12px 20px 14px}
+.hdr-top{display:flex;align-items:center;justify-content:space-between}
+.back{display:flex;align-items:center;gap:4px;color:#007aff;font-size:17px;font-family:'IBM Plex Sans',sans-serif;font-weight:500;text-decoration:none;background:none;border:none;cursor:pointer;padding:4px 0}
+.back svg{width:20px;height:20px}
+.hdr-title{font-family:'IBM Plex Sans',sans-serif;font-size:17px;font-weight:600}
+.hero{padding:16px 20px;text-align:center;border-bottom:.5px solid #e5e5ea;background:#fff}
+.hero-icon{width:48px;height:48px;border-radius:12px;background:#e8f8ec;color:#166f47;display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 8px}
+.hero-title{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600;color:#1c1c1e;margin-bottom:2px}
+.hero-amount{font-family:'IBM Plex Sans',sans-serif;font-size:36px;font-weight:700;color:#166f47;letter-spacing:-.8px}
+.hero-sub{font-size:13px;color:#8e8e93;margin-top:2px}
+.hero-status{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:8px;font-size:12px;font-weight:600;background:#e8f8ec;color:#166f47;margin-top:6px}
+.hero-time{font-size:12px;color:#8e8e93;margin-top:4px}
+.sec{background:#fff;margin-top:8px;padding:0 20px}
+.sec-title{font-family:'IBM Plex Sans',sans-serif;font-size:12px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:.5px;padding:14px 0 6px}
+.row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:.5px solid #f2f2f7}
+.row:last-child{border-bottom:none}
+.row .k{font-size:14px;color:#8e8e93}
+.row .v{font-size:14px;font-weight:500;color:#1c1c1e;text-align:right}
+.row .v.green{color:#166f47}
+.row .v.red{color:#b91c1c}
+.tl{background:#fff;margin-top:8px;padding:0 20px 20px}
+.tl-title{font-family:'IBM Plex Sans',sans-serif;font-size:12px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:.5px;padding:14px 0 10px}
+.tl-item{display:flex;gap:12px;padding-bottom:12px;position:relative}
+.tl-item:last-child{padding-bottom:0}
+.tl-item::before{content:'';position:absolute;left:5px;top:16px;bottom:0;width:1.5px;background:#e5e5ea}
+.tl-item:last-child::before{display:none}
+.tl-dot{width:11px;height:11px;border-radius:50%;border:2px solid #166f47;background:#fff;flex-shrink:0;z-index:1;margin-top:2px}
+.tl-dot.active{background:#166f47}
+.tl-text .time{font-size:12px;color:#8e8e93}
+.tl-text .msg{font-size:14px;color:#1c1c1e;margin-top:1px}
+.nb{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(242,242,247,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:.5px solid #d1d1d6;display:flex;padding:8px 0 28px;z-index:100}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;color:#8e8e93;font-size:10px;font-weight:500;text-decoration:none;cursor:pointer}
+.ni.on{color:#007aff}
+.ni svg{width:24px;height:24px}
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="header-top">
-    <a href="javascript:history.back()" class="back-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>Back</a>
-    <div class="header-title">Tax Loss Harvesting</div>
+<div class="hdr">
+  <div class="hdr-top">
+    <a href="javascript:history.back()" class="back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>Back</a>
+    <div class="hdr-title">Tax Optimization</div>
     <div style="width:50px"></div>
   </div>
 </div>
 
 <div class="hero">
-  <div class="icon">✓</div>
-  <div class="amount">$81.60 saved</div>
-  <div class="label">Estimated tax benefit</div>
+  <div class="hero-icon">✓</div>
+  <div class="hero-title">Tax Loss Harvesting Completed</div>
+  <div class="hero-amount">$81.60 saved</div>
+  <div class="hero-sub">VXUS → IXUS · Loss captured: $340</div>
+  <div class="hero-status">✓ Completed</div>
+  <div class="hero-time">Jan 5, 2025 · 2:30 PM</div>
 </div>
 
-<div class="card">
-  <div class="card-row"><span class="label">Status</span><span class="value"><span class="status-badge completed">✓ Completed</span></span></div>
-  <div class="card-row"><span class="label">Loss Captured</span><span class="value red">-$340.00</span></div>
-  <div class="card-row"><span class="label">Tax Saved (est.)</span><span class="value" style="font-weight:700;color:#30d158">$81.60</span></div>
-  <div class="card-row"><span class="label">Tax Rate</span><span class="value">24% bracket</span></div>
-  <div class="card-row"><span class="label">Wash Sale Rule</span><span class="value" style="color:#30d158">No violation</span></div>
+<div class="sec">
+  <div class="sec-title">Tax Details</div>
+  <div class="row"><span class="k">Loss Harvested</span><span class="v red">-$340.00</span></div>
+  <div class="row"><span class="k">Est. Tax Saved</span><span class="v green">$81.60</span></div>
+  <div class="row"><span class="k">Tax Bracket</span><span class="v">24%</span></div>
+  <div class="row"><span class="k">Wash Sale Rule</span><span class="v green">No violation</span></div>
 </div>
 
-<div class="section-title">What Advizmo Did</div>
-<div class="swap-flow">
-  <div class="swap-step">
-    <div class="swap-icon" style="background:rgba(191,90,242,0.12);color:#bf5af2">↗</div>
-    <div class="swap-text">
-      <div class="title">Sold VXUS</div>
-      <div class="desc">10.00 shares @ $56.80 = $568.00</div>
-    </div>
+<div class="sec">
+  <div class="sec-title">What Advizmo Did</div>
+  <div class="row"><span class="k">Asset Sold</span><span class="v">VXUS · 10 shares</span></div>
+  <div class="row"><span class="k">Sale Price</span><span class="v">$56.80</span></div>
+  <div class="row"><span class="k">Replacement</span><span class="v">IXUS · 9.97 shares</span></div>
+  <div class="row"><span class="k">Replacement Price</span><span class="v">$56.96</span></div>
+  <div class="row"><span class="k">Reason</span><span class="v">Capture tax loss while maintaining exposure</span></div>
+</div>
+
+<div class="tl">
+  <div class="tl-title">Activity Timeline</div>
+  <div class="tl-item">
+    <div class="tl-dot active"></div>
+    <div class="tl-text"><div class="time">Jan 5 · 2:30 PM</div><div class="msg">Tax loss harvested · $81.60 saved</div></div>
   </div>
-  <div class="swap-step">
-    <div class="swap-icon" style="background:rgba(255,159,10,0.12);color:#ff9f0a">↓</div>
-    <div class="swap-text">
-      <div class="title">Funds moved to Advizmo Cash</div>
-      <div class="desc">$568.00 available for reinvestment</div>
-    </div>
+  <div class="tl-item">
+    <div class="tl-dot active"></div>
+    <div class="tl-text"><div class="time">Jan 5 · 2:30 PM</div><div class="msg">IXUS purchased as replacement</div></div>
   </div>
-  <div class="swap-step">
-    <div class="swap-icon" style="background:rgba(10,132,255,0.12);color:#0a84ff">↗</div>
-    <div class="swap-text">
-      <div class="title">Bought IXUS</div>
-      <div class="desc">iShares Core MSCI Total International · 9.97 shares @ $56.96</div>
-    </div>
+  <div class="tl-item">
+    <div class="tl-dot active"></div>
+    <div class="tl-text"><div class="time">Jan 5 · 2:29 PM</div><div class="msg">VXUS sold at loss</div></div>
+  </div>
+  <div class="tl-item">
+    <div class="tl-dot"></div>
+    <div class="tl-text"><div class="time">Jan 5 · 2:00 PM</div><div class="msg">Tax loss opportunity identified</div></div>
   </div>
 </div>
 
-<div class="card">
-  <div class="card-row"><span class="label">What happened?</span><span class="value" style="font-size:14px;font-weight:400;color:#636366">Advizmo sold VXUS at a loss and immediately bought IXUS — a similar but not identical ETF. This captures a $340 tax loss while keeping your international stock exposure.</span></div>
-  <div class="card-row"><span class="label">Why?</span><span class="value" style="font-size:14px;font-weight:400;color:#636366">Tax loss harvesting can save you thousands over time. Advizmo monitors your portfolio daily for these opportunities.</span></div>
-  <div class="card-row"><span class="label">What's next?</span><span class="value" style="font-size:14px;font-weight:400;color:#636366">The $81.60 tax saving will reduce your tax bill next April. IXUS will track the same international market as VXUS.</span></div>
-</div>
-
-<button class="help-btn">Need Help?</button>
-
-<div style="height:40px"></div>
+<nav class="nb">
+  <a class="ni" href="overview.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</a>
+  <a class="ni" href="invest-overview-1-clarity.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Portfolio</a>
+  <a class="ni on" href="invest-activity-final-1-apple.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Activity</a>
+  <a class="ni" href="invest-documents-1-files.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>Docs</a>
+  <a class="ni" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</a>
+</nav>
 
 </body>
 </html>
