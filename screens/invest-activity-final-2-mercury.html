@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Advizmo Invest — Activity · Mercury</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #fafafa;
+    --card: #ffffff;
+    --border: #e8e8ed;
+    --border-light: #f0f0f4;
+    --green: #166f47;
+    --green-bg: #e6f5ed;
+    --amber: #c2790a;
+    --amber-bg: #fef3e2;
+    --red: #b91c1c;
+    --red-bg: #fde8e8;
+    --blue: #0a84ff;
+    --blue-bg: #e8f4ff;
+    --purple: #bf5af2;
+    --purple-bg: #f4e8fc;
+    --text-primary: #1a1a1f;
+    --text-secondary: #6b6b76;
+    --text-tertiary: #9b9ba8;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --radius-xs: 6px;
+  }
+  html { font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text-primary); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  body { display: flex; justify-content: center; min-height: 100vh; background: #f2f2f5; padding: 16px 0 80px; }
+
+  /* Shell */
+  .phone { width: 100%; max-width: 430px; background: var(--bg); min-height: 100vh; position: relative; overflow-x: hidden; }
+
+  /* Header */
+  .header { padding: 12px 20px 0; background: var(--bg); position: sticky; top: 0; z-index: 100; }
+  .header-top { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .back-btn { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border); background: var(--card); display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
+  .back-btn svg { width: 18px; height: 18px; color: var(--text-primary); }
+  .header-title { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; flex: 1; }
+  .header-actions { display: flex; gap: 8px; }
+  .icon-btn { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border); background: var(--card); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+  .icon-btn svg { width: 18px; height: 18px; color: var(--text-secondary); }
+
+  /* Segmented Nav */
+  .segmented-nav { display: flex; background: #eaeaef; border-radius: 10px; padding: 3px; margin-bottom: 16px; }
+  .seg-item { flex: 1; text-align: center; padding: 7px 6px; font-size: 13px; font-weight: 600; color: var(--text-secondary); border-radius: 8px; cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif; }
+  .seg-item.active { background: var(--card); color: var(--text-primary); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  .seg-item:not(.active):hover { color: var(--text-primary); }
+
+  /* Filters */
+  .filters { padding: 0 20px 12px; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .filters::-webkit-scrollbar { display: none; }
+  .filter-row { display: flex; gap: 6px; width: max-content; }
+  .filter-chip { padding: 6px 14px; border-radius: 100px; font-size: 12.5px; font-weight: 600; border: 1px solid var(--border); background: var(--card); color: var(--text-secondary); cursor: pointer; white-space: nowrap; transition: all 0.15s; font-family: 'Inter', sans-serif; }
+  .filter-chip.active { background: var(--text-primary); color: #fff; border-color: var(--text-primary); }
+  .filter-chip:not(.active):hover { border-color: #ccc; color: var(--text-primary); }
+
+  /* Content */
+  .content { padding: 0 20px; }
+
+  /* Monthly Summary */
+  .monthly-summary { background: #1a1a1f; border-radius: var(--radius); padding: 18px 20px; margin-bottom: 20px; color: #fff; }
+  .summary-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+  .summary-label { font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.5); letter-spacing: 0.4px; text-transform: uppercase; }
+  .summary-period { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+  .summary-amount { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; }
+  .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.08); }
+  .summary-stat-label { font-size: 10.5px; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 4px; }
+  .summary-stat-value { font-size: 15px; font-weight: 600; }
+  .summary-stat-value.green { color: #34d07e; }
+  .summary-stat-value.blue { color: #5ac8fa; }
+
+  /* Date Group */
+  .date-group { margin-bottom: 20px; }
+  .date-label { font-size: 12px; font-weight: 600; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.5px; padding: 0 0 8px; }
+
+  /* Activity Card */
+  .activity-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 8px; overflow: hidden; transition: box-shadow 0.2s; }
+  .activity-card:active { box-shadow: 0 0 0 2px var(--border); }
+  .card-main { padding: 14px 16px; display: flex; align-items: flex-start; gap: 12px; cursor: pointer; }
+
+  /* Circular Icon */
+  .card-icon { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .card-icon svg { width: 18px; height: 18px; }
+  .card-icon.green { background: var(--green-bg); color: var(--green); }
+  .card-icon.amber { background: var(--amber-bg); color: var(--amber); }
+  .card-icon.red { background: var(--red-bg); color: var(--red); }
+  .card-icon.blue { background: var(--blue-bg); color: var(--blue); }
+  .card-icon.purple { background: var(--purple-bg); color: var(--purple); }
+
+  /* Card Content */
+  .card-body { flex: 1; min-width: 0; }
+  .card-header-row { display: flex; align-items: center; gap: 6px; margin-bottom: 2px; flex-wrap: wrap; }
+  .card-title { font-size: 14px; font-weight: 600; color: var(--text-primary); line-height: 1.35; }
+  .card-chip { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 100px; letter-spacing: 0.2px; text-transform: uppercase; }
+  .card-chip.deposit { background: var(--green-bg); color: var(--green); }
+  .card-chip.buy { background: var(--blue-bg); color: var(--blue); }
+  .card-chip.tax { background: var(--amber-bg); color: var(--amber); }
+  .card-chip.transfer { background: var(--purple-bg); color: var(--purple); }
+  .card-chip.dividend { background: var(--green-bg); color: var(--green); }
+  .card-chip.scheduled { background: var(--blue-bg); color: var(--blue); }
+  .card-chip.rebalance { background: #e8f0fe; color: #1a73e8; }
+  .card-chip.withdrawal { background: var(--red-bg); color: var(--red); }
+  .card-chip.failed { background: var(--red-bg); color: var(--red); }
+  .card-chip.cancelled { background: #f0f0f4; color: var(--text-secondary); }
+
+  .card-desc { font-size: 12.5px; color: var(--text-secondary); line-height: 1.35; margin-top: 2px; }
+  .card-meta { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+  .card-amount { font-size: 15px; font-weight: 700; letter-spacing: -0.2px; }
+  .card-amount.positive { color: var(--green); }
+  .card-amount.negative { color: var(--red); }
+  .card-amount.neutral { color: var(--text-primary); }
+  .card-status { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 100px; }
+  .card-status.completed { background: var(--green-bg); color: var(--green); }
+  .card-status.pending { background: var(--amber-bg); color: var(--amber); }
+  .card-status.failed { background: var(--red-bg); color: var(--red); }
+  .card-status.scheduled { background: var(--blue-bg); color: var(--blue); }
+  .card-status.waiting { background: #f0f0f4; color: var(--text-secondary); }
+  .card-time { font-size: 11.5px; color: var(--text-tertiary); margin-left: auto; white-space: nowrap; }
+
+  /* Expand Handle */
+  .expand-handle { display: flex; flex-direction: column; align-items: center; padding: 6px 0 8px; cursor: pointer; border-top: 1px solid var(--border-light); }
+  .expand-handle .chevron { width: 18px; height: 18px; color: var(--text-tertiary); transition: transform 0.25s; }
+  .expand-handle .handle-label { font-size: 10px; color: var(--text-tertiary); margin-top: 1px; font-weight: 500; letter-spacing: 0.2px; }
+  .activity-card.expanded .expand-handle .chevron { transform: rotate(180deg); }
+
+  /* Expanded Panel */
+  .expanded-panel { display: none; padding: 0 16px 14px; border-top: 1px solid var(--border-light); }
+  .activity-card.expanded .expanded-panel { display: block; }
+  .expanded-panel .detail-grid { display: grid; gap: 0; }
+  .detail-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 8px 0; border-bottom: 1px solid var(--border-light); }
+  .detail-row:last-child { border-bottom: none; }
+  .detail-key { font-size: 12px; color: var(--text-tertiary); font-weight: 500; }
+  .detail-val { font-size: 12.5px; color: var(--text-primary); font-weight: 600; text-align: right; max-width: 55%; }
+
+  /* Bottom Nav */
+  .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 430px; background: rgba(255,255,255,0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 1px solid var(--border); padding: 6px 0 env(safe-area-inset-bottom, 8px); z-index: 200; }
+  .nav-row { display: flex; justify-content: space-around; padding: 4px 0; }
+  .nav-item { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 4px 12px; cursor: pointer; }
+  .nav-item svg { width: 22px; height: 22px; color: var(--text-tertiary); }
+  .nav-item span { font-size: 10px; font-weight: 600; color: var(--text-tertiary); font-family: 'Inter', sans-serif; }
+  .nav-item.active svg { color: var(--text-primary); }
+  .nav-item.active span { color: var(--text-primary); }
+
+  /* Utilities */
+  .text-green { color: var(--green); }
+  .text-amber { color: var(--amber); }
+  .text-red { color: var(--red); }
+  .text-blue { color: var(--blue); }
+  .text-purple { color: var(--purple); }
+  .mt-8 { margin-top: 8px; }
+
+  /* Scrollbar hidden */
+  .phone { overflow-y: auto; }
+  .phone::-webkit-scrollbar { display: none; }
+</style>
+</head>
+<body>
+
+<div class="phone">
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-top">
+      <button class="back-btn" aria-label="Back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <h1 class="header-title">Activity</h1>
+      <div class="header-actions">
+        <button class="icon-btn" aria-label="Search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+        </button>
+        <button class="icon-btn" aria-label="Notifications">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="segmented-nav">
+      <div class="seg-item">Overview</div>
+      <div class="seg-item active">Activity</div>
+      <div class="seg-item">Documents</div>
+      <div class="seg-item">Math</div>
+    </div>
+  </header>
+
+  <!-- Filters -->
+  <div class="filters">
+    <div class="filter-row">
+      <div class="filter-chip active">All</div>
+      <div class="filter-chip">Deposits</div>
+      <div class="filter-chip">Withdrawals</div>
+      <div class="filter-chip">Investments</div>
+      <div class="filter-chip">Transfers</div>
+      <div class="filter-chip">Automation</div>
+      <div class="filter-chip">Tax</div>
+      <div class="filter-chip">Income</div>
+      <div class="filter-chip">Failed</div>
+      <div class="filter-chip">Pending</div>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+
+    <!-- Monthly Summary -->
+    <div class="monthly-summary">
+      <div class="summary-top">
+        <div>
+          <div class="summary-label">January 2025</div>
+          <div class="summary-period">Net Activity</div>
+        </div>
+        <div class="summary-amount">−$1,673.42</div>
+      </div>
+      <div class="summary-grid">
+        <div>
+          <div class="summary-stat-label">Deposited</div>
+          <div class="summary-stat-value green">+$2,400</div>
+        </div>
+        <div>
+          <div class="summary-stat-label">Invested</div>
+          <div class="summary-stat-value blue">$519.76</div>
+        </div>
+        <div>
+          <div class="summary-stat-label">Fees Saved</div>
+          <div class="summary-stat-value green">$81.60</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TODAY -->
+    <div class="date-group">
+      <div class="date-label">Today · Jan 6</div>
+
+      <!-- Deposit -->
+      <div class="activity-card" onclick="this.classList.toggle('expanded')">
+        <div class="card-main">
+          <div class="card-icon green">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+          </div>
+          <div class="card-body">
+            <div class="card-header-row">
+              <span class="card-title">Funds Added from Capital One</span>
+              <span class="card-chip deposit">Deposit</span>
+            </div>
+            <div class="card-desc">ACH transfer · 3-day hold · Reference #ACH-847291</div>
+            <div class="card-meta">
+              <span class="card-amount positive">+$2,400.00</span>
+              <span class="card-status completed">Completed</span>
+              <span class="card-time">11:42 AM</span>
+            </div>
+          </div>
+        </div>
+        <div class="expanded-panel">
+          <div class="detail-grid">
+            <div class="detail-row"><span class="detail-key">Source</span><span class="detail-val">Capital One ···4829</span></div>
+            <div class="detail-row"><span class="detail-key">Destination</span><span class="detail-val">Advizmo Core Portfolio</span></div>
+            <div class="detail-row"><span class="detail-key">Method</span><span class="detail-val">ACH Push · 3 business days</span></div>
+            <div class="detail-row"><span class="detail-key">Reference</span><span class="detail-val">#ACH-847291</span></div>
+            <div class="detail-row"><span class="detail-key">Hold Expires</span><span class="detail-val">Jan 9, 2025</span></div>
+          </div>
+        </div>
+        <div class="expand-handle">
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          <span class="handle-label">Details</span>
+        </div>
+      </div>
+
+      <!-- Buy VTI -->
+      <div class="activity-card" onclick="this.classList.toggle('expanded')">
+        <div class="card-main">
+          <div class="card-icon blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+          </div>
+          <div class="card-body">
+            <div class="card-header-row">
+              <span class="card-title">Bought Vanguard Total Stock Market ETF</span>
+              <span class="card-chip buy">Buy</span>
+            </div>
+            <div class="card-desc">VTI · 1.642 shares · Market order · Pending settlement</div>
+            <div class="card-meta">
+              <span class="card-amount neutral">$301.60</span>
+              <span class="card-status pending">Settling</span>
+              <span class="card-time">10:30 AM</span>
+            </div>
+          </div>
+        </div>
+        <div class="expanded-panel">
+          <div class="detail-grid">
+            <div class="detail-row"><span class="detail-key">Shares</span><span class="detail-val">1.642</span></div>
+            <div class="detail-row"><span class="detail-key">Execution Price</span><span class="detail-val">$183.67 / share</span></div>
+            <div class="detail-row"><span class="detail-key">Settlement</span><span class="detail-val">Jan 8, 2025 (T+1)</span></div>
+            <div class="detail-row"><span class="detail-key">Portfolio</span><span class="detail-val">Core · 70% Equities</span></div>
+            <div class="detail-row"><span class="detail-key">Broker</span><span class="detail-val">Apex Clearing</span></div>
+          </div>
+        </div>
+        <div class="expand-handle">
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          <span class="handle-label">Details</span>
+        </div>
+      </div>
+
+      <!-- Buy VXUS -->
+      <div class="activity-card" onclick="this.classList.toggle('expanded')">
+        <div class="card-main">
+          <div class="card-icon blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+          </div>
+          <div class="card-body">
+            <div class="card-header-row">
+              <span class="card-title">Bought Vanguard Total International Stock ETF</span>
+              <span class="card-chip buy">Buy</span>
+            </div>
+            <div class="card-desc">VXUS · 2.241 shares · Market order · Pending settlement</div>
+            <div class="card-meta">
+              <span class="card-amount neutral">$93.72</span>
+              <span class="card-status pending">Settling</span>
+              <span class="card-time">10:30 AM</span>
+            </div>
+          </div>
+        </div>
+        <div class="expanded-panel">
+          <div class="detail-grid">
+            <div class="detail-row"><span class="detail-key">Shares</span><span class="detail-val">2.241</span></div>
+            <div class="detail-row"><span class="detail-key">Execution Price</span><span class="detail-val">$41.82 / share</span></div>
+            <div class="detail-row"><span class="detail-key">Settlement</span><span class="detail-val">Jan 8, 2025 (T+1)</span></div>
+            <div class="detail-row"><span class="detail-key">Portfolio</span><span class="detail-val">Core · International</span></div>
+            <div class="detail-row"><span class="detail-key">Broker</span><span class="detail-val">Apex Clearing</span></div>
+          </div>
+        </div>
+        <div class="expand-handle">
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          <span class="handle-label">Details</span>
+        </div>
+      </div>
+
+      <!-- Buy BND -->
+      <div class="activity-card" onclick="this.classList.toggle('expanded')">
+        <div class="card-main">
+          <div class="card-icon blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+          </div>
+          <div class="card-body">
+            <div class="card-header-row">
+              <span class="card-title">Bought Vanguard Total Bond Market ETF</span>
+              <span class="card-chip buy">Buy</span>
+            </div>
+            <div class="card-desc">BND · 1.024 shares · Market order · Pending settlement</div>
+            <div class="card-meta">
+              <span class="card-amount neutral">$72.40</span>
+              <span class="card-status pending">Settling</span>
+              <span class="card-time">10:30 AM</span>
+            </div>
+          </div>
+        </div>
+        <div class="expanded-panel">
+          <div class="detail-grid">
+            <div class="detail-row"><span class="detail-key">Shares</span><span class="detail-val">1.024</span></div>
+            <div class="detail-row"><span class="detail-key">Execution Price</span><span class="detail-val">$70.70 / share</span></div>
+            <div class="detail-row"><span class="detail-key">Settlement</span><span class="detail-val">Jan 8, 2025 (T+1)</span></div>
+            <div class="detail-row"><span class="detail-key">Portfolio</span><span class="detail-val">Core · Fixed Income</span></div>
+            <div class="detail-row"><span class="detail-key">Broker</span><span class="detail-val">Apex Clearing</span></div>
+          </div>
+        </div>
+        <div class="expand-handle">
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          <span class="handle-label">Details</span>
+        </div>
+      </div>
+
+      <!-- Buy VNQ -->
+      <div class="activity-card" onclick="this.classList.toggle('expanded')">
+        <div class="card-main">
+          <div class="card-icon blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+          </div>
+          <div class="card-body">
+            <div class="card-header-row">
+              <span class="card-title">Bought Vanguard Real Estate ETF</span>
+              <span class="card-chip buy">Buy</span>
+            </div>
+            <div class="card-desc">VNQ · 0.578 shares · Market order · Pending settlement</div>
+            <div class="card-meta">
+              <span class="card-amount neutral">$52.04</span>
+              <span class="card-status pending">Settling</span>
+              <span class="card-time">10:30 AM</span>
+            </div>
+          </div>
+        </div>
+        <div class="expanded-panel">
+          <div class="detail-grid">
+            <div class="detail-row"><span class="detail-key">Shares</span><span class="detail-val">0.578</span></div>
+            <div class="detail-row"><span class="detail-key">Execution Price</span><span class="detail-val">$89.95 / share</span></div>
+            <div class="detail-row"><span class="detail-key">Settlement</span><span class="detail-val">Jan 8, 2025 (T+1)</span></div>
+            <div class="detail-row"><span class="detail-key">Portfolio</span><span class="detail-val">Core · Real Assets</span></div>
+            <div class="detail-row"><span class="detail-key">Broker</span><span class="detail-val">Apex Clearing</span></div>
+          </div>
+        </div>
+        <div class="expand-handle">
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          <span class="handle-label">Details</span>
+        </div>
+      </div>
+
+      <!-- Settlement -->
+      <div class="activity-card" onclick="this.classList.toggle('expanded')">
+        <div class="card-main">
+          <div class="card-icon green">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg>
+          </div>
+          <div class="card-body">
+            <div class="card-header-row">
+              <span class="card-title">Investment Settlement Completed</span>
+              <span class="card-chip deposit">Settle</span>
+            </div>
+            <div class="card-desc">4 orders settled · VTI, VXUS, BND, VNQ · Funds cleared</div>
+            <div class="card-meta">
+              <span class="card-amount positive">+$519.76</span>
+              <span class="card-status completed">Completed</span>
+              <span class="card-time">10:30 AM</span>
+            </div>
+          </div>
+        </div>
+        <div class="expanded-panel">
+          <div class="detail-grid">
+            <div class="detail-row"><span class="detail-key">Orders Settled</span><span class="detail-val">4 of 4</span></div>
+            <div class="detail-row"><span class="detail-key">Total Allocated</span><span class="detail-val">$519.76</span></div>
+            <div class="detail-row"><span class="detail-key">Source</span><span class="detail-val">Cash Balance</span></div>
+            <div class="detail-row"><span class="detail-key">Cleared Via</span><span class="detail-val">DTCC</span></div>
+          </div>
+        </div>
+        <div class="expand-handle">
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          <span class="handle-label">Details</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- YESTERDAY -->
+    <div class="date-group">
+      <div class="date-label">Yesterday · Jan 5</div>
+
+      <!-- Tax Loss Harvesting -->
+      <div class="activity-card" onclick="this.classList.toggle('expanded')">
+        <div class="card-main">
+          <div class="card-icon amber">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M9 15l2 2 4-4"/></svg>
+          </div>
+          <div class="card-body">
+            <div class="card-header-row">
+              <span class="card-title">Tax Loss Harvesting Completed</span>
+              <span class="card-chip tax">Tax</span>
+            </div>
+            <div class="card-desc">Sold SCHD, bought VIG · Same-sector swap · Wash-sale safe</div>
+            <div class="card-meta">
+              <span class="card-amount positive">$81.60 saved</span>
+              <span class="card-status completed">Completed</span>
+              <span class="card-time">3:58 PM</span>
+            </div>
+          </div>
+        </div>
+        <div class="expanded-panel">
+          <div class="detail-grid">
+            <div class="detail-row"><span class="detail-key">Asset Sold</span><span class="detail-val">SCHD · 5.200 shares</span></div>
+            <div class="detail-row"><span class="detail-key">Replacement</span><span class="detail-val">VIG · 4.850 shares</span></div>
+            <div class="detail-row"><span class="detail-key">Realized Loss</span><span class="detail-val text-red">−$326.40</span></div>
+            <div class="detail-row"><span class="detail-key">Est. Tax Saved</span><span class="detail-val text-green">$81.60</span></div>
+            <div class="detail-row"><span class="detail-key">Wash-Sale</span><span class="detail-val text-green">Cleared ✓</span></div>
+          </div>
+        </div>
+        <div class="expand-handle">
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          <span class="handle-label">Details</span>
+        </div>
+      </div>
+
+      <!-- Transfer to Reserve -->
+      <div class="activity-card" onclick="this.classList.toggle('expanded')">
+        <div class="card-main">
+          <div class="card-icon purple">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
+          </div>
+          <div class="card-body">
+            <div class="card-header-row">
+              <span class="card-title">Transferred Funds to Emergency Reserve</span>
+              <span class="card-chip transfer">Transfer</span>
+            </div>
+            <div class="card-desc">Auto-transfer · Reserve target: $5,000 · 84% funded</div>
+            <div class="card-meta">
+              <span class="card-amount negative">−$200.00</span>
+              <span class="card-status completed">Completed</span>
+              <span class="card-time">12:15 PM</span>
+            </div>
+          </div>
+        </div>
+        <div class="expanded-panel">
+          <div class="detail-grid">
+            <div class="detail-row"><span class="detail-key">From</span><span class="detail-val">Core Cash</span></div>
+            <div class="detail-row"><span class="detail-key">To</span><span class="detail-val">Emergency Reserve</span></div>
+            <div class="detail-row"><span class="detail-key">Reserve Progress</span><span class="detail-val">84% · $4,200 / $5,000</span></div>
+            <div class="detail-row"><span class="detail-key">Automation</span><span class="detail-val">Weekly · Sundays</span></div>
+          </div>
+        </div>
+        <div class="expand-handle">
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          <span class="handle-label">Details</span>
+        </div>
+      </div>
+
+      <!-- Dividend VTI -->
+      <div class="activity-card" onclick="this.classList.toggle('expanded')">
+        <div class="card-main">
+          <div class="card-icon green">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M8 10l4-4 4 4"/></svg>
+          </div>
+          <div class="card-body">
+            <div class="card-header-row">
+              <span class="card-title">Dividend Received from VTI</span>
+              <span class="card-chip dividend">Dividend</span>
+            </div>
+            <div class="card-desc">Vanguard Total Stock Market ETF · Quarterly · Auto-reinvested</div>
+            <div class="card-meta">
+              <span class="card-amount positive">+$42.18</span>
+              <span class="card-status completed">Completed</span>
+              <span class="card-time">9:30 AM</span>
+            </div>
+          </div>
+        </div>
+        <div class="expanded-panel">
+          <div class="detail-grid">
+            <div class="detail-row"><span class="detail-key">Holding</span><span class="detail-val">VTI · 42.8 shares</span></div>
+            <div class="detail-row"><span class="detail-key">Dividend / Share</span><span class="detail-val">$0.986</span></div>
+            <div class="detail-row"><span class="detail-key">Ex-Date</span><span class="detail-val">Jan 3, 2025</span></div>
+            <div class="detail-row"><span class="detail-key">Reinvested</span><span class="detail-val">0.230 shares VTI</span></div>
+          </div>
+        </div>
+        <div class="expand-handle">
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          <span class="handle-label">Details</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SATURDAY JAN 4 -->
+    <div class="date-group">
+      <div class="date-label">Saturday · Jan 4</div>
+
+      <!-- Investment Scheduled -->
+      <div class="activity-card" onclick="this.classList.toggle('expanded')">
+        <div class="card-main">
+          <div class="card-icon blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div class="card-body">
+            <div class="card-header-row">
+              <span class="card-title">Investment Scheduled for Market Open</span>
+              <span class="card-chip scheduled">Scheduled</span>
+            </div>
+            <div class="card-desc">Recurring buy · VTI, VXUS, BND, VNQ · $520 total</div>
+            <div class="card-meta">
+              <span class="card-amount neutral">$520.00</span>
+              <span class="card-status scheduled">Scheduled</span>
+              <span class="card-time">Jan 6, 9:30 AM</span>
+            </div>
+          </div>
+        </div>
+        <div class="expanded-panel">
+          <div class="detail-grid">
+            <div class="detail-row"><span class="detail-key">Waiting for Open</span><span class="detail-val">NYSE · Mon 9:30 AM ET</span></div>
+            <div class="detail-row"><span class="detail-key">Expected Execution</span><span class="detail-val">Market order · ~5 min</span></div>
+            <div class="detail-row"><span class="detail-key">VTI Allocation</span><span class="detail-val">40% · $208.00</span></div>
+            <div class="detail-row"><span class="detail-key">VXUS Allocation</span><span class="detail-val">20% · $104.00</span></div>
+            <div class="detail-row"><span class="detail-key">BND Allocation</span><span class="detail-val">25% · $130.00</span></div>
+            <div class="detail-row"><span class="detail-key">VNQ Allocation</span><span class="detail-val">15% · $78.00</span></div>
+          </div>
+        </div>
+        <div class="expand-handle">
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          <span class="handle-label">Details</span>
+        </div>
+      </div>
+
+      <!-- Interest -->
+      <div class="activity-card" onclick="this.classList.toggle('expanded')">
+        <div class="card-main">
+          <div class="card-icon green">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+          </div>
+          <div class="card-body">
+            <div class="card-header-row">
+              <span class="card-title">Interest Earned on Cash</span>
+              <span class="card-chip dividend">Interest</span>
+            </div>
+            <div class="card-desc">APY 4.25% · Cash sweep · 5.0% bonus rate</div>
+            <div class="card-meta">
+              <span class="card-amount positive">+$12.40</span>
+              <span class="card-status completed">Completed</span>
+              <span class="card-time">12:00 AM</span>
+            </div>
+          </div>
+        </div>
+        <div class="expanded-panel">
+          <div class="detail-grid">
+            <div class="detail-row"><span class="detail-key">Balance</span><span class="detail-val">$10,712.00</span></div>
+            <div class="detail-row"><span class="detail-key">APY</span><span class="detail-val">4.25%</span></div>
+            <div class="detail-row"><span class="detail-key">Period</span><span class="detail-val">Jan 1–4, 2025</span></div>
+            <div class="detail-row"><span class="detail-key">FDIC Insured</span><span class="detail-val text-green">Yes ✓</span></div>
+          </div>
+        </div>
+        <div class="expand-handle">
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          <span class="handle-label">Details</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- FRIDAY JAN 3 -->
+    <div class="date-group">
+      <div class="date-label">Friday · Jan 3</div>
+
+      <!-- Rebalance -->
+      <div class="activity-card" onclick="this.classList.toggle('expanded')">
+        <div class="card-main">
+          <div class="card-icon" style="background: #e8f0fe; color: #1a73e8;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M2.5 22v-6h6"/><path d="M2.5 11.5a10 10 0 0118.36-4.5M21.5 12.5a10 10 0 01-18.36 4.5"/></svg>
+          </div>
+          <div class="card-body">
+            <div class="card-header-row">
+              <span class="card-title">Portfolio Automatically Rebalanced</span>
+              <span class="card-chip rebalance">Rebalance</span>
+            </div>
+            <div class="card-desc">Drift correction · 3 positions adjusted · No tax event</div>
+            <div class="card-meta">
+              <span class="card-amount positive">+$18.40</span>
+              <span class="card-status completed">Completed</span>
+              <span class="card-time">4:02 PM</span>
+            </div>
+          </div>
+        </div>
+        <div class="expanded-panel">
+          <div class="detail-grid">
+            <div class="detail-row"><span class="detail-key">Trigger</span><span class="detail-val">Auto-rebalance · 5% drift</span></div>
+            <div class="detail-row"><span class="detail-key">VTI</span><span class="detail-val text-green">+0.2% overweight</span></div>
+            <div class="detail-row"><span class="detail-key">BND</span><span class="detail-val text-red">−0.15% underweight</span></div>
+            <div class="detail-row"><span class="detail-key">VNQ</span><span class="detail-val text-green">+0.1% overweight</span></div>
+            <div class="detail-row"><span class="detail-key">Tax Impact</span><span class="detail-val text-green">None · In-kind</span></div>
+          </div>
+        </div>
+        <div class="expand-handle">
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          <span class="handle-label">Details</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- THURSDAY JAN 2 -->
+    <div class="date-group">
+      <div class="date-label">Thursday · Jan 2</div>
+
+      <!-- Withdrawal -->
+      <div class="activity-card" onclick="this.classList.toggle('expanded')">
+        <div class="card-main">
+          <div class="card-icon red">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+          </div>
+          <div class="card-body">
+            <div class="card-header-row">
+              <span class="card-title">Funds Withdrawn to Capital One</span>
+              <span class="card-chip withdrawal">Withdrawal</span>
+            </div>
+            <div class="card-desc">ACH transfer · Capital One ···4829 · 1-3 business days</div>
+            <div class="card-meta">
+              <span class="card-amount negative">−$1,000.00</span>
+              <span class="card-status completed">Completed</span>
+              <span class="card-time">2:18 PM</span>
+            </div>
+          </div>
+        </div>
+        <div class="expanded-panel">
+          <div class="detail-grid">
+            <div class="detail-row"><span class="detail-key">From</span><span class="detail-val">Advizmo Core Cash</span></div>
+            <div class="detail-row"><span class="detail-key">To</span><span class="detail-val">Capital One ···4829</span></div>
+            <div class="detail-row"><span class="detail-key">Method</span><span class="detail-val">ACH · 1-3 business days</span></div>
+            <div class="detail-row"><span class="detail-key">Reference</span><span class="detail-val">#WD-391847</span></div>
+            <div class="detail-row"><span class="detail-key">Est. Arrival</span><span class="detail-val">Jan 4–6, 2025</span></div>
+          </div>
+        </div>
+        <div class="expand-handle">
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          <span class="handle-label">Details</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEC 28 -->
+    <div class="date-group">
+      <div class="date-label">Saturday · Dec 28</div>
+
+      <!-- Cancelled -->
+      <div class="activity-card" onclick="this.classList.toggle('expanded')">
+        <div class="card-main">
+          <div class="card-icon" style="background: #f0f0f4; color: var(--text-secondary);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>
+          </div>
+          <div class="card-body">
+            <div class="card-header-row">
+              <span class="card-title">Scheduled Investment Cancelled</span>
+              <span class="card-chip cancelled">Cancelled</span>
+            </div>
+            <div class="card-desc">Insufficient cash balance · $500 order · User cancelled</div>
+            <div class="card-meta">
+              <span class="card-amount neutral">$500.00</span>
+              <span class="card-status waiting">Cancelled</span>
+              <span class="card-time">9:30 AM</span>
+            </div>
+          </div>
+        </div>
+        <div class="expanded-panel">
+          <div class="detail-grid">
+            <div class="detail-row"><span class="detail-key">Order Type</span><span class="detail-val">Recurring buy</span></div>
+            <div class="detail-row"><span class="detail-key">Allocations</span><span class="detail-val">VTI · VXUS · BND</span></div>
+            <div class="detail-row"><span class="detail-key">Reason</span><span class="detail-val">Cash balance $0.00</span></div>
+            <div class="detail-row"><span class="detail-key">Action</span><span class="detail-val">Cancelled by user</span></div>
+          </div>
+        </div>
+        <div class="expand-handle">
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          <span class="handle-label">Details</span>
+        </div>
+      </div>
+
+      <!-- Failed -->
+      <div class="activity-card" onclick="this.classList.toggle('expanded')">
+        <div class="card-main">
+          <div class="card-icon red">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <div class="card-body">
+            <div class="card-header-row">
+              <span class="card-title">Deposit Failed · Bank Returned Funds</span>
+              <span class="card-chip failed">Failed</span>
+            </div>
+            <div class="card-desc">Capital One ···4829 · ACH return · R01 insufficient funds</div>
+            <div class="card-meta">
+              <span class="card-amount negative">−$1,200.00</span>
+              <span class="card-status failed">Failed</span>
+              <span class="card-time">11:15 AM</span>
+            </div>
+          </div>
+        </div>
+        <div class="expanded-panel">
+          <div class="detail-grid">
+            <div class="detail-row"><span class="detail-key">Error Code</span><span class="detail-val text-red">R01 · Insufficient Funds</span></div>
+            <div class="detail-row"><span class="detail-key">What Happened</span><span class="detail-val">Bank rejected ACH transfer</span></div>
+            <div class="detail-row"><span class="detail-key">Fees Charged</span><span class="detail-val text-green">$0.00 · No penalty</span></div>
+            <div class="detail-row"><span class="detail-key">Next Step</span><span class="detail-val">Re-deposit with verified balance</span></div>
+            <div class="detail-row"><span class="detail-key">Retry</span><span class="detail-val" style="color: var(--blue); cursor: pointer;">Try Again →</span></div>
+          </div>
+        </div>
+        <div class="expand-handle">
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          <span class="handle-label">Details</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom spacer for nav -->
+    <div style="height: 24px;"></div>
+  </div>
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav">
+    <div class="nav-row">
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>Home</span>
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        <span>Portfolio</span>
+      </div>
+      <div class="nav-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        <span>Activity</span>
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span>Docs</span>
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Profile</span>
+      </div>
+    </div>
+  </nav>
+
+</div>
+
+</body>
+</html>

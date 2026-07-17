@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Activity — Apple Wallet · Advizmo</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#f2f2f7;--card:#fff;--green:#166f47;--amber:#c2790a;--red:#b91c1c;--blue:#0a84ff;--purple:#bf5af2;--text:#1c1c1e;--text2:#8e8e93;--text3:#aeaeb2;--border:#e5e5ea;--radius:14px}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;max-width:430px;margin:0 auto;min-height:100vh;padding-bottom:100px}
+.header{position:sticky;top:0;z-index:100;background:rgba(242,242,247,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:12px 20px 0}
+.ht{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.back{display:flex;align-items:center;gap:4px;color:var(--blue);font-size:17px;font-family:'IBM Plex Sans',sans-serif;font-weight:500;text-decoration:none;background:none;border:none;cursor:pointer;padding:4px 0}
+.back svg{width:20px;height:20px}
+.title{font-family:'IBM Plex Sans',sans-serif;font-size:34px;font-weight:700;letter-spacing:-0.5px}
+.nav{display:flex;background:#e5e5ea;border-radius:9px;padding:2px;margin-bottom:12px}
+.nav button{flex:1;padding:8px 0;border:none;background:transparent;font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#636366;border-radius:7px;cursor:pointer;transition:all .2s}
+.nav button.on{background:#fff;color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.filters{display:flex;gap:8px;overflow-x:auto;padding-bottom:12px;-ms-overflow-style:none;scrollbar-width:none}
+.filters::-webkit-scrollbar{display:none}
+.chip{white-space:nowrap;padding:7px 14px;border-radius:20px;font-size:13px;font-weight:500;background:#fff;color:#636366;border:1px solid #d1d1d6;cursor:pointer;transition:all .2s}
+.chip.on{background:var(--text);color:#fff;border-color:var(--text)}
+/* Summary */
+.summary{margin:12px 20px 16px;background:linear-gradient(135deg,#1c1c1e,#2c2c2e);border-radius:16px;padding:20px;color:#fff}
+.summary h3{font-family:'IBM Plex Sans',sans-serif;font-size:11px;font-weight:600;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.si .v{font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700;letter-spacing:-.3px}
+.si .v.g{color:#30d158}.si .v.w{color:#fff}
+.si .l{font-size:11px;color:rgba(255,255,255,.4);margin-top:2px}
+/* Date groups */
+.dg{padding:0 20px;margin-bottom:20px}
+.dl{font-family:'IBM Plex Sans',sans-serif;font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+/* Activity Card */
+.ac{background:var(--card);border-radius:var(--radius);margin-bottom:6px;overflow:hidden;transition:transform .15s}
+.ac:active{transform:scale(.98)}
+.ac-top{padding:14px 16px;display:flex;align-items:flex-start;gap:12px}
+.ac-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;margin-top:1px}
+.ac-icon.deposit{background:#e8f8ec;color:var(--green)}
+.ac-icon.buy{background:#e8f0ff;color:var(--blue)}
+.ac-icon.sell{background:#f5e8ff;color:var(--purple)}
+.ac-icon.dividend{background:#e8f8ec;color:var(--green)}
+.ac-icon.interest{background:#e8f8ec;color:var(--green)}
+.ac-icon.scheduled{background:#fff5e6;color:var(--amber)}
+.ac-icon.rebalance{background:#e8f0ff;color:var(--blue)}
+.ac-icon.transfer{background:#fff5e6;color:var(--amber)}
+.ac-icon.withdrawal{background:#ffe8e8;color:var(--red)}
+.ac-icon.tax{background:#e8f8ec;color:var(--green)}
+.ac-icon.failed{background:#ffe8e8;color:var(--red)}
+.ac-icon.cancelled{background:#f0f0f0;color:var(--text2)}
+.ac-icon.pending{background:#fff5e6;color:var(--amber)}
+.ac-icon.settlement{background:#e8f0ff;color:var(--blue)}
+.ac-icon.account{background:#e8f0ff;color:var(--blue)}
+.ac-body{flex:1;min-width:0}
+.ac-title{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600;color:var(--text);line-height:1.3}
+.ac-meta{font-size:13px;color:var(--text2);margin-top:2px;line-height:1.3}
+.ac-right{text-align:right;flex-shrink:0;margin-left:auto}
+.ac-amount{font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;letter-spacing:-.2px;line-height:1.2}
+.ac-amount.pos{color:var(--green)}.ac-amount.neg{color:var(--text)}
+.ac-status{font-size:11px;font-weight:500;margin-top:3px;padding:2px 7px;border-radius:6px;display:inline-flex;align-items:center;gap:3px}
+.ac-status.done{background:#e8f8ec;color:var(--green)}
+.ac-status.sched{background:#fff5e6;color:var(--amber)}
+.ac-status.pend{background:#f0f0f0;color:var(--text2)}
+.ac-status.fail{background:#ffe8e8;color:var(--red)}
+.ac-status.proc{background:#e8f0ff;color:var(--blue)}
+/* Expand handle */
+.ac-expand{border-top:0.5px solid var(--border);padding:10px 16px;text-align:center;cursor:pointer;transition:background .15s}
+.ac-expand:active{background:#f8f8fa}
+.ac-expand .chev{display:inline-block;transition:transform .25s;color:var(--text3);font-size:12px}
+.ac-expand .label{font-size:12px;color:var(--text2);margin-left:6px}
+.ac.expanded .ac-expand .chev{transform:rotate(180deg)}
+/* Expanded content */
+.ac-expanded{display:none;border-top:0.5px solid var(--border);padding:14px 16px;background:#fafafa}
+.ac.expanded .ac-expanded{display:block}
+.er{display:flex;justify-content:space-between;padding:6px 0;font-size:13px}
+.er .k{color:var(--text2)}.er .val{color:var(--text);font-weight:500;text-align:right}
+.er .val.green{color:var(--green)}.er .val.red{color:var(--red)}
+/* Detail page link */
+.detail-link{display:block;margin:12px 20px;padding:14px;background:var(--card);border-radius:var(--radius);text-align:center;color:var(--blue);font-size:15px;font-weight:600;text-decoration:none;font-family:'IBM Plex Sans',sans-serif;transition:background .15s}
+.detail-link:active{background:#f0f0f5}
+/* Nav bar */
+.nb{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(242,242,247,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:.5px solid #d1d1d6;display:flex;padding:8px 0 28px;z-index:100}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--text2);font-size:10px;font-weight:500;text-decoration:none;cursor:pointer}
+.ni.on{color:var(--blue)}
+.ni svg{width:24px;height:24px}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="ht">
+    <a href="index.html" class="back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>Hub</a>
+  </div>
+  <div class="title">Activity</div>
+  <div class="nav">
+    <button onclick="location.href='invest-overview-1-clarity.html'">Overview</button>
+    <button class="on">Activity</button>
+    <button onclick="location.href='invest-documents-1-files.html'">Documents</button>
+    <button onclick="location.href='invest-math-1-command.html'">Math</button>
+  </div>
+  <div class="filters">
+    <div class="chip on">All</div>
+    <div class="chip">Deposits</div>
+    <div class="chip">Withdrawals</div>
+    <div class="chip">Investments</div>
+    <div class="chip">Transfers</div>
+    <div class="chip">Automation</div>
+    <div class="chip">Tax</div>
+    <div class="chip">Income</div>
+    <div class="chip">Failed</div>
+    <div class="chip">Pending</div>
+  </div>
+</div>
+
+<div class="summary">
+  <h3>January 2025</h3>
+  <div class="sg">
+    <div class="si"><div class="v g">+$6,368</div><div class="l">Deposited</div></div>
+    <div class="si"><div class="v w">$520</div><div class="l">Invested</div></div>
+    <div class="si"><div class="v w">-$1,000</div><div class="l">Withdrawn</div></div>
+    <div class="si"><div class="v g">$164</div><div class="l">Dividends</div></div>
+    <div class="si"><div class="v g">$12</div><div class="l">Interest</div></div>
+    <div class="si"><div class="v g">$82</div><div class="l">Tax Saved</div></div>
+    <div class="si"><div class="v w">$520</div><div class="l">Auto Invested</div></div>
+    <div class="si"><div class="v w">$200</div><div class="l">Transferred</div></div>
+  </div>
+</div>
+
+<!-- TODAY -->
+<div class="dg">
+  <div class="dl">Today · Monday, January 6</div>
+
+  <div class="ac" onclick="this.classList.toggle('expanded')">
+    <div class="ac-top">
+      <div class="ac-icon deposit">↓</div>
+      <div class="ac-body">
+        <div class="ac-title">Funds Added from Capital One</div>
+        <div class="ac-meta">ACH Transfer · Ref ADV-2025-01-06</div>
+      </div>
+      <div class="ac-right">
+        <div class="ac-amount pos">+$2,400.00</div>
+        <div class="ac-status done">✓ Available</div>
+      </div>
+    </div>
+    <div class="ac-expand"><span class="chev">▼</span><span class="label">View deposit details</span></div>
+    <div class="ac-expanded">
+      <div class="er"><span class="k">Source</span><span class="val">Capital One Checking ****4821</span></div>
+      <div class="er"><span class="k">Destination</span><span class="val">Advizmo Cash</span></div>
+      <div class="er"><span class="k">Method</span><span class="val">ACH Transfer</span></div>
+      <div class="er"><span class="k">Reference</span><span class="val" style="font-family:monospace;font-size:12px">ADV-2025-01-06-001</span></div>
+      <div class="er"><span class="k">Arrived</span><span class="val">10:15 AM</span></div>
+    </div>
+  </div>
+
+  <div class="ac" onclick="this.classList.toggle('expanded')">
+    <div class="ac-top">
+      <div class="ac-icon buy">↗</div>
+      <div class="ac-body">
+        <div class="ac-title">Bought Vanguard Total Stock Market ETF</div>
+        <div class="ac-meta">VTI · Settlement today</div>
+      </div>
+      <div class="ac-right">
+        <div class="ac-amount neg">$301.60</div>
+        <div class="ac-status done">✓ Settled</div>
+      </div>
+    </div>
+    <div class="ac-expand"><span class="chev">▼</span><span class="label">View trade details</span></div>
+    <div class="ac-expanded">
+      <div class="er"><span class="k">Shares</span><span class="val">1.52</span></div>
+      <div class="er"><span class="k">Execution Price</span><span class="val">$198.42</span></div>
+      <div class="er"><span class="k">Settlement</span><span class="val">Jan 6, 4:00 PM</span></div>
+      <div class="er"><span class="k">Portfolio</span><span class="val">Growth Portfolio</span></div>
+      <div class="er"><span class="k">Broker</span><span class="val">Advizmo Securities</span></div>
+    </div>
+  </div>
+
+  <div class="ac" onclick="this.classList.toggle('expanded')">
+    <div class="ac-top">
+      <div class="ac-icon buy">↗</div>
+      <div class="ac-body">
+        <div class="ac-title">Bought Vanguard Total International Stock ETF</div>
+        <div class="ac-meta">VXUS · Settlement today</div>
+      </div>
+      <div class="ac-right">
+        <div class="ac-amount neg">$93.72</div>
+        <div class="ac-status done">✓ Settled</div>
+      </div>
+    </div>
+    <div class="ac-expand"><span class="chev">▼</span><span class="label">View trade details</span></div>
+    <div class="ac-expanded">
+      <div class="er"><span class="k">Shares</span><span class="val">1.65</span></div>
+      <div class="er"><span class="k">Execution Price</span><span class="val">$56.80</span></div>
+      <div class="er"><span class="k">Settlement</span><span class="val">Jan 6, 4:00 PM</span></div>
+      <div class="er"><span class="k">Portfolio</span><span class="val">Growth Portfolio</span></div>
+      <div class="er"><span class="k">Broker</span><span class="val">Advizmo Securities</span></div>
+    </div>
+  </div>
+
+  <div class="ac" onclick="this.classList.toggle('expanded')">
+    <div class="ac-top">
+      <div class="ac-icon buy">↗</div>
+      <div class="ac-body">
+        <div class="ac-title">Bought Vanguard Total Bond Market ETF</div>
+        <div class="ac-meta">BND · Settlement today</div>
+      </div>
+      <div class="ac-right">
+        <div class="ac-amount neg">$72.40</div>
+        <div class="ac-status done">✓ Settled</div>
+      </div>
+    </div>
+    <div class="ac-expand"><span class="chev">▼</span><span class="label">View trade details</span></div>
+    <div class="ac-expanded">
+      <div class="er"><span class="k">Shares</span><span class="val">1.00</span></div>
+      <div class="er"><span class="k">Execution Price</span><span class="val">$72.40</span></div>
+      <div class="er"><span class="k">Settlement</span><span class="val">Jan 6, 4:00 PM</span></div>
+      <div class="er"><span class="k">Portfolio</span><span class="val">Growth Portfolio</span></div>
+      <div class="er"><span class="k">Broker</span><span class="val">Advizmo Securities</span></div>
+    </div>
+  </div>
+
+  <div class="ac" onclick="this.classList.toggle('expanded')">
+    <div class="ac-top">
+      <div class="ac-icon buy">↗</div>
+      <div class="ac-body">
+        <div class="ac-title">Bought Vanguard Real Estate ETF</div>
+        <div class="ac-meta">VNQ · Settlement today</div>
+      </div>
+      <div class="ac-right">
+        <div class="ac-amount neg">$52.04</div>
+        <div class="ac-status done">✓ Settled</div>
+      </div>
+    </div>
+    <div class="ac-expand"><span class="chev">▼</span><span class="label">View trade details</span></div>
+    <div class="ac-expanded">
+      <div class="er"><span class="k">Shares</span><span class="val">0.63</span></div>
+      <div class="er"><span class="k">Execution Price</span><span class="val">$82.60</span></div>
+      <div class="er"><span class="k">Settlement</span><span class="val">Jan 6, 4:00 PM</span></div>
+      <div class="er"><span class="k">Portfolio</span><span class="val">Growth Portfolio</span></div>
+      <div class="er"><span class="k">Broker</span><span class="val">Advizmo Securities</span></div>
+    </div>
+  </div>
+
+  <div class="ac" onclick="this.classList.toggle('expanded')">
+    <div class="ac-top">
+      <div class="ac-icon settlement">↻</div>
+      <div class="ac-body">
+        <div class="ac-title">Trade Settlement Completed</div>
+        <div class="ac-meta">VTI · VXUS · BND · VNQ · All settled</div>
+      </div>
+      <div class="ac-right">
+        <div class="ac-amount neg">$519.76</div>
+        <div class="ac-status done">✓ Settled</div>
+      </div>
+    </div>
+    <div class="ac-expand"><span class="chev">▼</span><span class="label">View settlement details</span></div>
+    <div class="ac-expanded">
+      <div class="er"><span class="k">Settled</span><span class="val">4:00 PM ET</span></div>
+      <div class="er"><span class="k">Trades</span><span class="val">4 executed</span></div>
+      <div class="er"><span class="k">Portfolio Updated</span><span class="val">Yes</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- YESTERDAY -->
+<div class="dg">
+  <div class="dl">Yesterday · Sunday, January 5</div>
+
+  <div class="ac" onclick="this.classList.toggle('expanded')">
+    <div class="ac-top">
+      <div class="ac-icon tax">✓</div>
+      <div class="ac-body">
+        <div class="ac-title">Tax Loss Harvesting Completed</div>
+        <div class="ac-meta">VXUS → IXUS · Loss captured: $340</div>
+      </div>
+      <div class="ac-right">
+        <div class="ac-amount pos">$81.60 saved</div>
+        <div class="ac-status done">✓ Completed</div>
+      </div>
+    </div>
+    <div class="ac-expand"><span class="chev">▼</span><span class="label">View tax details</span></div>
+    <div class="ac-expanded">
+      <div class="er"><span class="k">Asset Sold</span><span class="val">VXUS · 10 shares</span></div>
+      <div class="er"><span class="k">Replacement</span><span class="val">IXUS · 9.97 shares</span></div>
+      <div class="er"><span class="k">Loss Captured</span><span class="val red">-$340.00</span></div>
+      <div class="er"><span class="k">Est. Tax Saved</span><span class="val green">$81.60</span></div>
+      <div class="er"><span class="k">Wash Sale Rule</span><span class="val green">No violation</span></div>
+    </div>
+  </div>
+
+  <div class="ac" onclick="this.classList.toggle('expanded')">
+    <div class="ac-top">
+      <div class="ac-icon transfer">↔</div>
+      <div class="ac-body">
+        <div class="ac-title">Transferred Funds to Emergency Reserve</div>
+        <div class="ac-meta">Advizmo Cash → Reserve</div>
+      </div>
+      <div class="ac-right">
+        <div class="ac-amount neg">$200.00</div>
+        <div class="ac-status done">✓ Completed</div>
+      </div>
+    </div>
+    <div class="ac-expand"><span class="chev">▼</span><span class="label">View transfer details</span></div>
+    <div class="ac-expanded">
+      <div class="er"><span class="k">From</span><span class="val">Advizmo Cash</span></div>
+      <div class="er"><span class="k">To</span><span class="val">Advizmo Reserve</span></div>
+      <div class="er"><span class="k">Reason</span><span class="val">Emergency fund top-up</span></div>
+      <div class="er"><span class="k">Completed</span><span class="val">11:00 AM</span></div>
+    </div>
+  </div>
+
+  <div class="ac" onclick="this.classList.toggle('expanded')">
+    <div class="ac-top">
+      <div class="ac-icon dividend">$</div>
+      <div class="ac-body">
+        <div class="ac-title">Dividend Received from VTI</div>
+        <div class="ac-meta">Quarterly dividend · Automatically reinvested</div>
+      </div>
+      <div class="ac-right">
+        <div class="ac-amount pos">+$42.18</div>
+        <div class="ac-status done">✓ Reinvested</div>
+      </div>
+    </div>
+    <div class="ac-expand"><span class="chev">▼</span><span class="label">View dividend details</span></div>
+    <div class="ac-expanded">
+      <div class="er"><span class="k">ETF</span><span class="val">VTI</span></div>
+      <div class="er"><span class="k">Amount</span><span class="val">$42.18</span></div>
+      <div class="er"><span class="k">Shares Owned</span><span class="val">42.18</span></div>
+      <div class="er"><span class="k">Additional Shares</span><span class="val">0.21</span></div>
+      <div class="er"><span class="k">Reinvestment Price</span><span class="val">$198.42</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- SATURDAY -->
+<div class="dg">
+  <div class="dl">Saturday, January 4</div>
+
+  <div class="ac" onclick="this.classList.toggle('expanded')">
+    <div class="ac-top">
+      <div class="ac-icon scheduled">◷</div>
+      <div class="ac-body">
+        <div class="ac-title">Investment Scheduled for Market Open</div>
+        <div class="ac-meta">Queued for Monday, Jan 6 · 9:30 AM ET</div>
+      </div>
+      <div class="ac-right">
+        <div class="ac-amount neg">$520.00</div>
+        <div class="ac-status sched">○ Scheduled</div>
+      </div>
+    </div>
+    <div class="ac-expand"><span class="chev">▼</span><span class="label">View investment details</span></div>
+    <div class="ac-expanded">
+      <div class="er"><span class="k">Waiting for</span><span class="val" style="color:var(--amber)">Market Open</span></div>
+      <div class="er"><span class="k">Expected Execution</span><span class="val">Jan 6, 9:30 AM</span></div>
+      <div class="er"><span class="k">Source</span><span class="val">Advizmo Cash</span></div>
+      <div class="er"><span class="k">Est. VTI</span><span class="val">58% · ~$301</span></div>
+      <div class="er"><span class="k">Est. VXUS</span><span class="val">18% · ~$94</span></div>
+      <div class="er"><span class="k">Est. BND</span><span class="val">14% · ~$73</span></div>
+      <div class="er"><span class="k">Est. VNQ</span><span class="val">10% · ~$52</span></div>
+      <div class="er"><span class="k">Cancel</span><span class="val" style="color:var(--red)">Available until market open</span></div>
+    </div>
+  </div>
+
+  <div class="ac" onclick="this.classList.toggle('expanded')">
+    <div class="ac-top">
+      <div class="ac-icon interest">%</div>
+      <div class="ac-body">
+        <div class="ac-title">Money Market Interest Earned</div>
+        <div class="ac-meta">4.1% APY · Daily accrual</div>
+      </div>
+      <div class="ac-right">
+        <div class="ac-amount pos">+$12.40</div>
+        <div class="ac-status done">✓ Added</div>
+      </div>
+    </div>
+    <div class="ac-expand"><span class="chev">▼</span><span class="label">View interest details</span></div>
+    <div class="ac-expanded">
+      <div class="er"><span class="k">APY</span><span class="val">4.10%</span></div>
+      <div class="er"><span class="k">Balance Before</span><span class="val">$3,628.00</span></div>
+      <div class="er"><span class="k">Interest Earned</span><span class="val green">+$12.40</span></div>
+      <div class="er"><span class="k">Balance After</span><span class="val">$3,640.40</span></div>
+      <div class="er"><span class="k">Period</span><span class="val">Dec 1 – Dec 31</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- FRIDAY -->
+<div class="dg">
+  <div class="dl">Friday, January 3</div>
+
+  <div class="ac" onclick="this.classList.toggle('expanded')">
+    <div class="ac-top">
+      <div class="ac-icon rebalance">⟳</div>
+      <div class="ac-body">
+        <div class="ac-title">Portfolio Automatically Rebalanced</div>
+        <div class="ac-meta">Allocation drifted 2.3% · Corrected</div>
+      </div>
+      <div class="ac-right">
+        <div class="ac-amount pos">+$18.40</div>
+        <div class="ac-status done">✓ Completed</div>
+      </div>
+    </div>
+    <div class="ac-expand"><span class="chev">▼</span><span class="label">View automation details</span></div>
+    <div class="ac-expanded">
+      <div class="er"><span class="k">Drift Detected</span><span class="val" style="color:var(--amber)">+2.3%</span></div>
+      <div class="er"><span class="k">Sold</span><span class="val">VTI: $858 · VXUS: $427</span></div>
+      <div class="er"><span class="k">Bought</span><span class="val">BND: $1,285</span></div>
+      <div class="er"><span class="k">New Allocation</span><span class="val">On target</span></div>
+      <div class="er"><span class="k">Net Impact</span><span class="val green">+$18.40</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- THURSDAY -->
+<div class="dg">
+  <div class="dl">Thursday, January 2</div>
+
+  <div class="ac" onclick="this.classList.toggle('expanded')">
+    <div class="ac-top">
+      <div class="ac-icon withdrawal">↑</div>
+      <div class="ac-body">
+        <div class="ac-title">Funds Withdrawn to Capital One</div>
+        <div class="ac-meta">ACH Transfer · Arrived</div>
+      </div>
+      <div class="ac-right">
+        <div class="ac-amount neg">-$1,000.00</div>
+        <div class="ac-status done">✓ Completed</div>
+      </div>
+    </div>
+    <div class="ac-expand"><span class="chev">▼</span><span class="label">View withdrawal details</span></div>
+    <div class="ac-expanded">
+      <div class="er"><span class="k">From</span><span class="val">Advizmo Cash</span></div>
+      <div class="er"><span class="k">To</span><span class="val">Capital One Checking ****4821</span></div>
+      <div class="er"><span class="k">Method</span><span class="val">ACH Transfer</span></div>
+      <div class="er"><span class="k">Arrived</span><span class="val">3:45 PM</span></div>
+      <div class="er"><span class="k">Reference</span><span class="val" style="font-family:monospace;font-size:12px">WD-2025-01-02-001</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- EXCEPTIONS -->
+<div class="dg">
+  <div class="dl">Saturday, December 28</div>
+
+  <div class="ac" onclick="this.classList.toggle('expanded')">
+    <div class="ac-top">
+      <div class="ac-icon cancelled">⊘</div>
+      <div class="ac-body">
+        <div class="ac-title">Transfer Cancelled</div>
+        <div class="ac-meta">Move to Auto Invest · Insufficient balance</div>
+      </div>
+      <div class="ac-right">
+        <div class="ac-amount neg">$500.00</div>
+        <div class="ac-status pend">Cancelled</div>
+      </div>
+    </div>
+    <div class="ac-expand"><span class="chev">▼</span><span class="label">View details</span></div>
+    <div class="ac-expanded">
+      <div class="er"><span class="k">Reason</span><span class="val">Insufficient Advizmo Cash balance</span></div>
+      <div class="er"><span class="k">What happened</span><span class="val">Advizmo protects against overdrafts. No money moved.</span></div>
+      <div class="er"><span class="k">Next step</span><span class="val">Deposit funds, then retry.</span></div>
+    </div>
+  </div>
+
+  <div class="ac" onclick="this.classList.toggle('expanded')">
+    <div class="ac-top">
+      <div class="ac-icon failed">✕</div>
+      <div class="ac-body">
+        <div class="ac-title">Deposit Could Not Be Completed</div>
+        <div class="ac-meta">Capital One · Account frozen by bank</div>
+      </div>
+      <div class="ac-right">
+        <div class="ac-amount neg">$1,200.00</div>
+        <div class="ac-status fail">✕ Failed</div>
+      </div>
+    </div>
+    <div class="ac-expand"><span class="chev">▼</span><span class="label">View details</span></div>
+    <div class="ac-expanded">
+      <div class="er"><span class="k">Error</span><span class="val" style="color:var(--red)">Bank account frozen</span></div>
+      <div class="er"><span class="k">What happened</span><span class="val">Your bank temporarily froze the account. This is not an Advizmo issue.</span></div>
+      <div class="er"><span class="k">Next step</span><span class="val">Contact Capital One to unfreeze, then retry.</span></div>
+    </div>
+  </div>
+</div>
+
+<nav class="nb">
+  <a class="ni" href="overview.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</a>
+  <a class="ni" href="invest-overview-1-clarity.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Portfolio</a>
+  <a class="ni on" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Activity</a>
+  <a class="ni" href="invest-documents-1-files.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>Docs</a>
+  <a class="ni" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</a>
+</nav>
+
+</body>
+</html>
