@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Home — Command Center · Advizmo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
+:root{--bg:#f2f2f7;--card:#fff;--text:#1c1c1e;--text2:#8e8e93;--text3:#aeaeb2;--border:rgba(0,0,0,.06);--blue:#0a84ff;--green:#166f47;--green-bg:#e8f8ec;--amber:#c2790a;--amber-bg:#fff5e6;--red:#b91c1c;--red-bg:#ffe8e8;--blue-bg:#e8f0ff;--purple:#bf5af2}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text);max-width:430px;margin:0 auto;min-height:100vh;padding-bottom:90px}
+
+/* Status bar */
+.sb{display:flex;justify-content:space-between;align-items:center;padding:14px 24px 8px;font-size:15px;font-weight:600;background:#fff;position:sticky;top:0;z-index:100}
+
+/* Header */
+.hdr{padding:4px 20px 12px;background:#fff;border-bottom:.5px solid var(--border);position:sticky;top:44px;z-index:99}
+.hdr-row{display:flex;justify-content:space-between;align-items:center}
+.hdr-left .greet{font-family:'IBM Plex Sans',sans-serif;font-size:22px;font-weight:700;color:var(--text)}
+.hdr-left .date{font-size:13px;color:var(--text2);margin-top:1px}
+.hdr-right{display:flex;gap:16px}
+.hdr-right svg{width:22px;height:22px;color:var(--text);cursor:pointer}
+
+/* Segmented nav */
+.seg{display:flex;gap:6px;padding:10px 20px;background:#fff;overflow-x:auto;scrollbar-width:none}
+.seg::-webkit-scrollbar{display:none}
+.seg-btn{flex-shrink:0;padding:7px 14px;border-radius:20px;background:var(--bg);border:none;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:var(--text2);cursor:pointer;white-space:nowrap;transition:all .15s}
+.seg-btn.on{background:var(--text);color:#fff}
+
+/* Section labels */
+.sl{font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:700;color:var(--text);padding:20px 20px 8px;display:flex;justify-content:space-between;align-items:center}
+.sl .see{font-size:13px;font-weight:500;color:var(--blue);cursor:pointer;font-family:'Inter',sans-serif}
+
+/* ===== FIXES HERO ===== */
+.fixes{margin:12px 20px;background:#fff;border-radius:16px;overflow:hidden;border:1px solid var(--border)}
+.fixes-head{padding:16px 18px 12px;display:flex;justify-content:space-between;align-items:center}
+.fixes-head h3{font-family:'IBM Plex Sans',sans-serif;font-size:17px;font-weight:700}
+.fixes-head .cnt{font-size:12px;font-weight:600;color:var(--blue);background:var(--blue-bg);padding:3px 10px;border-radius:8px}
+
+/* Fix item — reusable account card */
+.fix{padding:14px 18px;border-top:.5px solid var(--border);cursor:pointer;transition:background .12s}
+.fix:active{background:#f8f8fa}
+.fix-tag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;display:flex;align-items:center;gap:5px}
+.fix-tag .dot{width:6px;height:6px;border-radius:50%}
+.fix-tag.urgent{color:var(--red)}.fix-tag.urgent .dot{background:var(--red)}
+.fix-tag.review{color:var(--amber)}.fix-tag.review .dot{background:var(--amber)}
+.fix-tag.grow{color:var(--green)}.fix-tag.grow .dot{background:var(--green)}
+.fix-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.fix-info{flex:1;min-width:0}
+.fix-name{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fix-sub{font-size:13px;color:var(--text2);margin-top:2px}
+.fix-right{text-align:right;flex-shrink:0}
+.fix-amt{font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;color:var(--text)}
+.fix-purpose{font-size:12px;color:var(--text2);margin-top:2px}
+/* Expanded state */
+.fix-detail{display:none;padding:12px 0 4px;border-top:.5px solid var(--border);margin-top:10px}
+.fix.expanded .fix-detail{display:block}
+.fix-detail-row{display:flex;justify-content:space-between;padding:5px 0;font-size:13px}
+.fix-detail-row .k{color:var(--text2)}.fix-detail-row .v{font-weight:500;color:var(--text)}
+.fix-detail-row .v.warn{color:var(--amber)}.fix-detail-row .v.good{color:var(--green)}.fix-detail-row .v.bad{color:var(--red)}
+.fix-actions{display:flex;gap:8px;margin-top:10px}
+.fix-btn{flex:1;padding:11px;border-radius:10px;border:none;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;text-align:center}
+.fix-btn.primary{background:var(--blue);color:#fff}
+.fix-btn.secondary{background:var(--bg);color:var(--text)}
+
+.fix-cta{display:block;margin:0;padding:14px;background:var(--blue);color:#fff;text-align:center;font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600;border:none;width:100%;cursor:pointer;text-decoration:none}
+.fix-cta:active{opacity:.85}
+.fix-note{text-align:center;font-size:12px;color:var(--text2);padding:8px 0 4px}
+
+/* ===== KPI ROW ===== */
+.kpi-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 20px}
+.kpi{background:#fff;border-radius:14px;padding:16px;border:1px solid var(--border)}
+.kpi-label{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.04em}
+.kpi-val{font-family:'IBM Plex Sans',sans-serif;font-size:22px;font-weight:700;color:var(--text);margin-top:4px;letter-spacing:-.3px}
+.kpi-sub{font-size:12px;color:var(--text2);margin-top:2px}
+.kpi-sub.up{color:var(--green)}.kpi-sub.down{color:var(--red)}
+.kpi.wide{grid-column:1/-1}
+
+/* ===== FINANCIAL HEALTH ===== */
+.health{margin:0 20px;background:#fff;border-radius:16px;padding:18px;border:1px solid var(--border)}
+.health-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
+.health-score{font-family:'IBM Plex Sans',sans-serif;font-size:42px;font-weight:700;color:var(--text);line-height:1}
+.health-label{font-size:14px;font-weight:600;margin-top:2px}
+.health-label.good{color:var(--green)}
+.health-msg{font-size:13px;color:var(--text2);line-height:1.4;margin-bottom:14px}
+.health-bar-track{height:8px;background:var(--bg);border-radius:4px;overflow:hidden;position:relative}
+.health-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,#ef4444,#f59e0b,#22c55e);width:72%;transition:width .6s}
+.health-metrics{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:14px;border-top:.5px solid var(--border);padding-top:12px}
+.hm{padding:8px 0}
+.hm-label{font-size:12px;color:var(--text2)}
+.hm-row{display:flex;justify-content:space-between;align-items:center;margin-top:2px}
+.hm-val{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:700}
+.hm-val.good{color:var(--green)}.hm-val.warn{color:var(--amber)}.hm-val.bad{color:var(--red)}
+.hm-sub{font-size:11px;color:var(--text2);margin-top:1px}
+
+/* ===== PORTFOLIO ===== */
+.pf{margin:0 20px;background:#fff;border-radius:16px;padding:18px;border:1px solid var(--border)}
+.pf-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px}
+.pf-val{font-family:'IBM Plex Sans',sans-serif;font-size:28px;font-weight:700;letter-spacing:-.5px}
+.pf-change{font-size:14px;font-weight:600;color:var(--green)}
+.pf-sub{font-size:12px;color:var(--text2);margin-bottom:14px}
+.pf-metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.pf-m{padding:10px;background:var(--bg);border-radius:10px}
+.pf-m-val{font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700}
+.pf-m-val.good{color:var(--green)}.pf-m-val.warn{color:var(--amber)}.pf-m-val.bad{color:var(--red)}
+.pf-m-label{font-size:11px;color:var(--text2);margin-top:1px}
+.pf-m-sub{font-size:10px;color:var(--text2)}
+
+/* ETF rows */
+.etf{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:.5px solid var(--border)}
+.etf:first-of-type{border-top:none}
+.etf-icon{width:36px;height:36px;border-radius:8px;background:var(--blue-bg);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;font-family:'IBM Plex Sans',sans-serif;flex-shrink:0}
+.etf-info{flex:1;min-width:0}
+.etf-name{font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600}
+.etf-shares{font-size:12px;color:var(--text2)}
+.etf-spark{width:48px;height:24px;flex-shrink:0}
+.etf-right{text-align:right;flex-shrink:0}
+.etf-amt{font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600}
+.etf-pct{font-size:12px;font-weight:500}
+.etf-pct.up{color:var(--green)}.etf-pct.down{color:var(--red)}
+
+.pf-cta{display:block;margin-top:12px;padding:12px;background:var(--bg);border-radius:10px;text-align:center;font-size:14px;font-weight:600;color:var(--blue);text-decoration:none;border:none;width:100%;cursor:pointer;font-family:'Inter',sans-serif}
+
+/* ===== SPENDING ===== */
+.spend{margin:0 20px;background:#fff;border-radius:16px;padding:18px;border:1px solid var(--border)}
+.spend-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px}
+.spend-val{font-family:'IBM Plex Sans',sans-serif;font-size:28px;font-weight:700;letter-spacing:-.5px}
+.spend-budget{font-size:13px;color:var(--text2);text-align:right}
+.spend-period{font-size:12px;color:var(--text2);margin-bottom:12px}
+.spend-bar-track{height:8px;background:var(--bg);border-radius:4px;overflow:hidden}
+.spend-bar-fill{height:100%;border-radius:4px;background:var(--green);transition:width .4s}
+.spend-bar-labels{display:flex;justify-content:space-between;font-size:12px;color:var(--text2);margin-top:6px}
+.spend-pace{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding-top:12px;border-top:.5px solid var(--border)}
+.spend-pace-label{font-size:13px;color:var(--text2)}
+.spend-pace-val{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600}
+
+.cat{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:.5px solid var(--border)}
+.cat:first-of-type{border-top:none}
+.cat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.cat-info{flex:1;min-width:0}
+.cat-name{font-size:14px;font-weight:500}
+.cat-pct{font-size:11px;color:var(--text2)}
+.cat-right{text-align:right;flex-shrink:0}
+.cat-amt{font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600}
+.cat-change{font-size:11px}
+.cat-change.up{color:var(--red)}.cat-change.down{color:var(--green)}
+
+/* ===== AI INSIGHT ===== */
+.ai{margin:0 20px;background:linear-gradient(135deg,#1c1c1e,#2c2c2e);border-radius:16px;padding:18px;color:#fff}
+.ai-tag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:rgba(255,255,255,.4);margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.ai-tag .sparkle{color:var(--blue)}
+.ai-text{font-size:15px;font-weight:500;line-height:1.45;color:rgba(255,255,255,.85)}
+.ai-text strong{color:#fff;font-weight:600}
+.ai-action{display:inline-flex;align-items:center;gap:4px;margin-top:12px;font-size:14px;font-weight:600;color:var(--blue);cursor:pointer}
+
+/* ===== ONBOARDING ===== */
+.onboard{margin:0 20px;background:#fff;border-radius:16px;padding:24px 18px;border:1px solid var(--border);text-align:center}
+.onboard-icon{width:48px;height:48px;border-radius:14px;background:var(--blue-bg);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 12px}
+.onboard h3{font-family:'IBM Plex Sans',sans-serif;font-size:17px;font-weight:700;margin-bottom:6px}
+.onboard p{font-size:14px;color:var(--text2);line-height:1.45;margin-bottom:16px}
+.onboard-btn{display:block;width:100%;padding:14px;background:var(--blue);color:#fff;border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:15px;font-weight:600;cursor:pointer}
+.onboard-btn:active{opacity:.85}
+.onboard-banks{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:12px}
+.onboard-bank{width:28px;height:28px;border-radius:6px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--text2)}
+.onboard-more{font-size:12px;color:var(--text2);font-weight:500}
+
+/* ===== BOTTOM NAV ===== */
+.nb{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(255,255,255,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:.5px solid rgba(0,0,0,.1);display:flex;padding:8px 0 34px;z-index:100}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--text2);font-size:10px;font-weight:500;cursor:pointer;text-decoration:none}
+.ni.on{color:var(--blue)}
+.ni svg{width:24px;height:24px}
+
+/* Sparkline SVG */
+.spark{display:block}
+</style>
+</head>
+<body>
+
+<div class="sb">
+  <span>9:41</span>
+  <div style="display:flex;gap:6px;align-items:center">
+    <svg width="18" height="12" viewBox="0 0 18 12"><path d="M1 7.5c1.5-2 3.5-3 5.5-3s4 1 5.5 3" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/><circle cx="7" cy="12" r="1.2" fill="currentColor"/></svg>
+    <svg width="28" height="13" viewBox="0 0 28 13"><rect x="0" y=".5" width="23" height="12" rx="3" stroke="currentColor" stroke-width="1" fill="none"/><rect x="24" y="4" width="2.5" height="5" rx="1" fill="currentColor" opacity=".3"/><rect x="1.5" y="2" width="18" height="9" rx="1.5" fill="currentColor"/></svg>
+  </div>
+</div>
+
+<div class="hdr">
+  <div class="hdr-row">
+    <div class="hdr-left">
+      <div class="greet">Welcome, James</div>
+      <div class="date">Friday, Jun 5</div>
+    </div>
+    <div class="hdr-right">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+    </div>
+  </div>
+</div>
+
+<div class="seg">
+  <button class="seg-btn on">Overview</button>
+  <button class="seg-btn">Accounts</button>
+  <button class="seg-btn">Targets</button>
+  <button class="seg-btn">Actions</button>
+  <button class="seg-btn">More</button>
+</div>
+
+<!-- ===== 3 THINGS TO FIX ===== -->
+<div class="fixes">
+  <div class="fixes-head">
+    <h3>3 things to fix</h3>
+    <div class="cnt">3 issues</div>
+  </div>
+
+  <div class="fix" onclick="this.classList.toggle('expanded')">
+    <div class="fix-tag urgent"><span class="dot"></span>Urgent · Checking Short</div>
+    <div class="fix-row">
+      <div class="fix-info">
+        <div class="fix-name">Chase Checking ****0203</div>
+        <div class="fix-sub">Balance: $3,200</div>
+      </div>
+      <div class="fix-right">
+        <div class="fix-amt">$182</div>
+        <div class="fix-purpose">To cover bills</div>
+      </div>
+    </div>
+    <div class="fix-detail">
+      <div class="fix-detail-row"><span class="k">Current balance</span><span class="v bad">$1,842</span></div>
+      <div class="fix-detail-row"><span class="k">Upcoming bills</span><span class="v">$2,200</span></div>
+      <div class="fix-detail-row"><span class="k">Shortfall</span><span class="v bad">-$358</span></div>
+      <div class="fix-detail-row"><span class="k">Rent due</span><span class="v">Friday, Jun 7</span></div>
+      <div class="fix-actions">
+        <button class="fix-btn primary">Move $800 from savings</button>
+        <button class="fix-btn secondary">Details</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="fix" onclick="this.classList.toggle('expanded')">
+    <div class="fix-tag review"><span class="dot"></span>Review · Below Target</div>
+    <div class="fix-row">
+      <div class="fix-info">
+        <div class="fix-name">Chase Savings ****8291</div>
+        <div class="fix-sub">Balance: $2,200</div>
+      </div>
+      <div class="fix-right">
+        <div class="fix-amt">$385</div>
+        <div class="fix-purpose">To build cushion</div>
+      </div>
+    </div>
+    <div class="fix-detail">
+      <div class="fix-detail-row"><span class="k">Emergency target</span><span class="v">$10,000</span></div>
+      <div class="fix-detail-row"><span class="k">Current savings</span><span class="v warn">$8,400</span></div>
+      <div class="fix-detail-row"><span class="k">Remaining</span><span class="v">$1,600</span></div>
+      <div class="fix-actions">
+        <button class="fix-btn primary">Adjust auto-deposit</button>
+        <button class="fix-btn secondary">Details</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="fix" onclick="this.classList.toggle('expanded')">
+    <div class="fix-tag grow"><span class="dot"></span>Grow · Idle Cash</div>
+    <div class="fix-row">
+      <div class="fix-info">
+        <div class="fix-name">Capital One Checking ****5349</div>
+        <div class="fix-sub">Balance: $1,200</div>
+      </div>
+      <div class="fix-right">
+        <div class="fix-amt">$214</div>
+        <div class="fix-purpose">To invest</div>
+      </div>
+    </div>
+    <div class="fix-detail">
+      <div class="fix-detail-row"><span class="k">Idle cash</span><span class="v">$4,200</span></div>
+      <div class="fix-detail-row"><span class="k">Current APY</span><span class="v bad">0.01%</span></div>
+      <div class="fix-detail-row"><span class="k">Potential gain</span><span class="v good">+$210/yr</span></div>
+      <div class="fix-actions">
+        <button class="fix-btn primary">Invest $3,000 now</button>
+        <button class="fix-btn secondary">Automate</button>
+      </div>
+    </div>
+  </div>
+
+  <button class="fix-cta">Review & fix all →</button>
+  <div class="fix-note">Takes about 2 minutes</div>
+</div>
+
+<!-- ===== KPI ROW ===== -->
+<div class="kpi-row" style="margin-top:16px">
+  <div class="kpi">
+    <div class="kpi-label">Net Worth</div>
+    <div class="kpi-val">$15,420</div>
+    <div class="kpi-sub up">+$540 vs last month</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">Cash</div>
+    <div class="kpi-val">$3,000</div>
+    <div class="kpi-sub">3 accounts</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">Invested</div>
+    <div class="kpi-val">$12,420</div>
+    <div class="kpi-sub up">+2.8% vs last month</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">Bills Due</div>
+    <div class="kpi-val" style="color:var(--red)">$1,170</div>
+    <div class="kpi-sub">in 14 days · 3 upcoming</div>
+  </div>
+</div>
+
+<!-- ===== FINANCIAL HEALTH ===== -->
+<div class="sl">Financial Health <span class="see">Details →</span></div>
+<div class="health">
+  <div class="health-top">
+    <div>
+      <div class="health-score">72</div>
+      <div class="health-label good">Good</div>
+    </div>
+  </div>
+  <div class="health-msg">Moving idle cash to investments would push your score above 80.</div>
+  <div class="health-bar-track"><div class="health-bar-fill"></div></div>
+  <div class="health-metrics">
+    <div class="hm">
+      <div class="hm-label">Income vs Expenses</div>
+      <div class="hm-row"><span class="hm-val good">95</span></div>
+      <div class="hm-sub">Strong surplus this month</div>
+    </div>
+    <div class="hm">
+      <div class="hm-label">Cash Efficiency</div>
+      <div class="hm-row"><span class="hm-val bad">0</span></div>
+      <div class="hm-sub">All cash is idle</div>
+    </div>
+    <div class="hm">
+      <div class="hm-label">Emergency Savings</div>
+      <div class="hm-row"><span class="hm-val good">78</span></div>
+      <div class="hm-sub">3 months covered</div>
+    </div>
+    <div class="hm">
+      <div class="hm-label">Debt</div>
+      <div class="hm-row"><span class="hm-val good">100</span></div>
+      <div class="hm-sub">No outstanding debt</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PORTFOLIO ===== -->
+<div class="sl">Portfolio <span class="see">YTD · Details →</span></div>
+<div class="pf">
+  <div class="pf-top">
+    <div class="pf-val">$12,420</div>
+    <div class="pf-change">+2.8%</div>
+  </div>
+  <div class="pf-sub">YTD +$340</div>
+  <div class="pf-metrics">
+    <div class="pf-m"><div class="pf-m-val good">69</div><div class="pf-m-label">Risk Alignment</div><div class="pf-m-sub">Strong</div></div>
+    <div class="pf-m"><div class="pf-m-val good">95</div><div class="pf-m-label">Performance</div><div class="pf-m-sub">Excellent</div></div>
+    <div class="pf-m"><div class="pf-m-val good">100</div><div class="pf-m-label">Diversification</div><div class="pf-m-sub">Excellent</div></div>
+    <div class="pf-m"><div class="pf-m-val bad">22</div><div class="pf-m-label">Tax Efficiency</div><div class="pf-m-sub">Critical</div></div>
+  </div>
+
+  <div class="etf">
+    <div class="etf-icon">VOO</div>
+    <div class="etf-info"><div class="etf-name">Vanguard S&P 500 ETF</div><div class="etf-shares">12 shares</div></div>
+    <svg class="etf-spark" viewBox="0 0 48 24"><polyline points="0,18 6,16 12,14 18,12 24,10 30,8 36,6 42,4 48,2" fill="none" stroke="#166f47" stroke-width="1.5" stroke-linecap="round"/></svg>
+    <div class="etf-right"><div class="etf-amt">$8,073</div><div class="etf-pct up">+3.2%</div></div>
+  </div>
+  <div class="etf">
+    <div class="etf-icon" style="background:var(--purple);color:#fff">VX</div>
+    <div class="etf-info"><div class="etf-name">Vanguard Total Intl Stock ETF</div><div class="etf-shares">8 shares</div></div>
+    <svg class="etf-spark" viewBox="0 0 48 24"><polyline points="0,14 6,12 12,10 18,12 24,8 30,10 36,6 42,8 48,4" fill="none" stroke="#166f47" stroke-width="1.5" stroke-linecap="round"/></svg>
+    <div class="etf-right"><div class="etf-amt">$3,105</div><div class="etf-pct up">+1.8%</div></div>
+  </div>
+  <div class="etf">
+    <div class="etf-icon" style="background:var(--amber-bg);color:var(--amber)">BND</div>
+    <div class="etf-info"><div class="etf-name">Vanguard Total Bond Market ETF</div><div class="etf-shares">10 shares</div></div>
+    <svg class="etf-spark" viewBox="0 0 48 24"><polyline points="0,12 6,10 12,11 18,9 24,10 30,8 36,9 42,7 48,8" fill="none" stroke="#166f47" stroke-width="1.5" stroke-linecap="round"/></svg>
+    <div class="etf-right"><div class="etf-amt">$1,242</div><div class="etf-pct up">+0.4%</div></div>
+  </div>
+  <button class="pf-cta">Check holdings</button>
+</div>
+
+<!-- ===== SPENDING ===== -->
+<div class="sl">Spending <span class="see">See all →</span></div>
+<div class="spend">
+  <div class="spend-top">
+    <div class="spend-val">$3,112</div>
+    <div class="spend-budget">$6,423 budget</div>
+  </div>
+  <div class="spend-period">Jun 1 — 30 · <span style="color:var(--blue)">Last month</span></div>
+  <div class="spend-bar-track"><div class="spend-bar-fill" style="width:48%"></div></div>
+  <div class="spend-bar-labels"><span>$3,311 left</span><span>17 days left</span></div>
+  <div class="spend-pace">
+    <span class="spend-pace-label">Safe daily pace</span>
+    <span class="spend-pace-val">$95/day</span>
+  </div>
+
+  <div style="font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.04em;margin-top:14px">Top Categories</div>
+  <div class="cat">
+    <div class="cat-dot" style="background:var(--red)"></div>
+    <div class="cat-info"><div class="cat-name">Fees & Other</div><div class="cat-pct">80%</div></div>
+    <div class="cat-right"><div class="cat-amt">$2,488</div><div class="cat-change up">-41% vs May</div></div>
+  </div>
+  <div class="cat">
+    <div class="cat-dot" style="background:var(--blue)"></div>
+    <div class="cat-info"><div class="cat-name">Housing & Utilities</div><div class="cat-pct">7%</div></div>
+    <div class="cat-right"><div class="cat-amt">$218</div><div class="cat-change up">+7% vs May</div></div>
+  </div>
+  <div class="cat">
+    <div class="cat-dot" style="background:var(--amber)"></div>
+    <div class="cat-info"><div class="cat-name">Shopping</div><div class="cat-pct">7%</div></div>
+    <div class="cat-right"><div class="cat-amt">$213</div><div class="cat-change down">-84% vs May</div></div>
+  </div>
+</div>
+
+<!-- ===== AI INSIGHT ===== -->
+<div class="sl">Insight</div>
+<div class="ai">
+  <div class="ai-tag"><span class="sparkle">✦</span> Advizmo AI</div>
+  <div class="ai-text">You have <strong>$4,200 earning 0.01%</strong> across your checking accounts. Moving $3,000 to your investment portfolio could earn an estimated <strong>$210 more per year</strong>. Your emergency fund is at 84% — just $1,600 from your target.</div>
+  <div class="ai-action">Review optimization →</div>
+</div>
+
+<!-- ===== CONNECT ACCOUNTS (Onboarding State 1) ===== -->
+<div class="sl">Accounts</div>
+<div class="onboard">
+  <div class="onboard-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+  </div>
+  <h3>Connect your accounts</h3>
+  <p>Link your external bank accounts to start moving money and investing with Advizmo.</p>
+  <button class="onboard-btn">Connect your first account</button>
+  <div class="onboard-banks">
+    <div class="onboard-bank">C</div>
+    <div class="onboard-bank">B</div>
+    <div class="onboard-bank">W</div>
+    <div class="onboard-bank">F</div>
+    <div class="onboard-bank">S</div>
+    <div class="onboard-more">+995</div>
+  </div>
+</div>
+
+<!-- ===== BOTTOM NAV ===== -->
+<nav class="nb">
+  <a class="ni on" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home</a>
+  <a class="ni" href="invest-overview-1-clarity.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>Invest</a>
+  <a class="ni" href="cashflow-1-pulse.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Plan</a>
+  <a class="ni" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</a>
+</nav>
+
+</body>
+</html>

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Home — Apple Wallet · Advizmo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
+:root{--bg:#f2f2f7;--card:#fff;--text:#1c1c1e;--text2:#8e8e93;--text3:#aeaeb2;--border:rgba(0,0,0,.06);--blue:#0a84ff;--green:#166f47;--green-bg:#e8f8ec;--amber:#c2790a;--amber-bg:#fff5e6;--red:#b91c1c;--red-bg:#ffe8e8;--blue-bg:#e8f0ff;--purple:#bf5af2}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text);max-width:430px;margin:0 auto;min-height:100vh;padding-bottom:90px}
+.sb{display:flex;justify-content:space-between;align-items:center;padding:14px 24px 8px;font-size:15px;font-weight:600;background:#fff;position:sticky;top:0;z-index:100}
+.hdr{padding:8px 20px 12px;background:#fff;border-bottom:.5px solid var(--border);position:sticky;top:44px;z-index:99}
+.hdr-row{display:flex;justify-content:space-between;align-items:center}
+.hdr-greet{font-family:'IBM Plex Sans',sans-serif;font-size:22px;font-weight:700}
+.hdr-date{font-size:13px;color:var(--text2);margin-top:1px}
+.hdr-icons{display:flex;gap:14px}
+.hdr-icons svg{width:22px;height:22px;color:var(--text);cursor:pointer}
+.seg{display:flex;gap:6px;padding:10px 20px;background:#fff;overflow-x:auto;scrollbar-width:none}
+.seg::-webkit-scrollbar{display:none}
+.seg-btn{flex-shrink:0;padding:7px 14px;border-radius:20px;background:var(--bg);border:none;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:var(--text2);cursor:pointer;white-space:nowrap}
+.seg-btn.on{background:var(--text);color:#fff}
+
+/* Section header */
+.sh{padding:20px 20px 10px;font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700}
+
+/* ===== WALLET CARD — Apple Wallet style ===== */
+.wallet{margin:0 20px 12px;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.wallet-head{padding:16px 18px 10px;display:flex;justify-content:space-between;align-items:center}
+.wallet-title{font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700}
+.wallet-badge{font-size:12px;font-weight:600;padding:3px 10px;border-radius:8px}
+.wallet-badge.green{background:var(--green-bg);color:var(--green)}
+.wallet-badge.amber{background:var(--amber-bg);color:var(--amber)}
+.wallet-badge.red{background:var(--red-bg);color:var(--red)}
+.wallet-badge.blue{background:var(--blue-bg);color:var(--blue)}
+
+/* Row — reusable for all card types */
+.row{display:flex;align-items:center;gap:12px;padding:12px 18px;border-top:.5px solid var(--border)}
+.row:first-of-type{border-top:none}
+.row-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.row-icon.green{background:var(--green-bg);color:var(--green)}
+.row-icon.blue{background:var(--blue-bg);color:var(--blue)}
+.row-icon.amber{background:var(--amber-bg);color:var(--amber)}
+.row-icon.red{background:var(--red-bg);color:var(--red)}
+.row-icon.purple{background:#f5e8ff;color:var(--purple)}
+.row-info{flex:1;min-width:0}
+.row-name{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row-sub{font-size:13px;color:var(--text2);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row-right{text-align:right;flex-shrink:0}
+.row-amt{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600}
+.row-change{font-size:12px;font-weight:500}
+.row-change.up{color:var(--green)}.row-change.down{color:var(--red)}
+.row-chevron{color:var(--text3);font-size:14px;flex-shrink:0}
+
+/* Status row */
+.row-status{display:flex;align-items:center;gap:6px}
+.status-dot{width:6px;height:6px;border-radius:50%}
+.status-dot.green{background:var(--green)}.status-dot.amber{background:var(--amber)}.status-dot.red{background:var(--red)}
+.status-text{font-size:12px;font-weight:500}
+.status-text.green{color:var(--green)}.status-text.amber{color:var(--amber)}.status-text.red{color:var(--red)}
+
+/* ===== FIX CARD ===== */
+.fix-card{margin:0 20px 8px;background:#fff;border-radius:14px;padding:16px;border:1px solid var(--border);cursor:pointer;transition:transform .12s}
+.fix-card:active{transform:scale(.98)}
+.fix-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.fix-badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:3px 8px;border-radius:6px}
+.fix-badge.urgent{background:var(--red);color:#fff}
+.fix-badge.review{background:var(--amber);color:#fff}
+.fix-badge.grow{background:var(--green);color:#fff}
+.fix-title{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600;margin-top:6px;line-height:1.3}
+.fix-desc{font-size:13px;color:var(--text2);margin-top:4px;line-height:1.35}
+.fix-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:10px;border-top:.5px solid var(--border)}
+.fix-amt{font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700}
+.fix-action{font-size:13px;font-weight:600;color:var(--blue)}
+
+/* ===== KPI TILES ===== */
+.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 20px;margin-bottom:12px}
+.kpi{background:#fff;border-radius:14px;padding:16px;border:1px solid var(--border)}
+.kpi-label{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.04em}
+.kpi-val{font-family:'IBM Plex Sans',sans-serif;font-size:22px;font-weight:700;margin-top:4px;letter-spacing:-.3px}
+.kpi-sub{font-size:12px;color:var(--text2);margin-top:2px}
+.kpi-sub.up{color:var(--green)}
+
+/* ===== HEALTH RING ===== */
+.health{margin:0 20px 12px;background:#fff;border-radius:16px;padding:18px;border:1px solid var(--border)}
+.health-row{display:flex;gap:16px;align-items:center}
+.health-ring{width:64px;height:64px;border-radius:50%;background:conic-gradient(var(--green) 0% 72%,#e5e5ea 72%);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative}
+.health-ring::after{content:'';position:absolute;width:52px;height:52px;border-radius:50%;background:#fff}
+.health-score{position:relative;z-index:1;font-family:'IBM Plex Sans',sans-serif;font-size:20px;font-weight:700}
+.health-info{flex:1}
+.health-title{font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:600}
+.health-sub{font-size:13px;color:var(--text2);margin-top:2px;line-height:1.3}
+.health-metrics{display:flex;gap:0;margin-top:14px;border-top:.5px solid var(--border);padding-top:12px}
+.hm{flex:1;text-align:center}
+.hm:not(:last-child){border-right:.5px solid var(--border)}
+.hm-val{font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700}
+.hm-val.good{color:var(--green)}.hm-val.bad{color:var(--red)}
+.hm-label{font-size:10px;color:var(--text2);margin-top:2px}
+
+/* ===== ETF ROWS ===== */
+.etf{display:flex;align-items:center;gap:12px;padding:12px 18px;border-top:.5px solid var(--border)}
+.etf:first-of-type{border-top:none}
+.etf-icon{width:36px;height:36px;border-radius:10px;background:var(--blue-bg);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;font-family:'IBM Plex Sans',sans-serif;flex-shrink:0}
+.etf-info{flex:1;min-width:0}
+.etf-name{font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.etf-meta{font-size:12px;color:var(--text2)}
+.etf-right{text-align:right;flex-shrink:0}
+.etf-amt{font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600}
+.etf-pct{font-size:12px;font-weight:500}
+.etf-pct.up{color:var(--green)}
+
+/* ===== SPENDING ===== */
+.spend{margin:0 20px 12px;background:#fff;border-radius:16px;padding:18px;border:1px solid var(--border)}
+.spend-top{display:flex;justify-content:space-between;align-items:baseline}
+.spend-val{font-family:'IBM Plex Sans',sans-serif;font-size:24px;font-weight:700}
+.spend-budget{font-size:13px;color:var(--text2)}
+.spend-bar{height:8px;background:var(--bg);border-radius:4px;overflow:hidden;margin:12px 0 6px}
+.spend-fill{height:100%;border-radius:4px;background:var(--green)}
+.spend-labels{display:flex;justify-content:space-between;font-size:12px;color:var(--text2)}
+
+/* ===== AI INSIGHT ===== */
+.ai{margin:0 20px 12px;background:#1c1c1e;border-radius:16px;padding:18px;color:#fff}
+.ai-tag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:rgba(255,255,255,.35);margin-bottom:8px}
+.ai-text{font-size:15px;line-height:1.5;color:rgba(255,255,255,.8)}
+.ai-text strong{color:#fff;font-weight:600}
+.ai-link{display:inline-flex;align-items:center;gap:4px;margin-top:12px;font-size:14px;font-weight:600;color:var(--blue);cursor:pointer}
+
+/* ===== ONBOARDING ===== */
+.ob{margin:0 20px 12px;background:#fff;border-radius:16px;padding:24px 18px;border:1px solid var(--border);text-align:center}
+.ob-icon{width:48px;height:48px;border-radius:14px;background:var(--blue-bg);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 12px}
+.ob h3{font-family:'IBM Plex Sans',sans-serif;font-size:17px;font-weight:700;margin-bottom:6px}
+.ob p{font-size:14px;color:var(--text2);line-height:1.45;margin-bottom:16px}
+.ob-btn{display:block;width:100%;padding:14px;background:var(--blue);color:#fff;border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:15px;font-weight:600;cursor:pointer}
+.ob-banks{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:12px}
+.ob-bank{width:28px;height:28px;border-radius:6px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--text2)}
+.ob-more{font-size:12px;color:var(--text2)}
+
+.nb{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(242,242,247,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:.5px solid rgba(0,0,0,.1);display:flex;padding:8px 0 34px;z-index:100}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--text2);font-size:10px;font-weight:500;cursor:pointer;text-decoration:none}
+.ni.on{color:var(--blue)}
+.ni svg{width:24px;height:24px}
+</style>
+</head>
+<body>
+
+<div class="sb">
+  <span>9:41</span>
+  <div style="display:flex;gap:6px;align-items:center">
+    <svg width="18" height="12" viewBox="0 0 18 12"><path d="M1 7.5c1.5-2 3.5-3 5.5-3s4 1 5.5 3" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/><circle cx="7" cy="12" r="1.2" fill="currentColor"/></svg>
+    <svg width="28" height="13" viewBox="0 0 28 13"><rect x="0" y=".5" width="23" height="12" rx="3" stroke="currentColor" stroke-width="1" fill="none"/><rect x="24" y="4" width="2.5" height="5" rx="1" fill="currentColor" opacity=".3"/><rect x="1.5" y="2" width="18" height="9" rx="1.5" fill="currentColor"/></svg>
+  </div>
+</div>
+
+<div class="hdr">
+  <div class="hdr-row">
+    <div><div class="hdr-greet">Welcome, James</div><div class="hdr-date">Friday, Jun 5</div></div>
+    <div class="hdr-icons">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+    </div>
+  </div>
+</div>
+
+<div class="seg">
+  <button class="seg-btn on">Overview</button>
+  <button class="seg-btn">Accounts</button>
+  <button class="seg-btn">Targets</button>
+  <button class="seg-btn">Actions</button>
+</div>
+
+<!-- 3 THINGS TO FIX -->
+<div class="sh">3 things to fix</div>
+
+<div class="fix-card">
+  <div class="fix-top"><div class="fix-badge urgent">Urgent</div></div>
+  <div class="fix-title">Chase Checking won't cover rent</div>
+  <div class="fix-desc">$1,842 balance. $358 short of $2,200 rent due Friday.</div>
+  <div class="fix-bottom">
+    <div class="fix-amt" style="color:var(--red)">-$358</div>
+    <div class="fix-action">Move funds →</div>
+  </div>
+</div>
+
+<div class="fix-card">
+  <div class="fix-top"><div class="fix-badge review">Review</div></div>
+  <div class="fix-title">Emergency fund below target</div>
+  <div class="fix-desc">$8,400 saved. $1,600 from your 6-month goal.</div>
+  <div class="fix-bottom">
+    <div class="fix-amt">$385</div>
+    <div class="fix-action">Adjust plan →</div>
+  </div>
+</div>
+
+<div class="fix-card">
+  <div class="fix-top"><div class="fix-badge grow">Grow</div></div>
+  <div class="fix-title">$4,200 earning almost nothing</div>
+  <div class="fix-desc">0.01% APY across checking. Invest to earn $210 more/yr.</div>
+  <div class="fix-bottom">
+    <div class="fix-amt" style="color:var(--green)">+$210/yr</div>
+    <div class="fix-action">Invest →</div>
+  </div>
+</div>
+
+<!-- NET WORTH -->
+<div class="sh">Net Worth</div>
+<div class="wallet">
+  <div class="wallet-head">
+    <div class="wallet-title">$15,420</div>
+    <div class="wallet-badge green">+$540</div>
+  </div>
+  <div class="row">
+    <div class="row-icon green">↓</div>
+    <div class="row-info"><div class="row-name">Cash</div><div class="row-sub">3 accounts</div></div>
+    <div class="row-right"><div class="row-amt">$3,000</div></div>
+    <div class="row-chevron">›</div>
+  </div>
+  <div class="row">
+    <div class="row-icon blue">↗</div>
+    <div class="row-info"><div class="row-name">Invested</div><div class="row-sub">+2.8% vs last month</div></div>
+    <div class="row-right"><div class="row-amt">$12,420</div><div class="row-change up">+2.8%</div></div>
+    <div class="row-chevron">›</div>
+  </div>
+  <div class="row">
+    <div class="row-icon red">!</div>
+    <div class="row-info"><div class="row-name">Bills Due</div><div class="row-sub">in 14 days · 3 upcoming</div></div>
+    <div class="row-right"><div class="row-amt" style="color:var(--red)">$1,170</div></div>
+    <div class="row-chevron">›</div>
+  </div>
+</div>
+
+<!-- FINANCIAL HEALTH -->
+<div class="sh">Financial Health</div>
+<div class="health">
+  <div class="health-row">
+    <div class="health-ring"><span class="health-score">72</span></div>
+    <div class="health-info">
+      <div class="health-title">Good</div>
+      <div class="health-sub">Move idle cash to investments to push your score above 80.</div>
+    </div>
+  </div>
+  <div class="health-metrics">
+    <div class="hm"><div class="hm-val good">95</div><div class="hm-label">Income</div></div>
+    <div class="hm"><div class="hm-val bad">0</div><div class="hm-label">Cash</div></div>
+    <div class="hm"><div class="hm-val good">78</div><div class="hm-label">Savings</div></div>
+    <div class="hm"><div class="hm-val good">100</div><div class="hm-label">Debt</div></div>
+  </div>
+</div>
+
+<!-- PORTFOLIO -->
+<div class="sh">Portfolio</div>
+<div class="wallet">
+  <div class="wallet-head">
+    <div class="wallet-title">$12,420</div>
+    <div class="wallet-badge green">+2.8%</div>
+  </div>
+  <div class="etf">
+    <div class="etf-icon">VOO</div>
+    <div class="etf-info"><div class="etf-name">Vanguard S&P 500 ETF</div><div class="etf-meta">12 shares</div></div>
+    <div class="etf-right"><div class="etf-amt">$8,073</div><div class="etf-pct up">+3.2%</div></div>
+    <div class="row-chevron">›</div>
+  </div>
+  <div class="etf">
+    <div class="etf-icon" style="background:#f5e8ff;color:#bf5af2">VX</div>
+    <div class="etf-info"><div class="etf-name">Vanguard Total Intl Stock ETF</div><div class="etf-meta">8 shares</div></div>
+    <div class="etf-right"><div class="etf-amt">$3,105</div><div class="etf-pct up">+1.8%</div></div>
+    <div class="row-chevron">›</div>
+  </div>
+  <div class="etf">
+    <div class="etf-icon" style="background:var(--amber-bg);color:var(--amber)">BND</div>
+    <div class="etf-info"><div class="etf-name">Vanguard Total Bond Market ETF</div><div class="etf-meta">10 shares</div></div>
+    <div class="etf-right"><div class="etf-amt">$1,242</div><div class="etf-pct up">+0.4%</div></div>
+    <div class="row-chevron">›</div>
+  </div>
+</div>
+
+<!-- SPENDING -->
+<div class="sh">Spending</div>
+<div class="spend">
+  <div class="spend-top"><div class="spend-val">$3,112</div><div class="spend-budget">of $6,423</div></div>
+  <div class="spend-bar"><div class="spend-fill" style="width:48%"></div></div>
+  <div class="spend-labels"><span>$3,311 left</span><span>17 days left</span></div>
+</div>
+<div class="wallet" style="margin-top:0">
+  <div class="row">
+    <div class="row-icon red" style="width:8px;height:8px;border-radius:50%;background:var(--red)"></div>
+    <div class="row-info"><div class="row-name">Fees & Other</div><div class="row-sub">80%</div></div>
+    <div class="row-right"><div class="row-amt">$2,488</div><div class="row-change up">-41%</div></div>
+  </div>
+  <div class="row">
+    <div class="row-icon blue" style="width:8px;height:8px;border-radius:50%;background:var(--blue)"></div>
+    <div class="row-info"><div class="row-name">Housing & Utilities</div><div class="row-sub">7%</div></div>
+    <div class="row-right"><div class="row-amt">$218</div><div class="row-change up">+7%</div></div>
+  </div>
+  <div class="row">
+    <div class="row-icon amber" style="width:8px;height:8px;border-radius:50%;background:var(--amber)"></div>
+    <div class="row-info"><div class="row-name">Shopping</div><div class="row-sub">7%</div></div>
+    <div class="row-right"><div class="row-amt">$213</div><div class="row-change down">-84%</div></div>
+  </div>
+</div>
+
+<!-- AI INSIGHT -->
+<div class="ai">
+  <div class="ai-tag">✦ Advizmo AI</div>
+  <div class="ai-text">You have <strong>$4,200 earning 0.01%</strong> across your checking accounts. Moving $3,000 to your investment portfolio could earn an estimated <strong>$210 more per year</strong>.</div>
+  <div class="ai-link">Review optimization →</div>
+</div>
+
+<!-- ONBOARDING -->
+<div class="ob">
+  <div class="ob-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+  </div>
+  <h3>Connect your accounts</h3>
+  <p>Link your external bank accounts to start moving money and investing with Advizmo.</p>
+  <button class="ob-btn">Connect your first account</button>
+  <div class="ob-banks">
+    <div class="ob-bank">C</div><div class="ob-bank">B</div><div class="ob-bank">W</div><div class="ob-bank">F</div><div class="ob-bank">S</div>
+    <div class="ob-more">+995</div>
+  </div>
+</div>
+
+<nav class="nb">
+  <a class="ni on" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home</a>
+  <a class="ni" href="invest-overview-1-clarity.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>Invest</a>
+  <a class="ni" href="cashflow-1-pulse.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Plan</a>
+  <a class="ni" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</a>
+</nav>
+
+</body>
+</html>
