@@ -1,0 +1,1527 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Move Money v2 — Component Library</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f2f2f7;--card:#fff;--text:#1c1c1e;--text2:#8e8e93;--text3:#aeaeb2;
+  --border:rgba(0,0,0,.06);--blue:#0a84ff;--green:#166f47;--green-bg:#e8f8ec;
+  --amber:#c2790a;--amber-bg:#fff5e6;--red:#b91c1c;--red-bg:#ffe8e8;
+  --blue-bg:#e8f0ff;--purple:#bf5af2;--shadow:0 1px 3px rgba(0,0,0,.08);
+  --shadow-md:0 4px 12px rgba(0,0,0,.1);--shadow-lg:0 8px 24px rgba(0,0,0,.12);
+}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased}
+.page{max-width:430px;margin:0 auto;padding:0 0 80px}
+.page-header{padding:40px 24px 32px;text-align:center}
+.page-header h1{font-family:'IBM Plex Sans',sans-serif;font-weight:700;font-size:26px;letter-spacing:-.3px;color:var(--text);margin-bottom:4px}
+.page-header p{font-size:14px;color:var(--text2);font-weight:400}
+.section{padding:24px 20px 0}
+.section-label{font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);margin-bottom:4px}
+.section-title{font-family:'IBM Plex Sans',sans-serif;font-weight:700;font-size:22px;color:var(--text);margin-bottom:4px;letter-spacing:-.2px}
+.section-desc{font-size:14px;color:var(--text2);margin-bottom:16px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:12px;position:relative}
+.iter-label{font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:16px;color:var(--text);margin:28px 0 4px;letter-spacing:-.1px}
+.iter-desc{font-size:13px;color:var(--text2);margin-bottom:12px}
+.state-label{font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;font-family:'IBM Plex Sans',sans-serif}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:6px;font-size:12px;font-weight:600;line-height:1}
+.badge-checking{background:var(--blue-bg);color:var(--blue)}
+.badge-savings{background:var(--green-bg);color:var(--green)}
+.badge-investment{background:#f3e8ff;color:var(--purple)}
+.badge-credit{background:var(--red-bg);color:var(--red)}
+.badge-brokerage{background:#fff5e6;color:var(--amber)}
+.badge-crypto{background:#f0f0ff;color:#5856d6}
+.icon-circle{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;flex-shrink:0;font-family:'IBM Plex Sans',sans-serif;color:#fff}
+.amount-input{font-family:'IBM Plex Sans',sans-serif;font-size:20px;font-weight:600;border:none;outline:none;background:transparent;width:100%;color:var(--text);padding:0}
+.amount-input::placeholder{color:var(--text3)}
+.amount-input-error{color:var(--red)}
+.amount-input-warning{color:var(--amber)}
+.amount-input-success{color:var(--green)}
+.amount-row{display:flex;align-items:center;gap:4px;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;background:#fafafa;transition:border-color .15s}
+.amount-row-focus{border-color:var(--blue);background:#fff}
+.amount-row-error{border-color:var(--red);background:#fff}
+.amount-row-warning{border-color:var(--amber);background:#fff}
+.amount-row-success{border-color:var(--green);background:#fff}
+.amount-row-disabled{opacity:.4;pointer-events:none}
+.amount-prefix{font-family:'IBM Plex Sans',sans-serif;font-size:20px;font-weight:600;color:var(--text)}
+.helper-text{font-size:12px;margin-top:6px;display:flex;align-items:center;gap:4px}
+.helper-error{color:var(--red)}
+.helper-warning{color:var(--amber)}
+.helper-info{color:var(--blue)}
+.helper-success{color:var(--green)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 16px;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;border:none;min-height:44px;min-width:44px;font-family:'Inter',sans-serif;transition:all .15s}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-secondary{background:var(--bg);color:var(--text)}
+.btn-danger{background:var(--red);color:#fff}
+.btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--text)}
+.btn-ghost{background:transparent;color:var(--blue);padding:8px}
+.btn-sm{padding:6px 12px;font-size:13px;min-height:32px;border-radius:8px}
+.btn-full{width:100%}
+.source-card{display:flex;align-items:center;gap:12px;background:var(--card);border:1.5px solid var(--border);border-radius:16px;padding:14px 16px;position:relative;transition:all .15s}
+.source-selected{border-color:var(--blue);background:#f0f6ff}
+.source-disabled{opacity:.5;pointer-events:none}
+.source-external{border-style:dashed}
+.source-info{flex:1;min-width:0}
+.source-name{font-weight:600;font-size:15px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.source-meta{font-size:13px;color:var(--text2);display:flex;align-items:center;gap:6px}
+.source-balance{font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:14px;color:var(--text)}
+.change-btn{background:transparent;color:var(--blue);border:none;font-weight:600;font-size:13px;cursor:pointer;padding:6px 10px;border-radius:8px;font-family:'Inter',sans-serif;min-height:32px}
+.dest-card{position:relative;overflow:visible}
+.dest-stacked .dest-header{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
+.dest-stacked .dest-name{font-weight:600;font-size:15px;color:var(--text);line-height:1.3;max-height:3.9em;overflow:hidden;flex:1}
+.dest-stacked .dest-meta{display:flex;align-items:center;gap:6px;margin-bottom:10px}
+.dest-stacked .dest-balance{font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:500;color:var(--text2)}
+.dest-split{display:flex;flex-direction:column;gap:8px}
+.dest-split .dest-top{display:flex;align-items:flex-start;gap:10px}
+.dest-split .dest-name-wrap{flex:1;min-width:0}
+.dest-split .dest-name{font-weight:600;font-size:15px;color:var(--text);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.dest-split .dest-amount-wrap{flex-shrink:0;min-width:120px;text-align:right}
+.dest-split .dest-amount-wrap .amount-row{text-align:right;justify-content:flex-end}
+.dest-split .dest-bottom{display:flex;align-items:center;justify-content:space-between;padding-left:50px}
+.dest-badge-led{display:flex;flex-direction:column;gap:8px}
+.dest-badge-led .dest-badge-row{display:flex;align-items:center;gap:8px}
+.dest-badge-led .dest-name{font-weight:600;font-size:15px;color:var(--text);flex:1}
+.dest-badge-led .dest-amount-row{display:flex;align-items:center;gap:8px}
+.dest-badge-led .dest-amount-row .amount-row{flex:1}
+.dest-compact{padding:14px 16px}
+.dest-compact .dest-compact-row{display:flex;align-items:center;gap:10px}
+.dest-compact .dest-compact-info{flex:1;min-width:0}
+.dest-compact .dest-compact-name{font-weight:600;font-size:15px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dest-compact .dest-compact-sub{font-size:13px;color:var(--text2);display:flex;align-items:center;gap:6px}
+.dest-compact .dest-amount-wrap{flex-shrink:0;min-width:110px}
+.dest-compact .dest-amount-wrap .amount-row{padding:8px 10px}
+.dest-compact .dest-amount-wrap .amount-input{font-size:17px}
+.dest-card-stack{box-shadow:var(--shadow-md);border:1px solid var(--border);padding:20px 18px;display:flex;flex-direction:column;gap:12px}
+.dest-card-stack .dest-name{font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:16px;color:var(--text);line-height:1.3;max-height:3.9em;overflow:hidden}
+.dest-card-stack .dest-balance{font-family:'IBM Plex Sans',sans-serif;font-size:22px;font-weight:700;color:var(--text)}
+.dest-card-stack .dest-amount-row{margin-top:4px}
+.lock-overlay{position:absolute;inset:0;border-radius:16px;background:rgba(242,242,247,.6);display:flex;align-items:center;justify-content:center;gap:6px;backdrop-filter:blur(1px);z-index:2}
+.lock-overlay span{font-size:13px;font-weight:500;color:var(--text2)}
+.source-verify{position:relative}
+.source-verify .verify-btn{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:var(--amber);color:#fff;padding:6px 12px;border-radius:8px;border:none;font-weight:600;font-size:13px;cursor:pointer}
+.source-reconnect{position:relative}
+.source-reconnect .reconnect-btn{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:var(--amber);color:#fff;padding:6px 12px;border-radius:8px;border:none;font-weight:600;font-size:13px;cursor:pointer}
+.skeleton{background:linear-gradient(90deg,#e8e8e8 25%,#f0f0f0 50%,#e8e8e8 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:8px}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.validation-inline{display:flex;align-items:flex-start;gap:6px;padding:8px 12px;border-radius:8px;font-size:13px;margin-top:6px}
+.validation-error-inline{background:var(--red-bg);color:var(--red)}
+.validation-warning-inline{background:var(--amber-bg);color:var(--amber)}
+.validation-info-inline{background:var(--blue-bg);color:var(--blue)}
+.validation-success-inline{background:var(--green-bg);color:var(--green)}
+.validation-banner{display:flex;align-items:flex-start;gap:8px;padding:12px 14px;border-radius:12px;font-size:13px;margin-bottom:12px}
+.validation-banner-error{background:var(--red-bg);color:var(--red);border:1px solid rgba(185,28,28,.12)}
+.validation-banner-warning{background:var(--amber-bg);color:var(--amber);border:1px solid rgba(194,121,10,.12)}
+.validation-banner-info{background:var(--blue-bg);color:var(--blue);border:1px solid rgba(10,132,255,.12)}
+.validation-summary{background:var(--red-bg);border:1px solid rgba(185,28,28,.1);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.validation-summary-title{font-weight:600;font-size:14px;color:var(--red);margin-bottom:6px}
+.validation-summary-item{font-size:13px;color:var(--red);padding:2px 0;display:flex;align-items:center;gap:4px}
+.calc-disclosure{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:12px}
+.calc-trigger{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;cursor:pointer;font-size:14px;font-weight:500;color:var(--blue);background:transparent;border:none;width:100%;font-family:'Inter',sans-serif}
+.calc-trigger:hover{background:var(--blue-bg)}
+.calc-trigger .chevron{transition:transform .2s;font-size:12px}
+.calc-trigger-open .chevron{transform:rotate(90deg)}
+.calc-content{padding:0 14px 14px;border-top:1px solid var(--border)}
+.calc-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:14px}
+.calc-row-label{color:var(--text2)}
+.calc-row-value{font-family:'IBM Plex Sans',sans-serif;font-weight:500;color:var(--text)}
+.calc-row-total{border-top:1px solid var(--border);padding-top:8px;margin-top:4px}
+.calc-row-total .calc-row-label{font-weight:600;color:var(--text)}
+.calc-row-total .calc-row-value{font-weight:700;color:var(--blue);font-size:16px}
+.calc-source{font-size:11px;color:var(--text3);margin-top:8px;font-style:italic}
+.footer-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;padding:12px 20px 28px;z-index:100}
+.footer-bar-bg{background:rgba(255,255,255,.96);backdrop-filter:blur(20px);border-radius:16px;box-shadow:0 -2px 12px rgba(0,0,0,.08)}
+.footer-minimal{display:flex;justify-content:space-between;align-items:center;padding:14px 18px}
+.footer-minimal-text{font-size:14px;font-weight:500;color:var(--text)}
+.footer-minimal-link{font-size:14px;font-weight:600;color:var(--blue)}
+.footer-detailed{padding:14px 18px;text-align:center}
+.footer-detailed-total{font-family:'IBM Plex Sans',sans-serif;font-size:22px;font-weight:700;color:var(--text)}
+.footer-detailed-sub{font-size:13px;color:var(--text2);margin-bottom:10px}
+.footer-breakdown{padding:14px 18px}
+.footer-breakdown-items{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:13px;color:var(--text2);margin-bottom:10px}
+.footer-breakdown-total{font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:10px}
+.footer-apple{text-align:center;padding:20px 18px}
+.footer-apple-amount{font-family:'IBM Plex Sans',sans-serif;font-size:28px;font-weight:700;color:var(--text);margin-bottom:12px}
+.footer-multi{padding:14px 18px}
+.footer-multi-total{font-size:13px;color:var(--text2);margin-bottom:6px}
+.footer-multi-total strong{color:var(--text)}
+.footer-multi-items{font-size:13px;color:var(--text2);margin-bottom:10px;line-height:1.8}
+.numpad-sheet{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:#d1d3d9;z-index:200}
+.numpad-sheet-inner{background:#fff;padding:0}
+.numpad-amount-display{padding:20px 24px 12px;text-align:center;font-family:'IBM Plex Sans',sans-serif;font-size:36px;font-weight:700;color:var(--text)}
+.numpad-balance-display{padding:0 24px 12px;text-align:center;font-size:13px;color:var(--text2)}
+.numpad-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;padding:0 4px 4px}
+.numpad-key{display:flex;align-items:center;justify-content:center;height:52px;font-size:22px;font-weight:400;color:var(--text);background:#fff;border:none;cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
+.numpad-key:active{background:#e0e0e0}
+.numpad-key-action{background:#d1d3d9;font-size:16px;font-weight:600}
+.numpad-key-done{background:var(--blue);color:#fff;font-size:16px;font-weight:600;border-radius:0 0 10px 10px}
+.numpad-del{font-size:18px}
+.quick-select{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.quick-pill{padding:8px 16px;border-radius:20px;font-size:14px;font-weight:600;border:1.5px solid var(--border);background:var(--card);color:var(--text);cursor:pointer;font-family:'IBM Plex Sans',sans-serif;transition:all .15s;min-height:44px}
+.quick-pill:active{background:var(--bg)}
+.quick-pill-selected{background:var(--blue);color:#fff;border-color:var(--blue)}
+.quick-pill-recommended{border-color:var(--blue);color:var(--blue)}
+.add-dest-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:16px;border:1.5px dashed var(--text3);border-radius:16px;background:transparent;color:var(--text2);font-size:15px;font-weight:600;cursor:pointer;min-height:56px;font-family:'Inter',sans-serif}
+.add-dest-btn:active{background:var(--bg)}
+.sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:300}
+.sheet{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:#fff;border-radius:16px 16px 0 0;max-height:85vh;overflow:hidden;z-index:301}
+.sheet-handle{width:36px;height:5px;background:#c7c7cc;border-radius:3px;margin:10px auto 0}
+.sheet-header{padding:16px 20px 12px;display:flex;align-items:center;justify-content:space-between}
+.sheet-title{font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700}
+.sheet-close{width:28px;height:28px;border-radius:50%;background:var(--bg);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:var(--text2)}
+.sheet-search{margin:0 20px 12px;padding:10px 12px;border-radius:10px;border:1.5px solid var(--border);font-size:15px;width:calc(100% - 40px);font-family:'Inter',sans-serif}
+.sheet-search:focus{border-color:var(--blue);outline:none}
+.sheet-section{padding:0 20px}
+.sheet-section-title{font-size:12px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;padding:8px 0 6px}
+.sheet-account{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);cursor:pointer}
+.sheet-account:last-child{border-bottom:none}
+.sheet-account-disabled{opacity:.4;pointer-events:none}
+.sheet-account-name{font-weight:600;font-size:15px;color:var(--text);flex:1}
+.sheet-account-meta{font-size:13px;color:var(--text2);display:flex;align-items:center;gap:6px}
+.sheet-account-check{width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.sheet-account-check-empty{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--text3);flex-shrink:0}
+.sheet-no-results{padding:32px 20px;text-align:center}
+.sheet-no-results-icon{font-size:36px;margin-bottom:8px}
+.sheet-no-results-text{font-size:15px;font-weight:600;color:var(--text);margin-bottom:4px}
+.sheet-no-results-sub{font-size:13px;color:var(--text2)}
+.sheet-add-new{display:flex;align-items:center;gap:12px;padding:14px 0;border-top:1px solid var(--border);margin-top:4px;cursor:pointer}
+.sheet-add-new-icon{width:40px;height:40px;border-radius:10px;background:var(--blue-bg);display:flex;align-items:center;justify-content:center;color:var(--blue);font-size:20px;font-weight:700}
+.sheet-add-new-text{font-weight:600;font-size:15px;color:var(--blue)}
+.dest-state{display:flex;align-items:center;gap:12px;padding:14px 16px}
+.dest-state-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px}
+.dest-state-info{flex:1;min-width:0}
+.dest-state-name{font-weight:600;font-size:15px;color:var(--text)}
+.dest-state-sub{font-size:13px;color:var(--text2)}
+.spinner{width:18px;height:18px;border:2px solid var(--text3);border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.edge-case{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:8px}
+.edge-case-name{font-weight:600;font-size:14px;color:var(--text);margin-bottom:4px}
+.edge-case-desc{font-size:13px;color:var(--text2);margin-bottom:6px}
+.edge-case-response{font-size:13px;color:var(--blue);font-weight:500}
+.assembled-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:12px}
+.assembled-section-label{font-size:12px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;margin-top:14px}
+.assembled-section-label:first-child{margin-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+<div class="page-header">
+  <h1>Move Money v2 — Component Library</h1>
+  <p>Production-ready components for Figma implementation</p>
+</div>
+
+<!-- SECTION 1: EDITABLE DESTINATION CARD -->
+<div class="section">
+  <div class="section-label">Section 1</div>
+  <div class="section-title">Editable Destination Card</div>
+  <div class="section-desc">5 layout iterations × 3 name/balance sizes × 6 states each</div>
+</div>
+
+<!-- ITERATION 1: STACKED -->
+<div class="section">
+  <div class="iter-label">Iteration 1 — "Stacked"</div>
+  <div class="iter-desc">Name on top (max 3 lines), type+balance below, amount input below. Vertical flow. Cleanest for long names.</div>
+
+  <div class="state-label">Short name + small balance</div>
+  <div class="card dest-card dest-stacked">
+    <div class="dest-header">
+      <div class="icon-circle" style="background:#1a73e8">C</div>
+      <div class="dest-name">Chase Checking · 2457</div>
+    </div>
+    <div class="dest-meta">
+      <span class="badge badge-checking">Checking</span>
+      <span class="dest-balance">$895.00</span>
+    </div>
+    <div class="amount-row"><span class="amount-prefix">$</span><input class="amount-input" type="text" placeholder="0.00" readonly></div>
+  </div>
+
+  <div class="state-label">Focused</div>
+  <div class="card dest-card dest-stacked">
+    <div class="dest-header">
+      <div class="icon-circle" style="background:#1a73e8">C</div>
+      <div class="dest-name">Chase Checking · 2457</div>
+    </div>
+    <div class="dest-meta">
+      <span class="badge badge-checking">Checking</span>
+      <span class="dest-balance">$895.00</span>
+    </div>
+    <div class="amount-row amount-row-focus">
+      <span class="amount-prefix">$</span>
+      <input class="amount-input" type="text" value="250.00" readonly>
+      <span style="width:2px;height:22px;background:var(--blue);animation:blink 1s infinite"></span>
+    </div>
+  </div>
+
+  <div class="state-label">Filled</div>
+  <div class="card dest-card dest-stacked">
+    <div class="dest-header">
+      <div class="icon-circle" style="background:#1a73e8">C</div>
+      <div class="dest-name">Chase Checking · 2457</div>
+    </div>
+    <div class="dest-meta">
+      <span class="badge badge-checking">Checking</span>
+      <span class="dest-balance">$895.00</span>
+    </div>
+    <div class="amount-row amount-row-success">
+      <span class="amount-prefix">$</span>
+      <input class="amount-input amount-input-success" type="text" value="250.00" readonly>
+    </div>
+    <div class="helper-text helper-success">✓ Remaining after transfer: $645.00</div>
+  </div>
+
+  <div class="state-label">Error — Insufficient funds</div>
+  <div class="card dest-card dest-stacked">
+    <div class="dest-header">
+      <div class="icon-circle" style="background:#1a73e8">C</div>
+      <div class="dest-name">Chase Checking · 2457</div>
+    </div>
+    <div class="dest-meta">
+      <span class="badge badge-checking">Checking</span>
+      <span class="dest-balance">$895.00</span>
+    </div>
+    <div class="amount-row amount-row-error">
+      <span class="amount-prefix">$</span>
+      <input class="amount-input amount-input-error" type="text" value="1,200.00" readonly>
+    </div>
+    <div class="helper-text helper-error">✕ Insufficient funds. Available: $895.00</div>
+  </div>
+
+  <div class="state-label">Warning — Minimum transfer</div>
+  <div class="card dest-card dest-stacked">
+    <div class="dest-header">
+      <div class="icon-circle" style="background:#1a73e8">C</div>
+      <div class="dest-name">Chase Checking · 2457</div>
+    </div>
+    <div class="dest-meta">
+      <span class="badge badge-checking">Checking</span>
+      <span class="dest-balance">$895.00</span>
+    </div>
+    <div class="amount-row amount-row-warning">
+      <span class="amount-prefix">$</span>
+      <input class="amount-input amount-input-warning" type="text" value="0.50" readonly>
+    </div>
+    <div class="helper-text helper-warning">⚠ Minimum transfer: $1.00</div>
+  </div>
+
+  <div class="state-label">Disabled</div>
+  <div class="card dest-card dest-stacked" style="opacity:.45;pointer-events:none">
+    <div class="dest-header">
+      <div class="icon-circle" style="background:#c7c7cc">C</div>
+      <div class="dest-name" style="color:var(--text2)">Chase Checking · 2457</div>
+    </div>
+    <div class="dest-meta">
+      <span class="badge badge-checking" style="opacity:.5">Checking</span>
+      <span class="dest-balance" style="color:var(--text3)">$895.00</span>
+    </div>
+    <div class="amount-row amount-row-disabled">
+      <span class="amount-prefix" style="color:var(--text3)">$</span>
+      <input class="amount-input" type="text" placeholder="0.00" readonly style="color:var(--text3)">
+    </div>
+    <div class="lock-overlay">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8e8e93" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+      <span>Account frozen</span>
+    </div>
+  </div>
+
+  <div class="state-label" style="margin-top:20px">Long name + medium balance</div>
+  <div class="card dest-card dest-stacked">
+    <div class="dest-header">
+      <div class="icon-circle" style="background:#7c3aed">V</div>
+      <div class="dest-name">Vanguard Total Stock Market Index Fund Admiral Shares</div>
+    </div>
+    <div class="dest-meta">
+      <span class="badge badge-investment">Investment</span>
+      <span class="dest-balance">$12,420.50</span>
+    </div>
+    <div class="amount-row"><span class="amount-prefix">$</span><input class="amount-input" type="text" placeholder="0.00" readonly></div>
+  </div>
+
+  <div class="state-label" style="margin-top:20px">Max stress test</div>
+  <div class="card dest-card dest-stacked">
+    <div class="dest-header">
+      <div class="icon-circle" style="background:#0e7a0d">T</div>
+      <div class="dest-name">TD Bank Business Premier Account with Savings</div>
+    </div>
+    <div class="dest-meta">
+      <span class="badge badge-savings">Savings</span>
+      <span class="dest-balance">$99,999,999.99</span>
+    </div>
+    <div class="amount-row">
+      <span class="amount-prefix">$</span>
+      <input class="amount-input" type="text" value="99,999,999.99" readonly>
+    </div>
+    <div class="helper-text helper-success">✓ Remaining after transfer: $0.00</div>
+  </div>
+</div>
+
+<!-- ITERATION 2: SPLIT -->
+<div class="section">
+  <div class="iter-label">Iteration 2 — "Split"</div>
+  <div class="iter-desc">Name left (2 lines max with ellipsis), amount input right-aligned. Type badge and balance as compact row below.</div>
+
+  <div class="state-label">Default — Short name</div>
+  <div class="card dest-card dest-split">
+    <div class="dest-top">
+      <div class="icon-circle" style="background:#1a73e8">C</div>
+      <div class="dest-name-wrap"><div class="dest-name">Chase Checking · 2457</div></div>
+      <div class="dest-amount-wrap">
+        <div class="amount-row"><span class="amount-prefix">$</span><input class="amount-input" type="text" placeholder="0.00" readonly style="font-size:17px"></div>
+      </div>
+    </div>
+    <div class="dest-bottom">
+      <div class="dest-meta" style="padding-left:50px">
+        <span class="badge badge-checking">Checking</span>
+        <span class="dest-balance">Bal: $895.00</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="state-label">Focused — Long name</div>
+  <div class="card dest-card dest-split">
+    <div class="dest-top">
+      <div class="icon-circle" style="background:#7c3aed">V</div>
+      <div class="dest-name-wrap"><div class="dest-name">Vanguard Total Stock Market Index Fund Admiral Shares</div></div>
+      <div class="dest-amount-wrap">
+        <div class="amount-row amount-row-focus"><span class="amount-prefix">$</span><input class="amount-input" type="text" value="5,000.00" readonly style="font-size:17px"></div>
+      </div>
+    </div>
+    <div class="dest-bottom">
+      <div class="dest-meta" style="padding-left:50px">
+        <span class="badge badge-investment">Investment</span>
+        <span class="dest-balance">Bal: $12,420.50</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="state-label">Error</div>
+  <div class="card dest-card dest-split">
+    <div class="dest-top">
+      <div class="icon-circle" style="background:#1a73e8">C</div>
+      <div class="dest-name-wrap"><div class="dest-name">Chase Checking · 2457</div></div>
+      <div class="dest-amount-wrap">
+        <div class="amount-row amount-row-error"><span class="amount-prefix">$</span><input class="amount-input amount-input-error" type="text" value="1,200.00" readonly style="font-size:17px"></div>
+        <div class="helper-text helper-error" style="margin-top:4px">✕ Insufficient</div>
+      </div>
+    </div>
+    <div class="dest-bottom">
+      <div class="dest-meta" style="padding-left:50px">
+        <span class="badge badge-checking">Checking</span>
+        <span class="dest-balance">Bal: $895.00</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="state-label">Max stress test</div>
+  <div class="card dest-card dest-split">
+    <div class="dest-top">
+      <div class="icon-circle" style="background:#0e7a0d">T</div>
+      <div class="dest-name-wrap"><div class="dest-name">TD Bank Business Premier Account with Savings</div></div>
+      <div class="dest-amount-wrap">
+        <div class="amount-row"><span class="amount-prefix">$</span><input class="amount-input" type="text" value="99,999,999.99" readonly style="font-size:17px"></div>
+      </div>
+    </div>
+    <div class="dest-bottom">
+      <div class="dest-meta" style="padding-left:50px">
+        <span class="badge badge-savings">Savings</span>
+        <span class="dest-balance">Bal: $99,999,999.99</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ITERATION 3: BADGE-LED -->
+<div class="section">
+  <div class="iter-label">Iteration 3 — "Badge-Led"</div>
+  <div class="iter-desc">Account type badge as primary visual, name below, amount as right-aligned input. Type-first hierarchy.</div>
+
+  <div class="state-label">Default — Short name</div>
+  <div class="card dest-card dest-badge-led">
+    <div class="dest-badge-row">
+      <span class="badge badge-checking" style="font-size:13px;padding:4px 10px">Checking</span>
+      <div class="dest-name">Chase Checking · 2457</div>
+    </div>
+    <div class="dest-amount-row">
+      <span class="dest-balance" style="flex:1">Balance: $895.00</span>
+      <div class="amount-row" style="flex:1"><span class="amount-prefix">$</span><input class="amount-input" type="text" placeholder="0.00" readonly style="font-size:17px"></div>
+    </div>
+  </div>
+
+  <div class="state-label">Focused — Long name</div>
+  <div class="card dest-card dest-badge-led">
+    <div class="dest-badge-row">
+      <span class="badge badge-investment" style="font-size:13px;padding:4px 10px">Investment</span>
+      <div class="dest-name">Vanguard Total Stock Market Index Fund Admiral Shares</div>
+    </div>
+    <div class="dest-amount-row">
+      <span class="dest-balance" style="flex:1">Balance: $12,420.50</span>
+      <div class="amount-row amount-row-focus" style="flex:1"><span class="amount-prefix">$</span><input class="amount-input" type="text" value="3,000.00" readonly style="font-size:17px"></div>
+    </div>
+  </div>
+
+  <div class="state-label">Max stress test</div>
+  <div class="card dest-card dest-badge-led">
+    <div class="dest-badge-row">
+      <span class="badge badge-savings" style="font-size:13px;padding:4px 10px">Savings</span>
+      <div class="dest-name">TD Bank Business Premier Account with Savings</div>
+    </div>
+    <div class="dest-amount-row">
+      <span class="dest-balance" style="flex:1">Balance: $99,999,999.99</span>
+      <div class="amount-row" style="flex:1"><span class="amount-prefix">$</span><input class="amount-input" type="text" value="99,999,999.99" readonly style="font-size:17px"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ITERATION 4: COMPACT ROW -->
+<div class="section">
+  <div class="iter-label">Iteration 4 — "Compact Row"</div>
+  <div class="iter-desc">Single dense row with icon, name (1 line ellipsis), amount input. Balance as secondary text. Maximum density.</div>
+
+  <div class="state-label">Default — Short name</div>
+  <div class="card dest-card dest-compact">
+    <div class="dest-compact-row">
+      <div class="icon-circle" style="background:#1a73e8;width:36px;height:36px;border-radius:8px;font-size:14px">C</div>
+      <div class="dest-compact-info">
+        <div class="dest-compact-name">Chase Checking · 2457</div>
+        <div class="dest-compact-sub"><span class="badge badge-checking" style="font-size:10px;padding:2px 6px">Checking</span> $895.00</div>
+      </div>
+      <div class="dest-amount-wrap"><div class="amount-row" style="padding:8px 10px"><span class="amount-prefix" style="font-size:16px">$</span><input class="amount-input" type="text" placeholder="0.00" readonly style="font-size:16px"></div></div>
+    </div>
+  </div>
+
+  <div class="state-label">Focused — Long name</div>
+  <div class="card dest-card dest-compact">
+    <div class="dest-compact-row">
+      <div class="icon-circle" style="background:#7c3aed;width:36px;height:36px;border-radius:8px;font-size:14px">V</div>
+      <div class="dest-compact-info">
+        <div class="dest-compact-name">Vanguard Total Stock Market Index Fund Admiral Shares</div>
+        <div class="dest-compact-sub"><span class="badge badge-investment" style="font-size:10px;padding:2px 6px">Investment</span> $12,420.50</div>
+      </div>
+      <div class="dest-amount-wrap"><div class="amount-row amount-row-focus" style="padding:8px 10px"><span class="amount-prefix" style="font-size:16px">$</span><input class="amount-input" type="text" value="1,500.00" readonly style="font-size:16px"></div></div>
+    </div>
+  </div>
+
+  <div class="state-label">Max stress test</div>
+  <div class="card dest-card dest-compact">
+    <div class="dest-compact-row">
+      <div class="icon-circle" style="background:#0e7a0d;width:36px;height:36px;border-radius:8px;font-size:14px">T</div>
+      <div class="dest-compact-info">
+        <div class="dest-compact-name">TD Bank Business Premier Account with Savings</div>
+        <div class="dest-compact-sub"><span class="badge badge-savings" style="font-size:10px;padding:2px 6px">Savings</span> $99,999,999.99</div>
+      </div>
+      <div class="dest-amount-wrap"><div class="amount-row" style="padding:8px 10px"><span class="amount-prefix" style="font-size:16px">$</span><input class="amount-input" type="text" value="99,999,999.99" readonly style="font-size:16px"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ITERATION 5: CARD STACK -->
+<div class="section">
+  <div class="iter-label">Iteration 5 — "Card Stack"</div>
+  <div class="iter-desc">Elevated card with subtle shadow, name at top, balance center, amount input bottom. Premium feel with more spacing.</div>
+
+  <div class="state-label">Default — Short name</div>
+  <div class="card dest-card dest-card-stack">
+    <div style="display:flex;align-items:flex-start;gap:10px">
+      <div class="icon-circle" style="background:#1a73e8">C</div>
+      <div><div class="dest-name">Chase Checking · 2457</div><span class="badge badge-checking" style="margin-top:4px">Checking</span></div>
+    </div>
+    <div class="dest-balance">$895.00</div>
+    <div class="amount-row dest-amount-row"><span class="amount-prefix">$</span><input class="amount-input" type="text" placeholder="0.00" readonly></div>
+  </div>
+
+  <div class="state-label">Focused — Long name</div>
+  <div class="card dest-card dest-card-stack">
+    <div style="display:flex;align-items:flex-start;gap:10px">
+      <div class="icon-circle" style="background:#7c3aed">V</div>
+      <div style="flex:1;min-width:0"><div class="dest-name">Vanguard Total Stock Market Index Fund Admiral Shares</div><span class="badge badge-investment" style="margin-top:4px">Investment</span></div>
+    </div>
+    <div class="dest-balance">$12,420.50</div>
+    <div class="amount-row dest-amount-row amount-row-focus"><span class="amount-prefix">$</span><input class="amount-input" type="text" value="5,000.00" readonly></div>
+  </div>
+
+  <div class="state-label">Max stress test — Error</div>
+  <div class="card dest-card dest-card-stack">
+    <div style="display:flex;align-items:flex-start;gap:10px">
+      <div class="icon-circle" style="background:#0e7a0d">T</div>
+      <div style="flex:1;min-width:0"><div class="dest-name">TD Bank Business Premier Account with Savings</div><span class="badge badge-savings" style="margin-top:4px">Savings</span></div>
+    </div>
+    <div class="dest-balance" style="color:var(--red)">$99,999,999.99</div>
+    <div class="amount-row dest-amount-row amount-row-error"><span class="amount-prefix">$</span><input class="amount-input amount-input-error" type="text" value="99,999,999.99" readonly></div>
+    <div class="helper-text helper-error">✕ Insufficient funds. Available: $99,999,999.99</div>
+  </div>
+</div>
+
+<!-- SECTION 2: SOURCE ACCOUNT -->
+<div class="section">
+  <div class="section-label">Section 2</div>
+  <div class="section-title">Source Account</div>
+  <div class="section-desc">Reusable source card with all states</div>
+</div>
+<div class="section">
+  <div class="state-label">Normal — with CHANGE button</div>
+  <div class="source-card">
+    <div class="icon-circle" style="background:#1a73e8">C</div>
+    <div class="source-info"><div class="source-name">Chase Checking</div><div class="source-meta"><span>Checking · 2457</span></div></div>
+    <div style="text-align:right"><div class="source-balance">$4,892.15</div><button class="change-btn">CHANGE</button></div>
+  </div>
+  <div class="state-label">Selected — blue highlight</div>
+  <div class="source-card source-selected">
+    <div class="icon-circle" style="background:#1a73e8">C</div>
+    <div class="source-info"><div class="source-name">Chase Checking</div><div class="source-meta"><span>Checking · 2457</span></div></div>
+    <div style="text-align:right"><div class="source-balance">$4,892.15</div><button class="change-btn">CHANGE</button></div>
+  </div>
+  <div class="state-label">Disabled — gray, lock icon</div>
+  <div class="source-card source-disabled" style="position:relative">
+    <div class="icon-circle" style="background:#c7c7cc">C</div>
+    <div class="source-info"><div class="source-name">Chase Checking</div><div class="source-meta"><span>Checking · 2457</span></div></div>
+    <div style="text-align:right"><div class="source-balance" style="color:var(--text3)">$4,892.15</div></div>
+    <div class="lock-overlay" style="border-radius:10px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8e8e93" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+  </div>
+  <div class="state-label">External account — link icon</div>
+  <div class="source-card source-external">
+    <div class="icon-circle" style="background:#5856d6"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div>
+    <div class="source-info"><div class="source-name">Capital One 360</div><div class="source-meta"><span>External · Savings · 7891</span></div></div>
+    <div style="text-align:right"><div class="source-balance">$2,340.00</div><button class="change-btn">CHANGE</button></div>
+  </div>
+  <div class="state-label">Verification required — shield icon</div>
+  <div class="source-card source-verify">
+    <div class="icon-circle" style="background:var(--amber)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+    <div class="source-info"><div class="source-name">Wells Fargo</div><div class="source-meta"><span>Checking · 3320</span></div></div>
+    <div style="text-align:right"><div class="source-balance" style="color:var(--amber)">$1,205.40</div></div>
+    <button class="verify-btn">Verify</button>
+  </div>
+  <div class="state-label">Connection expired — warning icon</div>
+  <div class="source-card source-reconnect">
+    <div class="icon-circle" style="background:var(--amber)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+    <div class="source-info"><div class="source-name">Bank of America</div><div class="source-meta"><span>Savings · 5589</span></div></div>
+    <div style="text-align:right"><div class="source-balance" style="color:var(--text3)">$0.00</div></div>
+    <button class="reconnect-btn">Reconnect</button>
+  </div>
+  <div class="state-label">Loading — skeleton</div>
+  <div class="source-card">
+    <div class="skeleton" style="width:40px;height:40px;border-radius:10px;flex-shrink:0"></div>
+    <div class="source-info" style="flex:1"><div class="skeleton" style="height:16px;width:60%;margin-bottom:6px"></div><div class="skeleton" style="height:13px;width:40%"></div></div>
+    <div style="text-align:right"><div class="skeleton" style="height:16px;width:70px;margin-bottom:4px;margin-left:auto"></div><div class="skeleton" style="height:28px;width:60px;border-radius:8px;margin-left:auto"></div></div>
+  </div>
+  <div class="state-label">Insufficient balance — red balance</div>
+  <div class="source-card" style="border-color:rgba(185,28,28,.15)">
+    <div class="icon-circle" style="background:var(--red)">C</div>
+    <div class="source-info"><div class="source-name">Chase Checking</div><div class="source-meta"><span>Checking · 2457</span></div></div>
+    <div style="text-align:right"><div class="source-balance" style="color:var(--red)">$212.40</div><div style="font-size:11px;color:var(--red);font-weight:500">⚠ Insufficient</div></div>
+  </div>
+</div>
+
+<!-- SECTION 3: DESTINATION STATES — ALL 18 STATES -->
+<div class="section">
+  <div class="section-label">Section 3</div>
+  <div class="section-title">Destination States</div>
+  <div class="section-desc">All 18 destination states with clear labels</div>
+</div>
+<div class="section">
+  <!-- 1. Editable -->
+  <div class="card" style="padding:14px 18px;border-left:3px solid var(--blue)">
+    <div class="dest-state" style="padding:0">
+      <div class="dest-state-icon" style="background:var(--blue-bg)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2.5" stroke-linecap="round"><path d="M17 3a2.828 2.828 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg></div>
+      <div class="dest-state-info"><div class="dest-state-name">Chase Checking · 2457</div><div class="dest-state-sub">Editable — Active input, blue left border</div></div>
+      <div class="amount-row amount-row-focus" style="width:120px;min-width:0;flex-shrink:0"><span class="amount-prefix" style="font-size:16px">$</span><input class="amount-input" type="text" placeholder="0.00" readonly style="font-size:16px"></div>
+    </div>
+  </div>
+  <!-- 2. Selected -->
+  <div class="card">
+    <div class="dest-state" style="padding:14px 16px">
+      <div class="dest-state-icon" style="background:var(--green-bg)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="3" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+      <div class="dest-state-info"><div class="dest-state-name">Chase Checking · 2457</div><div class="dest-state-sub">Selected — $250.00</div></div>
+      <span style="font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:16px;color:var(--green)">$250.00</span>
+    </div>
+  </div>
+  <!-- 3. Disabled -->
+  <div class="card" style="opacity:.5">
+    <div class="dest-state" style="padding:14px 16px">
+      <div class="dest-state-icon" style="background:#f0f0f0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aeaeb2" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+      <div class="dest-state-info"><div class="dest-state-name">Chase Checking · 2457</div><div class="dest-state-sub">Disabled — Account frozen</div></div>
+    </div>
+  </div>
+  <!-- 4. Unsupported -->
+  <div class="card" style="border-color:rgba(185,28,28,.15)">
+    <div class="dest-state" style="padding:14px 16px">
+      <div class="dest-state-icon" style="background:var(--red-bg)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg></div>
+      <div class="dest-state-info"><div class="dest-state-name">International Wire Account</div><div class="dest-state-sub">Unsupported — This destination does not support transfers</div></div>
+    </div>
+    <div class="validation-inline validation-error-inline" style="margin:0 0 0 48px">✕ Transfers to this account type are not supported.</div>
+  </div>
+  <!-- 5. External→External -->
+  <div class="card" style="border-color:rgba(185,28,28,.15)">
+    <div class="validation-banner validation-banner-error" style="margin-bottom:0">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>
+      <div><div style="font-weight:600;margin-bottom:2px">External to External</div><div>Use your bank's app for transfers between external accounts.</div></div>
+    </div>
+  </div>
+  <!-- 6. Market Closed -->
+  <div class="card">
+    <div class="validation-banner validation-banner-info" style="margin-bottom:0">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      <div><div style="font-weight:600;margin-bottom:2px">Market Closed</div><div>Transfer will execute at market open (9:30 AM ET, Mon).</div></div>
+    </div>
+  </div>
+  <!-- 7. Verification Required -->
+  <div class="card">
+    <div class="dest-state" style="padding:14px 16px">
+      <div class="dest-state-icon" style="background:var(--amber-bg)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <div class="dest-state-info"><div class="dest-state-name">Wells Fargo Checking</div><div class="dest-state-sub">Verification Required</div></div>
+      <button class="btn btn-sm" style="background:var(--amber);color:#fff">Verify</button>
+    </div>
+  </div>
+  <!-- 8. Connection Expired -->
+  <div class="card">
+    <div class="dest-state" style="padding:14px 16px">
+      <div class="dest-state-icon" style="background:var(--amber-bg)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2.5" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+      <div class="dest-state-info"><div class="dest-state-name">Bank of America Savings</div><div class="dest-state-sub">Connection Expired</div></div>
+      <button class="btn btn-sm" style="background:var(--amber);color:#fff">Reconnect</button>
+    </div>
+  </div>
+  <!-- 9. Loading -->
+  <div class="card">
+    <div class="dest-state" style="padding:14px 16px">
+      <div class="dest-state-icon" style="background:#f0f0f0"><div class="spinner"></div></div>
+      <div class="dest-state-info"><div class="dest-state-name">Loading account...</div><div class="dest-state-sub">Fetching balance and account details</div></div>
+    </div>
+  </div>
+  <!-- 10. Processing -->
+  <div class="card">
+    <div class="dest-state" style="padding:14px 16px">
+      <div class="dest-state-icon" style="background:var(--blue-bg)"><div class="spinner"></div></div>
+      <div class="dest-state-info"><div class="dest-state-name">Chase Checking · 2457</div><div class="dest-state-sub">Processing transfer...</div></div>
+    </div>
+  </div>
+  <!-- 11. Success -->
+  <div class="card" style="border-color:rgba(22,111,71,.15)">
+    <div class="dest-state" style="padding:14px 16px">
+      <div class="dest-state-icon" style="background:var(--green-bg)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="3" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+      <div class="dest-state-info"><div class="dest-state-name">Chase Checking · 2457</div><div class="dest-state-sub">Completed</div></div>
+      <span style="font-family:'IBM Plex Sans',sans-serif;font-weight:600;color:var(--green)">$250.00</span>
+    </div>
+  </div>
+  <!-- 12. Pending -->
+  <div class="card" style="border-color:rgba(194,121,10,.15)">
+    <div class="dest-state" style="padding:14px 16px">
+      <div class="dest-state-icon" style="background:var(--amber-bg)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+      <div class="dest-state-info"><div class="dest-state-name">Chase Checking · 2457</div><div class="dest-state-sub">Pending — Awaiting bank confirmation</div></div>
+      <span style="font-family:'IBM Plex Sans',sans-serif;font-weight:600;color:var(--amber)">$250.00</span>
+    </div>
+  </div>
+  <!-- 13. Error -->
+  <div class="card" style="border-color:rgba(185,28,28,.15)">
+    <div class="dest-state" style="padding:14px 16px">
+      <div class="dest-state-icon" style="background:var(--red-bg)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg></div>
+      <div class="dest-state-info"><div class="dest-state-name">Chase Checking · 2457</div><div class="dest-state-sub">Error — Bank declined the transfer</div></div>
+      <button class="btn btn-sm btn-outline" style="color:var(--red);border-color:rgba(185,28,28,.2)">Retry</button>
+    </div>
+  </div>
+  <!-- 14. Duplicate Destination -->
+  <div class="card" style="border-color:rgba(194,121,10,.15)">
+    <div class="dest-state" style="padding:14px 16px">
+      <div class="dest-state-icon" style="background:var(--amber-bg)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2.5" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+      <div class="dest-state-info"><div class="dest-state-name">Chase Checking · 2457</div><div class="dest-state-sub">Already added — This destination is already in this move</div></div>
+    </div>
+  </div>
+  <!-- 15. Insufficient Funds -->
+  <div class="card" style="border-color:rgba(185,28,28,.15)">
+    <div class="dest-state" style="padding:14px 16px">
+      <div class="dest-state-icon" style="background:var(--red-bg)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg></div>
+      <div class="dest-state-info"><div class="dest-state-name">Chase Checking · 2457</div><div class="dest-state-sub" style="color:var(--red);font-weight:500">Insufficient funds — Available: $212.40</div></div>
+    </div>
+  </div>
+  <!-- 16. Transfer Limit Exceeded -->
+  <div class="card" style="border-color:rgba(185,28,28,.15)">
+    <div class="dest-state" style="padding:14px 16px">
+      <div class="dest-state-icon" style="background:var(--red-bg)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <div class="dest-state-info"><div class="dest-state-name">Chase Checking · 2457</div><div class="dest-state-sub" style="color:var(--red);font-weight:500">Transfer limit exceeded — Limit: $10,000/day</div></div>
+    </div>
+  </div>
+  <!-- 17. Minimum Transfer Not Met -->
+  <div class="card" style="border-color:rgba(194,121,10,.15)">
+    <div class="dest-state" style="padding:14px 16px">
+      <div class="dest-state-icon" style="background:var(--amber-bg)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2.5" stroke-linecap="round"><path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg></div>
+      <div class="dest-state-info"><div class="dest-state-name">Chase Checking · 2457</div><div class="dest-state-sub" style="color:var(--amber);font-weight:500">Minimum transfer: $1.00</div></div>
+    </div>
+  </div>
+  <!-- 18. Account Frozen -->
+  <div class="card" style="border-color:rgba(185,28,28,.15)">
+    <div class="dest-state" style="padding:14px 16px">
+      <div class="dest-state-icon" style="background:var(--red-bg)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+      <div class="dest-state-info"><div class="dest-state-name">Chase Checking · 2457</div><div class="dest-state-sub" style="color:var(--red);font-weight:500">Account frozen — Contact your bank</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 4: VALIDATION COMPONENTS -->
+<div class="section">
+  <div class="section-label">Section 4</div>
+  <div class="section-title">Validation Components</div>
+  <div class="section-desc">Reusable alert patterns for financial validation</div>
+</div>
+<div class="section">
+  <div class="iter-label">Inline Validation</div>
+  <div class="iter-desc">Appears below the input field with icon + message</div>
+
+  <div class="card" style="padding:16px 18px">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+      <span class="badge badge-checking">Checking</span>
+      <span style="font-weight:600;font-size:15px">Chase · 2457</span>
+    </div>
+    <div class="amount-row amount-row-error"><span class="amount-prefix">$</span><input class="amount-input amount-input-error" type="text" value="1,200.00" readonly></div>
+    <div class="validation-inline validation-error-inline">✕ Insufficient funds. Available: $212.40</div>
+  </div>
+
+  <div class="card" style="padding:16px 18px">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+      <span class="badge badge-savings">Savings</span>
+      <span style="font-weight:600;font-size:15px">Wells Fargo · 5589</span>
+    </div>
+    <div class="amount-row amount-row-warning"><span class="amount-prefix">$</span><input class="amount-input amount-input-warning" type="text" value="0.50" readonly></div>
+    <div class="validation-inline validation-warning-inline">⚠ Minimum transfer: $1.00</div>
+  </div>
+
+  <div class="card" style="padding:16px 18px">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+      <span class="badge badge-investment">Investment</span>
+      <span style="font-weight:600;font-size:15px">Vanguard · 401k</span>
+    </div>
+    <div class="amount-row amount-row-focus"><span class="amount-prefix">$</span><input class="amount-input" type="text" value="3,200.00" readonly></div>
+    <div class="validation-inline validation-info-inline">ℹ Market closed. Transfer scheduled for next open.</div>
+  </div>
+
+  <div class="card" style="padding:16px 18px">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+      <span class="badge badge-checking">Checking</span>
+      <span style="font-weight:600;font-size:15px">Chase · 2457</span>
+    </div>
+    <div class="amount-row amount-row-success"><span class="amount-prefix">$</span><input class="amount-input amount-input-success" type="text" value="250.00" readonly></div>
+    <div class="validation-inline validation-success-inline">✓ Remaining after transfer: $645.00</div>
+  </div>
+
+  <div class="iter-label">Banner Validation</div>
+  <div class="iter-desc">Full-width alert at top of card with icon + message + optional action</div>
+
+  <div class="validation-banner validation-banner-error">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>
+    <div><div style="font-weight:600;margin-bottom:2px">Insufficient funds</div><div>Available: $212.40 — Reduce amount or change source.</div></div>
+  </div>
+  <div class="validation-banner validation-banner-warning">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    <div><div style="font-weight:600;margin-bottom:2px">External to external</div><div>Use your bank's app for transfers between external accounts.</div></div>
+  </div>
+  <div class="validation-banner validation-banner-info">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+    <div><div style="font-weight:600;margin-bottom:2px">Account verification required</div><div>Verify your Wells Fargo account before transferring. <a href="#" style="color:var(--blue);font-weight:600;text-decoration:none">Verify now →</a></div></div>
+  </div>
+
+  <div class="iter-label">Field Validation</div>
+  <div class="iter-desc">Specific validation states on the amount input</div>
+
+  <div class="card" style="padding:16px 18px">
+    <div style="font-size:13px;font-weight:500;color:var(--text2);margin-bottom:6px">Insufficient funds</div>
+    <div class="amount-row amount-row-error"><span class="amount-prefix">$</span><input class="amount-input amount-input-error" type="text" value="1,200.00" readonly></div>
+    <div class="helper-text helper-error">✕ Insufficient funds. Available: $212.40</div>
+  </div>
+  <div class="card" style="padding:16px 18px">
+    <div style="font-size:13px;font-weight:500;color:var(--text2);margin-bottom:6px">Minimum transfer</div>
+    <div class="amount-row amount-row-warning"><span class="amount-prefix">$</span><input class="amount-input amount-input-warning" type="text" value="0.50" readonly></div>
+    <div class="helper-text helper-warning">⚠ Minimum transfer: $1.00</div>
+  </div>
+  <div class="card" style="padding:16px 18px">
+    <div style="font-size:13px;font-weight:500;color:var(--text2);margin-bottom:6px">Maximum / Daily limit</div>
+    <div class="amount-row amount-row-error"><span class="amount-prefix">$</span><input class="amount-input amount-input-error" type="text" value="15,000.00" readonly></div>
+    <div class="helper-text helper-error">✕ Daily limit: $10,000. Remaining: $3,200</div>
+  </div>
+  <div class="card" style="padding:16px 18px">
+    <div style="font-size:13px;font-weight:500;color:var(--text2);margin-bottom:6px">Duplicate destination</div>
+    <div class="amount-row amount-row-warning"><span class="amount-prefix">$</span><input class="amount-input amount-input-warning" type="text" value="500.00" readonly></div>
+    <div class="helper-text helper-warning">⚠ This destination is already in this move</div>
+  </div>
+
+  <div class="iter-label">Summary Validation</div>
+  <div class="iter-desc">Aggregated errors before the Move button</div>
+
+  <div class="validation-summary">
+    <div class="validation-summary-title">3 issues need attention</div>
+    <div class="validation-summary-item">✕ Chase Checking: Insufficient funds — need $987.60 more</div>
+    <div class="validation-summary-item">✕ Wells Fargo Savings: Account verification required</div>
+    <div class="validation-summary-item">✕ Capital One 360: Connection expired</div>
+  </div>
+</div>
+
+<!-- SECTION 5: CALCULATION DISCLOSURE -->
+<div class="section">
+  <div class="section-label">Section 5</div>
+  <div class="section-title">Calculation Disclosure</div>
+  <div class="section-desc">"Why this amount?" — Expandable inline disclosure</div>
+</div>
+<div class="section">
+  <div class="iter-label">Collapsed State</div>
+  <div class="calc-disclosure">
+    <button class="calc-trigger"><span>Why $300?</span><span class="chevron">›</span></button>
+  </div>
+
+  <div class="iter-label">Expanded — Bills Payment</div>
+  <div class="calc-disclosure">
+    <button class="calc-trigger calc-trigger-open"><span>Why $300?</span><span class="chevron">›</span></button>
+    <div class="calc-content">
+      <div class="calc-row"><span class="calc-row-label">MOHELA (Student Loan)</span><span class="calc-row-value">$91.00</span></div>
+      <div class="calc-row"><span class="calc-row-label">Con Edison (Electric)</span><span class="calc-row-value">$58.00</span></div>
+      <div class="calc-row"><span class="calc-row-label">Spectrum (Internet)</span><span class="calc-row-value">$33.00</span></div>
+      <div class="calc-row" style="border-top:1px solid var(--border);padding-top:6px;margin-top:4px"><span class="calc-row-label">Bills total</span><span class="calc-row-value">$182.00</span></div>
+      <div class="calc-row"><span class="calc-row-label">Safety buffer (65%)</span><span class="calc-row-value">+$118.00</span></div>
+      <div class="calc-row calc-row-total"><span class="calc-row-label">Recommended</span><span class="calc-row-value">$300.00</span></div>
+      <div class="calc-source">Based on your real financial data</div>
+    </div>
+  </div>
+
+  <div class="iter-label">Expanded — Emergency Fund</div>
+  <div class="calc-disclosure">
+    <button class="calc-trigger calc-trigger-open"><span>Why $385?</span><span class="chevron">›</span></button>
+    <div class="calc-content">
+      <div class="calc-row"><span class="calc-row-label">Emergency fund current</span><span class="calc-row-value">$1,500.00</span></div>
+      <div class="calc-row"><span class="calc-row-label">Target (3 months expenses)</span><span class="calc-row-value">$2,000.00</span></div>
+      <div class="calc-row"><span class="calc-row-label">Gap</span><span class="calc-row-value">$500.00</span></div>
+      <div class="calc-row" style="border-top:1px solid var(--border);padding-top:6px;margin-top:4px"><span class="calc-row-label">Covers 77% of gap</span><span class="calc-row-value">$385.00</span></div>
+      <div class="calc-row calc-row-total"><span class="calc-row-label">Recommended</span><span class="calc-row-value">$385.00</span></div>
+      <div class="calc-source">Based on your real financial data</div>
+    </div>
+  </div>
+
+  <div class="iter-label">Expanded — Idle Cash Optimization</div>
+  <div class="calc-disclosure">
+    <button class="calc-trigger calc-trigger-open"><span>Why $4,200?</span><span class="chevron">›</span></button>
+    <div class="calc-content">
+      <div class="calc-row"><span class="calc-row-label">Idle cash (checking)</span><span class="calc-row-value">$4,200.00</span></div>
+      <div class="calc-row"><span class="calc-row-label">Current APY (0.01%)</span><span class="calc-row-value">$0.42/yr</span></div>
+      <div class="calc-row"><span class="calc-row-label">Invested at 5% APY</span><span class="calc-row-value">$210.00/yr</span></div>
+      <div class="calc-row calc-row-total"><span class="calc-row-label">Extra earnings/yr</span><span class="calc-row-value">+$209.58</span></div>
+      <div class="calc-source">Based on your real financial data</div>
+    </div>
+  </div>
+
+  <div class="iter-label">Expanded — Tax Loss Harvesting</div>
+  <div class="calc-disclosure">
+    <button class="calc-trigger calc-trigger-open"><span>Why $340?</span><span class="chevron">›</span></button>
+    <div class="calc-content">
+      <div class="calc-row"><span class="calc-row-label">VXUS position</span><span class="calc-row-value">-$340.00</span></div>
+      <div class="calc-row"><span class="calc-row-label">Sell VXUS → Buy IXUS</span><span class="calc-row-value">Swap</span></div>
+      <div class="calc-row"><span class="calc-row-label">Captured loss</span><span class="calc-row-value">$340.00</span></div>
+      <div class="calc-row"><span class="calc-row-label">Tax rate (24%)</span><span class="calc-row-value">× 0.24</span></div>
+      <div class="calc-row calc-row-total"><span class="calc-row-label">Est. tax savings</span><span class="calc-row-value">$81.60</span></div>
+      <div class="calc-source">Based on your real financial data</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 6: FOOTER SUMMARY — 5 CONCEPTS -->
+<div class="section">
+  <div class="section-label">Section 6</div>
+  <div class="section-title">Footer Summary</div>
+  <div class="section-desc">5 different footer summary designs</div>
+</div>
+<div class="section">
+  <div class="iter-label">Footer 1 — Minimal</div>
+  <div style="background:#fff;border-radius:16px;box-shadow:var(--shadow-md);margin-bottom:16px">
+    <div class="footer-minimal">
+      <span class="footer-minimal-text">1 move · $604.27</span>
+      <span class="footer-minimal-link">Review all →</span>
+    </div>
+  </div>
+
+  <div class="iter-label">Footer 2 — Detailed</div>
+  <div style="background:#fff;border-radius:16px;box-shadow:var(--shadow-md);margin-bottom:16px">
+    <div class="footer-detailed">
+      <div class="footer-detailed-total">$604.27</div>
+      <div class="footer-detailed-sub">1 move to 2 destinations</div>
+      <button class="btn btn-primary btn-full">Move Money</button>
+    </div>
+  </div>
+
+  <div class="iter-label">Footer 3 — Breakdown</div>
+  <div style="background:#fff;border-radius:16px;box-shadow:var(--shadow-md);margin-bottom:16px">
+    <div class="footer-breakdown">
+      <div class="footer-breakdown-items"><span>Bills: $300</span><span>·</span><span>Cushion: $204.27</span><span>·</span><span>Investment: $100</span></div>
+      <div class="footer-breakdown-total">Total: $604.27</div>
+      <button class="btn btn-primary btn-full">Move Money</button>
+    </div>
+  </div>
+
+  <div class="iter-label">Footer 4 — Apple Pay Style</div>
+  <div style="background:#fff;border-radius:16px;box-shadow:var(--shadow-md);margin-bottom:16px">
+    <div class="footer-apple">
+      <div class="footer-apple-amount">Move $604.27</div>
+      <button class="btn btn-primary btn-full" style="font-size:17px;height:50px;border-radius:14px;gap:10px">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg>
+        Move with Face ID
+      </button>
+    </div>
+  </div>
+
+  <div class="iter-label">Footer 5 — Multi-Move</div>
+  <div style="background:#fff;border-radius:16px;box-shadow:var(--shadow-md);margin-bottom:16px">
+    <div class="footer-multi">
+      <div class="footer-multi-total"><strong>3 moves</strong> · $1,812.81 total</div>
+      <div class="footer-multi-items">
+        Chase Checking · 2457 → $604.27<br>
+        Vanguard 401k → $700.00<br>
+        Wells Fargo Savings → $508.54
+      </div>
+      <button class="btn btn-primary btn-full">Review all →</button>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 7: AMOUNT ENTRY — 3 INTERACTIONS -->
+<div class="section">
+  <div class="section-label">Section 7</div>
+  <div class="section-title">Amount Entry</div>
+  <div class="section-desc">3 interaction patterns for entering amounts</div>
+</div>
+<div class="section">
+  <div class="iter-label">Entry 1 — "Inline Input"</div>
+  <div class="iter-desc">Amount input directly in the destination card. $ prefix, cursor, keyboard on tap. Blue border when focused.</div>
+
+  <div class="state-label">Empty state</div>
+  <div class="card dest-card dest-stacked" style="padding:16px 18px">
+    <div class="dest-header">
+      <div class="icon-circle" style="background:#1a73e8;width:36px;height:36px;border-radius:8px;font-size:14px">C</div>
+      <div class="dest-name">Chase Checking · 2457</div>
+    </div>
+    <div class="dest-meta"><span class="badge badge-checking">Checking</span><span class="dest-balance">$895.00</span></div>
+    <div class="amount-row"><span class="amount-prefix">$</span><input class="amount-input" type="text" placeholder="0.00" readonly></div>
+  </div>
+
+  <div class="state-label">Typing state — blue border, cursor</div>
+  <div class="card dest-card dest-stacked" style="padding:16px 18px">
+    <div class="dest-header">
+      <div class="icon-circle" style="background:#1a73e8;width:36px;height:36px;border-radius:8px;font-size:14px">C</div>
+      <div class="dest-name">Chase Checking · 2457</div>
+    </div>
+    <div class="dest-meta"><span class="badge badge-checking">Checking</span><span class="dest-balance">$895.00</span></div>
+    <div class="amount-row amount-row-focus">
+      <span class="amount-prefix">$</span>
+      <input class="amount-input" type="text" value="25" readonly>
+      <span style="width:2px;height:22px;background:var(--blue);animation:blink 1s infinite"></span>
+    </div>
+    <div class="helper-text helper-info">Available: $895.00</div>
+  </div>
+
+  <div class="state-label">Filled state</div>
+  <div class="card dest-card dest-stacked" style="padding:16px 18px">
+    <div class="dest-header">
+      <div class="icon-circle" style="background:#1a73e8;width:36px;height:36px;border-radius:8px;font-size:14px">C</div>
+      <div class="dest-name">Chase Checking · 2457</div>
+    </div>
+    <div class="dest-meta"><span class="badge badge-checking">Checking</span><span class="dest-balance">$895.00</span></div>
+    <div class="amount-row amount-row-success"><span class="amount-prefix">$</span><input class="amount-input amount-input-success" type="text" value="250.00" readonly></div>
+    <div class="helper-text helper-success">✓ Remaining: $645.00</div>
+  </div>
+
+  <div class="state-label">Error state</div>
+  <div class="card dest-card dest-stacked" style="padding:16px 18px">
+    <div class="dest-header">
+      <div class="icon-circle" style="background:#1a73e8;width:36px;height:36px;border-radius:8px;font-size:14px">C</div>
+      <div class="dest-name">Chase Checking · 2457</div>
+    </div>
+    <div class="dest-meta"><span class="badge badge-checking">Checking</span><span class="dest-balance">$895.00</span></div>
+    <div class="amount-row amount-row-error"><span class="amount-prefix">$</span><input class="amount-input amount-input-error" type="text" value="1,200.00" readonly></div>
+    <div class="helper-text helper-error">✕ Insufficient funds. Available: $895.00</div>
+  </div>
+
+  <div class="iter-label">Entry 2 — "Numpad Sheet"</div>
+  <div class="iter-desc">Tap destination to open a bottom numpad. Large amount display at top. Done button. Shows available balance.</div>
+
+  <div class="state-label">Empty state — sheet closed</div>
+  <div class="card dest-card dest-stacked" style="padding:16px 18px">
+    <div class="dest-header">
+      <div class="icon-circle" style="background:#1a73e8;width:36px;height:36px;border-radius:8px;font-size:14px">C</div>
+      <div class="dest-name">Chase Checking · 2457</div>
+    </div>
+    <div class="dest-meta"><span class="badge badge-checking">Checking</span><span class="dest-balance">$895.00</span></div>
+    <div class="amount-row" style="cursor:pointer"><span class="amount-prefix">$</span><input class="amount-input" type="text" placeholder="Tap to enter amount" readonly></div>
+  </div>
+
+  <div class="state-label">Numpad sheet — typing state</div>
+  <div class="numpad-sheet" style="position:relative;border-radius:16px 16px 0 0;box-shadow:var(--shadow-lg)">
+    <div class="numpad-sheet-inner">
+      <div class="numpad-amount-display">$250<span style="color:var(--text3);font-size:28px">.00</span><span style="width:2px;height:28px;background:var(--blue);animation:blink 1s infinite;display:inline-block;margin-left:2px"></span></div>
+      <div class="numpad-balance-display">Available: $895.00</div>
+      <div class="numpad-grid">
+        <button class="numpad-key">1</button><button class="numpad-key">2</button><button class="numpad-key">3</button>
+        <button class="numpad-key">4</button><button class="numpad-key">5</button><button class="numpad-key">6</button>
+        <button class="numpad-key">7</button><button class="numpad-key">8</button><button class="numpad-key">9</button>
+        <button class="numpad-key">.</button><button class="numpad-key">0</button><button class="numpad-key numpad-key-action numpad-del">⌫</button>
+      </div>
+      <button class="numpad-key numpad-key-done" style="width:calc(100% - 8px);margin:4px;border-radius:10px">Done</button>
+    </div>
+  </div>
+
+  <div class="state-label">Numpad sheet — error state</div>
+  <div class="numpad-sheet" style="position:relative;border-radius:16px 16px 0 0;box-shadow:var(--shadow-lg)">
+    <div class="numpad-sheet-inner">
+      <div class="numpad-amount-display" style="color:var(--red)">$1,200<span style="color:var(--red);font-size:28px;opacity:.6">.00</span></div>
+      <div class="numpad-balance-display" style="color:var(--red)">Insufficient funds · Available: $895.00</div>
+      <div class="numpad-grid">
+        <button class="numpad-key">1</button><button class="numpad-key">2</button><button class="numpad-key">3</button>
+        <button class="numpad-key">4</button><button class="numpad-key">5</button><button class="numpad-key">6</button>
+        <button class="numpad-key">7</button><button class="numpad-key">8</button><button class="numpad-key">9</button>
+        <button class="numpad-key">.</button><button class="numpad-key">0</button><button class="numpad-key numpad-key-action numpad-del">⌫</button>
+      </div>
+      <button class="numpad-key numpad-key-done" style="width:calc(100% - 8px);margin:4px;border-radius:10px;background:var(--red)">Done</button>
+    </div>
+  </div>
+
+  <div class="iter-label">Entry 3 — "Quick Select"</div>
+  <div class="iter-desc">Pre-filled amount buttons ($50, $100, $200, $500, Custom). Tap to select, long-press to edit. Recommended amount highlighted.</div>
+
+  <div class="state-label">Empty — no selection</div>
+  <div class="card dest-card dest-stacked" style="padding:16px 18px">
+    <div class="dest-header">
+      <div class="icon-circle" style="background:#1a73e8;width:36px;height:36px;border-radius:8px;font-size:14px">C</div>
+      <div class="dest-name">Chase Checking · 2457</div>
+    </div>
+    <div class="dest-meta"><span class="badge badge-checking">Checking</span><span class="dest-balance">$895.00</span></div>
+    <div class="quick-select">
+      <button class="quick-pill">$50</button>
+      <button class="quick-pill quick-pill-recommended">$100</button>
+      <button class="quick-pill">$200</button>
+      <button class="quick-pill">$500</button>
+      <button class="quick-pill" style="border-style:dashed">Custom</button>
+    </div>
+  </div>
+
+  <div class="state-label">Selected — $200 tapped</div>
+  <div class="card dest-card dest-stacked" style="padding:16px 18px">
+    <div class="dest-header">
+      <div class="icon-circle" style="background:#1a73e8;width:36px;height:36px;border-radius:8px;font-size:14px">C</div>
+      <div class="dest-name">Chase Checking · 2457</div>
+    </div>
+    <div class="dest-meta"><span class="badge badge-checking">Checking</span><span class="dest-balance">$895.00</span></div>
+    <div class="amount-row amount-row-success"><span class="amount-prefix">$</span><input class="amount-input amount-input-success" type="text" value="200.00" readonly></div>
+    <div class="quick-select">
+      <button class="quick-pill">$50</button>
+      <button class="quick-pill quick-pill-recommended">$100</button>
+      <button class="quick-pill quick-pill-selected">$200</button>
+      <button class="quick-pill">$500</button>
+      <button class="quick-pill" style="border-style:dashed">Custom</button>
+    </div>
+    <div class="helper-text helper-success">✓ Remaining: $695.00</div>
+  </div>
+
+  <div class="state-label">Error — $500 exceeds balance</div>
+  <div class="card dest-card dest-stacked" style="padding:16px 18px">
+    <div class="dest-header">
+      <div class="icon-circle" style="background:#1a73e8;width:36px;height:36px;border-radius:8px;font-size:14px">C</div>
+      <div class="dest-name">Chase Checking · 2457</div>
+    </div>
+    <div class="dest-meta"><span class="badge badge-checking">Checking</span><span class="dest-balance">$895.00</span></div>
+    <div class="amount-row amount-row-error"><span class="amount-prefix">$</span><input class="amount-input amount-input-error" type="text" value="500.00" readonly></div>
+    <div class="quick-select">
+      <button class="quick-pill">$50</button>
+      <button class="quick-pill quick-pill-recommended">$100</button>
+      <button class="quick-pill">$200</button>
+      <button class="quick-pill quick-pill-selected" style="border-color:var(--red);color:var(--red)">$500</button>
+      <button class="quick-pill" style="border-style:dashed">Custom</button>
+    </div>
+    <div class="helper-text helper-error">✕ Insufficient funds. Available: $895.00</div>
+  </div>
+
+  <div class="state-label">Custom — editable</div>
+  <div class="card dest-card dest-stacked" style="padding:16px 18px">
+    <div class="dest-header">
+      <div class="icon-circle" style="background:#1a73e8;width:36px;height:36px;border-radius:8px;font-size:14px">C</div>
+      <div class="dest-name">Chase Checking · 2457</div>
+    </div>
+    <div class="dest-meta"><span class="badge badge-checking">Checking</span><span class="dest-balance">$895.00</span></div>
+    <div class="amount-row amount-row-focus">
+      <span class="amount-prefix">$</span>
+      <input class="amount-input" type="text" value="375" readonly>
+      <span style="width:2px;height:22px;background:var(--blue);animation:blink 1s infinite"></span>
+    </div>
+    <div class="quick-select">
+      <button class="quick-pill">$50</button>
+      <button class="quick-pill quick-pill-recommended">$100</button>
+      <button class="quick-pill">$200</button>
+      <button class="quick-pill">$500</button>
+      <button class="quick-pill quick-pill-selected">$375</button>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 8: ADD DESTINATION — BOTTOM SHEET + PICKER -->
+<div class="section">
+  <div class="section-label">Section 8</div>
+  <div class="section-title">Add Destination</div>
+  <div class="section-desc">Bottom Sheet + Picker for adding destinations</div>
+</div>
+<div class="section">
+  <div class="iter-label">Trigger — Dashed border button</div>
+  <button class="add-dest-btn">+ Add destination</button>
+
+  <div class="iter-label">Bottom Sheet — Closed (peek)</div>
+  <div class="card" style="padding:12px 18px;text-align:center">
+    <div style="width:36px;height:5px;background:#c7c7cc;border-radius:3px;margin:0 auto 10px"></div>
+    <div style="font-size:14px;color:var(--text2)">Add destination</div>
+  </div>
+
+  <div class="iter-label">Bottom Sheet — Open</div>
+  <div class="card" style="padding:0;border-radius:16px 16px 0 0;max-height:500px;overflow:hidden">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header">
+      <div class="sheet-title">Add destination</div>
+      <button class="sheet-close">✕</button>
+    </div>
+    <input class="sheet-search" type="text" placeholder="Search accounts..." readonly>
+    <div class="sheet-section">
+      <div class="sheet-section-title">Recommended</div>
+      <div class="sheet-account">
+        <div class="icon-circle" style="background:#1a73e8;width:36px;height:36px;border-radius:8px;font-size:14px">C</div>
+        <div style="flex:1;min-width:0"><div class="sheet-account-name">Chase Checking</div><div class="sheet-account-meta"><span class="badge badge-checking" style="font-size:10px;padding:2px 6px">Checking</span> $4,892.15</div></div>
+        <div class="sheet-account-check-empty"></div>
+      </div>
+      <div class="sheet-account">
+        <div class="icon-circle" style="background:#0e7a0d;width:36px;height:36px;border-radius:8px;font-size:14px">T</div>
+        <div style="flex:1;min-width:0"><div class="sheet-account-name">TD Bank Savings</div><div class="sheet-account-meta"><span class="badge badge-savings" style="font-size:10px;padding:2px 6px">Savings</span> $12,340.00</div></div>
+        <div class="sheet-account-check-empty"></div>
+      </div>
+    </div>
+    <div class="sheet-section">
+      <div class="sheet-section-title">Your Accounts</div>
+      <div class="sheet-account">
+        <div class="icon-circle" style="background:#7c3aed;width:36px;height:36px;border-radius:8px;font-size:14px">V</div>
+        <div style="flex:1;min-width:0"><div class="sheet-account-name">Vanguard 401k</div><div class="sheet-account-meta"><span class="badge badge-investment" style="font-size:10px;padding:2px 6px">Investment</span> $45,200.00</div></div>
+        <div class="sheet-account-check-empty"></div>
+      </div>
+      <div class="sheet-account">
+        <div class="icon-circle" style="background:#ff9500;width:36px;height:36px;border-radius:8px;font-size:14px">W</div>
+        <div style="flex:1;min-width:0"><div class="sheet-account-name">Wells Fargo Checking</div><div class="sheet-account-meta"><span class="badge badge-checking" style="font-size:10px;padding:2px 6px">Checking</span> $1,205.40</div></div>
+        <div class="sheet-account-check-empty"></div>
+      </div>
+      <div class="sheet-account sheet-account-disabled">
+        <div class="icon-circle" style="background:#c7c7cc;width:36px;height:36px;border-radius:8px;font-size:14px">B</div>
+        <div style="flex:1;min-width:0"><div class="sheet-account-name">Bank of America Savings</div><div class="sheet-account-meta"><span class="badge badge-savings" style="font-size:10px;padding:2px 6px;opacity:.5">Savings</span> <span style="opacity:.5">$0.00</span></div></div>
+      </div>
+    </div>
+    <div class="sheet-section">
+      <div class="sheet-add-new">
+        <div class="sheet-add-new-icon">+</div>
+        <div class="sheet-add-new-text">Connect a new account</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="iter-label">Search state — filtered results</div>
+  <div class="card" style="padding:0;border-radius:16px 16px 0 0;max-height:400px;overflow:hidden">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header">
+      <div class="sheet-title">Add destination</div>
+      <button class="sheet-close">✕</button>
+    </div>
+    <input class="sheet-search" type="text" value="Vang" readonly style="border-color:var(--blue)">
+    <div class="sheet-section">
+      <div class="sheet-section-title">Results for "Vang"</div>
+      <div class="sheet-account">
+        <div class="icon-circle" style="background:#7c3aed;width:36px;height:36px;border-radius:8px;font-size:14px">V</div>
+        <div style="flex:1;min-width:0"><div class="sheet-account-name">Vanguard 401k</div><div class="sheet-account-meta"><span class="badge badge-investment" style="font-size:10px;padding:2px 6px">Investment</span> $45,200.00</div></div>
+        <div class="sheet-account-check"></div>
+      </div>
+      <div class="sheet-account">
+        <div class="icon-circle" style="background:#7c3aed;width:36px;height:36px;border-radius:8px;font-size:14px">V</div>
+        <div style="flex:1;min-width:0"><div class="sheet-account-name">Vanguard Total Stock Market Index Fund Admiral Shares</div><div class="sheet-account-meta"><span class="badge badge-investment" style="font-size:10px;padding:2px 6px">Investment</span> $12,420.50</div></div>
+        <div class="sheet-account-check-empty"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="iter-label">No results state</div>
+  <div class="card" style="padding:0;border-radius:16px 16px 0 0">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header">
+      <div class="sheet-title">Add destination</div>
+      <button class="sheet-close">✕</button>
+    </div>
+    <input class="sheet-search" type="text" value="xyz" readonly>
+    <div class="sheet-no-results">
+      <div class="sheet-no-results-icon">🔍</div>
+      <div class="sheet-no-results-text">No matching accounts</div>
+      <div class="sheet-no-results-sub">Try a different search or connect a new account.</div>
+    </div>
+    <div class="sheet-section">
+      <div class="sheet-add-new">
+        <div class="sheet-add-new-icon">+</div>
+        <div class="sheet-add-new-text">Connect a new account</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 9: EDGE CASES — 25+ REAL-WORLD SCENARIOS -->
+<div class="section">
+  <div class="section-label">Section 9</div>
+  <div class="section-title">Edge Cases</div>
+  <div class="section-desc">25+ real-world scenarios and how components handle them</div>
+</div>
+<div class="section">
+  <div class="edge-case">
+    <div class="edge-case-name">1. Account name longer than 3 lines</div>
+    <div class="edge-case-desc">Vanguard Total Stock Market Index Fund Admiral Shares (VTIAX) — 63 characters</div>
+    <div class="edge-case-response">Stacked: max-height 3.9em with overflow hidden. Split: -webkit-line-clamp 2 with ellipsis. Compact: single line ellipsis.</div>
+  </div>
+  <div class="edge-case">
+    <div class="edge-case-name">2. Balance exceeds $99,999,999.99</div>
+    <div class="edge-case-desc">Displayed as $100,000,000.00+ with tooltip</div>
+    <div class="edge-case-response">Balance field caps display at "$100M+" with info icon. Full balance shown on long-press tooltip.</div>
+  </div>
+  <div class="edge-case">
+    <div class="edge-case-name">3. Transfer amount exceeds balance</div>
+    <div class="edge-case-desc">User enters $500 but only $212.40 available</div>
+    <div class="edge-case-response">Red border on input, inline error: "Insufficient funds. Available: $212.40". Move button disabled.</div>
+  </div>
+  <div class="edge-case">
+    <div class="edge-case-name">4. Same source and destination</div>
+    <div class="edge-case-desc">User tries to move money to the same account</div>
+    <div class="edge-case-response">Banner error: "Cannot transfer to the same account". Destination card shows red border with lock icon.</div>
+  </div>
+  <div class="edge-case">
+    <div class="edge-case-name">5. Duplicate destination in same move</div>
+    <div class="edge-case-desc">Chase Checking added twice in multi-destination move</div>
+    <div class="edge-case-response">Amber warning badge: "Already added". Destination card gets amber border. Amounts shown side-by-side in review.</div>
+  </div>
+  <div class="edge-case">
+    <div class="edge-case-name">6. All destinations unsupported</div>
+    <div class="edge-case-desc">Every connected account has compliance restrictions</div>
+    <div class="edge-case-response">Empty state with lock icon. Message: "No available destinations". CTA: "Connect a supported account".</div>
+  </div>
+  <div class="edge-case">
+    <div class="edge-case-name">7. Source account frozen</div>
+    <div class="edge-case-desc">Bank has placed a hold on the source account</div>
+    <div class="edge-case-response">Source card shows lock overlay with gray styling. Error banner: "Account frozen — Contact your bank". All destinations disabled.</div>
+  </div>
+  <div class="edge-case">
+    <div class="edge-case-name">8. Source connection expired mid-transfer</div>
+    <div class="edge-case-desc">Plaid token expires while user is entering amounts</div>
+    <div class="edge-case-response">Source card switches to "Reconnect" state. All destination inputs disabled. Warning banner: "Connection expired. Please reconnect."</div>
+  </div>
+  <div class="edge-case">
+    <div class="edge-case-name">9. Market closes during entry</div>
+    <div class="edge-case-desc">User starts entering a transfer at 3:55 PM, market closes at 4:00 PM</div>
+    <div class="edge-case-response">Info banner appears: "Market closed. Transfer will execute at market open." Investment destination gets clock icon.</div>
+  </div>
+  <div class="edge-case">
+    <div class="edge-case-name">10. Bank returns error after submission</div>
+    <div class="edge-case-desc">ACH network rejects the transfer post-submission</div>
+    <div class="edge-case-response">Destination switches to Error state with red X. Error message from bank displayed. Retry button shown.</div>
+  </div>
+  <div class="edge-case">
+    <div class="edge-case-name">11. Network timeout during transfer</div>
+    <div class="edge-case-desc">User's connection drops during processing</div>
+    <div class="edge-case-response">Processing spinner continues. After 30s: "Taking longer than usual..." After 60s: "Check status in Activity". No duplicate submission.</div>
+  </div>
+  <div class="edge-case">
+    <div class="edge-case-name">12. User switches source mid-flow</div>
+    <div class="edge-case-desc">User changes source after entering destination amounts</div>
+    <div class="edge-case-response">All destination amounts re-validated against new source balance. Insufficient funds flagged if needed. Confirmation toast: "Source updated".</div>
+  </div>
+  <div class="edge-case">
+    <div class="edge-case-name">13. Amount has decimal precision issues</div>
+    <div class="edge-case-desc">User enters 250.999 or 100.001</div>
+    <div class="edge-case-response">Auto-rounded to 2 decimal places on blur. Helper text: "Rounded to $251.00". No silent precision loss.</div>
+  </div>
+  <div class="edge-case">
+    <div class="edge-case-name">14. Currency conversion needed</div>
+    <div class="edge-case-desc">Source in USD, destination in EUR</div>
+    <div class="edge-case-response">Banner: "Currency conversion required". Shows estimated rate and converted amount. Fee disclosure inline.</div>
+  </div>
+  <div class="edge-case">
+    <div class="edge-case-name">15. International transfer restrictions</div>
+    <div class="edge-case-desc">Destination account is in a restricted country</div>
+    <div class="edge-case-response">Destination card shows red "Unsupported" badge. Banner: "International transfers not supported to this region."</div>
+  </div>
+  <div class="edge-case">
+    <div class="edge-case-name">16. Daily transfer limit reached</div>
+    <div class="edge-case-desc">User has sent $9,500 today, trying to send $1,000 more</div>
+    <div class="edge-case-response">Red banner: "Daily limit: $10,000. Remaining: $500". Input caps at $500. Limit exceeded message if user types more.</div>
+  </div>
+  <div class="edge-case">
+    <div class="edge-case-name">17. Monthly transfer limit reached</div>
+    <div class="edge-case-desc">Regulatory limit on outbound transfers hit</div>
+    <div class="edge-case-response">Red banner: "Monthly limit: $25,000. Remaining: $0". All destination inputs disabled. Suggestion: "Try again next month."</div>
+  </div>
+  <div class="edge-case">
+    <div class="edge-case-name">18. Account requires 2FA</div>
+    <div class="edge-case-desc">Destination account has additional verification</div>
+    <div class="edge-case-response">Destination card shows shield icon. "Verify" button triggers 2FA flow. Transfer blocked until verified.</div>
+  </div>
+  <div class="edge-case">
+    <div class="edge-case-name">19. Beneficiary name mismatch</div>
+    <div class="edge-case-desc">Destination account name doesn't match registered beneficiary</div>
+    <div class="edge-case-response">Warning banner: "Beneficiary mismatch detected". Suggestion: "Verify account ownership before proceeding."</div>
+  </div>
+  <div class="edge-case">
+    <div class="edge-case-name">20. Routing number invalid</div>
+    <div class="edge-case-desc">User manually enters incorrect routing number</div>
+    <div class="edge-case-response">Inline error: "Invalid routing number". Red border on input. Suggestion: "Check the 9-digit number on your checks."</div>
+  </div>
+  <div class="edge-case">
+    <div class="edge-case-name">21. Account number invalid</div>
+    <div class="edge-case-desc">Entered account number fails validation checksum</div>
+    <div class="edge-case-response">Inline error: "Invalid account number". Red border. No partial match disclosure for security.</div>
+  </div>
+  <div class="edge-case">
+    <div class="edge-case-name">22. Minimum balance requirement</div>
+    <div class="edge-case-desc">Source account requires $500 minimum, transfer would drop below</div>
+    <div class="edge-case-response">Warning: "Transfer will drop balance below $500 minimum". Suggests keeping $500 buffer. Allows override with confirmation.</div>
+  </div>
+  <div class="edge-case">
+    <div class="edge-case-name">23. Overdraft protection triggered</div>
+    <div class="edge-case-desc">Transfer amount would trigger overdraft on source</div>
+    <div class="edge-case-response">Banner: "This transfer will use overdraft protection". Shows overdraft fee if applicable. Requires explicit confirmation.</div>
+  </div>
+  <div class="edge-case">
+    <div class="edge-case-name">24. Multiple moves queued simultaneously</div>
+    <div class="edge-case-desc">User submits 3 moves at once from different screens</div>
+    <div class="edge-case-response">Queue indicator in footer: "3 moves queued". Activity badge shows count. Each move shows independent status.</div>
+  </div>
+  <div class="edge-case">
+    <div class="edge-case-name">25. User receives push notification during flow</div>
+    <div class="edge-case-desc">Bank sends fraud alert while user is entering amounts</div>
+    <div class="edge-case-response">Notification banner appears at top. Flow state preserved. User can dismiss or act on notification without losing progress.</div>
+  </div>
+  <div class="edge-case">
+    <div class="edge-case-name">26. App backgrounded during transfer</div>
+    <div class="edge-case-desc">User switches to another app during processing</div>
+    <div class="edge-case-response">Transfer continues server-side. On return: status updated. If failed: error state shown. No duplicate processing.</div>
+  </div>
+  <div class="edge-case">
+    <div class="edge-case-name">27. Split destination amounts don't sum correctly</div>
+    <div class="edge-case-desc">User allocates $300 + $200 + $200 = $700 but source has $650</div>
+    <div class="edge-case-response">Summary validation: "Total exceeds source balance by $50". Individual insufficient errors on affected destinations.</div>
+  </div>
+  <div class="edge-case">
+    <div class="edge-case-name">28. Bank holiday affects settlement</div>
+    <div class="edge-case-desc">User submits transfer on Friday evening, Monday is a holiday</div>
+    <div class="edge-case-response">Info banner: "Bank holiday — Settlement delayed to Tuesday". Shows estimated arrival date. No false urgency.</div>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- ASSEMBLED MOVE MONEY CARD — ALL COMPONENTS -->
+<!-- ============================================ -->
+<div class="section">
+  <div class="section-label">Assembled Component</div>
+  <div class="section-title">Complete Move Money Card</div>
+  <div class="section-desc">All components working together</div>
+</div>
+<div class="section" style="padding-bottom:40px">
+  <div class="assembled-card">
+    <!-- SOURCE -->
+    <div class="assembled-section-label">Source</div>
+    <div class="source-card" style="margin-bottom:14px">
+      <div class="icon-circle" style="background:#1a73e8">C</div>
+      <div class="source-info"><div class="source-name">Chase Checking</div><div class="source-meta"><span>Checking · 2457</span></div></div>
+      <div style="text-align:right"><div class="source-balance">$4,892.15</div><button class="change-btn">CHANGE</button></div>
+    </div>
+
+    <!-- DESTINATIONS -->
+    <div class="assembled-section-label">Destinations</div>
+
+    <!-- Destination 1: Editable -->
+    <div class="card dest-card dest-stacked" style="padding:16px 18px;margin-bottom:10px;border-left:3px solid var(--blue)">
+      <div class="dest-header">
+        <div class="icon-circle" style="background:#1a73e8;width:36px;height:36px;border-radius:8px;font-size:14px">C</div>
+        <div class="dest-name">Chase Checking · 2457</div>
+      </div>
+      <div class="dest-meta"><span class="badge badge-checking">Checking</span><span class="dest-balance">$895.00</span></div>
+      <div class="amount-row amount-row-success">
+        <span class="amount-prefix">$</span>
+        <input class="amount-input amount-input-success" type="text" value="250.00" readonly>
+      </div>
+      <div class="helper-text helper-success">✓ Remaining after transfer: $645.00</div>
+    </div>
+
+    <!-- Destination 2: Disabled -->
+    <div class="card dest-card dest-stacked" style="padding:16px 18px;margin-bottom:10px;opacity:.45;pointer-events:none">
+      <div class="dest-header">
+        <div class="icon-circle" style="background:#c7c7cc;width:36px;height:36px;border-radius:8px;font-size:14px">W</div>
+        <div class="dest-name" style="color:var(--text2)">Wells Fargo Savings · 5589</div>
+      </div>
+      <div class="dest-meta"><span class="badge badge-savings" style="opacity:.5">Savings</span><span class="dest-balance" style="color:var(--text3)">$0.00</span></div>
+      <div class="amount-row amount-row-disabled">
+        <span class="amount-prefix" style="color:var(--text3)">$</span>
+        <input class="amount-input" type="text" placeholder="0.00" readonly style="color:var(--text3)">
+      </div>
+      <div class="lock-overlay"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8e8e93" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg><span>Connection expired</span></div>
+    </div>
+
+    <!-- Destination 3: Error -->
+    <div class="card dest-card dest-stacked" style="padding:16px 18px;margin-bottom:10px;border-color:rgba(185,28,28,.15)">
+      <div class="dest-header">
+        <div class="icon-circle" style="background:#7c3aed;width:36px;height:36px;border-radius:8px;font-size:14px">V</div>
+        <div class="dest-name">Vanguard 401k · Retirement</div>
+      </div>
+      <div class="dest-meta"><span class="badge badge-investment">Investment</span><span class="dest-balance">$45,200.00</span></div>
+      <div class="amount-row amount-row-error">
+        <span class="amount-prefix">$</span>
+        <input class="amount-input amount-input-error" type="text" value="500.00" readonly>
+      </div>
+      <div class="helper-text helper-error">✕ Market closed. Transfer scheduled for Monday open.</div>
+    </div>
+
+    <!-- Add Destination Button -->
+    <button class="add-dest-btn" style="margin-bottom:14px">+ Add destination</button>
+
+    <!-- Validation Banner -->
+    <div class="validation-banner validation-banner-warning" style="margin-bottom:14px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <div><div style="font-weight:600;margin-bottom:2px">Wells Fargo Savings</div><div>Connection expired. <a href="#" style="color:var(--amber);font-weight:600;text-decoration:none">Reconnect →</a></div></div>
+    </div>
+
+    <!-- Calculation Disclosure -->
+    <div class="calc-disclosure" style="margin-bottom:14px">
+      <button class="calc-trigger calc-trigger-open"><span>Why $250?</span><span class="chevron">›</span></button>
+      <div class="calc-content">
+        <div class="calc-row"><span class="calc-row-label">Chase Checking balance</span><span class="calc-row-value">$895.00</span></div>
+        <div class="calc-row"><span class="calc-row-label">Recommended (28%)</span><span class="calc-row-value">$250.00</span></div>
+        <div class="calc-row"><span class="calc-row-label">Safety buffer (72%)</span><span class="calc-row-value">$645.00</span></div>
+        <div class="calc-row calc-row-total"><span class="calc-row-label">Transfer amount</span><span class="calc-row-value">$250.00</span></div>
+        <div class="calc-source">Based on your real financial data</div>
+      </div>
+    </div>
+
+    <!-- Summary Validation -->
+    <div class="validation-summary" style="margin-bottom:14px">
+      <div class="validation-summary-title">2 issues need attention</div>
+      <div class="validation-summary-item">✕ Wells Fargo Savings: Connection expired</div>
+      <div class="validation-summary-item">⚠ Vanguard 401k: Market closed — executes Monday</div>
+    </div>
+
+    <!-- Footer Summary -->
+    <div style="border-top:1px solid var(--border);padding-top:14px;margin-top:4px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <div>
+          <div style="font-family:'IBM Plex Sans',sans-serif;font-size:20px;font-weight:700;color:var(--text)">$250.00</div>
+          <div style="font-size:13px;color:var(--text2)">1 move · 1 active destination</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:13px;color:var(--text2)">Bills: $182</div>
+          <div style="font-size:13px;color:var(--text2)">Buffer: $68</div>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-full" style="height:50px;font-size:17px;border-radius:14px;gap:10px">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg>
+        Move with Face ID
+      </button>
+    </div>
+  </div>
+</div>
+
+</div><!-- /page -->
+</body>
+</html>
