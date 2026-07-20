@@ -1,0 +1,2326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advizmo — Component Anatomy & Standards</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#f2f2f7;--card:#fff;--text:#1c1c1e;--text2:#8e8e93;--border:rgba(0,0,0,.06);
+--blue:#0a84ff;--green:#166f47;--green-bg:#e8f8ec;--amber:#c2790a;--amber-bg:#fff5e6;
+--red:#b91c1c;--red-bg:#ffe8e8;--blue-bg:#e8f0ff;--sidebar:#1c1c1e;--sidebar-w:260px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;color:var(--text);background:var(--bg);display:flex;min-height:100vh;line-height:1.5}
+
+/* SIDEBAR */
+.sidebar{position:fixed;top:0;left:0;width:var(--sidebar-w);height:100vh;background:var(--sidebar);color:#fff;overflow-y:auto;z-index:100;padding:24px 0}
+.sidebar-logo{padding:0 24px 24px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:16px}
+.sidebar-logo h2{font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700;letter-spacing:-.3px}
+.sidebar-logo span{font-size:11px;color:rgba(255,255,255,.4);display:block;margin-top:2px}
+.sidebar nav a{display:flex;align-items:center;gap:10px;padding:10px 24px;font-size:13px;color:rgba(255,255,255,.55);text-decoration:none;transition:all .15s;border-left:3px solid transparent}
+.sidebar nav a:hover,.sidebar nav a.active{color:#fff;background:rgba(255,255,255,.06)}
+.sidebar nav a.active{border-left-color:var(--blue)}
+.sidebar nav .nav-num{font-family:'IBM Plex Sans',sans-serif;font-size:10px;color:rgba(255,255,255,.25);width:20px;text-align:right}
+.sidebar-section{font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:rgba(255,255,255,.25);padding:16px 24px 6px;font-weight:600}
+
+/* MAIN */
+.main{margin-left:var(--sidebar-w);flex:1;min-height:100vh}
+.main-inner{max-width:430px;margin:0 auto;background:var(--card);min-height:100vh;padding:40px 24px 80px}
+
+/* SECTION */
+.comp-section{margin-bottom:64px;padding-top:32px;border-top:1px solid var(--border)}
+.comp-section:first-child{border-top:none;padding-top:0}
+.comp-section h1{font-family:'IBM Plex Sans',sans-serif;font-size:28px;font-weight:700;letter-spacing:-.5px;margin-bottom:4px}
+.comp-section h2{font-family:'IBM Plex Sans',sans-serif;font-size:20px;font-weight:700;letter-spacing:-.3px;margin:32px 0 12px;color:var(--text)}
+.comp-section h3{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600;margin:20px 0 8px;color:var(--text)}
+.comp-desc{font-size:14px;color:var(--text2);margin-bottom:24px;line-height:1.6}
+.sub-desc{font-size:12px;color:var(--text2);margin:8px 0 16px;font-style:italic}
+
+/* STATE GRID */
+.state-grid{display:flex;flex-direction:column;gap:16px;margin:16px 0 24px}
+.state-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text2);margin-bottom:6px}
+
+/* ANATOMY */
+.anatomy-box{background:#f8f9fa;border:1px dashed var(--border);border-radius:12px;padding:20px;margin:16px 0 24px;position:relative}
+.anatomy-box h4{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--blue);margin-bottom:12px}
+.annotation{position:absolute;background:var(--blue);color:#fff;font-size:9px;font-weight:600;padding:2px 6px;border-radius:3px;white-space:nowrap;pointer-events:none}
+
+/* SPACING */
+.spacing-row{display:flex;gap:12px;align-items:center;margin:4px 0;font-size:12px;color:var(--text2)}
+.spacing-dot{width:6px;height:6px;background:var(--blue);border-radius:50%}
+
+/* STATE TABLE */
+.state-table{width:100%;border-collapse:collapse;margin:16px 0 24px;font-size:13px}
+.state-table th{text-align:left;padding:8px 12px;background:#f8f9fa;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--text2);border-bottom:2px solid var(--border)}
+.state-table td{padding:8px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+.state-table tr:last-child td{border-bottom:none}
+
+/* GUIDELINES */
+.guidelines{background:#f8f9fa;border-radius:10px;padding:16px 20px;margin:16px 0}
+.guidelines h4{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
+.guidelines ul{list-style:none;padding:0}
+.guidelines li{font-size:13px;padding:4px 0;padding-left:16px;position:relative;color:var(--text)}
+.guidelines li::before{content:'—';position:absolute;left:0;color:var(--text2)}
+.guidelines .do::before{content:'✓';color:var(--green);font-weight:700}
+.guidelines .dont::before{content:'✕';color:var(--red);font-weight:700}
+
+/* A11Y */
+.a11y{background:var(--blue-bg);border-radius:10px;padding:16px 20px;margin:16px 0;font-size:12px;color:var(--text)}
+.a11y strong{display:block;margin-bottom:4px;font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--blue)}
+
+/* COMPONENT STYLES — ALERT BANNER */
+.alert-banner{border-radius:12px;padding:16px;position:relative}
+.alert-banner.critical{background:var(--red-bg);border:1px solid rgba(185,28,28,.15)}
+.alert-banner.high{background:var(--amber-bg);border:1px solid rgba(194,121,10,.15)}
+.alert-banner.medium{background:var(--blue-bg);border:1px solid rgba(10,132,255,.15)}
+.alert-banner.info{background:#f2f2f7;border:1px solid var(--border)}
+.alert-banner.expanded-state{background:var(--red-bg);border:1px solid rgba(185,28,28,.15)}
+.alert-banner.dismissed-state{opacity:.4;background:#f2f2f7;border:1px solid var(--border)}
+.alert-banner.skeleton-state{background:#f2f2f7;border:1px solid var(--border)}
+.alert-badge{display:inline-block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:3px 8px;border-radius:20px;margin-bottom:8px}
+.critical .alert-badge{background:var(--red);color:#fff}
+.high .alert-badge{background:var(--amber);color:#fff}
+.medium .alert-badge{background:var(--blue);color:#fff}
+.info .alert-badge{background:#e5e7eb;color:var(--text2)}
+.alert-title{font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;margin-bottom:4px}
+.critical .alert-title{color:var(--red)}
+.high .alert-title{color:var(--amber)}
+.medium .alert-title{color:var(--blue)}
+.info .alert-title{color:var(--text)}
+.alert-desc{font-size:14px;color:var(--text2);margin-bottom:10px;line-height:1.4}
+.alert-why{font-size:12px;color:var(--text2);cursor:pointer;margin-bottom:12px;display:flex;align-items:center;gap:4px}
+.alert-why::after{content:'▸';font-size:10px}
+.alert-cta{width:100%;padding:12px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;margin-bottom:8px}
+.critical .alert-cta{background:var(--red);color:#fff}
+.high .alert-cta{background:var(--amber);color:#fff}
+.medium .alert-cta{background:var(--blue);color:#fff}
+.info .alert-cta{background:var(--text);color:#fff}
+.alert-learn{font-size:13px;color:var(--blue);text-decoration:none;text-align:center;display:block}
+.alert-dismiss{position:absolute;top:12px;right:12px;width:24px;height:24px;border:none;background:rgba(0,0,0,.06);border-radius:50%;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text2)}
+
+/* ACCOUNT CARD */
+.account-card{border-radius:12px;padding:16px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;gap:12px;position:relative}
+.account-card.warning-state{border-color:var(--amber);border-width:1px}
+.account-card.error-state{border-color:var(--red);border-width:1px}
+.account-card.disconnected-state{opacity:.7;border-style:dashed}
+.account-card.skeleton-state{border:1px solid var(--border)}
+.account-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0}
+.account-icon.chase{background:#1a73e8;color:#fff}
+.account-icon.schwab{background:#00a651;color:#fff}
+.account-icon.citi{background:#003b70;color:#fff}
+.account-icon.icon-gray{background:#e5e7eb}
+.account-info{flex:1;min-width:0}
+.account-name{font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.account-type{font-size:12px;color:var(--text2)}
+.account-right{text-align:right;flex-shrink:0}
+.account-balance{font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700}
+.account-change{font-size:12px}
+.account-change.pos{color:var(--green)}
+.account-change.neg{color:var(--red)}
+.account-sync{font-size:11px;color:var(--text2);margin-top:2px}
+.account-chevron{color:var(--text2);font-size:12px;margin-left:8px}
+
+/* SKELETON */
+.skeleton{background:linear-gradient(90deg,#e5e7eb 25%,#f3f4f6 50%,#e5e7eb 75%);background-size:200% 100%;animation:skeleton-pulse 1.5s ease-in-out infinite;border-radius:6px}
+@keyframes skeleton-pulse{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.skel-bar{height:14px;margin-bottom:8px}
+.skel-bar.w60{width:60%}
+.skel-bar.w80{width:80%}
+.skel-bar.w40{width:40%}
+.skel-bar.w100{width:100%}
+.skel-bar.h8{height:8px}
+.skel-bar.h20{height:20px}
+.skel-bar.w50{width:50%}
+.skel-bar.w30{width:30%}
+.skel-bar.w70{width:70%}
+.skel-circle{border-radius:50%}
+
+/* KPI CARD */
+.kpi-card{border-radius:12px;padding:20px;background:var(--card);border:1px solid var(--border)}
+.kpi-label{font-size:12px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;font-weight:500;margin-bottom:4px}
+.kpi-value{font-family:'IBM Plex Sans',sans-serif;font-size:28px;font-weight:700;letter-spacing:-.5px;margin-bottom:4px}
+.kpi-value.negative{color:var(--red)}
+.kpi-value.zero{color:var(--text2)}
+.kpi-change{font-size:14px;font-weight:500}
+.kpi-change.pos{color:var(--green)}
+.kpi-change.neg{color:var(--red)}
+.kpi-period{font-size:12px;color:var(--text2);margin-left:4px}
+.kpi-sub{font-size:13px;color:var(--text2);margin-top:2px}
+.kpi-ring{width:80px;height:80px;border-radius:50%;border:6px solid #e5e7eb;display:flex;align-items:center;justify-content:center;margin:8px 0}
+.kpi-ring-inner{font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700}
+
+/* NAV BAR */
+.nav-bar{display:flex;align-items:center;justify-content:space-around;background:var(--card);border-top:1px solid var(--border);padding:8px 0 20px;border-radius:0 0 12px 12px}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;position:relative;min-width:56px}
+.nav-icon{width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.nav-icon.inactive{color:var(--text2)}
+.nav-icon.active{color:var(--blue)}
+.nav-label{font-size:10px;font-weight:500}
+.nav-label.inactive{color:var(--text2)}
+.nav-label.active{color:var(--blue)}
+.nav-badge{position:absolute;top:-2px;right:6px;background:var(--red);color:#fff;font-size:9px;font-weight:700;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+
+/* RECURRING CARD */
+.recurring-card{border-radius:12px;padding:16px;background:var(--card);border:1px solid var(--border)}
+.recurring-top{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.recurring-merchant-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;flex-shrink:0}
+.merchant-icon.netflix{background:#e50914;color:#fff}
+.merchant-icon.electric{background:#f59e0b;color:#fff}
+.merchant-icon.gym{background:#8b5cf6;color:#fff}
+.merchant-icon.hbo{background:#9333ea;color:#fff}
+.merchant-icon.cloud{background:#06b6d4;color:#fff}
+.merchant-icon.icon-gray{background:#e5e7eb;color:var(--text2)}
+.recurring-merchant-info{flex:1}
+.recurring-merchant-name{font-size:15px;font-weight:600}
+.recurring-merchant-cat{font-size:12px;color:var(--text2)}
+.recurring-amounts{text-align:right}
+.recurring-old{font-size:13px;color:var(--text2);text-decoration:line-through}
+.recurring-new{font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700}
+.recurring-diff{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;margin-top:2px}
+.recurring-diff.increase{background:var(--red-bg);color:var(--red)}
+.recurring-diff.decrease{background:var(--green-bg);color:var(--green)}
+.recurring-diff.new-tag{background:var(--blue-bg);color:var(--blue)}
+.recurring-diff.cancelled-tag{background:#f2f2f7;color:var(--text2)}
+.recurring-diff.paused-tag{background:var(--amber-bg);color:var(--amber)}
+.recurring-reason{font-size:13px;color:var(--text2);margin:8px 0}
+.recurring-actions{display:flex;gap:8px;margin-top:12px}
+.recurring-actions button{flex:1;padding:10px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;border:none}
+.btn-accept{background:var(--green);color:#fff}
+.btn-reject{background:transparent;border:1px solid var(--border)!important;color:var(--text)}
+.recurring-reviewed{opacity:.5}
+
+/* SETUP PROGRESS */
+.setup-card{border-radius:12px;padding:20px;background:var(--card);border:1px solid var(--border)}
+.setup-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.setup-title{font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:600}
+.setup-count{font-size:14px;color:var(--text2)}
+.setup-bar{height:8px;background:#e5e7eb;border-radius:4px;overflow:hidden;margin-bottom:12px}
+.setup-bar-fill{height:100%;background:var(--green);border-radius:4px;transition:width .3s}
+.setup-items{list-style:none;padding:0;margin:0 0 12px}
+.setup-items li{font-size:13px;padding:6px 0;display:flex;align-items:center;gap:8px;color:var(--text)}
+.setup-items li.done{color:var(--text2)}
+.setup-check{width:18px;height:18px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+.setup-check.checked{background:var(--green);border-color:var(--green);color:#fff}
+.setup-time{font-size:12px;color:var(--text2)}
+
+/* SYSTEM BANNER */
+.sys-banner{display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:10px;font-size:13px;font-weight:500}
+.sys-banner.offline{background:#f2f2f7;color:var(--text)}
+.sys-banner.syncing{background:var(--blue-bg);color:var(--blue)}
+.sys-banner.maintenance{background:var(--amber-bg);color:var(--amber)}
+.sys-banner.verify{background:var(--red-bg);color:var(--red)}
+.sys-banner.expired{background:var(--red-bg);color:var(--red)}
+.sys-banner.apifail{background:var(--red-bg);color:var(--red)}
+.sys-icon{font-size:16px;flex-shrink:0}
+.sys-msg{flex:1;font-weight:500}
+.sys-cta{font-size:13px;color:var(--blue);font-weight:600;cursor:pointer;white-space:nowrap}
+.sys-dismiss{width:20px;height:20px;border:none;background:rgba(0,0,0,.06);border-radius:50%;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text2);flex-shrink:0}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:40px 20px}
+.empty-illust{width:64px;height:64px;border-radius:50%;background:#f2f2f7;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px}
+.empty-title{font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700;margin-bottom:8px}
+.empty-desc{font-size:14px;color:var(--text2);line-height:1.5;margin-bottom:20px}
+.empty-cta{display:block;width:100%;padding:14px;border:none;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;background:var(--blue);color:#fff;margin-bottom:12px}
+.empty-secondary{font-size:14px;color:var(--blue);text-decoration:none;margin-bottom:8px;display:block}
+.empty-benefit{font-size:12px;color:var(--text2);margin-top:4px}
+.empty-time{font-size:12px;color:var(--text2);margin-top:2px}
+
+/* RECOMMENDATION CARD */
+.rec-card{border-radius:12px;padding:16px;background:var(--card);border-left:4px solid var(--border);position:relative}
+.rec-card.blue-accent{border-left-color:var(--blue)}
+.rec-card.amber-accent{border-left-color:var(--amber)}
+.rec-card.red-accent{border-left-color:var(--red)}
+.rec-card.green-accent{border-left-color:var(--green)}
+.rec-card.dismissed-rec{opacity:.3}
+.rec-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:8px}
+.rec-icon.blue-bg{background:var(--blue-bg);color:var(--blue)}
+.rec-icon.amber-bg{background:var(--amber-bg);color:var(--amber)}
+.rec-icon.red-bg{background:var(--red-bg);color:var(--red)}
+.rec-icon.green-bg{background:var(--green-bg);color:var(--green)}
+.rec-title{font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;margin-bottom:4px}
+.rec-desc{font-size:14px;color:var(--text2);line-height:1.4;margin-bottom:8px}
+.rec-why{font-size:13px;color:var(--text2);margin-bottom:10px;line-height:1.4}
+.rec-meta{display:flex;gap:16px;margin-bottom:12px}
+.rec-benefit{font-size:14px;font-weight:600}
+.rec-benefit.pos{color:var(--green)}
+.rec-time{font-size:12px;color:var(--text2);align-self:center}
+.rec-cta{width:100%;padding:12px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;background:var(--blue);color:#fff;margin-bottom:8px}
+.rec-dismiss{position:absolute;top:12px;right:12px;width:24px;height:24px;border:none;background:rgba(0,0,0,.04);border-radius:50%;font-size:12px;cursor:pointer;color:var(--text2)}
+
+/* TOAST */
+.toast{display:flex;align-items:center;gap:10px;padding:14px 16px;border-radius:12px;font-size:14px;font-weight:500;color:#fff;margin:8px 0}
+.toast.success{background:var(--green)}
+.toast.error{background:var(--red)}
+.toast.info{background:var(--blue)}
+.toast.warning{background:var(--amber)}
+.toast-icon{font-size:16px}
+.toast-msg{flex:1}
+
+/* MODAL */
+.modal-backdrop{background:rgba(0,0,0,.4);border-radius:12px;padding:20px 0 0;position:relative}
+.modal-sheet{background:var(--card);border-radius:16px 16px 0 0;padding:0;position:relative}
+.modal-handle{width:40px;height:4px;background:#d1d5db;border-radius:2px;margin:12px auto 0}
+.modal-title{font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700;text-align:center;padding:16px 20px 12px}
+.modal-content{padding:0 20px;max-height:200px;overflow-y:auto}
+.modal-actions{padding:16px 20px 20px;border-top:1px solid var(--border);display:flex;gap:8px}
+.modal-actions button{flex:1;padding:12px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;border:none}
+.modal-primary{background:var(--blue);color:#fff}
+.modal-secondary{background:#f2f2f7;color:var(--text)}
+.modal-filter-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);font-size:14px}
+.modal-filter-row:last-child{border-bottom:none}
+.modal-radio{width:20px;height:20px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center}
+.modal-radio.selected{border-color:var(--blue);background:var(--blue)}
+.modal-radio.selected::after{content:'';width:8px;height:8px;background:#fff;border-radius:50%}
+
+/* GRID HELPERS */
+.row{display:flex;gap:12px}
+.row > *{flex:1}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* TAGS */
+.tag{display:inline-block;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.3px}
+.tag-red{background:var(--red-bg);color:var(--red)}
+.tag-amber{background:var(--amber-bg);color:var(--amber)}
+.tag-green{background:var(--green-bg);color:var(--green)}
+.tag-blue{background:var(--blue-bg);color:var(--blue)}
+.tag-gray{background:#f2f2f7;color:var(--text2)}
+
+/* EXPANDED DETAILS */
+.expanded-details{margin-top:12px;padding-top:12px;border-top:1px solid var(--border);font-size:13px;color:var(--text2);line-height:1.6}
+
+/* SECTION HEADER */
+.section-intro{padding:32px 0 8px}
+.section-intro h1{font-size:32px}
+.section-intro p{font-size:15px;color:var(--text2);line-height:1.6;margin-top:8px}
+.page-badge{display:inline-block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--blue);background:var(--blue-bg);padding:4px 10px;border-radius:20px;margin-bottom:12px}
+
+@media(max-width:768px){
+.sidebar{display:none}
+.main{margin-left:0}
+.main-inner{padding:24px 16px 60px}
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+<div class="sidebar-logo">
+<h2>Advizmo</h2>
+<span>Component Anatomy & Standards</span>
+</div>
+<div class="sidebar-section">Components</div>
+<nav>
+<a href="#alert-banner"><span class="nav-num">01</span> Alert Banner</a>
+<a href="#account-card"><span class="nav-num">02</span> Account Card</a>
+<a href="#kpi-card"><span class="nav-num">03</span> KPI Card</a>
+<a href="#nav-bar"><span class="nav-num">04</span> Navigation Bar</a>
+<a href="#recurring-card"><span class="nav-num">05</span> Recurring Review</a>
+<a href="#setup-progress"><span class="nav-num">06</span> Setup Progress</a>
+<a href="#skeleton"><span class="nav-num">07</span> Loading Skeleton</a>
+<a href="#system-banner"><span class="nav-num">08</span> System Banner</a>
+<a href="#empty-state"><span class="nav-num">09</span> Empty State</a>
+<a href="#rec-card"><span class="nav-num">10</span> Recommendation</a>
+<a href="#toast"><span class="nav-num">11</span> Toast / Snackbar</a>
+<a href="#modal"><span class="nav-num">12</span> Modal / Bottom Sheet</a>
+</nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+<div class="main-inner">
+
+<!-- PAGE HEADER -->
+<div class="section-intro">
+<div class="page-badge">Engineering Reference</div>
+<h1>Component Anatomy & Standards</h1>
+<p>Production-ready component specifications for the Advizmo fintech design system. Each component includes all visual states, anatomy breakdowns, spacing tokens, usage guidelines, and accessibility requirements.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- COMPONENT 1: ALERT BANNER -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="comp-section" id="alert-banner">
+<h1>01 — Alert Banner</h1>
+<p class="comp-desc">Contextual alert displayed at the top of a screen to communicate urgent financial actions or status changes. Supports four priority levels with consistent anatomy across all states.</p>
+
+<h2>States</h2>
+
+<h3>Critical (Red)</h3>
+<div class="state-grid">
+<div class="alert-banner critical">
+<button class="alert-dismiss" aria-label="Dismiss">×</button>
+<span class="alert-badge">Critical</span>
+<div class="alert-title">Connect Checking</div>
+<div class="alert-desc">Your checking account isn't connected. We can't calculate your net worth or cash flow without it.</div>
+<div class="alert-why">Why this matters</div>
+<button class="alert-cta">Connect Account</button>
+<a href="#" class="alert-learn">Learn more about account linking</a>
+</div>
+</div>
+
+<h3>High (Amber)</h3>
+<div class="state-grid">
+<div class="alert-banner high">
+<button class="alert-dismiss" aria-label="Dismiss">×</button>
+<span class="alert-badge">High</span>
+<div class="alert-title">Checking Shortage</div>
+<div class="alert-desc">Your checking balance may not cover upcoming recurring charges of $342.50.</div>
+<div class="alert-why">Why this matters</div>
+<button class="alert-cta">Review Cash Flow</button>
+<a href="#" class="alert-learn">Learn more about cash flow alerts</a>
+</div>
+</div>
+
+<h3>Medium (Blue)</h3>
+<div class="state-grid">
+<div class="alert-banner medium">
+<button class="alert-dismiss" aria-label="Dismiss">×</button>
+<span class="alert-badge">Medium</span>
+<div class="alert-title">Recurring Changes</div>
+<div class="alert-desc">3 of your recurring subscriptions changed amounts this billing cycle.</div>
+<div class="alert-why">Why this matters</div>
+<button class="alert-cta">Review Changes</button>
+<a href="#" class="alert-learn">Learn more about recurring monitoring</a>
+</div>
+</div>
+
+<h3>Informational (Gray)</h3>
+<div class="state-grid">
+<div class="alert-banner info">
+<button class="alert-dismiss" aria-label="Dismiss">×</button>
+<span class="alert-badge">Info</span>
+<div class="alert-title">Portfolio Update</div>
+<div class="alert-desc">Your portfolio was last synced 5 minutes ago. Market data is current.</div>
+<button class="alert-cta">View Portfolio</button>
+</div>
+</div>
+
+<h3>Expanded</h3>
+<div class="state-grid">
+<div class="alert-banner expanded-state">
+<button class="alert-dismiss" aria-label="Dismiss">×</button>
+<span class="alert-badge">Critical</span>
+<div class="alert-title">Connect Checking</div>
+<div class="alert-desc">Your checking account isn't connected. We can't calculate your net worth or cash flow without it.</div>
+<div class="expanded-details">
+<strong>Why this matters:</strong> Without your checking account, Advizmo cannot accurately track your total net worth, calculate cash flow projections, or alert you to potential shortfalls. Your financial health score will also be incomplete.
+<br><br>
+<strong>What to do:</strong> Tap the button below to securely connect your checking account through Plaid. This takes about 2 minutes.
+</div>
+<button class="alert-cta" style="margin-top:12px">Connect Account</button>
+<a href="#" class="alert-learn">Learn more about account linking</a>
+</div>
+</div>
+
+<h3>Collapsed</h3>
+<div class="state-grid">
+<div class="alert-banner critical" style="padding:12px 16px">
+<div style="display:flex;align-items:center;gap:8px">
+<span class="alert-badge" style="margin-bottom:0">Critical</span>
+<div style="flex:1"><div class="alert-title" style="margin-bottom:0;font-size:14px">Connect Checking</div></div>
+<span style="color:var(--text2);font-size:12px">▸</span>
+</div>
+</div>
+</div>
+
+<h3>Dismissed (Fading)</h3>
+<div class="state-grid">
+<div class="alert-banner dismissed-state">
+<button class="alert-dismiss" aria-label="Dismiss">×</button>
+<span class="alert-badge">High</span>
+<div class="alert-title">Checking Shortage</div>
+<div class="alert-desc">Your checking balance may not cover upcoming recurring charges.</div>
+</div>
+</div>
+
+<h3>Loading (Skeleton)</h3>
+<div class="state-grid">
+<div class="alert-banner skeleton-state">
+<div class="skeleton skel-bar w30" style="height:12px;margin-bottom:10px"></div>
+<div class="skeleton skel-bar w60" style="height:14px;margin-bottom:8px"></div>
+<div class="skeleton skel-bar w100" style="height:12px;margin-bottom:12px"></div>
+<div class="skeleton skel-bar w100" style="height:40px;border-radius:10px;margin-bottom:8px"></div>
+<div class="skeleton skel-bar w50" style="height:12px"></div>
+</div>
+</div>
+
+<h2>Anatomy</h2>
+<div class="anatomy-box">
+<h4>Alert Banner Anatomy</h4>
+<div style="position:relative;padding:24px 0">
+<div class="alert-banner critical" style="position:relative">
+<span class="alert-badge">Critical</span>
+<div class="alert-title">Connect Checking</div>
+<div class="alert-desc">Your checking account isn't connected. We can't calculate your net worth.</div>
+<div class="alert-why">Why this matters</div>
+<button class="alert-cta">Connect Account</button>
+<a href="#" class="alert-learn">Learn more about account linking</a>
+</div>
+<div class="annotation" style="top:-8px;left:0">Priority Badge</div>
+<div class="annotation" style="top:28px;right:0">Dismiss X</div>
+<div class="annotation" style="top:54px;left:0">Title (16px bold)</div>
+<div class="annotation" style="top:80px;right:0">Description (14px)</div>
+<div class="annotation" style="top:118px;left:0">"Why this matters"</div>
+<div class="annotation" style="top:152px;right:0">CTA (full width)</div>
+<div class="annotation" style="top:200px;left:0">Learn more link</div>
+</div>
+</div>
+
+<h2>Spacing</h2>
+<div style="padding:12px 0">
+<div class="spacing-row"><div class="spacing-dot"></div><strong>16px</strong> padding all sides</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>8px</strong> between title and description</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>12px</strong> between description and CTA</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>8px</strong> between CTA and "Learn more"</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>8px</strong> between badge and title</div>
+</div>
+
+<h2>State Reference</h2>
+<table class="state-table">
+<thead><tr><th>State</th><th>Priority</th><th>Border</th><th>Dismissable</th><th>CTA</th></tr></thead>
+<tbody>
+<tr><td>Critical</td><td><span class="tag tag-red">Red</span></td><td>1px solid red/15%</td><td>Yes</td><td>Required</td></tr>
+<tr><td>High</td><td><span class="tag tag-amber">Amber</span></td><td>1px solid amber/15%</td><td>Yes</td><td>Required</td></tr>
+<tr><td>Medium</td><td><span class="tag tag-blue">Blue</span></td><td>1px solid blue/15%</td><td>Yes</td><td>Required</td></tr>
+<tr><td>Info</td><td><span class="tag tag-gray">Gray</span></td><td>1px solid border</td><td>Optional</td><td>Optional</td></tr>
+<tr><td>Expanded</td><td colspan="2">Same as parent</td><td>Yes</td><td>Required</td></tr>
+<tr><td>Collapsed</td><td colspan="2">Same as parent</td><td>No</td><td>Hidden</td></tr>
+<tr><td>Dismissed</td><td colspan="2">opacity: 0.4</td><td>N/A</td><td>Hidden</td></tr>
+<tr><td>Skeleton</td><td colspan="2">Gray border</td><td>No</td><td>Skeleton</td></tr>
+</tbody>
+</table>
+
+<h2>Usage Guidelines</h2>
+<div class="guidelines">
+<ul>
+<li class="do">Use Critical for account disconnections blocking core features</li>
+<li class="do">Use High for financial warnings (shortages, overdue items)</li>
+<li class="do">Use Medium for informational alerts requiring user awareness</li>
+<li class="do">Use Info for non-urgent updates that enhance context</li>
+<li class="dont">Don't stack more than 2 alerts simultaneously</li>
+<li class="dont">Don't use Critical for non-financial system messages</li>
+<li class="dont">Don't auto-dismiss critical or high alerts</li>
+</ul>
+</div>
+
+<h2>Accessibility</h2>
+<div class="a11y">
+<strong>WCAG 2.1 Requirements</strong>
+• Role: <code>alert</code> for critical/high, <code>status</code> for medium/info<br>
+• aria-live: "assertive" for critical, "polite" for others<br>
+• Dismiss button: aria-label="Dismiss alert"<br>
+• CTA: descriptive label, not just "Click here"<br>
+• Color contrast: all text passes AA (4.5:1 minimum)<br>
+• Priority badge: include screen reader text "Priority: Critical"
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- COMPONENT 2: ACCOUNT CARD -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="comp-section" id="account-card">
+<h1>02 — Account Card</h1>
+<p class="comp-desc">Displays a connected financial account with balance, type, and sync status. Supports healthy, warning, error, and disconnected states.</p>
+
+<h2>States</h2>
+
+<h3>Connected (Healthy)</h3>
+<div class="state-grid">
+<div class="account-card">
+<div class="account-icon chase">C</div>
+<div class="account-info">
+<div class="account-name">Chase Checking</div>
+<div class="account-type">Checking</div>
+</div>
+<div class="account-right">
+<div class="account-balance">$12,450.00</div>
+<div class="account-change pos">+$340.00</div>
+<div class="account-sync">2 min ago</div>
+</div>
+</div>
+</div>
+
+<h3>Connected (Warning — Low Balance)</h3>
+<div class="state-grid">
+<div class="account-card warning-state">
+<div class="account-icon chase">C</div>
+<div class="account-info">
+<div class="account-name">Chase Checking</div>
+<div class="account-type">Checking</div>
+</div>
+<div class="account-right">
+<div class="account-balance" style="color:var(--amber)">$124.50</div>
+<div class="account-change neg">-$2,340.00</div>
+<div class="account-sync">2 min ago</div>
+</div>
+</div>
+</div>
+
+<h3>Connected (Error)</h3>
+<div class="state-grid">
+<div class="account-card error-state">
+<div class="account-icon chase">C</div>
+<div class="account-info">
+<div class="account-name">Chase Checking</div>
+<div class="account-type" style="color:var(--red)">Connection expired</div>
+</div>
+<div class="account-right">
+<div class="account-balance" style="color:var(--text2)">—</div>
+<div class="account-sync">3 days ago</div>
+</div>
+</div>
+</div>
+
+<h3>Disconnected</h3>
+<div class="state-grid">
+<div class="account-card disconnected-state">
+<div class="account-icon icon-gray">+</div>
+<div class="account-info">
+<div class="account-name" style="color:var(--text2)">Connect Chase Checking</div>
+<div class="account-type">Tap to connect</div>
+</div>
+<div class="account-right">
+<span class="account-chevron">▸</span>
+</div>
+</div>
+</div>
+
+<h3>Loading (Skeleton)</h3>
+<div class="state-grid">
+<div class="account-card skeleton-state">
+<div class="skeleton skel-circle" style="width:36px;height:36px;flex-shrink:0"></div>
+<div class="account-info">
+<div class="skeleton skel-bar w60" style="height:14px;margin-bottom:6px"></div>
+<div class="skeleton skel-bar w40" style="height:10px"></div>
+</div>
+<div class="account-right">
+<div class="skeleton skel-bar w50" style="height:16px;margin-bottom:4px;margin-left:auto"></div>
+<div class="skeleton skel-bar w30" style="height:10px;margin-left:auto"></div>
+</div>
+</div>
+</div>
+
+<h3>Expandable (Collapsed)</h3>
+<div class="state-grid">
+<div class="account-card" style="cursor:pointer">
+<div class="account-icon schwab">S</div>
+<div class="account-info">
+<div class="account-name">Charles Schwab Investment Account</div>
+<div class="account-type">Investment</div>
+</div>
+<div class="account-right">
+<div class="account-balance">$84,230.00</div>
+<div class="account-change pos">+$1,240.00</div>
+</div>
+<span class="account-chevron">▾</span>
+</div>
+</div>
+
+<h3>Expandable (Expanded)</h3>
+<div class="state-grid">
+<div class="account-card" style="flex-direction:column;align-items:stretch">
+<div style="display:flex;align-items:center;gap:12px">
+<div class="account-icon schwab">S</div>
+<div class="account-info">
+<div class="account-name">Charles Schwab Investment Account</div>
+<div class="account-type">Investment</div>
+</div>
+<div class="account-right">
+<div class="account-balance">$84,230.00</div>
+<div class="account-change pos">+$1,240.00</div>
+</div>
+<span class="account-chevron">▴</span>
+</div>
+<div class="expanded-details">
+<div style="display:flex;justify-content:space-between;padding:4px 0"><span>Holdings</span><strong>12 stocks, 3 ETFs</strong></div>
+<div style="display:flex;justify-content:space-between;padding:4px 0"><span>Last dividend</span><strong>$342.00</strong></div>
+<div style="display:flex;justify-content:space-between;padding:4px 0"><span>Day change</span><strong style="color:var(--green)">+$420.00</strong></div>
+<div style="display:flex;justify-content:space-between;padding:4px 0"><span>Last synced</span><strong>2 min ago</strong></div>
+</div>
+</div>
+</div>
+
+<h3>Long Name (Truncated)</h3>
+<div class="state-grid">
+<div class="account-card">
+<div class="account-icon citi">C</div>
+<div class="account-info">
+<div class="account-name">Charles Schwab Individual Brokerage Account</div>
+<div class="account-type">Investment</div>
+</div>
+<div class="account-right">
+<div class="account-balance">$45,120.00</div>
+<div class="account-change pos">+$890.00</div>
+</div>
+</div>
+</div>
+
+<h2>Anatomy</h2>
+<div class="anatomy-box">
+<h4>Account Card Anatomy</h4>
+<div style="padding:20px 0;position:relative">
+<div class="account-card" style="position:relative">
+<div class="account-icon chase">C</div>
+<div class="account-info">
+<div class="account-name">Chase Checking</div>
+<div class="account-type">Checking</div>
+</div>
+<div class="account-right">
+<div class="account-balance">$12,450.00</div>
+<div class="account-change pos">+$340.00</div>
+<div class="account-sync">2 min ago</div>
+</div>
+</div>
+<div class="annotation" style="top:-8px;left:0">Bank Icon (32×32)</div>
+<div class="annotation" style="top:8px;right:0">Balance (18px bold)</div>
+<div class="annotation" style="top:34px;left:60px">Account Name (15px semi)</div>
+<div class="annotation" style="top:54px;left:60px">Type (12px gray)</div>
+<div class="annotation" style="top:34px;right:0">Change (+/- colored)</div>
+<div class="annotation" style="top:74px;right:0">Last Synced (11px)</div>
+</div>
+</div>
+
+<h2>Spacing</h2>
+<div style="padding:12px 0">
+<div class="spacing-row"><div class="spacing-dot"></div><strong>16px</strong> padding all sides</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>12px</strong> gap between icon and info</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>4px</strong> between name and type</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>2px</strong> between balance and change</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>12px</strong> minimum tap target height</div>
+</div>
+
+<h2>State Reference</h2>
+<table class="state-table">
+<thead><tr><th>State</th><th>Border</th><th>Balance Color</th><th>Icon</th><th>Sync</th></tr></thead>
+<tbody>
+<tr><td>Healthy</td><td>Default</td><td>Black</td><td>Bank color</td><td>Current</td></tr>
+<tr><td>Warning</td><td>Amber accent</td><td>Amber</td><td>Bank color</td><td>Current</td></tr>
+<tr><td>Error</td><td>Red accent</td><td>Gray (—)</td><td>Bank color</td><td>Stale</td></tr>
+<tr><td>Disconnected</td><td>Dashed</td><td>N/A</td><td>Gray + icon</td><td>N/A</td></tr>
+<tr><td>Skeleton</td><td>Default</td><td>Skeleton</td><td>Skeleton</td><td>Skeleton</td></tr>
+<tr><td>Long Name</td><td>Default</td><td>Black</td><td>Bank color</td><td>Current</td></tr>
+</tbody>
+</table>
+
+<h2>Usage Guidelines</h2>
+<div class="guidelines">
+<ul>
+<li class="do">Show warning border when balance drops below user-defined threshold</li>
+<li class="do">Truncate account names at ~28 characters with ellipsis</li>
+<li class="do">Use skeleton state during initial load only</li>
+<li class="dont">Don't display sensitive account numbers</li>
+<li class="dont">Don't auto-expand cards — require tap interaction</li>
+<li class="dont">Don't show "last synced" older than 24 hours without stale indicator</li>
+</ul>
+</div>
+
+<h2>Accessibility</h2>
+<div class="a11y">
+<strong>WCAG 2.1 Requirements</strong>
+• Role: <code>article</code> with aria-label="Chase Checking account"<br>
+• Expandable: aria-expanded="true/false", aria-controls pointing to detail region<br>
+• Balance: include screen reader text "Balance: $12,450.00"<br>
+• Warning/error: include aria-describedby linking to status message<br>
+• Tap target: minimum 44×44px for interactive elements
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- COMPONENT 3: KPI CARD -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="comp-section" id="kpi-card">
+<h1>03 — KPI Card</h1>
+<p class="comp-desc">Displays a single key performance indicator with label, value, change, and optional visualization. Used for net worth, portfolio value, cash flow, and health scores.</p>
+
+<h2>States</h2>
+
+<h3>Net Worth</h3>
+<div class="state-grid">
+<div class="kpi-card">
+<div class="kpi-label">Net Worth</div>
+<div class="kpi-value">$284,520.00</div>
+<div class="kpi-change pos">+$2,340.00<span class="kpi-period">this month</span></div>
+</div>
+</div>
+
+<h3>Portfolio Value</h3>
+<div class="state-grid">
+<div class="kpi-card">
+<div class="kpi-label">Portfolio Value</div>
+<div class="kpi-value">$198,430.00</div>
+<div class="kpi-change pos">+1.2%<span class="kpi-period">today</span></div>
+</div>
+</div>
+
+<h3>Cash Flow</h3>
+<div class="state-grid">
+<div class="kpi-card">
+<div class="kpi-label">Cash Flow</div>
+<div class="kpi-value">$4,200.00</div>
+<div class="kpi-sub">Income vs $3,800.00 Expenses</div>
+<div style="margin-top:12px;height:6px;background:#e5e7eb;border-radius:3px;overflow:hidden">
+<div style="height:100%;width:52%;background:var(--green);border-radius:3px"></div>
+</div>
+</div>
+</div>
+
+<h3>Health Score (Ring)</h3>
+<div class="state-grid">
+<div class="kpi-card" style="text-align:center">
+<div class="kpi-label">Health Score</div>
+<div class="kpi-ring" style="margin:12px auto;border-color:var(--green)">
+<div class="kpi-ring-inner" style="color:var(--green)">78</div>
+</div>
+<div class="kpi-sub">out of 100</div>
+</div>
+</div>
+
+<h3>Loading (Skeleton)</h3>
+<div class="state-grid">
+<div class="kpi-card">
+<div class="skeleton skel-bar w40" style="height:10px;margin-bottom:10px"></div>
+<div class="skeleton skel-bar w60" style="height:24px;margin-bottom:8px"></div>
+<div class="skeleton skel-bar w50" style="height:12px"></div>
+</div>
+</div>
+
+<h3>Negative</h3>
+<div class="state-grid">
+<div class="kpi-card">
+<div class="kpi-label">Net Worth Change</div>
+<div class="kpi-value negative">-$1,234.56</div>
+<div class="kpi-change neg">-0.4%<span class="kpi-period">this week</span></div>
+</div>
+</div>
+
+<h3>Zero</h3>
+<div class="state-grid">
+<div class="kpi-card">
+<div class="kpi-label">Pending Transfers</div>
+<div class="kpi-value zero">$0.00</div>
+<div class="kpi-sub">No pending activity</div>
+</div>
+</div>
+
+<h2>Anatomy</h2>
+<div class="anatomy-box">
+<h4>KPI Card Anatomy</h4>
+<div style="padding:20px 0;position:relative">
+<div class="kpi-card" style="position:relative">
+<div class="kpi-label">Net Worth</div>
+<div class="kpi-value">$284,520.00</div>
+<div class="kpi-change pos">+$2,340.00<span class="kpi-period">this month</span></div>
+</div>
+<div class="annotation" style="top:-8px;left:0">Label (12px gray UC)</div>
+<div class="annotation" style="top:24px;left:0">Value (24px IBM Plex bold)</div>
+<div class="annotation" style="top:56px;left:0">Change (14px colored)</div>
+<div class="annotation" style="top:56px;right:0">Period (12px gray)</div>
+</div>
+</div>
+
+<h2>Spacing</h2>
+<div style="padding:12px 0">
+<div class="spacing-row"><div class="spacing-dot"></div><strong>20px</strong> padding all sides</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>4px</strong> between label and value</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>4px</strong> between value and change</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>4px</strong> between change and period</div>
+</div>
+
+<h2>State Reference</h2>
+<table class="state-table">
+<thead><tr><th>State</th><th>Value Color</th><th>Change</th><th>Sub-text</th></tr></thead>
+<tbody>
+<tr><td>Positive</td><td>Black</td><td>Green (+)</td><td>Optional</td></tr>
+<tr><td>Negative</td><td>Red</td><td>Red (-)</td><td>Optional</td></tr>
+<tr><td>Zero</td><td>Gray</td><td>None</td><td>Descriptive</td></tr>
+<tr><td>Health Score</td><td>Ring colored</td><td>None</td><td>"out of 100"</td></tr>
+<tr><td>Skeleton</td><td>Skeleton bar</td><td>Skeleton bar</td><td>None</td></tr>
+</tbody>
+</table>
+
+<h2>Usage Guidelines</h2>
+<div class="guidelines">
+<ul>
+<li class="do">Use IBM Plex Sans for all numeric values for consistency</li>
+<li class="do">Show change with period context ("this month", "today")</li>
+<li class="do">Use ring visualization only for scored metrics (0-100)</li>
+<li class="dont">Don't use KPI cards for list data — use account cards instead</li>
+<li class="dont">Don't animate the value counter on initial load (use skeleton)</li>
+<li class="dont">Don't truncate values — always show full precision</li>
+</ul>
+</div>
+
+<h2>Accessibility</h2>
+<div class="a11y">
+<strong>WCAG 2.1 Requirements</strong>
+• Role: <code>region</code> with aria-label="Net Worth KPI"<br>
+• Value: use aria-label for full context "Net worth: $284,520.00, up $2,340 this month"<br>
+• Health ring: include aria-valuenow, aria-valuemin="0", aria-valuemax="100"<br>
+• Negative values: do not rely on color alone — include minus sign
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- COMPONENT 4: NAVIGATION BAR -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="comp-section" id="nav-bar">
+<h1>04 — Navigation Bar</h1>
+<p class="comp-desc">Bottom navigation bar providing access to primary app sections. Active state indicated by blue icon and label. Supports notification badges.</p>
+
+<h2>States</h2>
+
+<h3>Home Active</h3>
+<div class="state-grid">
+<div class="nav-bar">
+<div class="nav-item">
+<div class="nav-icon active">⌂</div>
+<div class="nav-label active">Home</div>
+</div>
+<div class="nav-item">
+<div class="nav-icon inactive">📊</div>
+<div class="nav-label inactive">Invest</div>
+</div>
+<div class="nav-item">
+<div class="nav-icon inactive">📋</div>
+<div class="nav-label inactive">Plan</div>
+</div>
+<div class="nav-item">
+<div class="nav-icon inactive">👤</div>
+<div class="nav-label inactive">Profile</div>
+</div>
+</div>
+</div>
+
+<h3>Invest Active</h3>
+<div class="state-grid">
+<div class="nav-bar">
+<div class="nav-item">
+<div class="nav-icon inactive">⌂</div>
+<div class="nav-label inactive">Home</div>
+</div>
+<div class="nav-item">
+<div class="nav-icon active">📊</div>
+<div class="nav-label active">Invest</div>
+</div>
+<div class="nav-item">
+<div class="nav-icon inactive">📋</div>
+<div class="nav-label inactive">Plan</div>
+</div>
+<div class="nav-item">
+<div class="nav-icon inactive">👤</div>
+<div class="nav-label inactive">Profile</div>
+</div>
+</div>
+</div>
+
+<h3>Plan Active</h3>
+<div class="state-grid">
+<div class="nav-bar">
+<div class="nav-item">
+<div class="nav-icon inactive">⌂</div>
+<div class="nav-label inactive">Home</div>
+</div>
+<div class="nav-item">
+<div class="nav-icon inactive">📊</div>
+<div class="nav-label inactive">Invest</div>
+</div>
+<div class="nav-item">
+<div class="nav-icon active">📋</div>
+<div class="nav-label active">Plan</div>
+</div>
+<div class="nav-item">
+<div class="nav-icon inactive">👤</div>
+<div class="nav-label inactive">Profile</div>
+</div>
+</div>
+</div>
+
+<h3>Profile Active</h3>
+<div class="state-grid">
+<div class="nav-bar">
+<div class="nav-item">
+<div class="nav-icon inactive">⌂</div>
+<div class="nav-label inactive">Home</div>
+</div>
+<div class="nav-item">
+<div class="nav-icon inactive">📊</div>
+<div class="nav-label inactive">Invest</div>
+</div>
+<div class="nav-item">
+<div class="nav-icon inactive">📋</div>
+<div class="nav-label inactive">Plan</div>
+</div>
+<div class="nav-item">
+<div class="nav-icon active">👤</div>
+<div class="nav-label active">Profile</div>
+</div>
+</div>
+</div>
+
+<h3>With Badge</h3>
+<div class="state-grid">
+<div class="nav-bar">
+<div class="nav-item">
+<div class="nav-icon active" style="position:relative">⌂<span class="nav-badge">3</span></div>
+<div class="nav-label active">Home</div>
+</div>
+<div class="nav-item">
+<div class="nav-icon inactive">📊</div>
+<div class="nav-label inactive">Invest</div>
+</div>
+<div class="nav-item">
+<div class="nav-icon inactive">📋</div>
+<div class="nav-label inactive">Plan</div>
+</div>
+<div class="nav-item">
+<div class="nav-icon inactive">👤</div>
+<div class="nav-label inactive">Profile</div>
+</div>
+</div>
+</div>
+
+<h3>Loading (Skeleton)</h3>
+<div class="state-grid">
+<div class="nav-bar" style="padding:12px 0 20px">
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+<div class="skeleton" style="width:24px;height:24px;border-radius:4px"></div>
+<div class="skeleton" style="width:32px;height:8px;border-radius:2px"></div>
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+<div class="skeleton" style="width:24px;height:24px;border-radius:4px"></div>
+<div class="skeleton" style="width:32px;height:8px;border-radius:2px"></div>
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+<div class="skeleton" style="width:24px;height:24px;border-radius:4px"></div>
+<div class="skeleton" style="width:32px;height:8px;border-radius:2px"></div>
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+<div class="skeleton" style="width:24px;height:24px;border-radius:4px"></div>
+<div class="skeleton" style="width:32px;height:8px;border-radius:2px"></div>
+</div>
+</div>
+</div>
+
+<h2>Anatomy</h2>
+<div class="anatomy-box">
+<h4>Navigation Bar Anatomy</h4>
+<div style="padding:20px 0;position:relative">
+<div class="nav-bar" style="position:relative;border-radius:0">
+<div class="nav-item">
+<div class="nav-icon active" style="position:relative">⌂<span class="nav-badge" style="position:absolute;top:-4px;right:-8px">3</span></div>
+<div class="nav-label active">Home</div>
+</div>
+<div class="nav-item">
+<div class="nav-icon inactive">📊</div>
+<div class="nav-label inactive">Invest</div>
+</div>
+<div class="nav-item">
+<div class="nav-icon inactive">📋</div>
+<div class="nav-label inactive">Plan</div>
+</div>
+<div class="nav-item">
+<div class="nav-icon inactive">👤</div>
+<div class="nav-label inactive">Profile</div>
+</div>
+</div>
+<div class="annotation" style="top:-16px;left:20px">Icon (24×24)</div>
+<div class="annotation" style="top:56px;left:16px">Label (10px Inter)</div>
+<div class="annotation" style="top:-16px;right:60px">Badge (red circle)</div>
+<div class="annotation" style="top:56px;right:60px">Active: #0a84ff</div>
+</div>
+</div>
+
+<h2>Spacing</h2>
+<div style="padding:12px 0">
+<div class="spacing-row"><div class="spacing-dot"></div><strong>8px</strong> top padding</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>20px</strong> bottom padding (safe area)</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>2px</strong> between icon and label</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>Equal</strong> distribution across items</div>
+</div>
+
+<h2>State Reference</h2>
+<table class="state-table">
+<thead><tr><th>State</th><th>Icon</th><th>Label</th><th>Badge</th></tr></thead>
+<tbody>
+<tr><td>Active</td><td>#0a84ff</td><td>#0a84ff, 10px</td><td>Optional</td></tr>
+<tr><td>Inactive</td><td>#8e8e93</td><td>#8e8e93, 10px</td><td>Hidden</td></tr>
+<tr><td>Skeleton</td><td>Skeleton</td><td>Skeleton</td><td>Hidden</td></tr>
+</tbody>
+</table>
+
+<h2>Usage Guidelines</h2>
+<div class="guidelines">
+<ul>
+<li class="do">Always show exactly 4 navigation items</li>
+<li class="do">Keep labels to 1-2 words max</li>
+<li class="do">Use badge for actionable notifications only</li>
+<li class="dont">Don't use more than 1 badge simultaneously</li>
+<li class="dont">Don't animate icon transitions — use instant swap</li>
+<li class="dont">Don't hide the nav bar during in-app modals</li>
+</ul>
+</div>
+
+<h2>Accessibility</h2>
+<div class="a11y">
+<strong>WCAG 2.1 Requirements</strong>
+• Role: <code>tablist</code> with each item as <code>tab</code><br>
+• Active tab: aria-selected="true"<br>
+• Badge: aria-label="3 notifications"<br>
+• Minimum tap target: 44×44px per item<br>
+• Focus indicator visible on keyboard navigation
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- COMPONENT 5: RECURRING REVIEW CARD -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="comp-section" id="recurring-card">
+<h1>05 — Recurring Review Card</h1>
+<p class="comp-desc">Displays a detected recurring subscription change for user review. Supports increase, decrease, new, cancelled, and paused states with accept/reject actions.</p>
+
+<h2>States</h2>
+
+<h3>Increased</h3>
+<div class="state-grid">
+<div class="recurring-card">
+<div class="recurring-top">
+<div class="recurring-merchant-icon merchant-icon.netflix">N</div>
+<div class="recurring-merchant-info">
+<div class="recurring-merchant-name">Netflix</div>
+<div class="recurring-merchant-cat">Entertainment</div>
+</div>
+<div class="recurring-amounts">
+<div class="recurring-old">$15.49</div>
+<div class="recurring-new">$17.99</div>
+<div class="recurring-diff increase">+$2.50</div>
+</div>
+</div>
+<div class="recurring-reason">Price increase effective Jan 2026</div>
+<div class="recurring-actions">
+<button class="btn-accept">Accept</button>
+<button class="btn-reject">Reject</button>
+</div>
+</div>
+</div>
+
+<h3>Decreased</h3>
+<div class="state-grid">
+<div class="recurring-card">
+<div class="recurring-top">
+<div class="recurring-merchant-icon merchant-icon.electric">E</div>
+<div class="recurring-merchant-info">
+<div class="recurring-merchant-name">Electric Company</div>
+<div class="recurring-merchant-cat">Utilities</div>
+</div>
+<div class="recurring-amounts">
+<div class="recurring-old">$142.00</div>
+<div class="recurring-new">$98.00</div>
+<div class="recurring-diff decrease">-$44.00</div>
+</div>
+</div>
+<div class="recurring-reason">Lower usage this billing cycle</div>
+<div class="recurring-actions">
+<button class="btn-accept">Accept</button>
+<button class="btn-reject">Reject</button>
+</div>
+</div>
+</div>
+
+<h3>New</h3>
+<div class="state-grid">
+<div class="recurring-card">
+<div class="recurring-top">
+<div class="recurring-merchant-icon merchant-icon.gym">G</div>
+<div class="recurring-merchant-info">
+<div class="recurring-merchant-name">Gym Membership</div>
+<div class="recurring-merchant-cat">Health & Fitness</div>
+</div>
+<div class="recurring-amounts">
+<div class="recurring-new">$49.99</div>
+<div class="recurring-diff new-tag">New</div>
+</div>
+</div>
+<div class="recurring-reason">First charge detected — Dec 2025</div>
+<div class="recurring-actions">
+<button class="btn-accept">Accept</button>
+<button class="btn-reject">Reject</button>
+</div>
+</div>
+</div>
+
+<h3>Cancelled</h3>
+<div class="state-grid">
+<div class="recurring-card" style="opacity:.7">
+<div class="recurring-top">
+<div class="recurring-merchant-icon merchant-icon.hbo">H</div>
+<div class="recurring-merchant-info">
+<div class="recurring-merchant-name">HBO Max</div>
+<div class="recurring-merchant-cat">Entertainment</div>
+</div>
+<div class="recurring-amounts">
+<div class="recurring-old">$15.99</div>
+<div class="recurring-diff cancelled-tag">Cancelled</div>
+</div>
+</div>
+<div class="recurring-reason">No charge in 60 days</div>
+</div>
+</div>
+
+<h3>Paused</h3>
+<div class="state-grid">
+<div class="recurring-card" style="opacity:.8">
+<div class="recurring-top">
+<div class="recurring-merchant-icon merchant-icon.cloud">C</div>
+<div class="recurring-merchant-info">
+<div class="recurring-merchant-name">Cloud Storage</div>
+<div class="recurring-merchant-cat">Software</div>
+</div>
+<div class="recurring-amounts">
+<div class="recurring-old">$2.99</div>
+<div class="recurring-diff paused-tag">Paused</div>
+</div>
+</div>
+<div class="recurring-reason">Last charge 45 days ago</div>
+</div>
+</div>
+
+<h3>Expanded (Full Details)</h3>
+<div class="state-grid">
+<div class="recurring-card">
+<div class="recurring-top">
+<div class="recurring-merchant-icon merchant-icon.netflix">N</div>
+<div class="recurring-merchant-info">
+<div class="recurring-merchant-name">Netflix</div>
+<div class="recurring-merchant-cat">Entertainment</div>
+</div>
+<div class="recurring-amounts">
+<div class="recurring-old">$15.49</div>
+<div class="recurring-new">$17.99</div>
+<div class="recurring-diff increase">+$2.50</div>
+</div>
+</div>
+<div class="expanded-details" style="margin-top:0;padding-top:8px;border-top:1px solid var(--border)">
+<div style="display:flex;justify-content:space-between;padding:4px 0"><span>Frequency</span><strong>Monthly</strong></div>
+<div style="display:flex;justify-content:space-between;padding:4px 0"><span>First detected</span><strong>Mar 2025</strong></div>
+<div style="display:flex;justify-content:space-between;padding:4px 0"><span>Last 12 months total</span><strong>$185.88</strong></div>
+<div style="display:flex;justify-content:space-between;padding:4px 0"><span>Category</span><strong>Entertainment</strong></div>
+</div>
+<div class="recurring-actions">
+<button class="btn-accept">Accept Change</button>
+<button class="btn-reject">Reject</button>
+</div>
+</div>
+</div>
+
+<h3>Reviewed (Muted)</h3>
+<div class="state-grid">
+<div class="recurring-card recurring-reviewed">
+<div class="recurring-top">
+<div class="recurring-merchant-icon merchant-icon.netflix" style="opacity:.5">N</div>
+<div class="recurring-merchant-info">
+<div class="recurring-merchant-name" style="text-decoration:line-through;color:var(--text2)">Netflix</div>
+<div class="recurring-merchant-cat">Accepted · $17.99/mo</div>
+</div>
+<div style="font-size:16px;color:var(--green)">✓</div>
+</div>
+</div>
+</div>
+
+<h2>Anatomy</h2>
+<div class="anatomy-box">
+<h4>Recurring Review Card Anatomy</h4>
+<div style="padding:20px 0;position:relative">
+<div class="recurring-card" style="position:relative">
+<div class="recurring-top">
+<div class="recurring-merchant-icon merchant-icon.netflix">N</div>
+<div class="recurring-merchant-info">
+<div class="recurring-merchant-name">Netflix</div>
+<div class="recurring-merchant-cat">Entertainment</div>
+</div>
+<div class="recurring-amounts">
+<div class="recurring-old">$15.49</div>
+<div class="recurring-new">$17.99</div>
+<div class="recurring-diff increase">+$2.50</div>
+</div>
+</div>
+<div class="recurring-reason">Price increase effective Jan 2026</div>
+<div class="recurring-actions">
+<button class="btn-accept">Accept</button>
+<button class="btn-reject">Reject</button>
+</div>
+</div>
+<div class="annotation" style="top:-8px;left:0">Merchant Icon (40×40)</div>
+<div class="annotation" style="top:12px;left:60px">Name (15px semi)</div>
+<div class="annotation" style="top:32px;left:60px">Category (12px gray)</div>
+<div class="annotation" style="top:-8px;right:0">Old Amount (14px strikethrough)</div>
+<div class="annotation" style="top:14px;right:0">New Amount (16px bold)</div>
+<div class="annotation" style="top:36px;right:0">Diff Badge (colored pill)</div>
+<div class="annotation" style="top:72px;left:0">Reason (13px gray)</div>
+<div class="annotation" style="top:100px;left:0">Accept (green) / Reject (gray)</div>
+</div>
+</div>
+
+<h2>Spacing</h2>
+<div style="padding:12px 0">
+<div class="spacing-row"><div class="spacing-dot"></div><strong>16px</strong> padding all sides</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>12px</strong> gap between icon and merchant info</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>8px</strong> between merchant row and reason</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>12px</strong> between reason and actions</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>8px</strong> gap between action buttons</div>
+</div>
+
+<h2>State Reference</h2>
+<table class="state-table">
+<thead><tr><th>State</th><th>Badge</th><th>Old Price</th><th>Actions</th><th>Opacity</th></tr></thead>
+<tbody>
+<tr><td>Increased</td><td><span class="tag tag-red">Increase</span></td><td>Strikethrough</td><td>Accept / Reject</td><td>100%</td></tr>
+<tr><td>Decreased</td><td><span class="tag tag-green">Decrease</span></td><td>Strikethrough</td><td>Accept / Reject</td><td>100%</td></tr>
+<tr><td>New</td><td><span class="tag tag-blue">New</span></td><td>Hidden</td><td>Accept / Reject</td><td>100%</td></tr>
+<tr><td>Cancelled</td><td><span class="tag tag-gray">Cancelled</span></td><td>Strikethrough</td><td>None</td><td>70%</td></tr>
+<tr><td>Paused</td><td><span class="tag tag-amber">Paused</span></td><td>Strikethrough</td><td>None</td><td>80%</td></tr>
+<tr><td>Reviewed</td><td>Checkmark ✓</td><td>Strikethrough</td><td>None</td><td>50%</td></tr>
+</tbody>
+</table>
+
+<h2>Usage Guidelines</h2>
+<div class="guidelines">
+<ul>
+<li class="do">Show accept/reject for Increased, Decreased, and New states only</li>
+<li class="do">Auto-mute cards after user reviews (accept or reject)</li>
+<li class="do">Group cancelled/paused cards in a separate "No Action Needed" section</li>
+<li class="dont">Don't auto-dismiss reviewed cards immediately</li>
+<li class="dont">Don't show more than 5 unreviewed cards at once</li>
+<li class="dont">Don't use this card for one-time transactions</li>
+</ul>
+</div>
+
+<h2>Accessibility</h2>
+<div class="a11y">
+<strong>WCAG 2.1 Requirements</strong>
+• Role: <code>article</code> with aria-label="Netflix recurring charge review"<br>
+• Amount change: include full screen reader text "Changed from $15.49 to $17.99, increase of $2.50"<br>
+• Accept/Reject: clearly labeled buttons, not icon-only<br>
+• Reviewed state: aria-label="Reviewed: Netflix accepted at $17.99/month"
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- COMPONENT 6: SETUP PROGRESS -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="comp-section" id="setup-progress">
+<h1>06 — Setup Progress</h1>
+<p class="comp-desc">Tracks the user's onboarding progress through financial setup steps. Displays a progress bar, completion count, remaining items, and estimated time.</p>
+
+<h2>States</h2>
+
+<h3>3/10 Complete (Early Stage)</h3>
+<div class="state-grid">
+<div class="setup-card">
+<div class="setup-header">
+<div class="setup-title">Financial Setup</div>
+<div class="setup-count">3/10 Completed</div>
+</div>
+<div class="setup-bar"><div class="setup-bar-fill" style="width:30%"></div></div>
+<ul class="setup-items">
+<li class="done"><span class="setup-check checked">✓</span> Connect checking account</li>
+<li class="done"><span class="setup-check checked">✓</span> Connect savings account</li>
+<li class="done"><span class="setup-check checked">✓</span> Set income amount</li>
+<li><span class="setup-check"></span> Connect investment account</li>
+<li><span class="setup-check"></span> Add recurring subscriptions</li>
+<li><span class="setup-check"></span> Set savings goal</li>
+</ul>
+<div class="setup-time">~5 minutes remaining</div>
+</div>
+</div>
+
+<h3>7/10 Complete (Mid Stage)</h3>
+<div class="state-grid">
+<div class="setup-card">
+<div class="setup-header">
+<div class="setup-title">Financial Setup</div>
+<div class="setup-count">7/10 Completed</div>
+</div>
+<div class="setup-bar"><div class="setup-bar-fill" style="width:70%"></div></div>
+<ul class="setup-items">
+<li class="done"><span class="setup-check checked">✓</span> Connect checking account</li>
+<li class="done"><span class="setup-check checked">✓</span> Connect savings account</li>
+<li class="done"><span class="setup-check checked">✓</span> Set income amount</li>
+<li class="done"><span class="setup-check checked">✓</span> Connect investment account</li>
+<li class="done"><span class="setup-check checked">✓</span> Add recurring subscriptions</li>
+<li class="done"><span class="setup-check checked">✓</span> Set savings goal</li>
+<li class="done"><span class="setup-check checked">✓</span> Connect credit card</li>
+<li><span class="setup-check"></span> Set monthly budget</li>
+<li><span class="setup-check"></span> Add financial goals</li>
+<li><span class="setup-check"></span> Review health score</li>
+</ul>
+<div class="setup-time">~3 minutes remaining</div>
+</div>
+</div>
+
+<h3>9/10 Complete (Almost Done)</h3>
+<div class="state-grid">
+<div class="setup-card" style="border-color:var(--green)">
+<div class="setup-header">
+<div class="setup-title">Financial Setup</div>
+<div class="setup-count" style="color:var(--green)">9/10 Completed</div>
+</div>
+<div class="setup-bar"><div class="setup-bar-fill" style="width:90%"></div></div>
+<ul class="setup-items">
+<li class="done"><span class="setup-check checked">✓</span> Connect checking account</li>
+<li class="done"><span class="setup-check checked">✓</span> Connect savings account</li>
+<li class="done"><span class="setup-check checked">✓</span> Set income amount</li>
+<li class="done"><span class="setup-check checked">✓</span> Connect investment account</li>
+<li class="done"><span class="setup-check checked">✓</span> Add recurring subscriptions</li>
+<li class="done"><span class="setup-check checked">✓</span> Set savings goal</li>
+<li class="done"><span class="setup-check checked">✓</span> Connect credit card</li>
+<li class="done"><span class="setup-check checked">✓</span> Set monthly budget</li>
+<li class="done"><span class="setup-check checked">✓</span> Add financial goals</li>
+<li><span class="setup-check"></span> Review health score</li>
+</ul>
+<div class="setup-time">~1 minute remaining</div>
+</div>
+</div>
+
+<h3>10/10 Complete</h3>
+<div class="state-grid">
+<div class="setup-card" style="background:var(--green-bg);border-color:var(--green);text-align:center;padding:24px">
+<div style="font-size:32px;margin-bottom:8px">🎉</div>
+<div class="setup-title" style="color:var(--green);margin-bottom:4px">All Complete!</div>
+<div style="font-size:14px;color:var(--green);margin-bottom:4px">10/10 — Your financial setup is done</div>
+<div style="font-size:13px;color:var(--text2)">Your health score is now being calculated.</div>
+</div>
+</div>
+
+<h2>Anatomy</h2>
+<div class="anatomy-box">
+<h4>Setup Progress Anatomy</h4>
+<div style="padding:20px 0;position:relative">
+<div class="setup-card" style="position:relative">
+<div class="setup-header">
+<div class="setup-title">Financial Setup</div>
+<div class="setup-count">7/10 Completed</div>
+</div>
+<div class="setup-bar"><div class="setup-bar-fill" style="width:70%"></div></div>
+<ul class="setup-items">
+<li class="done"><span class="setup-check checked">✓</span> Connect checking account</li>
+<li><span class="setup-check"></span> Connect investment account</li>
+</ul>
+<div class="setup-time">~3 minutes remaining</div>
+</div>
+<div class="annotation" style="top:-8px;left:0">Title (16px semi)</div>
+<div class="annotation" style="top:-8px;right:0">Count (14px gray)</div>
+<div class="annotation" style="top:40px;right:0">Progress Bar (8px)</div>
+<div class="annotation" style="top:72px;left:0">Item List (checkboxes)</div>
+<div class="annotation" style="top:120px;left:0">Est. Time (12px gray)</div>
+</div>
+</div>
+
+<h2>Spacing</h2>
+<div style="padding:12px 0">
+<div class="spacing-row"><div class="spacing-dot"></div><strong>20px</strong> padding all sides</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>12px</strong> between header and progress bar</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>12px</strong> between progress bar and item list</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>6px</strong> between each item</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>12px</strong> between list and time estimate</div>
+</div>
+
+<h2>Usage Guidelines</h2>
+<div class="guidelines">
+<ul>
+<li class="do">Show estimated time based on average completion speeds</li>
+<li class="do">Auto-hide the card when 10/10 complete (after celebration)</li>
+<li class="do">Allow users to dismiss the card early</li>
+<li class="dont">Don't show unchecked items as clickable in this component</li>
+<li class="dont">Don't animate progress bar on initial render</li>
+<li class="dont">Don't show this card after first session if dismissed</li>
+</ul>
+</div>
+
+<h2>Accessibility</h2>
+<div class="a11y">
+<strong>WCAG 2.1 Requirements</strong>
+• Role: <code>region</code> with aria-label="Financial Setup Progress"<br>
+• Progress bar: role="progressbar", aria-valuenow="7", aria-valuemin="0", aria-valuemax="10"<br>
+• Items: use semantic list markup (ul/li)<br>
+• Completed items: aria-checked="true"
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- COMPONENT 7: LOADING SKELETON -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="comp-section" id="skeleton">
+<h1>07 — Loading Skeleton</h1>
+<p class="comp-desc">Animated placeholder shown while content loads. Uses a shimmer pulse animation on gray bars to indicate loading state. Never use solid gray — always animate.</p>
+
+<h2>Variants</h2>
+
+<h3>KPI Skeleton</h3>
+<div class="state-grid">
+<div class="kpi-card">
+<div class="skeleton skel-bar w40" style="height:10px;margin-bottom:12px"></div>
+<div class="skeleton skel-bar w60" style="height:28px;margin-bottom:8px"></div>
+<div class="skeleton skel-bar w50" style="height:14px"></div>
+</div>
+</div>
+
+<h3>Account Skeleton</h3>
+<div class="state-grid">
+<div class="account-card skeleton-state" style="gap:12px">
+<div class="skeleton skel-circle" style="width:36px;height:36px;flex-shrink:0"></div>
+<div style="flex:1">
+<div class="skeleton skel-bar w60" style="height:14px;margin-bottom:6px"></div>
+<div class="skeleton skel-bar w40" style="height:10px"></div>
+</div>
+<div style="text-align:right">
+<div class="skeleton skel-bar w50" style="height:18px;margin-bottom:4px;margin-left:auto"></div>
+<div class="skeleton skel-bar w30" style="height:10px;margin-left:auto"></div>
+</div>
+</div>
+</div>
+
+<h3>Portfolio Skeleton</h3>
+<div class="state-grid">
+<div class="kpi-card">
+<div class="skeleton" style="width:100%;height:120px;border-radius:8px;margin-bottom:12px"></div>
+<div class="grid-2">
+<div>
+<div class="skeleton skel-bar w80" style="height:10px;margin-bottom:8px"></div>
+<div class="skeleton skel-bar w60" style="height:18px"></div>
+</div>
+<div>
+<div class="skeleton skel-bar w80" style="height:10px;margin-bottom:8px"></div>
+<div class="skeleton skel-bar w60" style="height:18px"></div>
+</div>
+</div>
+</div>
+</div>
+
+<h3>Spending Skeleton</h3>
+<div class="state-grid">
+<div class="kpi-card">
+<div class="skeleton" style="width:100%;height:100px;border-radius:8px;margin-bottom:16px"></div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;gap:8px;align-items:center">
+<div class="skeleton skel-circle" style="width:20px;height:20px;flex-shrink:0"></div>
+<div class="skeleton skel-bar w70" style="height:12px;flex:1"></div>
+<div class="skeleton skel-bar w20" style="height:12px;width:40px"></div>
+</div>
+<div style="display:flex;gap:8px;align-items:center">
+<div class="skeleton skel-circle" style="width:20px;height:20px;flex-shrink:0"></div>
+<div class="skeleton skel-bar w60" style="height:12px;flex:1"></div>
+<div class="skeleton skel-bar w20" style="height:12px;width:40px"></div>
+</div>
+<div style="display:flex;gap:8px;align-items:center">
+<div class="skeleton skel-circle" style="width:20px;height:20px;flex-shrink:0"></div>
+<div class="skeleton skel-bar w80" style="height:12px;flex:1"></div>
+<div class="skeleton skel-bar w20" style="height:12px;width:40px"></div>
+</div>
+</div>
+</div>
+</div>
+
+<h3>News Skeleton</h3>
+<div class="state-grid">
+<div class="kpi-card" style="padding:0">
+<div style="padding:16px">
+<div class="skeleton skel-bar w80" style="height:14px;margin-bottom:8px"></div>
+<div class="skeleton skel-bar w100" style="height:12px;margin-bottom:4px"></div>
+<div class="skeleton skel-bar w60" style="height:12px"></div>
+</div>
+<div class="skeleton" style="width:100%;height:80px;border-radius:0"></div>
+<div style="padding:16px">
+<div class="skeleton skel-bar w80" style="height:14px;margin-bottom:8px"></div>
+<div class="skeleton skel-bar w100" style="height:12px;margin-bottom:4px"></div>
+<div class="skeleton skel-bar w40" style="height:12px"></div>
+</div>
+</div>
+</div>
+
+<h3>Card Skeleton</h3>
+<div class="state-grid">
+<div style="border:1px solid var(--border);border-radius:12px;padding:16px">
+<div style="display:flex;gap:12px;margin-bottom:12px">
+<div class="skeleton skel-circle" style="width:40px;height:40px;flex-shrink:0"></div>
+<div style="flex:1">
+<div class="skeleton skel-bar w60" style="height:14px;margin-bottom:6px"></div>
+<div class="skeleton skel-bar w40" style="height:10px"></div>
+</div>
+</div>
+<div class="skeleton skel-bar w100" style="height:12px;margin-bottom:6px"></div>
+<div class="skeleton skel-bar w80" style="height:12px;margin-bottom:6px"></div>
+<div class="skeleton skel-bar w60" style="height:12px;margin-bottom:12px"></div>
+<div class="skeleton skel-bar w100" style="height:40px;border-radius:10px"></div>
+</div>
+</div>
+
+<h3>List Skeleton</h3>
+<div class="state-grid">
+<div style="border:1px solid var(--border);border-radius:12px;padding:12px">
+<div style="display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)">
+<div class="skeleton skel-circle" style="width:32px;height:32px;flex-shrink:0"></div>
+<div style="flex:1">
+<div class="skeleton skel-bar w60" style="height:12px;margin-bottom:4px"></div>
+<div class="skeleton skel-bar w40" style="height:10px"></div>
+</div>
+<div class="skeleton skel-bar w20" style="height:12px;width:50px"></div>
+</div>
+<div style="display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)">
+<div class="skeleton skel-circle" style="width:32px;height:32px;flex-shrink:0"></div>
+<div style="flex:1">
+<div class="skeleton skel-bar w70" style="height:12px;margin-bottom:4px"></div>
+<div class="skeleton skel-bar w50" style="height:10px"></div>
+</div>
+<div class="skeleton skel-bar w20" style="height:12px;width:50px"></div>
+</div>
+<div style="display:flex;gap:10px;align-items:center;padding:8px 0">
+<div class="skeleton skel-circle" style="width:32px;height:32px;flex-shrink:0"></div>
+<div style="flex:1">
+<div class="skeleton skel-bar w50" style="height:12px;margin-bottom:4px"></div>
+<div class="skeleton skel-bar w30" style="height:10px"></div>
+</div>
+<div class="skeleton skel-bar w20" style="height:12px;width:50px"></div>
+</div>
+</div>
+</div>
+
+<h2>Animation Specifications</h2>
+<div class="anatomy-box">
+<h4>Skeleton Animation</h4>
+<div style="padding:12px 0;font-size:13px;color:var(--text)">
+<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border)"><span>Animation</span><code>shimmer pulse</code></div>
+<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border)"><span>Duration</span><code>1.5s infinite</code></div>
+<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border)"><span>Easing</span><code>ease-in-out</code></div>
+<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border)"><span>Start color</span><code>#e5e7eb</code></div>
+<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border)"><span>Peak color</span><code>#f3f4f6</code></div>
+<div style="display:flex;justify-content:space-between;padding:6px 0"><span>Never</span><code>Solid gray — always pulse</code></div>
+</div>
+</div>
+
+<h2>Usage Guidelines</h2>
+<div class="guidelines">
+<ul>
+<li class="do">Match skeleton shape to actual content shape</li>
+<li class="do">Use skeleton only for initial page load</li>
+<li class="do">Replace skeleton with content as soon as data arrives</li>
+<li class="dont">Don't show skeleton for small inline updates</li>
+<li class="dont">Don't mix skeleton with actual content on same card</li>
+<li class="dont">Don't use skeleton longer than 3 seconds — show error state after</li>
+</ul>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- COMPONENT 8: SYSTEM BANNER -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="comp-section" id="system-banner">
+<h1>08 — System Banner</h1>
+<p class="comp-desc">Persistent banner at the top of a screen communicating system-level status. Shows offline, syncing, maintenance, and error states. Always visible until resolved.</p>
+
+<h2>Variants</h2>
+
+<h3>Offline</h3>
+<div class="state-grid">
+<div class="sys-banner offline">
+<span class="sys-icon">⚡</span>
+<span class="sys-msg">You're offline. Showing cached data.</span>
+</div>
+</div>
+
+<h3>Syncing</h3>
+<div class="state-grid">
+<div class="sys-banner syncing">
+<span class="sys-icon">🔄</span>
+<span class="sys-msg">Syncing your accounts...</span>
+</div>
+</div>
+
+<h3>Bank Maintenance</h3>
+<div class="state-grid">
+<div class="sys-banner maintenance">
+<span class="sys-icon">🔧</span>
+<span class="sys-msg">Chase is temporarily unavailable.</span>
+<span class="sys-cta">Details</span>
+</div>
+</div>
+
+<h3>Verification Required</h3>
+<div class="state-grid">
+<div class="sys-banner verify">
+<span class="sys-icon">⚠</span>
+<span class="sys-msg">Chase needs re-verification.</span>
+<span class="sys-cta">Verify now</span>
+</div>
+</div>
+
+<h3>Connection Expired</h3>
+<div class="state-grid">
+<div class="sys-banner expired">
+<span class="sys-icon">🔑</span>
+<span class="sys-msg">Your Chase connection has expired.</span>
+<span class="sys-cta">Reconnect</span>
+<button class="sys-dismiss" aria-label="Dismiss">×</button>
+</div>
+</div>
+
+<h3>API Failure</h3>
+<div class="state-grid">
+<div class="sys-banner apifail">
+<span class="sys-icon">⛔</span>
+<span class="sys-msg">Unable to reach Chase. Retrying...</span>
+</div>
+</div>
+
+<h2>Anatomy</h2>
+<div class="anatomy-box">
+<h4>System Banner Anatomy</h4>
+<div style="padding:12px 0;position:relative">
+<div class="sys-banner verify" style="position:relative">
+<span class="sys-icon">⚠</span>
+<span class="sys-msg">Chase needs re-verification.</span>
+<span class="sys-cta">Verify now</span>
+<button class="sys-dismiss" aria-label="Dismiss">×</button>
+</div>
+<div class="annotation" style="top:-12px;left:0">Icon (16×16)</div>
+<div class="annotation" style="top:-12px;left:40px">Message (13px semi)</div>
+<div class="annotation" style="top:-12px;right:60px">CTA Link (13px blue)</div>
+<div class="annotation" style="top:-12px;right:0">Dismiss X (optional)</div>
+</div>
+</div>
+
+<h2>Spacing</h2>
+<div style="padding:12px 0">
+<div class="spacing-row"><div class="spacing-dot"></div><strong>12px</strong> padding vertical</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>16px</strong> padding horizontal</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>10px</strong> gap between icon and message</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>8px</strong> gap between message and CTA</div>
+</div>
+
+<h2>State Reference</h2>
+<table class="state-table">
+<thead><tr><th>Variant</th><th>Background</th><th>Dismissable</th><th>CTA</th><th>Auto-resolve</th></tr></thead>
+<tbody>
+<tr><td>Offline</td><td>#f2f2f7</td><td>No</td><td>No</td><td>Yes (on reconnect)</td></tr>
+<tr><td>Syncing</td><td>Blue bg</td><td>No</td><td>No</td><td>Yes (on complete)</td></tr>
+<tr><td>Maintenance</td><td>Amber bg</td><td>No</td><td>Optional</td><td>No</td></tr>
+<tr><td>Verification</td><td>Red bg</td><td>No</td><td>Required</td><td>No</td></tr>
+<tr><td>Expired</td><td>Red bg</td><td>Optional</td><td>Required</td><td>No</td></tr>
+<tr><td>API Failure</td><td>Red bg</td><td>No</td><td>No</td><td>Retry loop</td></tr>
+</tbody>
+</table>
+
+<h2>Usage Guidelines</h2>
+<div class="guidelines">
+<ul>
+<li class="do">Show system banners at the very top of the screen, above all content</li>
+<li class="do">Use amber for temporary bank-side issues</li>
+<li class="do">Use red for user-action-required states</li>
+<li class="dont">Don't stack multiple system banners</li>
+<li class="dont">Don't auto-dismiss banners that require user action</li>
+<li class="dont">Don't show system banners in modals or bottom sheets</li>
+</ul>
+</div>
+
+<h2>Accessibility</h2>
+<div class="a11y">
+<strong>WCAG 2.1 Requirements</strong>
+• Role: <code>alert</code> for all system banners<br>
+• aria-live: "assertive" for offline/error, "polite" for syncing<br>
+• CTA links: clearly labeled, keyboard accessible<br>
+• Dismiss button: aria-label="Dismiss banner"
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- COMPONENT 9: EMPTY STATE -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="comp-section" id="empty-state">
+<h1>09 — Empty State</h1>
+<p class="comp-desc">Displayed when a section has no data. Provides context, a clear call-to-action, and optional benefit text to encourage user engagement.</p>
+
+<h2>Variants</h2>
+
+<h3>No Accounts</h3>
+<div class="state-grid">
+<div class="empty-state">
+<div class="empty-illust">🏦</div>
+<div class="empty-title">Connect Your First Account</div>
+<div class="empty-desc">Link your bank accounts to see your complete financial picture in one place.</div>
+<button class="empty-cta">Connect Account</button>
+<a href="#" class="empty-secondary">Learn more</a>
+<div class="empty-benefit">✓ See all accounts in one dashboard</div>
+<div class="empty-time">Takes about 2 minutes</div>
+</div>
+</div>
+
+<h3>No Portfolio</h3>
+<div class="state-grid">
+<div class="empty-state">
+<div class="empty-illust">📈</div>
+<div class="empty-title">Start Investing with Advizmo</div>
+<div class="empty-desc">Connect your brokerage account or start a new investment portfolio.</div>
+<button class="empty-cta">Get Started</button>
+<a href="#" class="empty-secondary">Explore investment options</a>
+<div class="empty-benefit">✓ Automated portfolio rebalancing</div>
+<div class="empty-time">Setup takes about 5 minutes</div>
+</div>
+</div>
+
+<h3>No Spending</h3>
+<div class="state-grid">
+<div class="empty-state">
+<div class="empty-illust">💳</div>
+<div class="empty-title">Link Accounts to Track Spending</div>
+<div class="empty-desc">Connect your accounts and we'll automatically categorize your transactions.</div>
+<button class="empty-cta">Connect Accounts</button>
+<a href="#" class="empty-secondary">How spending tracking works</a>
+<div class="empty-benefit">✓ Automatic categorization</div>
+<div class="empty-time">Data appears within 24 hours</div>
+</div>
+</div>
+
+<h3>No Health Score</h3>
+<div class="state-grid">
+<div class="empty-state">
+<div class="empty-illust">❤️</div>
+<div class="empty-title">Connect Accounts for Health Analysis</div>
+<div class="empty-desc">Link at least 2 accounts to receive your personalized financial health score.</div>
+<button class="empty-cta">Connect Accounts</button>
+<a href="#" class="empty-secondary">How health scoring works</a>
+<div class="empty-benefit">✓ Personalized recommendations</div>
+<div class="empty-time">Score calculated instantly</div>
+</div>
+</div>
+
+<h3>No Recommendations</h3>
+<div class="state-grid">
+<div class="empty-state">
+<div class="empty-illust">✨</div>
+<div class="empty-title">All Caught Up!</div>
+<div class="empty-desc">No new recommendations right now. We'll notify you when we find ways to improve your finances.</div>
+<div class="empty-benefit" style="margin-top:8px">We check daily for new opportunities</div>
+</div>
+</div>
+
+<h2>Anatomy</h2>
+<div class="anatomy-box">
+<h4>Empty State Anatomy</h4>
+<div style="padding:20px 0;text-align:center;position:relative">
+<div class="empty-illust" style="position:relative">🏦</div>
+<div class="empty-title" style="position:relative">Connect Your First Account</div>
+<div class="empty-desc" style="position:relative">Link your bank accounts to see your complete financial picture.</div>
+<button class="empty-cta" style="position:relative">Connect Account</button>
+<a href="#" class="empty-secondary" style="position:relative">Learn more</a>
+<div class="empty-benefit" style="position:relative">✓ See all accounts in one dashboard</div>
+<div class="empty-time" style="position:relative">Takes about 2 minutes</div>
+<div class="annotation" style="top:-16px;left:10px">Illustration (64×64)</div>
+<div class="annotation" style="top:60px;left:10px">Title (18px bold)</div>
+<div class="annotation" style="top:90px;right:10px">Description (14px gray)</div>
+<div class="annotation" style="top:130px;left:10px">Primary CTA (blue button)</div>
+<div class="annotation" style="top:160px;right:10px">Secondary CTA (text link)</div>
+<div class="annotation" style="top:188px;left:10px">Benefit text (12px gray)</div>
+<div class="annotation" style="top:208px;right:10px">Time estimate (12px gray)</div>
+</div>
+</div>
+
+<h2>Spacing</h2>
+<div style="padding:12px 0">
+<div class="spacing-row"><div class="spacing-dot"></div><strong>40px</strong> vertical padding</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>16px</strong> between illustration and title</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>8px</strong> between title and description</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>20px</strong> between description and CTA</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>12px</strong> between CTA and secondary link</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>8px</strong> between secondary link and benefit text</div>
+</div>
+
+<h2>Usage Guidelines</h2>
+<div class="guidelines">
+<ul>
+<li class="do">Customize empty state text per section context</li>
+<li class="do">Include benefit text to motivate action</li>
+<li class="do">Show time estimate when CTA involves setup</li>
+<li class="dont">Don't use generic "No data" messages</li>
+<li class="dont">Don't show empty states with no CTA</li>
+<li class="dont">Don't auto-dismiss empty states</li>
+</ul>
+</div>
+
+<h2>Accessibility</h2>
+<div class="a11y">
+<strong>WCAG 2.1 Requirements</strong>
+• Role: <code>region</code> with aria-label="No accounts connected"<br>
+• Illustration: decorative only, aria-hidden="true"<br>
+• CTA button: clear, descriptive label<br>
+• All links: keyboard focusable with visible indicator
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- COMPONENT 10: RECOMMENDATION CARD -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="comp-section" id="rec-card">
+<h1>10 — Recommendation Card</h1>
+<p class="comp-desc">Displays an actionable financial recommendation with benefit estimate and time required. Supports four accent colors based on recommendation type.</p>
+
+<h2>States</h2>
+
+<h3>Connect Account (Blue)</h3>
+<div class="state-grid">
+<div class="rec-card blue-accent">
+<div class="rec-icon blue-bg">🏦</div>
+<div class="rec-title">Connect Your Checking Account</div>
+<div class="rec-desc">Connect your Chase checking account to get a complete financial health score.</div>
+<div class="rec-meta">
+<div class="rec-benefit pos">+12 health points</div>
+<div class="rec-time">~2 min</div>
+</div>
+<button class="rec-cta">Connect Account</button>
+</div>
+</div>
+
+<h3>Idle Cash (Amber)</h3>
+<div class="state-grid">
+<div class="rec-card amber-accent">
+<div class="rec-icon amber-bg">💰</div>
+<div class="rec-title">Move Idle Cash to Savings</div>
+<div class="rec-desc">$4,200 in checking earning 0.01% APY. Move to high-yield savings at 4.5%.</div>
+<div class="rec-why">Why: Your checking balance exceeds 2 months of expenses. Earning an additional $189/year requires just a quick transfer.</div>
+<div class="rec-meta">
+<div class="rec-benefit pos">+$209/year</div>
+<div class="rec-time">~3 min</div>
+</div>
+<button class="rec-cta">Move Funds</button>
+</div>
+</div>
+
+<h3>Checking Shortage (Red)</h3>
+<div class="state-grid">
+<div class="rec-card red-accent">
+<div class="rec-icon red-bg">⚠️</div>
+<div class="rec-title">Checking Account Shortage</div>
+<div class="rec-desc">Your checking balance ($124.50) won't cover upcoming bills ($342.50).</div>
+<div class="rec-why">Why: Three recurring charges totaling $342.50 will hit your account before your next paycheck on Jan 15.</div>
+<div class="rec-meta">
+<div class="rec-benefit" style="color:var(--red)">-$218 shortfall</div>
+<div class="rec-time">~2 min</div>
+</div>
+<button class="rec-cta" style="background:var(--red)">Review Cash Flow</button>
+</div>
+</div>
+
+<h3>Tax Savings (Green)</h3>
+<div class="state-grid">
+<div class="rec-card green-accent">
+<div class="rec-icon green-bg">📋</div>
+<div class="rec-title">Maximize Tax-Advantaged Savings</div>
+<div class="rec-desc">You've contributed $2,400 to your Roth IRA. You can add $4,100 more before April.</div>
+<div class="rec-why">Why: Contributing the maximum reduces your taxable income and grows tax-free. At your tax bracket, that's $1,230 in savings.</div>
+<div class="rec-meta">
+<div class="rec-benefit pos">+$1,230/year</div>
+<div class="rec-time">~5 min</div>
+</div>
+<button class="rec-cta" style="background:var(--green)">Start Contribution</button>
+</div>
+</div>
+
+<h3>Expanded</h3>
+<div class="state-grid">
+<div class="rec-card amber-accent">
+<button class="rec-dismiss" aria-label="Dismiss">×</button>
+<div class="rec-icon amber-bg">💰</div>
+<div class="rec-title">Move Idle Cash to Savings</div>
+<div class="rec-desc">$4,200 in checking earning 0.01% APY. Move to high-yield savings at 4.5%.</div>
+<div class="expanded-details" style="border-top:1px solid var(--border);padding-top:12px;margin-top:4px">
+<div style="display:flex;justify-content:space-between;padding:4px 0"><span>Current APY</span><strong>0.01%</strong></div>
+<div style="display:flex;justify-content:space-between;padding:4px 0"><span>Target APY</span><strong>4.50%</strong></div>
+<div style="display:flex;justify-content:space-between;padding:4px 0"><span>Annual gain</span><strong style="color:var(--green)">+$189.00</strong></div>
+<div style="display:flex;justify-content:space-between;padding:4px 0"><span>Risk</span><strong>None (FDIC insured)</strong></div>
+</div>
+<div class="rec-meta" style="margin-top:8px">
+<div class="rec-benefit pos">+$209/year</div>
+<div class="rec-time">~3 min</div>
+</div>
+<button class="rec-cta">Move Funds</button>
+</div>
+</div>
+
+<h3>Dismissed (Fading)</h3>
+<div class="state-grid">
+<div class="rec-card blue-accent dismissed-rec">
+<div class="rec-icon blue-bg" style="opacity:.3">🏦</div>
+<div class="rec-title" style="opacity:.3">Connect Your Checking Account</div>
+<div class="rec-desc" style="opacity:.3">Connect your Chase checking account to get a complete financial health score.</div>
+</div>
+</div>
+
+<h2>Anatomy</h2>
+<div class="anatomy-box">
+<h4>Recommendation Card Anatomy</h4>
+<div style="padding:20px 0;position:relative">
+<div class="rec-card amber-accent" style="position:relative">
+<button class="rec-dismiss" aria-label="Dismiss">×</button>
+<div class="rec-icon amber-bg">💰</div>
+<div class="rec-title">Move Idle Cash to Savings</div>
+<div class="rec-desc">$4,200 in checking earning 0.01% APY. Move to high-yield savings at 4.5%.</div>
+<div class="rec-why">Why: Your checking balance exceeds 2 months of expenses.</div>
+<div class="rec-meta">
+<div class="rec-benefit pos">+$209/year</div>
+<div class="rec-time">~3 min</div>
+</div>
+<button class="rec-cta">Move Funds</button>
+</div>
+<div class="annotation" style="top:-8px;left:0">Icon (32×32 colored)</div>
+<div class="annotation" style="top:-8px;right:0">Dismiss X</div>
+<div class="annotation" style="top:40px;left:0">Title (16px semi)</div>
+<div class="annotation" style="top:64px;right:0">Description (14px gray)</div>
+<div class="annotation" style="top:100px;left:0">Why section (13px gray)</div>
+<div class="annotation" style="top:130px;left:0">Benefit (colored)</div>
+<div class="annotation" style="top:130px;right:0">Time (12px gray)</div>
+<div class="annotation" style="top:160px;right:0">CTA (full width)</div>
+</div>
+</div>
+
+<h2>Spacing</h2>
+<div style="padding:12px 0">
+<div class="spacing-row"><div class="spacing-dot"></div><strong>16px</strong> padding all sides</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>4px</strong> left border width</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>8px</strong> between icon and title</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>4px</strong> between title and description</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>8px</strong> between description and "why"</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>12px</strong> between meta and CTA</div>
+</div>
+
+<h2>State Reference</h2>
+<table class="state-table">
+<thead><tr><th>Type</th><th>Accent</th><th>Icon BG</th><th>CTA Color</th><th>Dismissable</th></tr></thead>
+<tbody>
+<tr><td>Connect</td><td><span class="tag tag-blue">Blue</span></td><td>Blue bg</td><td>Blue</td><td>Yes</td></tr>
+<tr><td>Idle Cash</td><td><span class="tag tag-amber">Amber</span></td><td>Amber bg</td><td>Blue</td><td>Yes</td></tr>
+<tr><td>Shortage</td><td><span class="tag tag-red">Red</span></td><td>Red bg</td><td>Red</td><td>Yes</td></tr>
+<tr><td>Tax Savings</td><td><span class="tag tag-green">Green</span></td><td>Green bg</td><td>Green</td><td>Yes</td></tr>
+<tr><td>Dismissed</td><td colspan="2">Same, opacity 0.3</td><td>Hidden</td><td>N/A</td></tr>
+</tbody>
+</table>
+
+<h2>Usage Guidelines</h2>
+<div class="guidelines">
+<ul>
+<li class="do">Show max 3 recommendations at a time</li>
+<li class="do">Sort by impact (dollar benefit) descending</li>
+<li class="do">Always include time estimate for the CTA</li>
+<li class="dont">Don't show recommendations with no clear action</li>
+<li class="dont">Don't auto-dismiss dismissed recommendations permanently</li>
+<li class="dont">Don't show same recommendation more than 3 times</li>
+</ul>
+</div>
+
+<h2>Accessibility</h2>
+<div class="a11y">
+<strong>WCAG 2.1 Requirements</strong>
+• Role: <code>article</code> with aria-label="Recommendation: Move idle cash to savings"<br>
+• Benefit: include full text "Estimated benefit: $209 per year"<br>
+• Dismiss: aria-label="Dismiss recommendation"<br>
+• CTA: descriptive, action-oriented label
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- COMPONENT 11: TOAST / SNACKBAR -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="comp-section" id="toast">
+<h1>11 — Toast / Snackbar</h1>
+<p class="comp-desc">Transient notification displayed at the bottom of the screen. Auto-dismisses after 2 seconds. Used for success, error, info, and warning confirmations.</p>
+
+<h2>Variants</h2>
+
+<h3>Success</h3>
+<div class="state-grid">
+<div class="toast success">
+<span class="toast-icon">✓</span>
+<span class="toast-msg">Account connected successfully</span>
+</div>
+</div>
+
+<h3>Error</h3>
+<div class="state-grid">
+<div class="toast error">
+<span class="toast-icon">✕</span>
+<span class="toast-msg">Unable to connect. Please try again.</span>
+</div>
+</div>
+
+<h3>Info</h3>
+<div class="state-grid">
+<div class="toast info">
+<span class="toast-icon">ℹ</span>
+<span class="toast-msg">Syncing complete</span>
+</div>
+</div>
+
+<h3>Warning</h3>
+<div class="state-grid">
+<div class="toast warning">
+<span class="toast-icon">!</span>
+<span class="toast-msg">Connection expiring soon</span>
+</div>
+</div>
+
+<h2>Anatomy</h2>
+<div class="anatomy-box">
+<h4>Toast Anatomy</h4>
+<div style="padding:12px 0;position:relative">
+<div class="toast success" style="position:relative">
+<span class="toast-icon">✓</span>
+<span class="toast-msg">Account connected successfully</span>
+</div>
+<div class="annotation" style="top:-12px;left:0">Icon (16×16)</div>
+<div class="annotation" style="top:-12px;left:40px">Message (14px semi)</div>
+</div>
+</div>
+
+<h2>Spacing</h2>
+<div style="padding:12px 0">
+<div class="spacing-row"><div class="spacing-dot"></div><strong>14px</strong> padding vertical</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>16px</strong> padding horizontal</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>10px</strong> gap between icon and message</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>12px</strong> bottom offset from nav bar</div>
+</div>
+
+<h2>State Reference</h2>
+<table class="state-table">
+<thead><tr><th>Variant</th><th>Background</th><th>Text</th><th>Icon</th><th>Auto-dismiss</th></tr></thead>
+<tbody>
+<tr><td>Success</td><td>#166f47</td><td>White</td><td>✓</td><td>2 seconds</td></tr>
+<tr><td>Error</td><td>#b91c1c</td><td>White</td><td>✕</td><td>3 seconds</td></tr>
+<tr><td>Info</td><td>#0a84ff</td><td>White</td><td>ℹ</td><td>2 seconds</td></tr>
+<tr><td>Warning</td><td>#c2790a</td><td>White</td><td>!</td><td>2.5 seconds</td></tr>
+</tbody>
+</table>
+
+<h2>Usage Guidelines</h2>
+<div class="guidelines">
+<ul>
+<li class="do">Position above the bottom navigation bar</li>
+<li class="do">Queue multiple toasts — show one at a time</li>
+<li class="do">Use success for completed actions</li>
+<li class="dont">Don't use toast for critical errors requiring action</li>
+<li class="dont">Don't stack multiple toasts simultaneously</li>
+<li class="dont">Don't auto-dismiss error toasts — require manual dismiss</li>
+</ul>
+</div>
+
+<h2>Accessibility</h2>
+<div class="a11y">
+<strong>WCAG 2.1 Requirements</strong>
+• Role: <code>alert</code> with aria-live="polite"<br>
+• Auto-dismiss: announce "dismissed" to screen readers<br>
+• Error toasts: aria-live="assertive"<br>
+• Sufficient contrast for white text on colored background
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- COMPONENT 12: MODAL / BOTTOM SHEET -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="comp-section" id="modal">
+<h1>12 — Modal / Bottom Sheet</h1>
+<p class="comp-desc">Slide-up panel from the bottom of the screen for focused interactions. Includes a drag handle, scrollable content area, and sticky action buttons.</p>
+
+<h2>Variants</h2>
+
+<h3>Confirmation</h3>
+<div class="state-grid">
+<div class="modal-backdrop">
+<div class="modal-sheet">
+<div class="modal-handle"></div>
+<div class="modal-title">Accept All Changes?</div>
+<div class="modal-content" style="text-align:center;padding:0 20px 16px">
+<p style="font-size:14px;color:var(--text2);line-height:1.5">You're about to accept 3 recurring subscription changes. This will update your budget and spending tracker.</p>
+</div>
+<div class="modal-actions">
+<button class="modal-secondary">Cancel</button>
+<button class="modal-primary">Accept All</button>
+</div>
+</div>
+</div>
+</div>
+
+<h3>Detail</h3>
+<div class="state-grid">
+<div class="modal-backdrop">
+<div class="modal-sheet">
+<div class="modal-handle"></div>
+<div class="modal-title">Netflix — Subscription Details</div>
+<div class="modal-content">
+<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:14px"><span style="color:var(--text2)">Amount</span><strong>$17.99/mo</strong></div>
+<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:14px"><span style="color:var(--text2)">Category</span><strong>Entertainment</strong></div>
+<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:14px"><span style="color:var(--text2)">Frequency</span><strong>Monthly</strong></div>
+<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:14px"><span style="color:var(--text2)">First detected</span><strong>Mar 2025</strong></div>
+<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:14px"><span style="color:var(--text2)">Last 12 months</span><strong>$185.88</strong></div>
+<div style="display:flex;justify-content:space-between;padding:10px 0;font-size:14px"><span style="color:var(--text2)">Status</span><strong style="color:var(--green)">Active</strong></div>
+</div>
+<div class="modal-actions">
+<button class="modal-secondary">Close</button>
+<button class="modal-primary">Manage Subscription</button>
+</div>
+</div>
+</div>
+</div>
+
+<h3>Filter</h3>
+<div class="state-grid">
+<div class="modal-backdrop">
+<div class="modal-sheet">
+<div class="modal-handle"></div>
+<div class="modal-title">Sort & Filter</div>
+<div class="modal-content">
+<div style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--text2);margin-bottom:8px">Sort By</div>
+<div class="modal-filter-row"><span>Amount (high to low)</span><div class="modal-radio selected"></div></div>
+<div class="modal-filter-row"><span>Amount (low to high)</span><div class="modal-radio"></div></div>
+<div class="modal-filter-row"><span>Most recent</span><div class="modal-radio"></div></div>
+<div class="modal-filter-row"><span>Name (A-Z)</span><div class="modal-radio"></div></div>
+<div style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--text2);margin:16px 0 8px">Category</div>
+<div class="modal-filter-row"><span>All Categories</span><div class="modal-radio selected"></div></div>
+<div class="modal-filter-row"><span>Entertainment</span><div class="modal-radio"></div></div>
+<div class="modal-filter-row"><span>Utilities</span><div class="modal-radio"></div></div>
+</div>
+<div class="modal-actions">
+<button class="modal-secondary">Reset</button>
+<button class="modal-primary">Apply Filters</button>
+</div>
+</div>
+</div>
+</div>
+
+<h3>Share</h3>
+<div class="state-grid">
+<div class="modal-backdrop">
+<div class="modal-sheet">
+<div class="modal-handle"></div>
+<div class="modal-title">Share</div>
+<div class="modal-content" style="text-align:center;padding:16px 20px">
+<div class="grid-2" style="gap:16px">
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer">
+<div style="width:48px;height:48px;background:#25d366;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px">💬</div>
+<span style="font-size:12px;color:var(--text2)">WhatsApp</span>
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer">
+<div style="width:48px;height:48px;background:#1da1f2;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px">🐦</div>
+<span style="font-size:12px;color:var(--text2)">Twitter</span>
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer">
+<div style="width:48px;height:48px;background:#4285f4;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px">✉️</div>
+<span style="font-size:12px;color:var(--text2)">Email</span>
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer">
+<div style="width:48px;height:48px;background:#e5e7eb;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px">📋</div>
+<span style="font-size:12px;color:var(--text2)">Copy Link</span>
+</div>
+</div>
+</div>
+<div class="modal-actions">
+<button class="modal-secondary" style="width:100%">Cancel</button>
+</div>
+</div>
+</div>
+</div>
+
+<h2>Anatomy</h2>
+<div class="anatomy-box">
+<h4>Modal / Bottom Sheet Anatomy</h4>
+<div style="padding:12px 0;position:relative">
+<div class="modal-sheet" style="position:relative">
+<div class="modal-handle"></div>
+<div class="modal-title">Modal Title</div>
+<div class="modal-content" style="min-height:80px">
+<p style="font-size:14px;color:var(--text2)">Scrollable content area with details, options, or forms.</p>
+</div>
+<div class="modal-actions">
+<button class="modal-secondary">Cancel</button>
+<button class="modal-primary">Confirm</button>
+</div>
+</div>
+<div class="annotation" style="top:-16px;left:0">Handle (40×4px, gray)</div>
+<div class="annotation" style="top:-16px;right:0">Title (18px bold)</div>
+<div class="annotation" style="top:60px;left:0">Content (scrollable)</div>
+<div class="annotation" style="top:120px;right:0">Actions (sticky bottom)</div>
+<div class="annotation" style="top:160px;left:0">Backdrop: rgba(0,0,0,.4)</div>
+</div>
+</div>
+
+<h2>Spacing</h2>
+<div style="padding:12px 0">
+<div class="spacing-row"><div class="spacing-dot"></div><strong>12px</strong> handle margin from top</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>16px</strong> padding horizontal</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>12px</strong> between handle and title</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>16px</strong> between title and content</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>16px</strong> padding for actions area</div>
+<div class="spacing-row"><div class="spacing-dot"></div><strong>8px</strong> gap between action buttons</div>
+</div>
+
+<h2>Usage Guidelines</h2>
+<div class="guidelines">
+<ul>
+<li class="do">Use confirmation modals for destructive or irreversible actions</li>
+<li class="do">Use detail modals for complex information not fitting in a card</li>
+<li class="do">Use filter modals for sort and filter controls</li>
+<li class="dont">Don't nest modals (no modal inside modal)</li>
+<li class="dont">Don't use modals for simple notifications — use toasts</li>
+<li class="dont">Don't make content scroll beyond 70vh without clear scroll affordance</li>
+</ul>
+</div>
+
+<h2>Accessibility</h2>
+<div class="a11y">
+<strong>WCAG 2.1 Requirements</strong>
+• Role: <code>dialog</code> with aria-modal="true"<br>
+• Focus trap: tab cycling within modal only<br>
+• Escape key: closes modal and returns focus to trigger<br>
+• Backdrop: click to close (with aria-label="Close dialog")<br>
+• Title: use heading element (h2) linked via aria-labelledby<br>
+• Handle: aria-hidden="true" (decorative only)
+</div>
+</section>
+
+<!-- FOOTER -->
+<div style="text-align:center;padding:40px 0 20px;border-top:1px solid var(--border);margin-top:40px">
+<div style="font-size:12px;color:var(--text2)">Advizmo Component Anatomy & Standards</div>
+<div style="font-size:11px;color:var(--text2);margin-top:4px">Engineering Reference · v1.0</div>
+<div style="font-size:11px;color:var(--text2);margin-top:4px">Max-width: 430px · IBM Plex Sans + Inter</div>
+</div>
+
+</div>
+</main>
+
+<script>
+// Sidebar active state
+document.querySelectorAll('.sidebar nav a').forEach(link=>{
+link.addEventListener('click',function(){
+document.querySelectorAll('.sidebar nav a').forEach(l=>l.classList.remove('active'));
+this.classList.add('active');
+});
+});
+
+// Intersection Observer for sidebar
+const sections=document.querySelectorAll('.comp-section');
+const navLinks=document.querySelectorAll('.sidebar nav a');
+const observer=new IntersectionObserver(entries=>{
+entries.forEach(entry=>{
+if(entry.isIntersecting){
+const id=entry.target.id;
+navLinks.forEach(l=>{
+l.classList.remove('active');
+if(l.getAttribute('href')==='#'+id)l.classList.add('active');
+});
+}
+});
+},{rootMargin:'-20% 0px -70% 0px'});
+sections.forEach(s=>observer.observe(s));
+</script>
+</body>
+</html>
