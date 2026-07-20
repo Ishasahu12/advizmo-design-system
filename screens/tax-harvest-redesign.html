@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tax Loss Harvesting - Redesign Concepts</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --blue: #0a84ff;
+    --green: #166f47;
+    --green-bg: #e8f8ec;
+    --amber: #c2790a;
+    --amber-bg: #fff5e6;
+    --red: #b91c1c;
+    --red-bg: #ffe8e8;
+    --card: #fff;
+    --text: #1c1c1e;
+    --text2: #8e8e93;
+    --bg: #f2f2f7;
+    --max-w: 430px;
+    --sidebar-w: 260px;
+  }
+  html { font-size: 14px; }
+  body {
+    font-family: 'IBM Plex Sans', 'Inter', -apple-system, sans-serif;
+    background: #e5e5ea;
+    color: var(--text);
+    display: flex;
+    min-height: 100vh;
+  }
+  /* Sidebar */
+  .sidebar {
+    width: var(--sidebar-w);
+    background: #1c1c1e;
+    color: #fff;
+    padding: 24px 16px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .sidebar-brand {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--blue);
+    margin-bottom: 20px;
+    font-weight: 600;
+  }
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #8e8e93;
+    cursor: pointer;
+    transition: background .15s, color .15s;
+  }
+  .sidebar-item:hover { background: #2c2c2e; color: #fff; }
+  .sidebar-item.active { background: var(--blue); color: #fff; }
+  .sidebar-item svg { width: 18px; height: 18px; flex-shrink: 0; }
+  .sidebar-divider { height: 1px; background: #38383a; margin: 12px 0; }
+  .sidebar-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #636366;
+    padding: 8px 12px 4px;
+  }
+  /* Main area */
+  .main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-x: auto;
+    align-items: center;
+  }
+  /* Phone frame */
+  .phone-wrap {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    padding: 32px 0;
+  }
+  .phone {
+    width: var(--max-w);
+    min-height: 850px;
+    background: var(--bg);
+    border-radius: 40px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.18), 0 0 0 1px rgba(0,0,0,.08);
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  /* Status bar */
+  .status-bar {
+    height: 54px;
+    padding: 14px 28px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 15px;
+    font-weight: 600;
+    position: relative;
+    z-index: 10;
+  }
+  .status-bar .time { letter-spacing: .5px; }
+  .status-icons { display: flex; gap: 6px; align-items: center; }
+  .status-icons svg { width: 16px; height: 16px; }
+  .dynamic-island {
+    width: 126px; height: 36px;
+    background: #000;
+    border-radius: 20px;
+    position: absolute;
+    left: 50%;
+    top: 10px;
+    transform: translateX(-50%);
+  }
+  /* Sticky header */
+  .header {
+    padding: 8px 20px 12px;
+    background: var(--bg);
+    position: sticky;
+    top: 0;
+    z-index: 9;
+  }
+  .header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: -.5px;
+  }
+  .header-sub {
+    font-size: 13px;
+    color: var(--text2);
+    margin-top: 2px;
+  }
+  /* Content area */
+  .content {
+    flex: 1;
+    padding: 4px 16px 100px;
+    overflow-y: auto;
+  }
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.06);
+  }
+  .card-green {
+    background: var(--green-bg);
+    border: 1px solid rgba(22,111,71,.12);
+  }
+  .card-amber {
+    background: var(--amber-bg);
+    border: 1px solid rgba(194,121,10,.12);
+  }
+  .card-red {
+    background: var(--red-bg);
+    border: 1px solid rgba(185,28,28,.12);
+  }
+  /* Bottom nav */
+  .bottom-nav {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 82px;
+    background: rgba(255,255,255,.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: .5px solid #d1d1d6;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    padding-top: 8px;
+    z-index: 20;
+  }
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    font-size: 10px;
+    color: var(--text2);
+    cursor: pointer;
+    width: 64px;
+  }
+  .nav-item.active { color: var(--blue); }
+  .nav-item svg { width: 24px; height: 24px; }
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 14px 24px;
+    border-radius: 14px;
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    font-family: inherit;
+    transition: opacity .15s;
+  }
+  .btn:hover { opacity: .88; }
+  .btn-primary { background: var(--blue); color: #fff; }
+  .btn-green { background: var(--green); color: #fff; }
+  .btn-outline { background: transparent; color: var(--blue); border: 1.5px solid var(--blue); }
+  .btn-ghost { background: transparent; color: var(--text2); }
+  .btn-sm { padding: 10px 16px; font-size: 13px; border-radius: 10px; }
+  /* Concept label */
+  .concept-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 40px 0 16px;
+    padding: 0 4px;
+  }
+  .concept-label:first-child { margin-top: 0; }
+  .concept-num {
+    width: 28px;
+    height: 28px;
+    background: var(--text);
+    color: #fff;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .concept-title {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    color: var(--text2);
+  }
+  /* Dashboard context */
+  .dash-section {
+    margin: 16px 0;
+    padding: 0 4px;
+  }
+  .dash-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    color: var(--text2);
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  /* Progress ring */
+  .ring-wrap {
+    width: 120px;
+    height: 120px;
+    position: relative;
+    margin: 0 auto;
+  }
+  .ring-wrap svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .ring-bg { fill: none; stroke: #e5e5ea; stroke-width: 10; }
+  .ring-fg { fill: none; stroke: var(--green); stroke-width: 10; stroke-linecap: round; transition: stroke-dashoffset .8s ease; }
+  .ring-center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .ring-value { font-size: 22px; font-weight: 700; font-family: 'Inter', sans-serif; }
+  .ring-label { font-size: 10px; color: var(--text2); margin-top: 2px; }
+  /* Milestones */
+  .milestones {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 16px;
+    position: relative;
+    padding: 0 4px;
+  }
+  .milestones::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 16px;
+    right: 16px;
+    height: 2px;
+    background: #e5e5ea;
+  }
+  .milestone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    position: relative;
+    z-index: 1;
+  }
+  .milestone-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #e5e5ea;
+    border: 3px solid var(--bg);
+  }
+  .milestone-dot.filled { background: var(--green); }
+  .milestone-dot.current { background: var(--green); box-shadow: 0 0 0 4px rgba(22,111,71,.2); }
+  .milestone-label { font-size: 10px; color: var(--text2); font-weight: 500; }
+  /* Timeline */
+  .timeline { display: flex; flex-direction: column; gap: 0; margin-top: 16px; }
+  .tl-item {
+    display: flex;
+    gap: 12px;
+    position: relative;
+    padding-bottom: 20px;
+  }
+  .tl-item:last-child { padding-bottom: 0; }
+  .tl-line {
+    width: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .tl-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--blue);
+    flex-shrink: 0;
+    margin-top: 4px;
+  }
+  .tl-dot.done { background: var(--green); }
+  .tl-connector {
+    width: 2px;
+    flex: 1;
+    background: #e5e5ea;
+    margin-top: 4px;
+  }
+  .tl-item:last-child .tl-connector { display: none; }
+  .tl-content { flex: 1; }
+  .tl-title { font-size: 13px; font-weight: 600; }
+  .tl-desc { font-size: 12px; color: var(--text2); margin-top: 2px; }
+  /* Breakdown */
+  .breakdown { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+  .breakdown-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+  }
+  .breakdown-ticker { font-weight: 600; }
+  .breakdown-loss { color: var(--red); font-weight: 600; }
+  .breakdown-bar {
+    height: 4px;
+    border-radius: 2px;
+    background: #e5e5ea;
+    margin-top: 4px;
+    overflow: hidden;
+  }
+  .breakdown-bar-fill { height: 100%; background: var(--red); border-radius: 2px; }
+  /* Status row */
+  .status-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    background: var(--bg);
+    border-radius: 10px;
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--text2);
+  }
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .status-dot.green { background: #30d158; }
+  .status-dot.amber { background: var(--amber); }
+  .status-dot.gray { background: #aeaeb2; }
+  /* Spinner */
+  .spinner {
+    width: 20px;
+    height: 20px;
+    border: 2.5px solid #e5e5ea;
+    border-top-color: var(--green);
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  /* Expandable */
+  .expandable { margin-top: 12px; }
+  .expand-trigger {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--blue);
+    cursor: pointer;
+    padding: 6px 0;
+  }
+  .expand-trigger svg {
+    width: 16px;
+    height: 16px;
+    transition: transform .2s;
+  }
+  .expand-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .3s ease;
+  }
+  .expand-body.open { max-height: 500px; }
+  /* Badge */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .badge-green { background: var(--green-bg); color: var(--green); }
+  .badge-amber { background: var(--amber-bg); color: var(--amber); }
+  .badge-red { background: var(--red-bg); color: var(--red); }
+  .badge-gray { background: #f2f2f7; color: var(--text2); }
+  /* Benefit card */
+  .benefit-card {
+    display: flex;
+    gap: 12px;
+    padding: 14px;
+    background: var(--bg);
+    border-radius: 12px;
+    margin-bottom: 10px;
+  }
+  .benefit-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .benefit-icon svg { width: 20px; height: 20px; }
+  .benefit-title { font-size: 13px; font-weight: 600; }
+  .benefit-desc { font-size: 12px; color: var(--text2); margin-top: 2px; }
+  /* AI Card */
+  .ai-card {
+    background: linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%);
+    border-radius: 16px;
+    padding: 20px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .ai-card::before {
+    content: '';
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, rgba(10,132,255,.3), transparent);
+    border-radius: 50%;
+  }
+  .ai-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue), #5e5ce6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+  }
+  .ai-avatar svg { width: 18px; height: 18px; color: #fff; }
+  .ai-message {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 1;
+  }
+  .ai-highlight { color: var(--blue); font-weight: 600; }
+  .ai-recs { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+  .ai-rec {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    background: rgba(255,255,255,.08);
+    border-radius: 10px;
+    font-size: 12px;
+    position: relative;
+    z-index: 1;
+  }
+  .ai-rec-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--blue);
+    flex-shrink: 0;
+  }
+  .ai-expiry {
+    font-size: 11px;
+    color: #8e8e93;
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 1;
+  }
+  .ai-card .btn { position: relative; z-index: 1; }
+  .ai-empty { color: #8e8e93; font-size: 13px; line-height: 1.5; }
+  /* Dashboard mini cards */
+  .dash-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .mini-card {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 14px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.06);
+  }
+  .mini-label { font-size: 11px; color: var(--text2); margin-bottom: 4px; }
+  .mini-value { font-size: 18px; font-weight: 700; font-family: 'Inter', sans-serif; }
+  .mini-change { font-size: 11px; color: var(--green); margin-top: 2px; }
+  /* Separator */
+  .sep {
+    height: 1px;
+    background: #e5e5ea;
+    margin: 16px 0;
+  }
+  /* Flex helpers */
+  .flex-col { display: flex; flex-direction: column; }
+  .gap-4 { gap: 4px; }
+  .gap-8 { gap: 8px; }
+  .gap-12 { gap: 12px; }
+  .mt-8 { margin-top: 8px; }
+  .mt-12 { margin-top: 12px; }
+  .mt-16 { margin-top: 16px; }
+  .mb-8 { margin-bottom: 8px; }
+  .mb-12 { margin-bottom: 12px; }
+  .text-sm { font-size: 12px; }
+  .text-xs { font-size: 11px; }
+  .text-muted { color: var(--text2); }
+  .text-center { text-align: center; }
+  .fw-600 { font-weight: 600; }
+  .leaf-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--green-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .leaf-icon svg { width: 22px; height: 22px; color: var(--green); }
+  /* Monitor pulse */
+  .pulse-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #30d158;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(48,209,88,.4); }
+    50% { opacity: .7; box-shadow: 0 0 0 6px rgba(48,209,88,0); }
+  }
+  /* Check animation */
+  .check-circle {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--green-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;
+  }
+  .check-circle svg { width: 24px; height: 24px; color: var(--green); }
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-brand">Advizmo Design System</div>
+  <div class="sidebar-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    Dashboard
+  </div>
+  <div class="sidebar-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+    Accounts
+  </div>
+  <div class="sidebar-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path d="M9 12l2 2 4-4"/></svg>
+    Planning
+  </div>
+  <div class="sidebar-divider"></div>
+  <div class="sidebar-label">Components</div>
+  <div class="sidebar-item active">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+    Tax Harvest
+  </div>
+  <div class="sidebar-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+    Analytics
+  </div>
+  <div class="sidebar-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+    Settings
+  </div>
+  <div style="flex:1"></div>
+  <div class="sidebar-item" style="margin-top:auto">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+    Log out
+  </div>
+</aside>
+
+<!-- Main -->
+<main class="main">
+  <div class="phone-wrap">
+    <div class="phone">
+
+      <!-- Status Bar -->
+      <div class="status-bar">
+        <span class="time">9:41</span>
+        <div class="dynamic-island"></div>
+        <div class="status-icons">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3a4.237 4.237 0 00-6 0zm-4-4l2 2a7.074 7.074 0 0110 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+        </div>
+      </div>
+
+      <!-- Header -->
+      <div class="header">
+        <h1>Tax Harvesting</h1>
+        <div class="header-sub">Optimize your tax strategy</div>
+      </div>
+
+      <!-- Content -->
+      <div class="content">
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- CONCEPT 1: ACTIVATION CARD -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="concept-label">
+          <div class="concept-num">1</div>
+          <div class="concept-title">Activation Card</div>
+        </div>
+
+        <!-- State 1A: Not Enabled -->
+        <div class="card card-green">
+          <div class="flex-col gap-12">
+            <div class="leaf-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8C8 10 5.9 16.17 3.82 21.34l1.89.66.95-2.3c.48.17.98.3 1.34.3C19 20 22 3 22 3c-1 2-8 2.25-13 3.25S2 11.5 2 13.5s1.75 3.75 1.75 3.75"/></svg>
+            </div>
+            <div>
+              <h3 style="font-size:18px;font-weight:700;margin-bottom:4px;">Save on taxes automatically</h3>
+              <p class="text-sm text-muted">Advizmo sells investments at a loss to reduce your tax bill.</p>
+            </div>
+            <div style="background:rgba(22,111,71,.1);border-radius:12px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;">
+              <span class="text-sm fw-600" style="color:var(--green);">Save up to $288/year</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--green)"><path d="M9 18l6-6-6-6"/></svg>
+            </div>
+          </div>
+          <div class="expandable">
+            <div class="expand-trigger" onclick="this.nextElementSibling.classList.toggle('open')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+              How it works
+            </div>
+            <div class="expand-body">
+              <div class="timeline" style="padding-top:8px;">
+                <div class="tl-item">
+                  <div class="tl-line"><div class="tl-dot"></div><div class="tl-connector"></div></div>
+                  <div class="tl-content"><div class="tl-title">1. We scan your portfolio</div><div class="tl-desc">Daily analysis of unrealized losses</div></div>
+                </div>
+                <div class="tl-item">
+                  <div class="tl-line"><div class="tl-dot"></div><div class="tl-connector"></div></div>
+                  <div class="tl-content"><div class="tl-title">2. Find harvesting opportunities</div><div class="tl-desc">Identify positions with tax-loss potential</div></div>
+                </div>
+                <div class="tl-item">
+                  <div class="tl-line"><div class="tl-dot"></div><div class="tl-connector"></div></div>
+                  <div class="tl-content"><div class="tl-title">3. Execute the trade</div><div class="tl-desc">Sell at a loss and reinvest smartly</div></div>
+                </div>
+                <div class="tl-item">
+                  <div class="tl-line"><div class="tl-dot done"></div></div>
+                  <div class="tl-content"><div class="tl-title">4. Reduce your tax bill</div><div class="tl-desc">Harvested losses offset your gains</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-green mt-16">Enable tax harvesting</button>
+        </div>
+
+        <!-- State 1B: Enabled, No Opportunities -->
+        <div class="mt-16">
+          <div class="badge badge-gray mb-8">Enabled - No Opportunities</div>
+          <div class="card card-green">
+            <div class="flex-col gap-12">
+              <div class="flex-col gap-4">
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <div class="leaf-icon" style="width:36px;height:36px;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;"><path d="M17 8C8 10 5.9 16.17 3.82 21.34l1.89.66.95-2.3c.48.17.98.3 1.34.3C19 20 22 3 22 3c-1 2-8 2.25-13 3.25S2 11.5 2 13.5s1.75 3.75 1.75 3.75"/></svg>
+                  </div>
+                  <div>
+                    <div class="fw-600" style="font-size:15px;">Tax harvesting active</div>
+                    <div class="text-xs text-muted">Monitoring your portfolio daily</div>
+                  </div>
+                </div>
+              </div>
+              <div class="status-row">
+                <div class="pulse-dot"></div>
+                <span>Watching for opportunities — Last scan: Today, 2:30 PM</span>
+              </div>
+              <div style="background:rgba(22,111,71,.08);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:8px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--green);flex-shrink:0;"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
+                <span class="text-sm" style="color:var(--green);">No losses to harvest right now — your portfolio is performing well</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- State 1C: Opportunity Available -->
+        <div class="mt-16">
+          <div class="badge badge-green mb-8">Opportunity Available</div>
+          <div class="card card-green">
+            <div class="flex-col gap-12">
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <div class="leaf-icon" style="width:36px;height:36px;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;"><path d="M17 8C8 10 5.9 16.17 3.82 21.34l1.89.66.95-2.3c.48.17.98.3 1.34.3C19 20 22 3 22 3c-1 2-8 2.25-13 3.25S2 11.5 2 13.5s1.75 3.75 1.75 3.75"/></svg>
+                  </div>
+                  <div>
+                    <div class="fw-600" style="font-size:15px;">Opportunity found!</div>
+                    <div class="text-xs text-muted">3 positions with losses</div>
+                  </div>
+                </div>
+                <div class="badge badge-green">New</div>
+              </div>
+              <div style="background:rgba(22,111,71,.1);border-radius:12px;padding:14px 16px;text-align:center;">
+                <div class="text-xs text-muted mb-8">Potential savings</div>
+                <div style="font-size:28px;font-weight:700;color:var(--green);">$288</div>
+              </div>
+              <button class="btn btn-green">Enable and harvest now</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dashboard Context -->
+        <div class="dash-section mt-16">
+          <div class="dash-label">Dashboard Context</div>
+        </div>
+        <div class="dash-row">
+          <div class="mini-card">
+            <div class="mini-label">Portfolio Value</div>
+            <div class="mini-value">$48,290</div>
+            <div class="mini-change">+2.4% this month</div>
+          </div>
+          <div class="mini-card">
+            <div class="mini-label">Taxable Account</div>
+            <div class="mini-value">$32,150</div>
+            <div class="mini-change">+1.8% this month</div>
+          </div>
+        </div>
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div>
+              <div class="text-xs text-muted">Tax Harvesting</div>
+              <div class="fw-600 mt-8" style="font-size:15px;">Not enabled</div>
+            </div>
+            <div style="width:40px;height:40px;border-radius:50%;background:#f2f2f7;display:flex;align-items:center;justify-content:center;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--text2)"><path d="M9 18l6-6-6-6"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- CONCEPT 2: PROGRESS CARD -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="concept-label">
+          <div class="concept-num">2</div>
+          <div class="concept-title">Progress Card</div>
+        </div>
+
+        <!-- State 2A: No Investments (Empty Ring) -->
+        <div class="card">
+          <div class="text-center mb-12">
+            <div class="ring-wrap" style="margin-bottom:4px;">
+              <svg viewBox="0 0 120 120">
+                <circle class="ring-bg" cx="60" cy="60" r="50"/>
+                <circle class="ring-fg" cx="60" cy="60" r="50" stroke-dasharray="314.16" stroke-dashoffset="314.16" stroke="var(--text2)" stroke-width="8"/>
+              </svg>
+              <div class="ring-center">
+                <div class="ring-value" style="color:var(--text2);">$0</div>
+                <div class="ring-label">saved</div>
+              </div>
+            </div>
+          </div>
+          <div class="text-center mb-12">
+            <div class="fw-600" style="font-size:16px;">No investments yet</div>
+            <div class="text-sm text-muted mt-8">Add investments to start saving on taxes</div>
+          </div>
+          <div class="milestones">
+            <div class="milestone">
+              <div class="milestone-dot"></div>
+              <div class="milestone-label">$0</div>
+            </div>
+            <div class="milestone">
+              <div class="milestone-dot"></div>
+              <div class="milestone-label">$100</div>
+            </div>
+            <div class="milestone">
+              <div class="milestone-dot"></div>
+              <div class="milestone-label">$200</div>
+            </div>
+            <div class="milestone">
+              <div class="milestone-dot"></div>
+              <div class="milestone-label">$288</div>
+            </div>
+          </div>
+          <button class="btn btn-outline mt-16">Get started</button>
+        </div>
+
+        <!-- State 2B: $144 Saved (50%) -->
+        <div class="mt-16">
+          <div class="badge badge-green mb-8">50% Progress</div>
+          <div class="card">
+            <div class="text-center mb-12">
+              <div class="ring-wrap" style="margin-bottom:4px;">
+                <svg viewBox="0 0 120 120">
+                  <circle class="ring-bg" cx="60" cy="60" r="50"/>
+                  <circle class="ring-fg" cx="60" cy="60" r="50" stroke-dasharray="314.16" stroke-dashoffset="157.08"/>
+                </svg>
+                <div class="ring-center">
+                  <div class="ring-value" style="color:var(--green);">$144</div>
+                  <div class="ring-label">saved</div>
+                </div>
+              </div>
+            </div>
+            <div class="text-center mb-12">
+              <div class="fw-600" style="font-size:16px;">$144 saved this year</div>
+              <div class="text-sm text-muted mt-8">Keep going — you're halfway there!</div>
+            </div>
+            <div class="milestones">
+              <div class="milestone">
+                <div class="milestone-dot filled"></div>
+                <div class="milestone-label">$0</div>
+              </div>
+              <div class="milestone">
+                <div class="milestone-dot filled"></div>
+                <div class="milestone-label">$100</div>
+              </div>
+              <div class="milestone">
+                <div class="milestone-dot current"></div>
+                <div class="milestone-label">$200</div>
+              </div>
+              <div class="milestone">
+                <div class="milestone-dot"></div>
+                <div class="milestone-label">$288</div>
+              </div>
+            </div>
+            <div class="status-row mt-16">
+              <div class="status-dot green"></div>
+              <span>Last harvest: Nov 14, 2024 — Saved $42</span>
+            </div>
+            <button class="btn btn-outline mt-12">View history</button>
+          </div>
+        </div>
+
+        <!-- State 2C: $288 Saved (100%) -->
+        <div class="mt-16">
+          <div class="badge badge-green mb-8">Complete</div>
+          <div class="card">
+            <div class="text-center mb-12">
+              <div class="ring-wrap" style="margin-bottom:4px;">
+                <svg viewBox="0 0 120 120">
+                  <circle class="ring-bg" cx="60" cy="60" r="50"/>
+                  <circle class="ring-fg" cx="60" cy="60" r="50" stroke-dasharray="314.16" stroke-dashoffset="0"/>
+                </svg>
+                <div class="ring-center">
+                  <div class="ring-value" style="color:var(--green);">$288</div>
+                  <div class="ring-label">saved</div>
+                </div>
+              </div>
+            </div>
+            <div class="text-center mb-12">
+              <div class="fw-600" style="font-size:16px;">Tax savings goal reached!</div>
+              <div class="text-sm text-muted mt-8">You've maximized your tax harvesting for 2024</div>
+            </div>
+            <div class="milestones">
+              <div class="milestone">
+                <div class="milestone-dot filled"></div>
+                <div class="milestone-label">$0</div>
+              </div>
+              <div class="milestone">
+                <div class="milestone-dot filled"></div>
+                <div class="milestone-label">$100</div>
+              </div>
+              <div class="milestone">
+                <div class="milestone-dot filled"></div>
+                <div class="milestone-label">$200</div>
+              </div>
+              <div class="milestone">
+                <div class="milestone-dot filled"></div>
+                <div class="milestone-label">$288</div>
+              </div>
+            </div>
+            <div style="background:var(--green-bg);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:10px;margin-top:16px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--green);flex-shrink:0;"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
+              <span class="text-sm fw-600" style="color:var(--green);">Full annual benefit achieved — see you next year!</span>
+            </div>
+            <button class="btn btn-ghost mt-12">View full history</button>
+          </div>
+        </div>
+
+        <!-- Dashboard Context -->
+        <div class="dash-section mt-16">
+          <div class="dash-label">Dashboard Context</div>
+        </div>
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div>
+              <div class="text-xs text-muted">Tax Savings Progress</div>
+              <div class="fw-600 mt-8" style="font-size:15px;">$144 of $288</div>
+            </div>
+            <div class="badge badge-green">50%</div>
+          </div>
+          <div style="height:4px;background:#e5e5ea;border-radius:2px;margin-top:10px;overflow:hidden;">
+            <div style="width:50%;height:100%;background:var(--green);border-radius:2px;"></div>
+          </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- CONCEPT 3: FUTURE BENEFITS -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="concept-label">
+          <div class="concept-num">3</div>
+          <div class="concept-title">Future Benefits</div>
+        </div>
+
+        <!-- State 3A: Not Enabled -->
+        <div class="card">
+          <div class="text-center mb-12">
+            <div style="width:56px;height:56px;border-radius:16px;background:var(--green-bg);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--green);"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+            </div>
+            <h3 style="font-size:18px;font-weight:700;">Your tax savings potential</h3>
+            <div style="font-size:28px;font-weight:700;color:var(--green);margin-top:4px;">Save up to $288/year</div>
+            <div class="text-sm text-muted mt-8">Based on your current portfolio and tax situation</div>
+          </div>
+
+          <div class="benefit-card">
+            <div class="benefit-icon" style="background:var(--green-bg);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--green);"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div>
+              <div class="benefit-title">Protect your gains</div>
+              <div class="benefit-desc">Offset capital gains with harvested losses to keep more of your returns</div>
+            </div>
+          </div>
+
+          <div class="benefit-card">
+            <div class="benefit-icon" style="background:rgba(10,132,255,.1);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--blue);"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <div>
+              <div class="benefit-title">Reduce your tax bill</div>
+              <div class="benefit-desc">Harvested losses directly reduce what you owe at tax time</div>
+            </div>
+          </div>
+
+          <div class="benefit-card">
+            <div class="benefit-icon" style="background:rgba(88,86,214,.1);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#5e5ce6;"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            </div>
+            <div>
+              <div class="benefit-title">Fully automatic</div>
+              <div class="benefit-desc">We handle everything — scanning, trading, and tax-loss harvesting</div>
+            </div>
+          </div>
+
+          <div class="sep"></div>
+
+          <div class="text-xs text-muted fw-600 mb-8">What happens after you enable</div>
+          <div class="timeline">
+            <div class="tl-item">
+              <div class="tl-line"><div class="tl-dot done"></div><div class="tl-connector"></div></div>
+              <div class="tl-content"><div class="tl-title">Instant scan</div><div class="tl-desc">We analyze your portfolio for opportunities</div></div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-line"><div class="tl-dot"></div><div class="tl-connector"></div></div>
+              <div class="tl-content"><div class="tl-title">Daily monitoring</div><div class="tl-desc">Continuous tracking of unrealized losses</div></div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-line"><div class="tl-dot"></div><div class="tl-connector"></div></div>
+              <div class="tl-content"><div class="tl-title">Smart execution</div><div class="tl-desc">Automatic trades when conditions are right</div></div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-line"><div class="tl-dot"></div></div>
+              <div class="tl-content"><div class="tl-title">Tax savings</div><div class="tl-desc">Losses applied to reduce your tax liability</div></div>
+            </div>
+          </div>
+
+          <button class="btn btn-green mt-16">Enable tax harvesting</button>
+        </div>
+
+        <!-- State 3B: Enabled (Monitoring) -->
+        <div class="mt-16">
+          <div class="badge badge-green mb-8">Monitoring Active</div>
+          <div class="card">
+            <div class="text-center mb-12">
+              <div style="width:56px;height:56px;border-radius:16px;background:var(--green-bg);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;position:relative;">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--green);"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <div style="position:absolute;top:-2px;right:-2px;width:14px;height:14px;border-radius:50%;background:#30d158;border:2px solid var(--card);"></div>
+              </div>
+              <h3 style="font-size:18px;font-weight:700;">Tax harvesting active</h3>
+              <div class="text-sm text-muted mt-8">We're monitoring your portfolio 24/7</div>
+            </div>
+
+            <div class="dash-row">
+              <div class="mini-card">
+                <div class="mini-label">Status</div>
+                <div class="text-sm fw-600" style="color:var(--green);">Watching</div>
+              </div>
+              <div class="mini-card">
+                <div class="mini-label">Last scan</div>
+                <div class="text-sm fw-600">2 min ago</div>
+              </div>
+            </div>
+
+            <div class="status-row">
+              <div class="pulse-dot"></div>
+              <span>Portfolio scanned — no opportunities found at this time</span>
+            </div>
+
+            <div style="background:var(--bg);border-radius:12px;padding:14px 16px;margin-top:12px;">
+              <div class="text-xs text-muted mb-8 fw-600">Next actions</div>
+              <div class="flex-col gap-8">
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <div style="width:6px;height:6px;border-radius:50%;background:var(--blue);"></div>
+                  <span class="text-sm">We'll notify you when an opportunity is found</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <div style="width:6px;height:6px;border-radius:50%;background:var(--blue);"></div>
+                  <span class="text-sm">Automatic harvesting when conditions are met</span>
+                </div>
+              </div>
+            </div>
+
+            <button class="btn btn-ghost mt-12">Pause monitoring</button>
+          </div>
+        </div>
+
+        <!-- Dashboard Context -->
+        <div class="dash-section mt-16">
+          <div class="dash-label">Dashboard Context</div>
+        </div>
+        <div class="dash-row">
+          <div class="mini-card">
+            <div class="mini-label">Realized Gains</div>
+            <div class="mini-value" style="color:var(--red);">-$1,200</div>
+          </div>
+          <div class="mini-card">
+            <div class="mini-label">Tax Savings</div>
+            <div class="mini-value" style="color:var(--green);">$288</div>
+          </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- CONCEPT 4: OPPORTUNITY CARD -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="concept-label">
+          <div class="concept-num">4</div>
+          <div class="concept-title">Opportunity Card</div>
+        </div>
+
+        <!-- State 4A: Opportunity Available -->
+        <div class="card card-green">
+          <div class="flex-col gap-12">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div class="badge badge-green">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                Opportunity
+              </div>
+              <div class="badge badge-amber">Expires Dec 31</div>
+            </div>
+            <div>
+              <h3 style="font-size:18px;font-weight:700;">Tax harvesting opportunity</h3>
+              <div style="font-size:32px;font-weight:700;color:var(--green);margin-top:4px;">$1,200 in losses</div>
+              <div class="text-sm text-muted mt-8">Available to harvest now</div>
+            </div>
+            <div style="background:rgba(22,111,71,.1);border-radius:12px;padding:14px 16px;text-align:center;">
+              <div class="text-xs text-muted">Estimated tax savings</div>
+              <div style="font-size:24px;font-weight:700;color:var(--green);margin-top:2px;">Save $288 in taxes</div>
+            </div>
+
+            <div class="text-xs text-muted fw-600">Loss breakdown</div>
+            <div class="breakdown">
+              <div>
+                <div class="breakdown-row">
+                  <span class="breakdown-ticker">VTI — Vanguard Total Stock</span>
+                  <span class="breakdown-loss">-$400</span>
+                </div>
+                <div class="breakdown-bar"><div class="breakdown-bar-fill" style="width:33%;"></div></div>
+              </div>
+              <div>
+                <div class="breakdown-row">
+                  <span class="breakdown-ticker">BND — Vanguard Total Bond</span>
+                  <span class="breakdown-loss">-$300</span>
+                </div>
+                <div class="breakdown-bar"><div class="breakdown-bar-fill" style="width:25%;"></div></div>
+              </div>
+              <div>
+                <div class="breakdown-row">
+                  <span class="breakdown-ticker">SCHD — Schwab Dividend</span>
+                  <span class="breakdown-loss">-$500</span>
+                </div>
+                <div class="breakdown-bar"><div class="breakdown-bar-fill" style="width:42%;"></div></div>
+              </div>
+            </div>
+
+            <div class="sep"></div>
+
+            <div>
+              <div class="text-xs text-muted fw-600 mb-8">What happens next</div>
+              <div class="flex-col gap-8">
+                <div style="display:flex;align-items:flex-start;gap:8px;">
+                  <div style="width:20px;height:20px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px;">1</div>
+                  <div>
+                    <div class="text-sm fw-600">Sell positions at a loss</div>
+                    <div class="text-xs text-muted">We sell the losing positions to realize losses</div>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:flex-start;gap:8px;">
+                  <div style="width:20px;height:20px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px;">2</div>
+                  <div>
+                    <div class="text-sm fw-600">Reinvest immediately</div>
+                    <div class="text-xs text-muted">Buy similar (not identical) assets to stay invested</div>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:flex-start;gap:8px;">
+                  <div style="width:20px;height:20px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px;">3</div>
+                  <div>
+                    <div class="text-sm fw-600">Offset your taxes</div>
+                    <div class="text-xs text-muted">Losses reduce your capital gains tax bill</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <button class="btn btn-green">Harvest now</button>
+          </div>
+        </div>
+
+        <!-- State 4B: Harvest in Progress -->
+        <div class="mt-16">
+          <div class="badge badge-amber mb-8">In Progress</div>
+          <div class="card card-green">
+            <div class="flex-col gap-12" style="align-items:center;text-align:center;">
+              <div class="spinner" style="width:48px;height:48px;border-width:4px;"></div>
+              <div>
+                <h3 style="font-size:18px;font-weight:700;">Harvesting in progress</h3>
+                <div class="text-sm text-muted mt-8">Selling positions and reinvesting...</div>
+              </div>
+              <div style="width:100%;background:rgba(22,111,71,.1);border-radius:12px;padding:14px 16px;">
+                <div class="flex-col gap-8">
+                  <div style="display:flex;align-items:center;justify-content:space-between;">
+                    <span class="text-sm">VTI — Selling</span>
+                    <div class="spinner" style="width:14px;height:14px;border-width:2px;"></div>
+                  </div>
+                  <div style="display:flex;align-items:center;justify-content:space-between;">
+                    <span class="text-sm">BND — Pending</span>
+                    <div style="width:14px;height:14px;border-radius:50%;border:2px solid #e5e5ea;"></div>
+                  </div>
+                  <div style="display:flex;align-items:center;justify-content:space-between;">
+                    <span class="text-sm">SCHD — Pending</span>
+                    <div style="width:14px;height:14px;border-radius:50%;border:2px solid #e5e5ea;"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="text-xs text-muted">Estimated completion: 2-3 minutes</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- State 4C: Harvest Completed -->
+        <div class="mt-16">
+          <div class="badge badge-green mb-8">Completed</div>
+          <div class="card">
+            <div class="text-center mb-12">
+              <div class="check-circle">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+              </div>
+              <h3 style="font-size:18px;font-weight:700;">Harvest complete!</h3>
+              <div class="text-sm text-muted mt-8">You've saved $288 in taxes this year</div>
+            </div>
+            <div style="background:var(--green-bg);border-radius:12px;padding:16px;">
+              <div class="flex-col gap-8">
+                <div style="display:flex;align-items:center;justify-content:space-between;">
+                  <span class="text-sm">VTI — Sold</span>
+                  <span class="text-sm fw-600" style="color:var(--green);">-$400</span>
+                </div>
+                <div style="display:flex;align-items:center;justify-content:space-between;">
+                  <span class="text-sm">BND — Sold</span>
+                  <span class="text-sm fw-600" style="color:var(--green);">-$300</span>
+                </div>
+                <div style="display:flex;align-items:center;justify-content:space-between;">
+                  <span class="text-sm">SCHD — Sold</span>
+                  <span class="text-sm fw-600" style="color:var(--green);">-$500</span>
+                </div>
+                <div style="height:1px;background:rgba(22,111,71,.15);"></div>
+                <div style="display:flex;align-items:center;justify-content:space-between;">
+                  <span class="text-sm fw-600">Total losses harvested</span>
+                  <span class="text-sm fw-600" style="color:var(--green);">-$1,200</span>
+                </div>
+              </div>
+            </div>
+            <div class="status-row mt-12">
+              <div class="status-dot green"></div>
+              <span>All positions reinvested — tax savings applied</span>
+            </div>
+            <button class="btn btn-outline mt-12">View details</button>
+          </div>
+        </div>
+
+        <!-- Dashboard Context -->
+        <div class="dash-section mt-16">
+          <div class="dash-label">Dashboard Context</div>
+        </div>
+        <div class="card">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+            <div style="width:8px;height:8px;border-radius:50%;background:var(--amber);"></div>
+            <span class="text-sm fw-600">1 opportunity available</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <div class="text-xs text-muted">Potential savings</div>
+              <div class="fw-600" style="font-size:18px;color:var(--green);">$288</div>
+            </div>
+            <button class="btn btn-sm btn-green" style="width:auto;">Review</button>
+          </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- CONCEPT 5: AI GUIDANCE -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="concept-label">
+          <div class="concept-num">5</div>
+          <div class="concept-title">AI Guidance</div>
+        </div>
+
+        <!-- State 5A: Opportunity (Recommendation) -->
+        <div class="ai-card">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+            <div class="ai-avatar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1010 10A10 10 0 0012 2zm0 18a8 8 0 118-8 8 8 0 01-8 8z"/><path d="M8 12l3 3 5-5"/></svg>
+            </div>
+            <div>
+              <div class="fw-600" style="font-size:14px;">Advizmo AI</div>
+              <div class="text-xs" style="color:#8e8e93;">Tax optimization assistant</div>
+            </div>
+          </div>
+          <div class="ai-message">
+            I've been monitoring your portfolio and found <span class="ai-highlight">$1,200 in losses</span> available to harvest. You could <span class="ai-highlight">save $288</span> on your taxes.
+          </div>
+          <div class="ai-recs">
+            <div class="ai-rec">
+              <div class="ai-rec-dot"></div>
+              <div>
+                <div class="fw-600">VTI — $400 loss</div>
+                <div class="text-xs" style="color:#8e8e93;">Vanguard Total Stock Market ETF</div>
+              </div>
+            </div>
+            <div class="ai-rec">
+              <div class="ai-rec-dot"></div>
+              <div>
+                <div class="fw-600">BND — $300 loss</div>
+                <div class="text-xs" style="color:#8e8e93;">Vanguard Total Bond Market ETF</div>
+              </div>
+            </div>
+            <div class="ai-rec">
+              <div class="ai-rec-dot"></div>
+              <div>
+                <div class="fw-600">SCHD — $500 loss</div>
+                <div class="text-xs" style="color:#8e8e93;">Schwab U.S. Dividend Equity ETF</div>
+              </div>
+            </div>
+          </div>
+          <div class="ai-expiry">⏰ One-time opportunity before Dec 31 — wash sale window clear</div>
+          <button class="btn btn-primary">Let's do it</button>
+        </div>
+
+        <!-- State 5B: No Opportunity (Monitoring) -->
+        <div class="mt-16">
+          <div class="badge badge-gray mb-8">Monitoring</div>
+          <div class="ai-card">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+              <div class="ai-avatar">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1010 10A10 10 0 0012 2zm0 18a8 8 0 118-8 8 8 0 01-8 8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </div>
+              <div>
+                <div class="fw-600" style="font-size:14px;">Advizmo AI</div>
+                <div class="text-xs" style="color:#8e8e93;">Last checked: 3 minutes ago</div>
+              </div>
+            </div>
+            <div class="ai-message ai-empty">
+              I've been monitoring your portfolio daily. Currently, there are <span class="ai-highlight">no harvesting opportunities</span> — your positions are performing well.
+            </div>
+            <div style="background:rgba(255,255,255,.06);border-radius:12px;padding:14px 16px;margin-bottom:16px;position:relative;z-index:1;">
+              <div class="text-xs fw-600" style="color:#8e8e93;margin-bottom:8px;">What I'm watching for</div>
+              <div class="flex-col gap-8">
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <div class="pulse-dot" style="width:6px;height:6px;"></div>
+                  <span class="text-sm" style="color:#aeaeb2;">Positions with unrealized losses > $50</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <div class="pulse-dot" style="width:6px;height:6px;"></div>
+                  <span class="text-sm" style="color:#aeaeb2;">Wash sale rule compliance</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <div class="pulse-dot" style="width:6px;height:6px;"></div>
+                  <span class="text-sm" style="color:#aeaeb2;">Year-end deadline proximity</span>
+                </div>
+              </div>
+            </div>
+            <div style="background:rgba(10,132,255,.15);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:8px;position:relative;z-index:1;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--blue);flex-shrink:0;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+              <span class="text-xs" style="color:var(--blue);">I'll alert you as soon as an opportunity appears</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dashboard Context -->
+        <div class="dash-section mt-16">
+          <div class="dash-label">Dashboard Context</div>
+        </div>
+        <div class="card" style="border-left:3px solid var(--blue);">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--blue),#5e5ce6);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#fff;"><circle cx="12" cy="12" r="3"/></svg>
+            </div>
+            <div>
+              <div class="text-xs text-muted">AI Status</div>
+              <div class="text-sm fw-600">Monitoring portfolio • No opportunities</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="height:40px;"></div>
+
+      </div><!-- /content -->
+
+      <!-- Bottom Nav -->
+      <div class="bottom-nav">
+        <div class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Home
+        </div>
+        <div class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+          Invest
+        </div>
+        <div class="nav-item active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+          Tax
+        </div>
+        <div class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path d="M9 12l2 2 4-4"/></svg>
+          Goals
+        </div>
+        <div class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Profile
+        </div>
+      </div>
+
+    </div><!-- /phone -->
+  </div><!-- /phone-wrap -->
+</main>
+
+</body>
+</html>
