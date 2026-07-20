@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Overview States Library — Adaptive Dashboard Components</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f2f2f7;--card:#fff;--text:#1c1c1e;--text2:#8e8e93;--border:rgba(0,0,0,.06);
+  --blue:#0a84ff;--green:#166f47;--green-bg:#e8f8ec;--amber:#c2790a;--amber-bg:#fff5e6;
+  --red:#b91c1c;--red-bg:#ffe8e8;--blue-bg:#e8f0ff;
+  --font-heading:'IBM Plex Sans',sans-serif;--font-body:'Inter',sans-serif;
+}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased}
+.page-header{max-width:430px;margin:0 auto;padding:40px 20px 20px;text-align:center}
+.page-header h1{font-family:var(--font-heading);font-size:22px;font-weight:700;color:var(--text);margin-bottom:6px}
+.page-header p{font-size:13px;color:var(--text2)}
+.section-nav{max-width:430px;margin:0 auto 16px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center;padding:0 20px}
+.section-nav a{display:inline-block;padding:5px 10px;border-radius:8px;background:var(--card);border:1px solid var(--border);font-size:11px;font-weight:600;color:var(--text2);text-decoration:none;transition:all .15s}
+.section-nav a:hover{color:var(--blue);border-color:var(--blue);background:var(--blue-bg)}
+.device{max-width:430px;margin:0 auto 40px;background:var(--bg);border-radius:24px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08);border:1px solid var(--border)}
+.device-label{font-family:var(--font-heading);font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;padding:10px 16px 0}
+.status-bar{display:flex;align-items:center;justify-content:space-between;padding:8px 20px 4px;font-size:12px;font-weight:600}
+.status-bar .time{font-family:var(--font-heading);font-weight:700}
+.status-bar .icons{display:flex;gap:4px;align-items:center}
+.status-bar .icons svg{width:14px;height:14px;fill:var(--text)}
+.section-title{font-family:var(--font-heading);font-size:13px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.04em;padding:0 20px;margin-bottom:10px}
+.card{background:var(--card);border-radius:14px;padding:16px;margin:0 16px 10px;border:1px solid var(--border)}
+.card-hero{border-radius:16px;padding:20px;margin:0 16px 10px}
+.card-section{font-family:var(--font-heading);font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px}
+.card-value{font-family:var(--font-heading);font-size:28px;font-weight:700;color:var(--text);line-height:1.2}
+.card-sub{font-size:13px;color:var(--text2);margin-top:4px}
+.card-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)}
+.card-row:last-child{border-bottom:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 20px;border-radius:12px;font-family:var(--font-body);font-size:14px;font-weight:600;border:none;cursor:pointer;transition:all .15s}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:hover{opacity:.9}
+.btn-secondary{background:transparent;color:var(--blue);padding:8px 0}
+.btn-ghost{background:rgba(10,132,255,.1);color:var(--blue)}
+.btn-sm{padding:7px 14px;font-size:13px;border-radius:10px}
+.btn-block{width:100%}
+.btn-green{background:var(--green);color:#fff}
+.btn-amber{background:var(--amber);color:#fff}
+.btn-red{background:var(--red);color:#fff}
+.text-link{font-size:13px;color:var(--blue);font-weight:500;cursor:pointer;background:none;border:none;text-decoration:none}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:600}
+.badge-green{background:var(--green-bg);color:var(--green)}
+.badge-amber{background:var(--amber-bg);color:var(--amber)}
+.badge-red{background:var(--red-bg);color:var(--red)}
+.badge-blue{background:var(--blue-bg);color:var(--blue)}
+.badge-gray{background:#f2f2f7;color:var(--text2)}
+.skeleton{background:#e5e5ea;border-radius:8px;position:relative;overflow:hidden}
+.skeleton::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);animation:shimmer 1.5s infinite}
+@keyframes shimmer{to{left:100%}}
+.skeleton-line{height:12px;border-radius:6px;margin-bottom:8px}
+.skeleton-line.w60{width:60%}
+.skeleton-line.w40{width:40%}
+.skeleton-line.w80{width:80%}
+.skeleton-line.w100{width:100%}
+.skeleton-rect{height:80px;border-radius:12px}
+.skeleton-rect-sm{height:48px;border-radius:10px}
+.skeleton-circle{width:40px;height:40px;border-radius:50%}
+.spinner{width:20px;height:20px;border:2.5px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner-sm{width:14px;height:14px;border-width:2px}
+.empty-state{text-align:center;padding:40px 24px}
+.empty-icon{width:64px;height:64px;border-radius:50%;margin:0 auto 16px;display:flex;align-items:center;justify-content:center}
+.empty-icon svg{width:28px;height:28px}
+.empty-title{font-family:var(--font-heading);font-size:17px;font-weight:700;color:var(--text);margin-bottom:6px}
+.empty-desc{font-size:13px;color:var(--text2);max-width:280px;margin:0 auto 16px;line-height:1.5}
+.empty-actions{display:flex;flex-direction:column;align-items:center;gap:8px}
+.alert{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:12px;margin:0 16px 8px}
+.alert-dot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0}
+.alert-dot.red{background:var(--red)}
+.alert-dot.amber{background:var(--amber)}
+.alert-dot.blue{background:var(--blue)}
+.alert-dot.gray{background:var(--text2)}
+.alert-body{flex:1;min-width:0}
+.alert-title{font-size:13px;font-weight:600;color:var(--text)}
+.alert-desc{font-size:12px;color:var(--text2);margin-top:2px}
+.alert-actions{display:flex;gap:8px;margin-top:8px;align-items:center}
+.alert-dismiss{width:24px;height:24px;border-radius:6px;background:rgba(0,0,0,.05);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--text2);font-size:14px}
+.alert.priority-critical{background:var(--red-bg);border:1px solid rgba(185,28,28,.12)}
+.alert.priority-high{background:var(--amber-bg);border:1px solid rgba(194,121,10,.12)}
+.alert.priority-medium{background:var(--blue-bg);border:1px solid rgba(10,132,255,.12)}
+.alert.priority-low{background:#f2f2f7;border:1px solid var(--border)}
+.recurring-card{background:var(--card);border-radius:12px;padding:14px;margin:0 16px 8px;border:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.recurring-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.recurring-info{flex:1;min-width:0}
+.recurring-merchant{font-size:14px;font-weight:600;color:var(--text)}
+.recurring-category{font-size:11px;color:var(--text2);margin-top:2px}
+.recurring-amounts{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.recurring-old{text-decoration:line-through;color:var(--text2);font-size:13px}
+.recurring-new{font-family:var(--font-heading);font-weight:600;font-size:15px;color:var(--text)}
+.recurring-diff{font-size:11px;font-weight:600;padding:2px 6px;border-radius:4px}
+.recurring-diff.up{background:var(--red-bg);color:var(--red)}
+.recurring-diff.down{background:var(--green-bg);color:var(--green)}
+.recurring-reason{font-size:11px;color:var(--text2);margin-top:4px}
+.sys-banner{display:flex;align-items:center;gap:8px;padding:10px 16px;font-size:12px;font-weight:500;color:var(--text2)}
+.sys-banner svg{width:16px;height:16px;flex-shrink:0}
+.sys-banner.offline{background:#e5e5ea}
+.sys-banner.error{background:var(--red-bg);color:var(--red)}
+.sys-banner.warning{background:var(--amber-bg);color:var(--amber)}
+.sys-banner.info{background:var(--blue-bg);color:var(--blue)}
+.progress-bar-track{height:6px;background:#e5e5ea;border-radius:3px;overflow:hidden;margin:8px 0}
+.progress-bar-fill{height:100%;border-radius:3px;background:var(--blue);transition:width .5s}
+.progress-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.progress-item:last-child{border-bottom:none}
+.progress-check{width:20px;height:20px;border-radius:50%;border:2px solid #d1d5db;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.progress-check.done{background:var(--blue);border-color:var(--blue);color:#fff}
+.progress-check svg{width:12px;height:12px}
+.rec-card{background:var(--card);border-radius:12px;padding:14px;margin:0 16px 8px;border:1px solid var(--border);display:flex;gap:12px;align-items:flex-start}
+.rec-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.rec-body{flex:1;min-width:0}
+.rec-title{font-size:14px;font-weight:600;color:var(--text)}
+.rec-desc{font-size:12px;color:var(--text2);margin-top:2px;line-height:1.4}
+.rec-impact{display:inline-flex;align-items:center;padding:2px 6px;border-radius:4px;font-size:11px;font-weight:600;margin-top:6px}
+.rec-dismiss{width:24px;height:24px;border-radius:6px;background:transparent;border:none;cursor:pointer;color:var(--text2);font-size:16px;flex-shrink:0}
+.onboard-step{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:13px;color:var(--text2)}
+.onboard-step.active{color:var(--blue);font-weight:600}
+.onboard-step.done{color:var(--green)}
+.onboard-step-num{width:22px;height:22px;border-radius:50%;background:#e5e5ea;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--text2);flex-shrink:0}
+.onboard-step.active .onboard-step-num{background:var(--blue);color:#fff}
+.onboard-step.done .onboard-step-num{background:var(--green);color:#fff}
+.section-divider{max-width:430px;margin:32px auto 8px;padding:0 20px;font-family:var(--font-heading);font-size:18px;font-weight:700;color:var(--text);border-bottom:2px solid var(--text);padding-bottom:8px}
+.section-sublabel{max-width:430px;margin:0 auto 16px;padding:0 20px;font-size:13px;color:var(--text2)}
+.concept-label{max-width:430px;margin:0 auto 12px;padding:0 20px;display:flex;align-items:center;gap:8px}
+.concept-label span{font-family:var(--font-heading);font-size:14px;font-weight:600;color:var(--text)}
+.concept-label .num{width:26px;height:26px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.dots{display:flex;gap:6px;justify-content:center;padding:8px 0}
+.dot{width:6px;height:6px;border-radius:50%;background:#d1d5db}
+.dot.active{background:var(--blue)}
+.count-badge{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;border-radius:10px;background:var(--red);color:#fff;font-size:11px;font-weight:700;padding:0 5px}
+.swipe-container{overflow:hidden;position:relative}
+.swipe-track{display:flex;transition:transform .3s}
+.swipe-track .alert{flex-shrink:0;width:100%}
+.expandable-header{display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:10px 0}
+.expandable-header .arrow{transition:transform .2s;color:var(--text2);font-size:12px}
+.expandable-header.open .arrow{transform:rotate(90deg)}
+.expandable-content{overflow:hidden;max-height:0;transition:max-height .3s}
+.expandable-content.open{max-height:500px}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Overview States Library</h1>
+  <p>Adaptive Dashboard Components</p>
+</div>
+
+<nav class="section-nav">
+  <a href="#loading">Loading</a>
+  <a href="#empty">Empty</a>
+  <a href="#onboarding">Onboarding</a>
+  <a href="#alerts">Alerts</a>
+  <a href="#recurring">Recurring</a>
+  <a href="#system">System</a>
+  <a href="#progress">Setup Progress</a>
+  <a href="#recommendations">Recommendations</a>
+</nav>
+
+<!-- PART 1: LOADING STATES -->
+<div class="section-divider" id="loading">Part 1: Loading States</div>
+
+<!-- 1a. Full Skeleton -->
+<div class="device">
+  <div class="device-label">1a. Initial App Loading — Full Skeleton</div>
+  <div class="status-bar">
+    <span class="time">9:41</span>
+    <span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span>
+  </div>
+  <div style="padding:4px 16px 8px">
+    <div class="skeleton skeleton-line w60" style="height:18px;margin-bottom:4px"></div>
+    <div class="skeleton skeleton-line w40" style="height:12px"></div>
+  </div>
+  <div style="padding:0 16px 10px"><div class="skeleton skeleton-rect" style="height:100px"></div></div>
+  <div style="padding:0 16px 10px">
+    <div class="skeleton skeleton-line w80" style="height:10px"></div>
+    <div class="skeleton skeleton-rect" style="height:60px;margin-top:6px"></div>
+  </div>
+  <div style="padding:0 16px 10px">
+    <div class="skeleton skeleton-rect" style="height:56px;margin-bottom:8px"></div>
+    <div class="skeleton skeleton-rect" style="height:56px;margin-bottom:8px"></div>
+    <div class="skeleton skeleton-rect" style="height:56px"></div>
+  </div>
+  <div style="padding:0 16px 10px">
+    <div class="skeleton skeleton-line w60" style="height:10px"></div>
+    <div class="skeleton skeleton-rect" style="height:70px;margin-top:6px"></div>
+  </div>
+  <div style="padding:0 16px 20px">
+    <div class="skeleton skeleton-line w60" style="height:10px"></div>
+    <div class="skeleton skeleton-rect" style="height:60px;margin-top:6px"></div>
+  </div>
+</div>
+
+<!-- 1b. Progressive Loading -->
+<div class="device">
+  <div class="device-label">1b. Progressive Loading — Section by Section</div>
+  <div class="status-bar">
+    <span class="time">9:41</span>
+    <span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span>
+  </div>
+  <div style="padding:8px 16px">
+    <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
+      <span class="badge badge-green">&#10003; Loaded</span>
+      <span style="font-size:12px;color:var(--text2);font-weight:600">Accounts</span>
+    </div>
+    <div class="card" style="margin:0 0 12px">
+      <div style="display:flex;gap:10px">
+        <div style="width:36px;height:36px;border-radius:8px;background:#e8f0ff;display:flex;align-items:center;justify-content:center">
+          <svg width="18" height="18" fill="#0a84ff" viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+        </div>
+        <div style="flex:1">
+          <div style="font-size:11px;color:var(--text2)">Chase Checking</div>
+          <div style="font-family:var(--font-heading);font-weight:700;font-size:17px">$4,283.41</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="padding:0 16px 12px">
+    <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
+      <span class="spinner spinner-sm"></span>
+      <span style="font-size:12px;color:var(--text2);font-weight:600">Portfolio — Loading</span>
+    </div>
+    <div class="skeleton skeleton-rect" style="margin:0;height:80px"></div>
+  </div>
+  <div style="padding:0 16px 12px">
+    <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
+      <span class="spinner spinner-sm"></span>
+      <span style="font-size:12px;color:var(--text2);font-weight:600">Recommendations — Loading</span>
+    </div>
+    <div class="skeleton skeleton-rect-sm" style="margin:0;height:50px"></div>
+  </div>
+  <div style="padding:0 16px 20px">
+    <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
+      <span class="spinner spinner-sm"></span>
+      <span style="font-size:12px;color:var(--text2);font-weight:600">Financial Health — Calculating</span>
+    </div>
+    <div class="skeleton skeleton-rect" style="margin:0;height:60px"></div>
+  </div>
+</div>
+
+<!-- 1c. Refreshing -->
+<div class="device">
+  <div class="device-label">1c. Refreshing State — Non-blocking</div>
+  <div class="status-bar">
+    <span class="time">9:41</span>
+    <span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span>
+  </div>
+  <div style="background:var(--blue-bg);padding:10px 16px;display:flex;align-items:center;justify-content:space-between">
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="spinner spinner-sm"></span>
+      <span style="font-size:13px;font-weight:500;color:var(--blue)">Refreshing...</span>
+    </div>
+    <span style="font-size:11px;color:var(--blue);opacity:.7">Last synced 2 minutes ago</span>
+  </div>
+  <div style="padding:8px 16px">
+    <div class="card-hero" style="background:linear-gradient(135deg,#0a84ff,#0066cc);margin:0 0 10px">
+      <div style="font-size:12px;color:rgba(255,255,255,.7)">Net Worth</div>
+      <div style="font-family:var(--font-heading);font-size:30px;font-weight:700;color:#fff">$47,832</div>
+    </div>
+  </div>
+  <div style="padding:0 16px 10px">
+    <div class="card" style="margin:0">
+      <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px">Recent Activity</div>
+      <div style="font-size:12px;color:var(--text2)">Content remains visible during refresh</div>
+    </div>
+  </div>
+</div>
+
+<!-- PART 2: EMPTY STATES -->
+<div class="section-divider" id="empty">Part 2: Empty States</div>
+<div class="section-sublabel">Each state includes illustration, title, description, primary CTA, and secondary text link.</div>
+
+<!-- 2a. No External Accounts -->
+<div class="device">
+  <div class="device-label">2a. No External Accounts</div>
+  <div class="status-bar"><span class="time">9:41</span><span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span></div>
+  <div class="card" style="margin:10px 16px">
+    <div class="empty-state" style="padding:32px 20px">
+      <div class="empty-icon" style="background:var(--blue-bg)"><svg viewBox="0 0 24 24" fill="var(--blue)"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></div>
+      <div class="empty-title">No Accounts Connected</div>
+      <div class="empty-desc">Connect your first account to see your complete financial picture in one place.</div>
+      <div class="empty-actions">
+        <button class="btn btn-primary btn-block" style="max-width:240px">Connect Checking Account</button>
+        <button class="text-link">I'll do this later</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 2b. No Advizmo Account -->
+<div class="device">
+  <div class="device-label">2b. No Advizmo Account</div>
+  <div class="status-bar"><span class="time">9:41</span><span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span></div>
+  <div class="card" style="margin:10px 16px">
+    <div class="empty-state" style="padding:32px 20px">
+      <div class="empty-icon" style="background:var(--green-bg)"><svg viewBox="0 0 24 24" fill="var(--green)"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg></div>
+      <div class="empty-title">No Advizmo Account</div>
+      <div class="empty-desc">Open an Advizmo account to start automatic investing and grow your wealth effortlessly.</div>
+      <div class="empty-actions">
+        <button class="btn btn-primary btn-block" style="max-width:240px">Open Advizmo Account</button>
+        <button class="text-link">Learn more</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 2c. No Investment Portfolio -->
+<div class="device">
+  <div class="device-label">2c. No Investment Portfolio</div>
+  <div class="status-bar"><span class="time">9:41</span><span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span></div>
+  <div class="card" style="margin:10px 16px">
+    <div class="empty-state" style="padding:32px 20px">
+      <div class="empty-icon" style="background:#f0fdf4"><svg viewBox="0 0 24 24" fill="var(--green)"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg></div>
+      <div class="empty-title">No Portfolio Yet</div>
+      <div class="empty-desc">Your portfolio will appear here once you start investing with Advizmo.</div>
+      <div class="empty-actions">
+        <button class="btn btn-green btn-block" style="max-width:240px">Start Investing</button>
+        <button class="text-link">See how it works</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 2d. No Spending History -->
+<div class="device">
+  <div class="device-label">2d. No Spending History</div>
+  <div class="status-bar"><span class="time">9:41</span><span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span></div>
+  <div class="card" style="margin:10px 16px">
+    <div class="empty-state" style="padding:32px 20px">
+      <div class="empty-icon" style="background:var(--amber-bg)"><svg viewBox="0 0 24 24" fill="var(--amber)"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg></div>
+      <div class="empty-title">No Spending Data</div>
+      <div class="empty-desc">Spending insights will appear after 30 days of data from your connected accounts.</div>
+      <div class="empty-actions">
+        <button class="btn btn-primary btn-block" style="max-width:240px">Connect Account</button>
+        <button class="text-link">What we track</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 2e. No Recurring Transactions -->
+<div class="device">
+  <div class="device-label">2e. No Recurring Transactions</div>
+  <div class="status-bar"><span class="time">9:41</span><span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span></div>
+  <div class="card" style="margin:10px 16px">
+    <div class="empty-state" style="padding:32px 20px">
+      <div class="empty-icon" style="background:#f3f0ff"><svg viewBox="0 0 24 24" fill="#7c3aed"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11zM9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2z"/></svg></div>
+      <div class="empty-title">No Recurring Detected</div>
+      <div class="empty-desc">We'll detect your recurring bills and subscriptions automatically.</div>
+      <div class="empty-actions">
+        <button class="btn btn-primary btn-block" style="max-width:240px">Add Manually</button>
+        <button class="text-link">How detection works</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 2f. No Financial Health Score -->
+<div class="device">
+  <div class="device-label">2f. No Financial Health Score</div>
+  <div class="status-bar"><span class="time">9:41</span><span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span></div>
+  <div class="card" style="margin:10px 16px">
+    <div class="empty-state" style="padding:32px 20px">
+      <div class="empty-icon" style="background:var(--red-bg)"><svg viewBox="0 0 24 24" fill="var(--red)"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>
+      <div class="empty-title">No Health Score</div>
+      <div class="empty-desc">Your score will be calculated once we analyze your connected accounts.</div>
+      <div class="empty-actions">
+        <button class="btn btn-primary btn-block" style="max-width:240px">Connect Accounts</button>
+        <button class="text-link">What's included</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 2g. No Bills -->
+<div class="device">
+  <div class="device-label">2g. No Bills</div>
+  <div class="status-bar"><span class="time">9:41</span><span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span></div>
+  <div class="card" style="margin:10px 16px">
+    <div class="empty-state" style="padding:32px 20px">
+      <div class="empty-icon" style="background:#f0fdf4"><svg viewBox="0 0 24 24" fill="var(--green)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+      <div class="empty-title">No Upcoming Bills</div>
+      <div class="empty-desc">No upcoming bills detected. We'll notify you when they're found.</div>
+      <div class="empty-actions">
+        <button class="btn btn-ghost btn-block" style="max-width:240px">Add Bill Manually</button>
+        <button class="text-link">Enable notifications</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 2h. No News -->
+<div class="device">
+  <div class="device-label">2h. No News</div>
+  <div class="status-bar"><span class="time">9:41</span><span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span></div>
+  <div class="card" style="margin:10px 16px">
+    <div class="empty-state" style="padding:32px 20px">
+      <div class="empty-icon" style="background:var(--blue-bg)"><svg viewBox="0 0 24 24" fill="var(--blue)"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z"/></svg></div>
+      <div class="empty-title">No Insights Yet</div>
+      <div class="empty-desc">Market insights will appear here when relevant to your portfolio.</div>
+      <div class="empty-actions">
+        <button class="btn btn-ghost btn-block" style="max-width:240px">Browse Market News</button>
+        <button class="text-link">Customize topics</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PART 3: ONBOARDING STATES -->
+<div class="section-divider" id="onboarding">Part 3: Onboarding States</div>
+<div class="section-sublabel">Each state shows the dashboard at a specific onboarding step with highlighted guidance.</div>
+
+<!-- 3a. Brand New -->
+<div class="device">
+  <div class="device-label">3a. State 1 — Brand New</div>
+  <div class="status-bar"><span class="time">9:41</span><span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span></div>
+  <div class="card" style="margin:8px 16px;background:linear-gradient(135deg,#0a84ff,#0055cc);border:none">
+    <div style="text-align:center;padding:8px 0">
+      <div style="font-size:24px;margin-bottom:4px">&#128075;</div>
+      <div style="font-family:var(--font-heading);font-size:20px;font-weight:700;color:#fff">Welcome to Advizmo</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.8);margin-top:4px">Let's set up your financial dashboard</div>
+      <button class="btn" style="background:#fff;color:var(--blue);margin-top:12px;width:100%">Connect Checking Account</button>
+    </div>
+  </div>
+  <div style="padding:8px 16px">
+    <div class="card" style="margin:0">
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <div class="onboard-step active"><div class="onboard-step-num">1</div><span>Connect Checking Account</span></div>
+        <div class="onboard-step"><div class="onboard-step-num">2</div><span>Connect Savings</span></div>
+        <div class="onboard-step"><div class="onboard-step-num">3</div><span>Connect Investment Accounts</span></div>
+        <div class="onboard-step"><div class="onboard-step-num">4</div><span>Open Advizmo Account</span></div>
+        <div class="onboard-step"><div class="onboard-step-num">5</div><span>Review Recurring Payments</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3b. Checking Connected -->
+<div class="device">
+  <div class="device-label">3b. State 2 — Checking Connected</div>
+  <div class="status-bar"><span class="time">9:41</span><span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span></div>
+  <div class="card-hero" style="background:linear-gradient(135deg,#0a84ff,#0055cc);margin:8px 16px;border:none">
+    <div style="font-size:12px;color:rgba(255,255,255,.7)">Net Worth</div>
+    <div style="font-family:var(--font-heading);font-size:30px;font-weight:700;color:#fff">$4,283.41</div>
+    <div style="font-size:12px;color:rgba(255,255,255,.7);margin-top:2px">First time seeing this!</div>
+  </div>
+  <div style="padding:8px 16px">
+    <div class="card" style="margin:0">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <div style="width:36px;height:36px;border-radius:8px;background:#e8f0ff;display:flex;align-items:center;justify-content:center">
+          <svg width="18" height="18" fill="#0a84ff" viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9z"/></svg>
+        </div>
+        <div style="flex:1">
+          <div style="font-size:11px;color:var(--text2)">Chase Checking</div>
+          <div style="font-family:var(--font-heading);font-weight:700;font-size:17px">$4,283.41</div>
+        </div>
+        <span class="badge badge-green">Connected</span>
+      </div>
+      <div style="border-top:1px solid var(--border);padding-top:10px">
+        <div style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px">Next: Connect Savings</div>
+        <div class="onboard-step active" style="padding:4px 0"><div class="onboard-step-num">2</div><span>Connect a savings account for complete picture</span></div>
+        <button class="btn btn-primary btn-block btn-sm" style="margin-top:8px">Connect Savings</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3c. Checking + Savings -->
+<div class="device">
+  <div class="device-label">3c. State 3 — Checking + Savings</div>
+  <div class="status-bar"><span class="time">9:41</span><span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span></div>
+  <div class="card-hero" style="background:linear-gradient(135deg,#0a84ff,#0055cc);margin:8px 16px;border:none">
+    <div style="font-size:12px;color:rgba(255,255,255,.7)">Net Worth</div>
+    <div style="font-family:var(--font-heading);font-size:30px;font-weight:700;color:#fff">$12,783.41</div>
+  </div>
+  <div style="padding:0 16px 10px">
+    <div class="card" style="margin:0">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <div style="width:36px;height:36px;border-radius:8px;background:#e8f0ff;display:flex;align-items:center;justify-content:center">
+          <svg width="18" height="18" fill="#0a84ff" viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9z"/></svg>
+        </div>
+        <div style="flex:1"><div style="font-size:11px;color:var(--text2)">Chase Checking</div><div style="font-family:var(--font-heading);font-weight:700;font-size:17px">$4,283.41</div></div>
+        <span class="badge badge-green">&#10003;</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <div style="width:36px;height:36px;border-radius:8px;background:var(--green-bg);display:flex;align-items:center;justify-content:center">
+          <svg width="18" height="18" fill="#166f47" viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+        </div>
+        <div style="flex:1"><div style="font-size:11px;color:var(--text2)">Chase Savings</div><div style="font-family:var(--font-heading);font-weight:700;font-size:17px">$8,500.00</div></div>
+        <span class="badge badge-green">&#10003;</span>
+      </div>
+      <div style="border-top:1px solid var(--border);padding-top:10px">
+        <div style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px">Next: Investment Accounts</div>
+        <button class="btn btn-primary btn-block btn-sm">Connect Investment Accounts</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3d. Open Advizmo Account -->
+<div class="device">
+  <div class="device-label">3d. State 4 — Open Advizmo Account</div>
+  <div class="status-bar"><span class="time">9:41</span><span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span></div>
+  <div class="card" style="margin:8px 16px;background:var(--green-bg);border:1px solid rgba(22,111,71,.12)">
+    <div style="text-align:center;padding:4px 0">
+      <div style="font-size:20px;margin-bottom:4px">&#127974;</div>
+      <div style="font-family:var(--font-heading);font-size:16px;font-weight:700;color:var(--green)">Open Advizmo Account</div>
+      <div style="font-size:12px;color:var(--green);margin:4px 0 10px">Your external accounts are connected. Now open an Advizmo account to start investing.</div>
+      <div style="display:flex;flex-direction:column;gap:6px;text-align:left;margin-bottom:10px">
+        <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text)"><svg width="14" height="14" fill="#166f47" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Automatic investing &amp; rebalancing</div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text)"><svg width="14" height="14" fill="#166f47" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Tax-loss harvesting</div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text)"><svg width="14" height="14" fill="#166f47" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Smart cash management</div>
+      </div>
+      <button class="btn btn-green btn-block">Open Account — Free</button>
+    </div>
+  </div>
+</div>
+
+<!-- 3e. Review Recurring Payments -->
+<div class="device">
+  <div class="device-label">3e. State 5 — Review Recurring Payments</div>
+  <div class="status-bar"><span class="time">9:41</span><span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span></div>
+  <div class="alert priority-high" style="margin:8px 16px">
+    <div class="alert-dot amber"></div>
+    <div class="alert-body">
+      <div class="alert-title">3 subscriptions detected</div>
+      <div class="alert-desc">We found recurring payments that need your review</div>
+      <div class="alert-actions"><button class="btn btn-sm btn-amber">Review Now</button><button class="text-link" style="font-size:12px">Skip</button></div>
+    </div>
+  </div>
+  <div style="padding:0 16px 10px">
+    <div class="card" style="margin:0">
+      <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
+        <div style="width:32px;height:32px;border-radius:8px;background:#ff6b6b;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px">N</div>
+        <div style="flex:1"><div style="font-size:13px;font-weight:600">Netflix</div><div style="font-size:11px;color:var(--text2)">Entertainment</div></div>
+        <div style="font-family:var(--font-heading);font-weight:600;font-size:14px">$15.99/mo</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
+        <div style="width:32px;height:32px;border-radius:8px;background:#4285f4;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px">S</div>
+        <div style="flex:1"><div style="font-size:13px;font-weight:600">Spotify</div><div style="font-size:11px;color:var(--text2)">Music</div></div>
+        <div style="font-family:var(--font-heading);font-weight:600;font-size:14px">$9.99/mo</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;padding:8px 0">
+        <div style="width:32px;height:32px;border-radius:8px;background:#00d2ff;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px">G</div>
+        <div style="flex:1"><div style="font-size:13px;font-weight:600">Gym</div><div style="font-size:11px;color:var(--text2)">Fitness</div></div>
+        <div style="font-family:var(--font-heading);font-weight:600;font-size:14px">$49.99/mo</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3f. Complete Profile -->
+<div class="device">
+  <div class="device-label">3f. State 6 — Complete Profile</div>
+  <div class="status-bar"><span class="time">9:41</span><span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span></div>
+  <div class="card" style="margin:8px 16px;border:2px solid var(--blue)">
+    <div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:var(--blue);margin-bottom:4px">Complete Your Profile</div>
+    <div style="font-size:12px;color:var(--text2);margin-bottom:12px">Required for personalized recommendations</div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--bg);border-radius:8px">
+        <div style="display:flex;align-items:center;gap:8px"><svg width="16" height="16" fill="var(--text2)" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg><span style="font-size:13px">Risk Profile</span></div>
+        <span class="badge badge-gray">Pending</span>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--bg);border-radius:8px">
+        <div style="display:flex;align-items:center;gap:8px"><svg width="16" height="16" fill="var(--text2)" viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg><span style="font-size:13px">Employment Status</span></div>
+        <span class="badge badge-gray">Pending</span>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--bg);border-radius:8px">
+        <div style="display:flex;align-items:center;gap:8px"><svg width="16" height="16" fill="var(--text2)" viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg><span style="font-size:13px">Annual Income</span></div>
+        <span class="badge badge-gray">Pending</span>
+      </div>
+    </div>
+    <button class="btn btn-primary btn-block btn-sm" style="margin-top:12px">Complete Profile</button>
+  </div>
+</div>
+
+<!-- 3g. Configure Targets -->
+<div class="device">
+  <div class="device-label">3g. State 7 — Configure Targets</div>
+  <div class="status-bar"><span class="time">9:41</span><span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span></div>
+  <div class="card" style="margin:8px 16px;border:2px solid var(--blue)">
+    <div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:var(--blue);margin-bottom:4px">Set Your Targets</div>
+    <div style="font-size:12px;color:var(--text2);margin-bottom:12px">We'll help you stay on track</div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg);border-radius:10px">
+        <div style="width:36px;height:36px;border-radius:50%;background:var(--amber-bg);display:flex;align-items:center;justify-content:center"><svg width="18" height="18" fill="#c2790a" viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg></div>
+        <div style="flex:1"><div style="font-size:13px;font-weight:600">Emergency Fund</div><div style="font-size:11px;color:var(--text2)">Target: 3-6 months expenses</div></div>
+        <button class="btn btn-sm btn-ghost">Set</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg);border-radius:10px">
+        <div style="width:36px;height:36px;border-radius:50%;background:var(--green-bg);display:flex;align-items:center;justify-content:center"><svg width="18" height="18" fill="#166f47" viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg></div>
+        <div style="flex:1"><div style="font-size:13px;font-weight:600">Savings Goal</div><div style="font-size:11px;color:var(--text2)">Vacation, home, or custom</div></div>
+        <button class="btn btn-sm btn-ghost">Set</button>
+      </div>
+    </div>
+    <button class="btn btn-primary btn-block btn-sm" style="margin-top:12px">Configure Targets</button>
+  </div>
+</div>
+
+<!-- 3h. Set Up Cushions -->
+<div class="device">
+  <div class="device-label">3h. State 8 — Set Up Cushions</div>
+  <div class="status-bar"><span class="time">9:41</span><span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span></div>
+  <div class="card" style="margin:8px 16px;border:2px solid var(--blue)">
+    <div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:var(--blue);margin-bottom:4px">Set Up Cushions</div>
+    <div style="font-size:12px;color:var(--text2);margin-bottom:12px">Reserve funds to cover unexpected expenses</div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px;background:var(--bg);border-radius:10px">
+        <div><div style="font-size:13px;font-weight:600">Checking Cushion</div><div style="font-size:11px;color:var(--text2)">Minimum balance buffer</div></div>
+        <div style="font-family:var(--font-heading);font-weight:700;font-size:15px;color:var(--blue)">$500</div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px;background:var(--bg);border-radius:10px">
+        <div><div style="font-size:13px;font-weight:600">Bill Buffer</div><div style="font-size:11px;color:var(--text2)">Extra for bill payments</div></div>
+        <div style="font-family:var(--font-heading);font-weight:700;font-size:15px;color:var(--blue)">$200</div>
+      </div>
+    </div>
+    <button class="btn btn-primary btn-block btn-sm" style="margin-top:12px">Save Cushions</button>
+  </div>
+</div>
+
+<!-- 3i. Full Dashboard -->
+<div class="device">
+  <div class="device-label">3i. State 9 — Full Dashboard (No Onboarding)</div>
+  <div class="status-bar"><span class="time">9:41</span><span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span></div>
+  <div class="card-hero" style="background:linear-gradient(135deg,#0a84ff,#0055cc);margin:8px 16px;border:none">
+    <div style="font-size:12px;color:rgba(255,255,255,.7)">Net Worth</div>
+    <div style="font-family:var(--font-heading);font-size:30px;font-weight:700;color:#fff">$47,832.14</div>
+    <div style="font-size:12px;color:rgba(255,255,255,.7);margin-top:2px">+$1,234 this month</div>
+  </div>
+  <div style="padding:0 16px 10px">
+    <div class="card" style="margin:0">
+      <div style="font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px">Financial Health</div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="width:48px;height:48px;border-radius:50%;background:var(--green-bg);display:flex;align-items:center;justify-content:center"><span style="font-family:var(--font-heading);font-size:20px;font-weight:700;color:var(--green)">82</span></div>
+        <div style="flex:1"><div style="font-size:14px;font-weight:600;color:var(--green)">Good</div><div style="font-size:12px;color:var(--text2)">Your finances are on track</div></div>
+      </div>
+    </div>
+  </div>
+  <div style="padding:0 16px 10px">
+    <div class="card" style="margin:0">
+      <div style="font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px">Smart Recommendations</div>
+      <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
+        <div style="width:32px;height:32px;border-radius:8px;background:var(--amber-bg);display:flex;align-items:center;justify-content:center"><svg width="16" height="16" fill="#c2790a" viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg></div>
+        <div style="flex:1"><div style="font-size:13px;font-weight:600">Invest idle cash</div><div style="font-size:11px;color:var(--text2)">$4,200 earning 0.01%</div></div>
+        <span class="badge badge-green">+$210/yr</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3j. Setup Progress Bar -->
+<div class="device">
+  <div class="device-label">3j. State 10 — Setup Progress Bar</div>
+  <div class="status-bar"><span class="time">9:41</span><span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span></div>
+  <div class="card" style="margin:8px 16px;border:2px solid var(--blue)">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:var(--text)">Financial Setup</div>
+      <div style="font-size:12px;color:var(--text2)">~2 min left</div>
+    </div>
+    <div style="font-size:12px;color:var(--text2);margin-bottom:8px">7 of 9 completed</div>
+    <div class="progress-bar-track"><div class="progress-bar-fill" style="width:78%"></div></div>
+    <div style="margin-top:10px">
+      <div style="display:flex;align-items:center;gap:8px;padding:4px 0"><div class="progress-check done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></div><span style="font-size:12px;color:var(--text2);text-decoration:line-through">Connect Checking</span></div>
+      <div style="display:flex;align-items:center;gap:8px;padding:4px 0"><div class="progress-check done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></div><span style="font-size:12px;color:var(--text2);text-decoration:line-through">Connect Savings</span></div>
+      <div style="display:flex;align-items:center;gap:8px;padding:4px 0"><div class="progress-check" style="border-color:var(--blue)"><span style="font-size:10px;color:var(--blue);font-weight:700">8</span></div><span style="font-size:12px;color:var(--text);font-weight:600">Complete Profile</span></div>
+      <div style="display:flex;align-items:center;gap:8px;padding:4px 0"><div class="progress-check" style="border-color:var(--blue)"><span style="font-size:10px;color:var(--blue);font-weight:700">9</span></div><span style="font-size:12px;color:var(--text);font-weight:600">Configure Cushions</span></div>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px">
+      <button class="btn btn-primary btn-sm">Continue Setup</button>
+      <button class="text-link" style="font-size:12px">Skip for now</button>
+    </div>
+  </div>
+</div>
+
+<!-- PART 4: ALERT SYSTEM -->
+<div class="section-divider" id="alerts">Part 4: Alert System</div>
+
+<div class="concept-label"><div class="num">4a</div><span>Alert Banner Component</span></div>
+<div class="section-sublabel">Reusable banner with priority indicator, title, description, CTA, dismiss, and optional secondary action.</div>
+
+<div class="device">
+  <div class="device-label">Critical Alert (Red)</div>
+  <div class="status-bar"><span class="time">9:41</span><span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span></div>
+  <div class="alert priority-critical">
+    <div class="alert-dot red"></div>
+    <div class="alert-body">
+      <div class="alert-title">Connect Checking Account</div>
+      <div class="alert-desc">Required to use Advizmo features</div>
+      <div class="alert-actions"><button class="btn btn-sm btn-red">Connect Now</button><button class="text-link" style="font-size:12px">Why is this needed?</button></div>
+    </div>
+    <button class="alert-dismiss">&#10005;</button>
+  </div>
+</div>
+
+<div class="device">
+  <div class="device-label">High Priority Alert (Amber)</div>
+  <div class="status-bar"><span class="time">9:41</span><span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span></div>
+  <div class="alert priority-high">
+    <div class="alert-dot amber"></div>
+    <div class="alert-body">
+      <div class="alert-title">Checking shortage: $358 below rent</div>
+      <div class="alert-desc">Rent due in 3 days. Transfer funds to avoid late fee.</div>
+      <div class="alert-actions"><button class="btn btn-sm btn-amber">Transfer $358</button><button class="text-link" style="font-size:12px">View details</button></div>
+    </div>
+    <button class="alert-dismiss">&#10005;</button>
+  </div>
+</div>
+
+<div class="device">
+  <div class="device-label">Medium Priority Alert (Blue)</div>
+  <div class="status-bar"><span class="time">9:41</span><span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span></div>
+  <div class="alert priority-medium">
+    <div class="alert-dot blue"></div>
+    <div class="alert-body">
+      <div class="alert-title">Connect another account</div>
+      <div class="alert-desc">Get better insights with more accounts connected</div>
+      <div class="alert-actions"><button class="btn btn-sm btn-ghost">Connect</button><button class="text-link" style="font-size:12px">Maybe later</button></div>
+    </div>
+    <button class="alert-dismiss">&#10005;</button>
+  </div>
+</div>
+
+<div class="device">
+  <div class="device-label">Low Priority Alert (Gray)</div>
+  <div class="status-bar"><span class="time">9:41</span><span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span></div>
+  <div class="alert priority-low">
+    <div class="alert-dot gray"></div>
+    <div class="alert-body">
+      <div class="alert-title">Market insight: S&P 500 up 1.2%</div>
+      <div class="alert-desc">Your portfolio gained $84 today</div>
+      <div class="alert-actions"><button class="text-link" style="font-size:12px">View portfolio</button></div>
+    </div>
+    <button class="alert-dismiss">&#10005;</button>
+  </div>
+</div>
+
+<!-- 4b. Alert Interaction Concepts -->
+<div class="concept-label"><div class="num">1</div><span>Single Banner</span></div>
+<div class="section-sublabel">Only one alert at a time. Highest priority wins. Dismissible.</div>
+<div class="device">
+  <div class="device-label">Concept 1 — Single Banner</div>
+  <div class="status-bar"><span class="time">9:41</span><span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span></div>
+  <div class="alert priority-critical" style="margin:8px 16px">
+    <div class="alert-dot red"></div>
+    <div class="alert-body">
+      <div class="alert-title">Connect Checking Account</div>
+      <div class="alert-desc">Required to use Advizmo features</div>
+      <div class="alert-actions"><button class="btn btn-sm btn-red">Connect Now</button></div>
+    </div>
+    <button class="alert-dismiss">&#10005;</button>
+  </div>
+  <div style="padding:0 16px 10px"><div class="card" style="margin:0;text-align:center;padding:12px"><span style="font-size:12px;color:var(--text2)">No other alerts shown</span></div></div>
+</div>
+
+<div class="concept-label"><div class="num">2</div><span>Stacked Alerts</span></div>
+<div class="section-sublabel">Multiple alerts stacked vertically. Collapsible. Count badge.</div>
+<div class="device">
+  <div class="device-label">Concept 2 — Stacked Alerts</div>
+  <div class="status-bar"><span class="time">9:41</span><span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span></div>
+  <div style="padding:8px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:4px"><span style="font-size:13px;font-weight:600;color:var(--text)">Alerts</span><span class="count-badge">3</span></div>
+  <div class="alert-stack">
+    <div class="alert priority-critical" style="margin:0 16px 4px"><div class="alert-dot red"></div><div class="alert-body"><div class="alert-title">Connect Checking Account</div><div class="alert-desc">Required to use Advizmo</div><div class="alert-actions"><button class="btn btn-sm btn-red">Connect</button></div></div><button class="alert-dismiss">&#10005;</button></div>
+    <div class="alert priority-high" style="margin:0 16px 4px"><div class="alert-dot amber"></div><div class="alert-body"><div class="alert-title">Checking shortage: $358</div><div class="alert-desc">Rent due in 3 days</div><div class="alert-actions"><button class="btn btn-sm btn-amber">Transfer</button></div></div><button class="alert-dismiss">&#10005;</button></div>
+    <div class="alert priority-medium" style="margin:0 16px 4px"><div class="alert-dot blue"></div><div class="alert-body"><div class="alert-title">Connect another account</div><div class="alert-desc">Get better insights</div><div class="alert-actions"><button class="btn btn-sm btn-ghost">Connect</button></div></div><button class="alert-dismiss">&#10005;</button></div>
+  </div>
+</div>
+
+<div class="concept-label"><div class="num">3</div><span>Swipeable Carousel</span></div>
+<div class="section-sublabel">Horizontal swipe between alerts. Dot indicator. Auto-advance.</div>
+<div class="device">
+  <div class="device-label">Concept 3 — Swipeable Carousel</div>
+  <div class="status-bar"><span class="time">9:41</span><span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span></div>
+  <div class="swipe-container">
+    <div class="swipe-track">
+      <div style="min-width:100%"><div class="alert priority-critical" style="margin:8px 16px"><div class="alert-dot red"></div><div class="alert-body"><div class="alert-title">Connect Checking Account</div><div class="alert-desc">Required to use Advizmo</div><div class="alert-actions"><button class="btn btn-sm btn-red">Connect</button></div></div></div></div>
+    </div>
+  </div>
+  <div class="dots"><div class="dot active"></div><div class="dot"></div><div class="dot"></div></div>
+  <div style="padding:0 16px 10px;text-align:center"><span style="font-size:11px;color:var(--text2)">Auto-advances every 5s &#183; Swipe to browse</span></div>
+</div>
+
+<div class="concept-label"><div class="num">4</div><span>Priority Inbox</span></div>
+<div class="section-sublabel">Alerts grouped by priority. Expandable sections. Count per tier.</div>
+<div class="device">
+  <div class="device-label">Concept 4 — Priority Inbox</div>
+  <div class="status-bar"><span class="time">9:41</span><span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span></div>
+  <div style="padding:8px 16px">
+    <div class="card" style="margin:0">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:8px"><div class="alert-dot red"></div><span style="font-size:13px;font-weight:600">Critical</span><span class="count-badge" style="font-size:10px;min-width:18px;height:18px">3</span></div>
+        <span style="color:var(--text2);font-size:12px">&#8250;</span>
+      </div>
+      <div style="padding:8px 0 0">
+        <div style="padding:4px 0;border-bottom:1px solid var(--border)"><div style="font-size:12px;font-weight:600;color:var(--text)">Connect Checking Account</div><div style="font-size:11px;color:var(--text2)">Required to use Advizmo</div></div>
+        <div style="padding:4px 0"><div style="font-size:12px;font-weight:600;color:var(--text)">Verification required</div><div style="font-size:11px;color:var(--text2)">Capital One needs re-authentication</div></div>
+      </div>
+    </div>
+  </div>
+  <div style="padding:0 16px 8px"><div class="card" style="margin:0"><div style="display:flex;align-items:center;justify-content:space-between"><div style="display:flex;align-items:center;gap:8px"><div class="alert-dot amber"></div><span style="font-size:13px;font-weight:600">High</span><span class="count-badge" style="font-size:10px;min-width:18px;height:18px;background:#c2790a">2</span></div><span style="color:var(--text2);font-size:12px">&#8250;</span></div></div></div>
+  <div style="padding:0 16px 8px"><div class="card" style="margin:0"><div style="display:flex;align-items:center;justify-content:space-between"><div style="display:flex;align-items:center;gap:8px"><div class="alert-dot blue"></div><span style="font-size:13px;font-weight:600">Medium</span><span class="count-badge" style="font-size:10px;min-width:18px;height:18px;background:#0a84ff">1</span></div><span style="color:var(--text2);font-size:12px">&#8250;</span></div></div></div>
+</div>
+
+<div class="concept-label"><div class="num">5</div><span>Adaptive Panel</span></div>
+<div class="section-sublabel">Single panel changes based on priority. Most relevant alert with context.</div>
+<div class="device">
+  <div class="device-label">Concept 5 — Adaptive Panel</div>
+  <div class="status-bar"><span class="time">9:41</span><span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span></div>
+  <div class="alert priority-critical" style="margin:8px 16px">
+    <div class="alert-dot red"></div>
+    <div class="alert-body">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px"><div class="alert-title">Action Required</div><span class="count-badge" style="font-size:10px;min-width:16px;height:16px">3</span></div>
+      <div class="alert-desc" style="margin-bottom:6px">Showing highest priority. 2 more available.</div>
+      <div class="alert-title" style="margin-bottom:2px">Connect Checking Account</div>
+      <div class="alert-desc">Required to use Advizmo features. No data can be analyzed without at least one connected account.</div>
+      <div class="alert-actions"><button class="btn btn-sm btn-red">Connect Now</button><button class="text-link" style="font-size:12px">Why is this needed?</button></div>
+    </div>
+    <button class="alert-dismiss">&#10005;</button>
+  </div>
+</div>
+
+<!-- PART 5: RECURRING ITEMS REVIEW -->
+<div class="section-divider" id="recurring">Part 5: Recurring Items Review</div>
+
+<div class="concept-label"><div class="num">5a</div><span>Recurring Item Card</span></div>
+<div class="section-sublabel">Reusable component: merchant, category, amount change, reason, review CTA, expandable detail.</div>
+
+<div class="device">
+  <div class="device-label">Normal (No Change)</div>
+  <div class="status-bar"><span class="time">9:41</span><span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span></div>
+  <div class="recurring-card">
+    <div class="recurring-icon" style="background:#ff6b6b;color:#fff">N</div>
+    <div class="recurring-info"><div class="recurring-merchant">Netflix</div><div class="recurring-category">Entertainment &#183; Monthly</div></div>
+    <div style="text-align:right"><div class="recurring-new">$15.99</div><div style="font-size:11px;color:var(--text2)">No change</div></div>
+  </div>
+</div>
+
+<div class="device">
+  <div class="device-label">Increased (+$2.00)</div>
+  <div class="status-bar"><span class="time">9:41</span><span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span></div>
+  <div class="recurring-card" style="border-color:rgba(185,28,28,.15)">
+    <div class="recurring-icon" style="background:#ff6b6b;color:#fff">N</div>
+    <div class="recurring-info">
+      <div class="recurring-merchant">Netflix</div>
+      <div class="recurring-category">Entertainment &#183; Monthly</div>
+      <div class="recurring-reason">Price increase: Standard plan raised from $13.99 to $15.99</div>
+    </div>
+    <div style="text-align:right"><div class="recurring-old">$13.99</div><div class="recurring-new">$15.99</div><div class="recurring-diff up">+$2.00</div></div>
+  </div>
+</div>
+
+<div class="device">
+  <div class="device-label">Decreased (-$8.00)</div>
+  <div class="status-bar"><span class="time">9:41</span><span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span></div>
+  <div class="recurring-card" style="border-color:rgba(22,111,71,.15)">
+    <div class="recurring-icon" style="background:#4285f4;color:#fff">S</div>
+    <div class="recurring-info">
+      <div class="recurring-merchant">Spotify</div>
+      <div class="recurring-category">Music &#183; Monthly</div>
+      <div class="recurring-reason">Discount applied: Student plan activated</div>
+    </div>
+    <div style="text-align:right"><div class="recurring-old">$17.99</div><div class="recurring-new">$9.99</div><div class="recurring-diff down">-$8.00</div></div>
+  </div>
+</div>
+
+<div class="device">
+  <div class="device-label">New Subscription</div>
+  <div class="status-bar"><span class="time">9:41</span><span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span></div>
+  <div class="recurring-card" style="border-color:rgba(10,132,255,.2);background:var(--blue-bg)">
+    <div class="recurring-icon" style="background:#00d2ff;color:#fff">G</div>
+    <div class="recurring-info">
+      <div class="recurring-merchant">Gym</div>
+      <div class="recurring-category">Fitness &#183; Monthly</div>
+      <div class="recurring-reason">New subscription detected</div>
+    </div>
+    <div style="text-align:right"><div class="badge badge-blue" style="margin-bottom:4px">New</div><div class="recurring-new">$49.99</div></div>
+  </div>
+</div>
+
+<div class="device">
+  <div class="device-label">Cancelled</div>
+  <div class="status-bar"><span class="time">9:41</span><span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span></div>
+  <div class="recurring-card" style="opacity:.6">
+    <div class="recurring-icon" style="background:#e5e5ea;color:var(--text2)">H</div>
+    <div class="recurring-info">
+      <div class="recurring-merchant">Hulu</div>
+      <div class="recurring-category">Entertainment &#183; Monthly</div>
+      <div class="recurring-reason">No charge detected for 2 months</div>
+    </div>
+    <div style="text-align:right"><div class="badge badge-gray">Cancelled</div></div>
+  </div>
+</div>
+
+<div class="device">
+  <div class="device-label">Paused</div>
+  <div class="status-bar"><span class="time">9:41</span><span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span></div>
+  <div class="recurring-card" style="border-color:rgba(194,121,10,.2);background:var(--amber-bg)">
+    <div class="recurring-icon" style="background:#c2790a;color:#fff">A</div>
+    <div class="recurring-info">
+      <div class="recurring-merchant">Amazon Prime</div>
+      <div class="recurring-category">Shopping &#183; Yearly</div>
+      <div class="recurring-reason">Paused by you on Jun 15</div>
+    </div>
+    <div style="text-align:right"><div class="badge badge-amber">Paused</div><div style="font-size:12px;color:var(--amber);margin-top:4px">$139/yr</div></div>
+  </div>
+</div>
+
+<!-- 5b. Review Flow -->
+<div class="concept-label"><div class="num">5b</div><span>Review Flow</span></div>
+<div class="section-sublabel">Header with count, item list, accept all / review individually, progress indicator.</div>
+<div class="device">
+  <div class="device-label">Review Flow — 3 Items Need Review</div>
+  <div class="status-bar"><span class="time">9:41</span><span class="icons"><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span></div>
+  <div style="padding:8px 16px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+      <div style="font-family:var(--font-heading);font-size:16px;font-weight:700;color:var(--text)">Review Changes</div>
+      <span class="count-badge">3</span>
+    </div>
+    <div style="font-size:12px;color:var(--text2);margin-bottom:10px">3 items need your review</div>
+    <div class="progress-bar-track" style="margin-bottom:12px"><div class="progress-bar-fill" style="width:0%"></div></div>
+  </div>
+  <div class="recurring-card" style="border-color:rgba(185,28,28,.15)">
+    <div class="recurring-icon" style="background:#ff6b6b;color:#fff">N</div>
+    <div class="recurring-info"><div class="recurring-merchant">Netflix</div><div class="recurring-category">Entertainment</div><div class="recurring-reason">$13.99 &#8594; $15.99</div></div>
+    <div style="text-align:right"><div class="recurring-diff up">+$2.00</div></div>
+  </div>
+  <div class="recurring-card" style="border-color:rgba(22,111,71,.15)">
+    <div class="recurring-icon" style="background:#4285f4;color:#fff">S</div>
+    <div class="recurring-info"><div class="recurring-merchant">Spotify</div><div class="recurring-category">Music</div><div class="recurring-reason">Student discount applied</div></div>
+    <div style="text-align:right"><div class="recurring-diff down">-$8.00</div></div>
+  </div>
+  <div class="recurring-card" style="border-color:rgba(10,132,255,.2);background:var(--blue-bg)">
+    <div class="recurring-icon" style="background:#00d2ff;color:#fff">G</div>
+    <div class="recurring-info"><div class="recurring-merchant">Gym</div><div class="recurring-category">Fitness</div><div class="recurring-reason">New subscription</div></div>
+    <div style="text-align:right"><div class="badge badge-blue">New</div></div>
+  </div>
+  <div style="padding:0 16px 16px;display:flex;gap:8px">
+    <button class="btn btn-primary" style="flex:1">Accept All</button>
+    <button class="btn btn-ghost" style="flex:1">Review Individually</button>
+  </div>
+</div>

@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recurring Review — List</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f2f2f7;
+    --card: #fff;
+    --text: #1c1c1e;
+    --text2: #8e8e93;
+    --border: rgba(0,0,0,.06);
+    --blue: #0a84ff;
+    --green: #166f47;
+    --green-bg: #e8f8ec;
+    --amber: #c2790a;
+    --amber-bg: #fff5e6;
+    --red: #b91c1c;
+    --red-bg: #ffe8e8;
+    --blue-bg: #e8f0ff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #f2f2f7;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    color: var(--text);
+  }
+  .phone {
+    width: 430px;
+    min-height: 100vh;
+    background: var(--bg);
+    position: relative;
+    overflow-x: hidden;
+  }
+  /* Status Bar */
+  .status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 24px 10px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .status-icons {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .status-icons svg { width: 18px; height: 18px; }
+  /* Header */
+  .header {
+    display: flex;
+    align-items: center;
+    padding: 8px 20px 16px;
+    gap: 12px;
+  }
+  .back-btn {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(0,0,0,.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .back-btn svg { width: 20px; height: 20px; color: var(--text); }
+  .header-text h1 {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .header-text p {
+    font-size: 13px;
+    color: var(--text2);
+    margin-top: 2px;
+  }
+  /* Content */
+  .content { padding: 0 16px 100px; }
+  /* Summary Card */
+  .summary-card {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+    border: 1px solid var(--border);
+    box-shadow: 0 1px 3px rgba(0,0,0,.04);
+  }
+  .summary-label {
+    font-size: 13px;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+  .summary-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .summary-old {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--text2);
+    text-decoration: line-through;
+  }
+  .summary-arrow { color: var(--text2); font-size: 16px; }
+  .summary-new {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .summary-diff {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 6px;
+  }
+  .summary-diff.up { background: var(--red-bg); color: var(--red); }
+  .summary-diff.down { background: var(--green-bg); color: var(--green); }
+  /* Item Cards */
+  .item-card {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 18px;
+    margin-bottom: 12px;
+    border: 1px solid var(--border);
+    box-shadow: 0 1px 3px rgba(0,0,0,.04);
+  }
+  .item-card.cancelled, .item-card.paused, .item-card.removed {
+    opacity: 0.7;
+  }
+  .item-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .item-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .merchant-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .merchant-name {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.2;
+  }
+  .merchant-sub {
+    font-size: 12px;
+    color: var(--text2);
+    margin-top: 2px;
+  }
+  .item-right {
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .amount-new {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .amount-old {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13px;
+    color: var(--text2);
+    text-decoration: line-through;
+    margin-top: 1px;
+  }
+  .diff-badge {
+    display: inline-block;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 6px;
+    margin-top: 4px;
+  }
+  .diff-badge.increase { background: var(--red-bg); color: var(--red); }
+  .diff-badge.decrease { background: var(--green-bg); color: var(--green); }
+  .diff-badge.new-item { background: var(--blue-bg); color: var(--blue); }
+  .diff-badge.cancelled { background: #f2f2f7; color: var(--text2); }
+  .diff-badge.paused { background: var(--amber-bg); color: var(--amber); }
+  .diff-badge.removed { background: #f2f2f7; color: var(--text2); }
+  .item-reason {
+    font-size: 13px;
+    color: var(--text2);
+    margin: 8px 0 14px;
+    padding-left: 56px;
+  }
+  .item-reason-full {
+    padding-left: 0;
+  }
+  .item-actions {
+    display: flex;
+    gap: 10px;
+    padding-left: 56px;
+  }
+  .btn-accept {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    background: var(--green);
+    color: #fff;
+  }
+  .btn-reject {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    background: var(--card);
+    color: var(--text2);
+  }
+  .btn-review {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    background: var(--card);
+    color: var(--text);
+  }
+  /* Bottom Actions */
+  .bottom-actions {
+    margin-top: 8px;
+    padding: 0 16px;
+  }
+  .btn-accept-all {
+    width: 100%;
+    padding: 16px;
+    border-radius: 14px;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    background: var(--green);
+    color: #fff;
+    margin-bottom: 12px;
+  }
+  .reject-all-link {
+    text-align: center;
+    font-size: 14px;
+    color: var(--text2);
+    padding: 8px;
+    cursor: pointer;
+  }
+  /* Bottom Nav */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    width: 430px;
+    background: rgba(255,255,255,.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0 28px;
+  }
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    color: var(--text2);
+  }
+  .nav-item.active { color: var(--blue); }
+  .nav-item svg { width: 24px; height: 24px; }
+  .home-indicator {
+    position: fixed;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 134px;
+    height: 5px;
+    background: var(--text);
+    border-radius: 100px;
+    opacity: 0.2;
+  }
+</style>
+</head>
+<body>
+<div class="phone">
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span>9:41</span>
+    <div class="status-icons">
+      <svg viewBox="0 0 18 12" fill="currentColor"><path d="M1 4.5c2.7-3 6.3-4.5 8-4.5s5.3 1.5 8 4.5" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M4 7.5c1.8-2 4.2-3 5-3s3.2 1 5 3" stroke="currentColor" stroke-width="1.5" fill="none"/><circle cx="9" cy="10.5" r="1.5"/></svg>
+      <svg viewBox="0 0 18 12" fill="currentColor"><rect x="1" y="1" width="13" height="10" rx="2" stroke="currentColor" stroke-width="1.2" fill="none"/><rect x="14.5" y="4" width="2" height="4" rx="0.5" fill="currentColor"/><rect x="3" y="3" width="8" height="6" rx="1" fill="currentColor"/></svg>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="back-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </div>
+    <div class="header-text">
+      <h1>Recurring Review</h1>
+      <p>6 items to review</p>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <!-- Summary Card -->
+    <div class="summary-card">
+      <div class="summary-label">Total Monthly</div>
+      <div class="summary-row">
+        <span class="summary-old">$330.46</span>
+        <span class="summary-arrow">→</span>
+        <span class="summary-new">$340.95</span>
+        <span class="summary-diff up">+$10.49</span>
+      </div>
+    </div>
+
+    <!-- Netflix — Increased -->
+    <div class="item-card">
+      <div class="item-top">
+        <div class="item-left">
+          <div class="merchant-icon" style="background:#b91c1c;">N</div>
+          <div>
+            <div class="merchant-name">Netflix</div>
+            <div class="merchant-sub">Standard Plan</div>
+          </div>
+        </div>
+        <div class="item-right">
+          <div class="amount-new">$17.99</div>
+          <div class="amount-old">$15.49</div>
+          <div class="diff-badge increase">+$2.50</div>
+        </div>
+      </div>
+      <div class="item-reason">Price increase effective next billing cycle</div>
+      <div class="item-actions">
+        <button class="btn-accept">Accept</button>
+        <button class="btn-reject">Reject</button>
+      </div>
+    </div>
+
+    <!-- Spotify — Increased -->
+    <div class="item-card">
+      <div class="item-top">
+        <div class="item-left">
+          <div class="merchant-icon" style="background:#1db954;">S</div>
+          <div>
+            <div class="merchant-name">Spotify</div>
+            <div class="merchant-sub">Premium</div>
+          </div>
+        </div>
+        <div class="item-right">
+          <div class="amount-new">$10.99</div>
+          <div class="amount-old">$9.99</div>
+          <div class="diff-badge increase">+$1.00</div>
+        </div>
+      </div>
+      <div class="item-reason">Annual price adjustment</div>
+      <div class="item-actions">
+        <button class="btn-accept">Accept</button>
+        <button class="btn-reject">Reject</button>
+      </div>
+    </div>
+
+    <!-- Electric Company — Decreased -->
+    <div class="item-card">
+      <div class="item-top">
+        <div class="item-left">
+          <div class="merchant-icon" style="background:#0a84ff;">E</div>
+          <div>
+            <div class="merchant-name">Electric Company</div>
+            <div class="merchant-sub">Monthly Utility</div>
+          </div>
+        </div>
+        <div class="item-right">
+          <div class="amount-new">$98</div>
+          <div class="amount-old">$142</div>
+          <div class="diff-badge decrease">-$44</div>
+        </div>
+      </div>
+      <div class="item-reason">Lower usage this month</div>
+      <div class="item-actions">
+        <button class="btn-accept">Accept</button>
+        <button class="btn-reject">Reject</button>
+      </div>
+    </div>
+
+    <!-- Gym Membership — New -->
+    <div class="item-card">
+      <div class="item-top">
+        <div class="item-left">
+          <div class="merchant-icon" style="background:#0a84ff;">G</div>
+          <div>
+            <div class="merchant-name">Gym Membership</div>
+            <div class="merchant-sub">Monthly</div>
+          </div>
+        </div>
+        <div class="item-right">
+          <div class="amount-new">$49.99</div>
+          <div class="diff-badge new-item">New</div>
+        </div>
+      </div>
+      <div class="item-reason">New recurring charge detected</div>
+      <div class="item-actions">
+        <button class="btn-accept">Accept</button>
+        <button class="btn-reject">Reject</button>
+      </div>
+    </div>
+
+    <!-- HBO Max — Cancelled -->
+    <div class="item-card cancelled">
+      <div class="item-top">
+        <div class="item-left">
+          <div class="merchant-icon" style="background:#6b7280;">H</div>
+          <div>
+            <div class="merchant-name">HBO Max</div>
+            <div class="merchant-sub">Streaming</div>
+          </div>
+        </div>
+        <div class="item-right">
+          <div class="amount-new" style="text-decoration:line-through; color:var(--text2);">$15.99</div>
+          <div class="diff-badge cancelled">Cancelled</div>
+        </div>
+      </div>
+      <div class="item-reason">Subscription cancelled</div>
+      <div class="item-actions">
+        <button class="btn-review">Review</button>
+      </div>
+    </div>
+
+    <!-- Cloud Storage — Paused -->
+    <div class="item-card paused">
+      <div class="item-top">
+        <div class="item-left">
+          <div class="merchant-icon" style="background:var(--amber);">C</div>
+          <div>
+            <div class="merchant-name">Cloud Storage</div>
+            <div class="merchant-sub">Monthly</div>
+          </div>
+        </div>
+        <div class="item-right">
+          <div class="amount-new" style="color:var(--amber);">$2.99</div>
+          <div class="diff-badge paused">Paused</div>
+        </div>
+      </div>
+      <div class="item-reason">Payment paused by provider</div>
+      <div class="item-actions">
+        <button class="btn-review">Review</button>
+      </div>
+    </div>
+
+    <!-- Old Insurance — Removed -->
+    <div class="item-card removed">
+      <div class="item-top">
+        <div class="item-left">
+          <div class="merchant-icon" style="background:#d1d5db;">O</div>
+          <div>
+            <div class="merchant-name">Old Insurance</div>
+            <div class="merchant-sub">Former Policy</div>
+          </div>
+        </div>
+        <div class="item-right">
+          <div class="amount-new" style="text-decoration:line-through; color:var(--text2);">$180</div>
+          <div class="diff-badge removed">Removed</div>
+        </div>
+      </div>
+      <div class="item-reason">No longer active</div>
+      <div class="item-actions">
+        <button class="btn-review">Review</button>
+      </div>
+    </div>
+
+    <!-- Bottom Actions -->
+    <div class="bottom-actions">
+      <button class="btn-accept-all">Accept All Changes</button>
+      <div class="reject-all-link">Reject All</div>
+    </div>
+  </div>
+
+  <!-- Bottom Nav -->
+  <div class="bottom-nav">
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/></svg>
+      <span>Home</span>
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16v4H4zM4 10h16v10H4z"/></svg>
+      <span>Payments</span>
+    </div>
+    <div class="nav-item active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+      <span>Recurring</span>
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+      <span>Insights</span>
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      <span>Profile</span>
+    </div>
+  </div>
+  <div class="home-indicator"></div>
+</div>
+</body>
+</html>
