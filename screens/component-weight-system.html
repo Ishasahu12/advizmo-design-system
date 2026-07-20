@@ -1,0 +1,1662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Component Weight System — Advizmo Design System</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #0a84ff;
+    --green: #166f47;
+    --green-bg: #e8f8ec;
+    --amber: #c2790a;
+    --amber-bg: #fff5e6;
+    --red: #b91c1c;
+    --red-bg: #ffe8e8;
+    --blue-bg: #e8f0ff;
+    --card: #fff;
+    --text: #1c1c1e;
+    --text2: #8e8e93;
+    --sidebar: #1c1c1e;
+    --bg: #f5f5f5;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'IBM Plex Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 260px;
+    min-height: 100vh;
+    background: var(--sidebar);
+    color: #fff;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    overflow-y: auto;
+    z-index: 100;
+  }
+
+  .sidebar-header {
+    padding: 24px 20px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .sidebar-header h2 {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--blue);
+    margin-bottom: 4px;
+  }
+
+  .sidebar-header p {
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+  }
+
+  .sidebar nav {
+    padding: 12px 0;
+  }
+
+  .sidebar nav a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 20px;
+    color: rgba(255,255,255,0.6);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.15s;
+  }
+
+  .sidebar nav a:hover {
+    color: #fff;
+    background: rgba(255,255,255,0.06);
+  }
+
+  .sidebar nav a.active {
+    color: var(--blue);
+    background: rgba(10,132,255,0.1);
+    border-right: 2px solid var(--blue);
+  }
+
+  .sidebar nav a .num {
+    font-size: 11px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 4px;
+    padding: 1px 6px;
+    min-width: 20px;
+    text-align: center;
+  }
+
+  .sidebar nav a.active .num {
+    background: rgba(10,132,255,0.2);
+    color: var(--blue);
+  }
+
+  /* MAIN */
+  .main {
+    margin-left: 260px;
+    flex: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* iOS STATUS BAR */
+  .status-bar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 24px 8px;
+    background: #fff;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .status-bar .time {
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .status-bar .icons {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+  }
+
+  .status-bar .icons span {
+    font-size: 12px;
+  }
+
+  /* HEADER */
+  .header {
+    position: sticky;
+    top: 40px;
+    z-index: 40;
+    background: #fff;
+    padding: 16px 32px 14px;
+    border-bottom: 1px solid #e5e5e5;
+  }
+
+  .header h1 {
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .header p {
+    font-size: 13px;
+    color: var(--text2);
+    margin-top: 2px;
+  }
+
+  /* CONTENT */
+  .content {
+    padding: 28px 32px 100px;
+    flex: 1;
+  }
+
+  /* SECTION */
+  .section {
+    margin-bottom: 40px;
+  }
+
+  .section-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .section-desc {
+    font-size: 13px;
+    color: var(--text2);
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+
+  .rules {
+    background: #f9f9f9;
+    border: 1px solid #e8e8e8;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+  }
+
+  .rules h4 {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text2);
+    margin-bottom: 8px;
+  }
+
+  .rules ul {
+    list-style: none;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  .rules ul li::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: var(--blue);
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: #e8e8e8;
+    margin: 36px 0;
+  }
+
+  /* PHONE FRAME */
+  .phone-frame {
+    width: 375px;
+    background: var(--card);
+    border-radius: 24px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04);
+    overflow: hidden;
+    margin: 0 auto;
+  }
+
+  .phone-content {
+    padding: 20px;
+  }
+
+  /* HERO MODULE */
+  .hero-module {
+    background: linear-gradient(160deg, #1c1c1e 0%, #2c2c2e 100%);
+    border-radius: 20px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-module::after {
+    content: '';
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, rgba(10,132,255,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .hero-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+
+  .hero-step {
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 12px;
+  }
+
+  .hero-progress-track {
+    width: 100%;
+    height: 4px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 2px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+
+  .hero-progress-fill {
+    height: 100%;
+    width: 50%;
+    background: var(--blue);
+    border-radius: 2px;
+  }
+
+  .hero-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .hero-step-item {
+    background: rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .hero-step-item.active {
+    background: #fff;
+  }
+
+  .hero-step-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  .hero-step-item.completed .hero-step-num {
+    background: var(--green);
+    color: #fff;
+  }
+
+  .hero-step-item.active .hero-step-num {
+    background: var(--blue);
+    color: #fff;
+  }
+
+  .hero-step-item.upcoming .hero-step-num {
+    background: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.4);
+  }
+
+  .hero-step-info h5 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+
+  .hero-step-item.completed .hero-step-info h5 {
+    text-decoration: line-through;
+    color: rgba(255,255,255,0.5);
+  }
+
+  .hero-step-item.active .hero-step-info h5 {
+    color: var(--text);
+  }
+
+  .hero-step-item.upcoming .hero-step-info h5 {
+    color: rgba(255,255,255,0.3);
+  }
+
+  .hero-step-info p {
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  .hero-step-item.completed .hero-step-info p {
+    color: rgba(255,255,255,0.4);
+  }
+
+  .hero-step-item.active .hero-step-info p {
+    color: var(--text2);
+  }
+
+  .hero-step-item.upcoming .hero-step-info p {
+    color: rgba(255,255,255,0.25);
+  }
+
+  .hero-step-badge {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(22,111,71,0.2);
+    color: #4ade80;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  .hero-step-item.active .hero-step-badge {
+    display: none;
+  }
+
+  .hero-step-cta {
+    display: inline-block;
+    margin-top: 8px;
+    background: var(--blue);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+  }
+
+  .hero-step-item.upcoming .hero-step-cta {
+    display: none;
+  }
+
+  /* PRIMARY CARD */
+  .primary-card {
+    border-radius: 16px;
+    padding: 20px;
+    position: relative;
+    color: #fff;
+  }
+
+  .primary-card.blue {
+    background: linear-gradient(160deg, #0a84ff 0%, #0066cc 100%);
+  }
+
+  .primary-card.red {
+    background: linear-gradient(160deg, #b91c1c 0%, #991b1b 100%);
+  }
+
+  .primary-card.orange {
+    background: linear-gradient(160deg, #c2790a 0%, #a06508 100%);
+  }
+
+  .primary-card-dismiss {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    border: none;
+    color: rgba(255,255,255,0.7);
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .primary-card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+
+  .primary-card-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    padding-right: 32px;
+  }
+
+  .primary-card-desc {
+    font-size: 14px;
+    line-height: 1.5;
+    opacity: 0.85;
+    margin-bottom: 10px;
+    padding-right: 20px;
+  }
+
+  .primary-card-benefit {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    padding-right: 20px;
+  }
+
+  .primary-card-time {
+    font-size: 12px;
+    opacity: 0.6;
+    margin-bottom: 14px;
+  }
+
+  .primary-card-cta {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    background: rgba(255,255,255,0.95);
+    color: var(--text);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 10px;
+  }
+
+  .primary-card-learn {
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  /* SECONDARY CARD */
+  .secondary-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: var(--card);
+    border: 1px solid #e8e8e8;
+    border-radius: 12px;
+    margin-bottom: 8px;
+  }
+
+  .secondary-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .secondary-icon.blue-bg { background: var(--blue-bg); }
+  .secondary-icon.green-bg { background: var(--green-bg); }
+  .secondary-icon.amber-bg { background: var(--amber-bg); }
+
+  .secondary-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .secondary-info-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .secondary-info h5 {
+    font-size: 15px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .secondary-time {
+    font-size: 11px;
+    color: var(--text2);
+    white-space: nowrap;
+  }
+
+  .secondary-info p {
+    font-size: 13px;
+    color: var(--text2);
+    margin-top: 1px;
+  }
+
+  .secondary-cta {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--blue);
+    white-space: nowrap;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  /* REVIEW CARD */
+  .review-card {
+    background: var(--card);
+    border: 1px solid #e8e8e8;
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+
+  .review-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .review-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .review-icon.amber-bg { background: var(--amber-bg); }
+  .review-icon.blue-bg { background: var(--blue-bg); }
+
+  .review-info {
+    flex: 1;
+  }
+
+  .review-info h5 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+
+  .review-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  .review-badge.amber {
+    background: var(--amber-bg);
+    color: var(--amber);
+  }
+
+  .review-badge.blue {
+    background: var(--blue-bg);
+    color: var(--blue);
+  }
+
+  .review-chevron {
+    font-size: 14px;
+    color: var(--text2);
+    transition: transform 0.2s;
+  }
+
+  .review-expanded {
+    padding: 0 16px 16px;
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .review-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #f5f5f5;
+  }
+
+  .review-item:last-child { border-bottom: none; }
+
+  .review-item-info {
+    flex: 1;
+  }
+
+  .review-item-name {
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .review-item-amount {
+    font-size: 12px;
+    color: var(--text2);
+  }
+
+  .review-item-actions {
+    display: flex;
+    gap: 6px;
+  }
+
+  .review-btn {
+    padding: 5px 12px;
+    border-radius: 6px;
+    border: none;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .review-btn.accept {
+    background: var(--green-bg);
+    color: var(--green);
+  }
+
+  .review-btn.reject {
+    background: var(--red-bg);
+    color: var(--red);
+  }
+
+  .review-progress {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--text2);
+  }
+
+  .review-progress-bar {
+    flex: 1;
+    height: 4px;
+    background: #e8e8e8;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .review-progress-fill {
+    height: 100%;
+    background: var(--amber);
+    border-radius: 2px;
+  }
+
+  .review-target-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f5f5f5;
+  }
+
+  .review-target-row:last-child { border-bottom: none; }
+
+  .review-target-label {
+    font-size: 14px;
+    font-weight: 500;
+    flex: 1;
+  }
+
+  .review-target-input {
+    width: 80px;
+    padding: 6px 8px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 13px;
+    text-align: right;
+  }
+
+  /* INLINE BANNER */
+  .inline-banner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 14px;
+    height: 42px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+
+  .inline-banner.green-tint { background: var(--green-bg); color: var(--green); }
+  .inline-banner.neutral { background: #f5f5f5; color: var(--text2); }
+  .inline-banner.blue-tint { background: var(--blue-bg); color: var(--blue); }
+
+  .inline-banner-icon {
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  /* SUCCESS CARD */
+  .success-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    background: linear-gradient(160deg, #e8f8ec 0%, #d4f5dc 100%);
+    border-radius: 10px;
+    margin-bottom: 8px;
+    animation: fadeInUp 0.3s ease-out;
+  }
+
+  .success-icon {
+    width: 20px;
+    height: 20px;
+    background: var(--green);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+
+  .success-msg {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--green);
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* WEIGHT OVERVIEW */
+  .weight-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .weight-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid #e8e8e8;
+    background: var(--card);
+  }
+
+  .weight-rank {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--blue);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .weight-bar {
+    height: 8px;
+    border-radius: 4px;
+    margin-top: 6px;
+  }
+
+  .weight-item-info h5 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+
+  .weight-item-info p {
+    font-size: 12px;
+    color: var(--text2);
+  }
+
+  /* COMPARISON TABLE */
+  .comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    background: var(--card);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #e8e8e8;
+  }
+
+  .comp-table th {
+    text-align: left;
+    padding: 10px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    color: var(--text2);
+    background: #f9f9f9;
+    border-bottom: 1px solid #e8e8e8;
+  }
+
+  .comp-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: middle;
+  }
+
+  .comp-table tr:last-child td { border-bottom: none; }
+
+  .comp-chip {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  /* PLACEMENT */
+  .placement-mock {
+    background: #f9f9f9;
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid #e8e8e8;
+  }
+
+  .placement-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text2);
+    margin-bottom: 10px;
+  }
+
+  .placement-slot {
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 2px dashed #ccc;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--text2);
+  }
+
+  .placement-slot.filled {
+    border-style: solid;
+    border-color: var(--blue);
+    background: var(--blue-bg);
+    color: var(--blue);
+    font-weight: 600;
+  }
+
+  /* BOTTOM NAV */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 260px;
+    right: 0;
+    background: #fff;
+    border-top: 1px solid #e5e5e5;
+    display: flex;
+    justify-content: space-around;
+    padding: 8px 0 24px;
+    z-index: 50;
+  }
+
+  .bottom-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    font-size: 10px;
+    color: var(--text2);
+    text-decoration: none;
+  }
+
+  .bottom-nav-item.active {
+    color: var(--blue);
+  }
+
+  .bottom-nav-icon {
+    font-size: 20px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <h2>ADVIZMO</h2>
+    <p>Design System</p>
+  </div>
+  <nav>
+    <a href="#">Overview</a>
+    <a href="#">Design Tokens</a>
+    <a href="#">Typography</a>
+    <a href="#">Colors</a>
+    <a href="#">Spacing</a>
+    <a href="#" class="active">Component Weights <span class="num">9</span></a>
+    <a href="#">Navigation</a>
+    <a href="#">Cards</a>
+    <a href="#">Buttons</a>
+    <a href="#">Forms</a>
+    <a href="#">Icons</a>
+    <a href="#">Modals</a>
+    <a href="#">Animations</a>
+  </nav>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- iOS Status Bar -->
+  <div class="status-bar">
+    <span class="time">9:41</span>
+    <span class="icons">
+      <span>&#9679;</span>
+      <span>&#9679;</span>
+      <span>&#9679;</span>
+      <span>&#9851;</span>
+      <span>&#9889;</span>
+    </span>
+  </div>
+
+  <!-- Header -->
+  <div class="header">
+    <h1>Component Weight System</h1>
+    <p>Visual hierarchy rules for recommendation importance levels</p>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+
+    <!-- SECTION 1: WEIGHT OVERVIEW -->
+    <div class="section" id="overview">
+      <h2 class="section-title">1. Component Weight Overview</h2>
+      <p class="section-desc">Six weight levels determine how recommendation types appear visually, from most prominent to least.</p>
+
+      <div class="weight-stack">
+        <div class="weight-item">
+          <span class="weight-rank">1</span>
+          <div style="flex:1">
+            <div class="weight-item-info">
+              <h5>Hero Module</h5>
+              <p>Largest. Dark gradient, maximum visual weight.</p>
+            </div>
+            <div class="weight-bar" style="width:100%;background:linear-gradient(90deg,#1c1c1e,#3c3c3e)"></div>
+          </div>
+        </div>
+        <div class="weight-item">
+          <span class="weight-rank">2</span>
+          <div style="flex:1">
+            <div class="weight-item-info">
+              <h5>Primary Recommendation Card</h5>
+              <p>Large semantic gradient, important action.</p>
+            </div>
+            <div class="weight-bar" style="width:85%;background:linear-gradient(90deg,var(--blue),#0066cc)"></div>
+          </div>
+        </div>
+        <div class="weight-item">
+          <span class="weight-rank">3</span>
+          <div style="flex:1">
+            <div class="weight-item-info">
+              <h5>Secondary Recommendation Card</h5>
+              <p>Compact, lower emphasis.</p>
+            </div>
+            <div class="weight-bar" style="width:60%;background:#e8e8e8"></div>
+          </div>
+        </div>
+        <div class="weight-item">
+          <span class="weight-rank">4</span>
+          <div style="flex:1">
+            <div class="weight-item-info">
+              <h5>Review Card</h5>
+              <p>Expandable, designed for reviewing.</p>
+            </div>
+            <div class="weight-bar" style="width:50%;background:var(--amber-bg)"></div>
+          </div>
+        </div>
+        <div class="weight-item">
+          <span class="weight-rank">5</span>
+          <div style="flex:1">
+            <div class="weight-item-info">
+              <h5>Inline Status Banner</h5>
+              <p>Small, minimal height.</p>
+            </div>
+            <div class="weight-bar" style="width:35%;background:#f0f0f0"></div>
+          </div>
+        </div>
+        <div class="weight-item">
+          <span class="weight-rank">6</span>
+          <div style="flex:1">
+            <div class="weight-item-info">
+              <h5>Success Card</h5>
+              <p>Temporary, auto-dismiss.</p>
+            </div>
+            <div class="weight-bar" style="width:25%;background:var(--green-bg)"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- SECTION 2: HERO MODULE -->
+    <div class="section" id="hero">
+      <h2 class="section-title">2. Hero Module</h2>
+
+      <div class="rules">
+        <h4>Rules</h4>
+        <ul>
+          <li>Used ONLY for Financial Setup Stepper</li>
+          <li>Appears ONLY in hero section</li>
+          <li>Maximum one on screen</li>
+          <li>Dark gradient background (#1c1c1e → #2c2c2e)</li>
+          <li>Replaces "Things to Fix" while onboarding incomplete</li>
+          <li>Disappears permanently when setup reaches 100%</li>
+        </ul>
+      </div>
+
+      <h3 class="section-title" style="font-size:14px;margin-bottom:12px">Live Example — Step 2 of 4 (50%)</h3>
+
+      <div class="phone-frame">
+        <div class="phone-content">
+          <div class="hero-module">
+            <h3 class="hero-title">Financial Setup</h3>
+            <p class="hero-step">Step 2 of 4</p>
+            <div class="hero-progress-track">
+              <div class="hero-progress-fill"></div>
+            </div>
+            <div class="hero-steps">
+              <!-- Step 1 - Completed -->
+              <div class="hero-step-item completed">
+                <div class="hero-step-num">&#10003;</div>
+                <div class="hero-step-info">
+                  <h5>Create Account</h5>
+                  <p>Your profile is set up</p>
+                </div>
+                <span class="hero-step-badge">Done</span>
+              </div>
+              <!-- Step 2 - Active -->
+              <div class="hero-step-item active">
+                <div class="hero-step-num">2</div>
+                <div class="hero-step-info">
+                  <h5>Connect Accounts</h5>
+                  <p>Link your bank accounts for personalized insights</p>
+                  <button class="hero-step-cta">Connect Bank</button>
+                </div>
+              </div>
+              <!-- Step 3 - Upcoming -->
+              <div class="hero-step-item upcoming">
+                <div class="hero-step-num">3</div>
+                <div class="hero-step-info">
+                  <h5>Set Targets</h5>
+                  <p>Define your financial goals</p>
+                </div>
+              </div>
+              <!-- Step 4 - Upcoming -->
+              <div class="hero-step-item upcoming">
+                <div class="hero-step-num">4</div>
+                <div class="hero-step-info">
+                  <h5>Review Subscriptions</h5>
+                  <p>Identify recurring charges</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- SECTION 3: PRIMARY RECOMMENDATION CARD -->
+    <div class="section" id="primary">
+      <h2 class="section-title">3. Primary Recommendation Card</h2>
+
+      <div class="rules">
+        <h4>Rules</h4>
+        <ul>
+          <li>Large semantic gradient card</li>
+          <li>Reserved for SINGLE most important action</li>
+          <li>Blue surface for setup, Red for critical, Orange for review</li>
+          <li>Maximum one Primary card visible at a time</li>
+        </ul>
+      </div>
+
+      <h3 class="section-title" style="font-size:14px;margin-bottom:12px">Blue Surface — Setup Action</h3>
+      <div class="phone-frame">
+        <div class="phone-content">
+          <div class="primary-card blue">
+            <button class="primary-card-dismiss">&times;</button>
+            <div class="primary-card-icon">&#127974;</div>
+            <h3 class="primary-card-title">Connect Checking</h3>
+            <p class="primary-card-desc">Track income and expenses automatically. Sync your checking account for real-time cash flow insights.</p>
+            <p class="primary-card-benefit">Save 2.5 hours per month on budgeting</p>
+            <p class="primary-card-time">Takes about 2 minutes</p>
+            <button class="primary-card-cta">Connect Account</button>
+            <span class="primary-card-learn">Learn more about account syncing</span>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-title" style="font-size:14px;margin:20px 0 12px">Red Surface — Critical Action</h3>
+      <div class="phone-frame">
+        <div class="phone-content">
+          <div class="primary-card red">
+            <button class="primary-card-dismiss">&times;</button>
+            <div class="primary-card-icon">&#9888;</div>
+            <h3 class="primary-card-title">Reconnect Chase</h3>
+            <p class="primary-card-desc">Your connection expired 3 days ago. Reconnect to keep your financial data up to date.</p>
+            <p class="primary-card-benefit">Restore 12 synced transactions</p>
+            <p class="primary-card-time">Takes about 1 minute</p>
+            <button class="primary-card-cta">Reconnect Now</button>
+            <span class="primary-card-learn">Why did my connection expire?</span>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-title" style="font-size:14px;margin:20px 0 12px">Orange Surface — Review Required</h3>
+      <div class="phone-frame">
+        <div class="phone-content">
+          <div class="primary-card orange">
+            <button class="primary-card-dismiss">&times;</button>
+            <div class="primary-card-icon">&#128196;</div>
+            <h3 class="primary-card-title">Review Recurring</h3>
+            <p class="primary-card-desc">6 subscriptions changed in the last 30 days. Review them to avoid unexpected charges.</p>
+            <p class="primary-card-benefit">Potential savings: $34/month</p>
+            <p class="primary-card-time">Takes about 3 minutes</p>
+            <button class="primary-card-cta">Review Now</button>
+            <span class="primary-card-learn">How we detect changes</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- SECTION 4: SECONDARY RECOMMENDATION CARD -->
+    <div class="section" id="secondary">
+      <h2 class="section-title">4. Secondary Recommendation Card</h2>
+
+      <div class="rules">
+        <h4>Rules</h4>
+        <ul>
+          <li>Compact card, lower emphasis</li>
+          <li>For less urgent actions</li>
+          <li>Can have multiple on screen</li>
+          <li>Subtle styling, smaller than Primary</li>
+        </ul>
+      </div>
+
+      <h3 class="section-title" style="font-size:14px;margin-bottom:12px">Compact List Example</h3>
+      <div class="phone-frame">
+        <div class="phone-content" style="padding:12px">
+          <div class="secondary-card">
+            <div class="secondary-icon blue-bg">&#127974;</div>
+            <div class="secondary-info">
+              <div class="secondary-info-top">
+                <h5>Connect Savings</h5>
+                <span class="secondary-time">2 min</span>
+              </div>
+              <p>Find idle cash</p>
+            </div>
+            <a class="secondary-cta" href="#">Add savings &rarr;</a>
+          </div>
+          <div class="secondary-card">
+            <div class="secondary-icon blue-bg">&#128200;</div>
+            <div class="secondary-info">
+              <div class="secondary-info-top">
+                <h5>Connect Investments</h5>
+                <span class="secondary-time">3 min</span>
+              </div>
+              <p>Complete portfolio view</p>
+            </div>
+            <a class="secondary-cta" href="#">Add &rarr;</a>
+          </div>
+          <div class="secondary-card">
+            <div class="secondary-icon green-bg">&#128176;</div>
+            <div class="secondary-info">
+              <div class="secondary-info-top">
+                <h5>Open Auto Invest</h5>
+                <span class="secondary-time">2 min</span>
+              </div>
+              <p>Earn 5.0% APY</p>
+            </div>
+            <a class="secondary-cta" href="#">Open &rarr;</a>
+          </div>
+          <div class="secondary-card">
+            <div class="secondary-icon amber-bg">&#128276;</div>
+            <div class="secondary-info">
+              <div class="secondary-info-top">
+                <h5>Enable Notifications</h5>
+                <span class="secondary-time">30 sec</span>
+              </div>
+              <p>Never miss an event</p>
+            </div>
+            <a class="secondary-cta" href="#">Enable &rarr;</a>
+          </div>
+          <div class="secondary-card">
+            <div class="secondary-icon blue-bg">&#128279;</div>
+            <div class="secondary-info">
+              <div class="secondary-info-top">
+                <h5>Connect More Accounts</h5>
+                <span class="secondary-time">2 min</span>
+              </div>
+              <p>Better suggestions</p>
+            </div>
+            <a class="secondary-cta" href="#">Add &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- SECTION 5: REVIEW CARD -->
+    <div class="section" id="review">
+      <h2 class="section-title">5. Review Card</h2>
+
+      <div class="rules">
+        <h4>Rules</h4>
+        <ul>
+          <li>Designed specifically for reviewing information</li>
+          <li>Always expandable</li>
+          <li>Shows summary by default, full details on expand</li>
+          <li>Supports accept/reject/edit actions</li>
+          <li>For recurring transactions, targets, cushions</li>
+        </ul>
+      </div>
+
+      <h3 class="section-title" style="font-size:14px;margin-bottom:12px">Review Recurring Transactions</h3>
+      <div class="phone-frame">
+        <div class="phone-content">
+          <div class="review-card">
+            <div class="review-header">
+              <div class="review-icon amber-bg">&#128179;</div>
+              <div class="review-info">
+                <h5>6 subscriptions to review</h5>
+              </div>
+              <span class="review-badge amber">6 items</span>
+              <span class="review-chevron">&#9662;</span>
+            </div>
+            <div class="review-expanded">
+              <div class="review-item">
+                <div class="review-item-info">
+                  <div class="review-item-name">Netflix</div>
+                  <div class="review-item-amount">$15.99/mo &middot; Changed from $13.99</div>
+                </div>
+                <div class="review-item-actions">
+                  <button class="review-btn accept">Accept</button>
+                  <button class="review-btn reject">Reject</button>
+                </div>
+              </div>
+              <div class="review-item">
+                <div class="review-item-info">
+                  <div class="review-item-name">Spotify</div>
+                  <div class="review-item-amount">$10.99/mo &middot; Family plan</div>
+                </div>
+                <div class="review-item-actions">
+                  <button class="review-btn accept">Accept</button>
+                  <button class="review-btn reject">Reject</button>
+                </div>
+              </div>
+              <div class="review-item">
+                <div class="review-item-info">
+                  <div class="review-item-name">Adobe CC</div>
+                  <div class="review-item-amount">$54.99/mo &middot; New subscription</div>
+                </div>
+                <div class="review-item-actions">
+                  <button class="review-btn accept">Accept</button>
+                  <button class="review-btn reject">Reject</button>
+                </div>
+              </div>
+              <div class="review-progress">
+                <span>0/6 reviewed</span>
+                <div class="review-progress-bar">
+                  <div class="review-progress-fill" style="width:0%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-title" style="font-size:14px;margin:20px 0 12px">Review Targets</h3>
+      <div class="phone-frame">
+        <div class="phone-content">
+          <div class="review-card">
+            <div class="review-header">
+              <div class="review-icon blue-bg">&#127919;</div>
+              <div class="review-info">
+                <h5>Set your financial targets</h5>
+              </div>
+              <span class="review-badge blue">4 targets</span>
+              <span class="review-chevron">&#9662;</span>
+            </div>
+            <div class="review-expanded">
+              <div class="review-target-row">
+                <span class="review-target-label">Monthly Savings</span>
+                <input class="review-target-input" type="text" value="$500">
+              </div>
+              <div class="review-target-row">
+                <span class="review-target-label">Emergency Fund</span>
+                <input class="review-target-input" type="text" value="$10,000">
+              </div>
+              <div class="review-target-row">
+                <span class="review-target-label">Debt Payoff</span>
+                <input class="review-target-input" type="text" value="$3,000">
+              </div>
+              <div class="review-target-row">
+                <span class="review-target-label">Investment Goal</span>
+                <input class="review-target-input" type="text" value="$25,000">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- SECTION 6: INLINE STATUS BANNER -->
+    <div class="section" id="banner">
+      <h2 class="section-title">6. Inline Status Banner</h2>
+
+      <div class="rules">
+        <h4>Rules</h4>
+        <ul>
+          <li>Small component, minimal height (40–48px)</li>
+          <li>For status information, not actions</li>
+          <li>No CTA or very subtle</li>
+          <li>Can appear anywhere inline</li>
+        </ul>
+      </div>
+
+      <div class="phone-frame">
+        <div class="phone-content">
+          <div class="inline-banner green-tint">
+            <span class="inline-banner-icon">&#10003;</span>
+            <span>All accounts synced</span>
+          </div>
+          <div class="inline-banner neutral">
+            <span class="inline-banner-icon">&#8635;</span>
+            <span>Last synced 2 min ago</span>
+          </div>
+          <div class="inline-banner green-tint">
+            <span class="inline-banner-icon">&#10003;</span>
+            <span>Recurring payments up to date</span>
+          </div>
+          <div class="inline-banner neutral">
+            <span class="inline-banner-icon">&#128197;</span>
+            <span>Market holiday — US markets closed</span>
+          </div>
+          <div class="inline-banner blue-tint">
+            <span class="inline-banner-icon">&#8634;</span>
+            <span>2 recommendations refreshed</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- SECTION 7: SUCCESS CARD -->
+    <div class="section" id="success">
+      <h2 class="section-title">7. Success Card</h2>
+
+      <div class="rules">
+        <h4>Rules</h4>
+        <ul>
+          <li>Temporary confirmation</li>
+          <li>Appears after completing an action</li>
+          <li>Auto-dismisses after 2–3 seconds</li>
+          <li>Minimal visual weight, green surface</li>
+          <li>Subtle entrance animation (fade in + slide up)</li>
+        </ul>
+      </div>
+
+      <div class="phone-frame">
+        <div class="phone-content">
+          <div class="success-card">
+            <div class="success-icon">&#10003;</div>
+            <span class="success-msg">Savings account connected</span>
+          </div>
+          <div class="success-card" style="animation-delay:0.1s">
+            <div class="success-icon">&#10003;</div>
+            <span class="success-msg">Recurring review completed</span>
+          </div>
+          <div class="success-card" style="animation-delay:0.2s">
+            <div class="success-icon">&#10003;</div>
+            <span class="success-msg">Profile updated</span>
+          </div>
+          <div class="success-card" style="animation-delay:0.3s">
+            <div class="success-icon">&#10003;</div>
+            <span class="success-msg">Auto Invest enabled</span>
+          </div>
+          <div class="success-card" style="animation-delay:0.4s">
+            <div class="success-icon">&#10003;</div>
+            <span class="success-msg">Transfer successful</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- SECTION 8: WEIGHT COMPARISON TABLE -->
+    <div class="section" id="comparison">
+      <h2 class="section-title">8. Weight Comparison Table</h2>
+      <p class="section-desc">Side-by-side visual comparison of all six weight types.</p>
+
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th>Weight</th>
+            <th>Size</th>
+            <th>Gradient</th>
+            <th>Icon Size</th>
+            <th>CTA Style</th>
+            <th>Max Visible</th>
+            <th>Auto-Dismiss</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Hero</strong></td>
+            <td>Full width, large</td>
+            <td><span class="comp-chip" style="background:linear-gradient(135deg,#1c1c1e,#3c3c3e);color:#fff">Dark gradient</span></td>
+            <td>28px step num</td>
+            <td><span class="comp-chip" style="background:var(--blue);color:#fff">Primary CTA</span></td>
+            <td>1</td>
+            <td>Never</td>
+          </tr>
+          <tr>
+            <td><strong>Primary</strong></td>
+            <td>Full width, large</td>
+            <td><span class="comp-chip" style="background:linear-gradient(135deg,var(--blue),#0066cc);color:#fff">Semantic gradient</span></td>
+            <td>40px</td>
+            <td><span class="comp-chip" style="background:rgba(255,255,255,0.95);color:var(--text);border:1px solid #e0e0e0">Full-width button</span></td>
+            <td>1</td>
+            <td>Manual</td>
+          </tr>
+          <tr>
+            <td><strong>Secondary</strong></td>
+            <td>Compact row</td>
+            <td><span class="comp-chip" style="background:#fff;border:1px solid #e8e8e8;color:var(--text)">No gradient</span></td>
+            <td>28px</td>
+            <td><span class="comp-chip" style="background:transparent;color:var(--blue)">Text link</span></td>
+            <td>Multiple</td>
+            <td>Manual</td>
+          </tr>
+          <tr>
+            <td><strong>Review</strong></td>
+            <td>Medium, expandable</td>
+            <td><span class="comp-chip" style="background:#fff;border:1px solid #e8e8e8;color:var(--text)">No gradient</span></td>
+            <td>36px</td>
+            <td><span class="comp-chip" style="background:var(--green-bg);color:var(--green)">Accept/Reject</span></td>
+            <td>Multiple</td>
+            <td>Manual</td>
+          </tr>
+          <tr>
+            <td><strong>Banner</strong></td>
+            <td>Full width, 42px</td>
+            <td><span class="comp-chip" style="background:var(--green-bg);color:var(--green)">Tint fill</span></td>
+            <td>16px</td>
+            <td><span class="comp-chip" style="background:transparent;color:var(--text2)">None</span></td>
+            <td>Multiple</td>
+            <td>Never</td>
+          </tr>
+          <tr>
+            <td><strong>Success</strong></td>
+            <td>Small row</td>
+            <td><span class="comp-chip" style="background:linear-gradient(135deg,#e8f8ec,#d4f5dc);color:var(--green)">Green gradient</span></td>
+            <td>20px</td>
+            <td><span class="comp-chip" style="background:transparent;color:var(--text2)">None</span></td>
+            <td>1</td>
+            <td>2–3 sec</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- SECTION 9: PLACEMENT GUIDE -->
+    <div class="section" id="placement">
+      <h2 class="section-title">9. Placement Guide</h2>
+      <p class="section-desc">Where each weight type appears in the app layout.</p>
+
+      <div class="placement-mock">
+        <div class="placement-label">Dashboard Mockup</div>
+
+        <div class="placement-slot filled">Hero Module — Hero section only, max 1</div>
+        <div class="placement-slot filled">Primary Card — Top of any section, max 1</div>
+        <div class="placement-slot filled">Secondary Card — Below Primary, multiple allowed</div>
+        <div class="placement-slot filled">Secondary Card — Below Primary, multiple allowed</div>
+        <div class="placement-slot filled">Secondary Card — Below Primary, multiple allowed</div>
+        <div class="placement-slot" style="border-color:var(--amber);background:var(--amber-bg);color:var(--amber)">Review Card — In section dedicated to reviews</div>
+        <div class="placement-slot" style="border-color:var(--green);background:var(--green-bg);color:var(--green)">Inline Banner — Anywhere inline</div>
+        <div class="placement-slot" style="border-color:var(--green);background:var(--green-bg);color:var(--green)">Success Card — After any action, temporary</div>
+      </div>
+
+      <h3 class="section-title" style="font-size:14px;margin:20px 0 12px">Full Dashboard View</h3>
+
+      <div class="phone-frame">
+        <div class="phone-content">
+          <!-- Hero -->
+          <div class="hero-module" style="margin-bottom:16px;padding:16px">
+            <h3 class="hero-title" style="font-size:16px">Financial Setup</h3>
+            <p class="hero-step">Step 2 of 4</p>
+            <div class="hero-progress-track">
+              <div class="hero-progress-fill"></div>
+            </div>
+          </div>
+
+          <!-- Primary -->
+          <div class="primary-card blue" style="margin-bottom:12px;padding:16px">
+            <button class="primary-card-dismiss" style="top:8px;right:8px">&times;</button>
+            <div class="primary-card-icon" style="width:32px;height:32px;font-size:16px;margin-bottom:8px">&#127974;</div>
+            <h3 class="primary-card-title" style="font-size:16px">Connect Checking</h3>
+            <p class="primary-card-desc" style="font-size:13px">Track income and expenses automatically</p>
+            <button class="primary-card-cta" style="padding:10px;font-size:14px">Connect Account</button>
+          </div>
+
+          <!-- Secondary -->
+          <div class="secondary-card">
+            <div class="secondary-icon blue-bg">&#127974;</div>
+            <div class="secondary-info">
+              <div class="secondary-info-top"><h5>Connect Savings</h5><span class="secondary-time">2 min</span></div>
+              <p>Find idle cash</p>
+            </div>
+            <a class="secondary-cta" href="#">Add savings &rarr;</a>
+          </div>
+          <div class="secondary-card">
+            <div class="secondary-icon blue-bg">&#128200;</div>
+            <div class="secondary-info">
+              <div class="secondary-info-top"><h5>Connect Investments</h5><span class="secondary-time">3 min</span></div>
+              <p>Complete portfolio view</p>
+            </div>
+            <a class="secondary-cta" href="#">Add &rarr;</a>
+          </div>
+
+          <!-- Banner -->
+          <div class="inline-banner green-tint" style="margin-top:12px">
+            <span class="inline-banner-icon">&#10003;</span>
+            <span>All accounts synced</span>
+          </div>
+
+          <!-- Success -->
+          <div class="success-card" style="margin-top:12px">
+            <div class="success-icon">&#10003;</div>
+            <span class="success-msg">Savings account connected</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Nav -->
+  <div class="bottom-nav">
+    <a class="bottom-nav-item" href="#">
+      <span class="bottom-nav-icon">&#127968;</span>
+      <span>Home</span>
+    </a>
+    <a class="bottom-nav-item" href="#">
+      <span class="bottom-nav-icon">&#128202;</span>
+      <span>Insights</span>
+    </a>
+    <a class="bottom-nav-item active" href="#">
+      <span class="bottom-nav-icon">&#10010;</span>
+      <span>Actions</span>
+    </a>
+    <a class="bottom-nav-item" href="#">
+      <span class="bottom-nav-icon">&#128196;</span>
+      <span>Reports</span>
+    </a>
+    <a class="bottom-nav-item" href="#">
+      <span class="bottom-nav-icon">&#9881;</span>
+      <span>Settings</span>
+    </a>
+  </div>
+
+</div>
+
+</body>
+</html>
