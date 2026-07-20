@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recommendation UX Critique & Component Specs — Advizmo Design System</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #0a84ff;
+    --green: #166f47;
+    --amber: #c2790a;
+    --red: #b91c1c;
+    --sidebar-bg: #1c1c1e;
+    --sidebar-text: #8e8e93;
+    --sidebar-active: #ffffff;
+    --bg: #f2f2f7;
+    --card-bg: #ffffff;
+    --text-primary: #1c1c1e;
+    --text-secondary: #6e6e73;
+    --border: #d1d1d6;
+    --border-light: #e5e5ea;
+    --severity-critical: #fee2e2;
+    --severity-critical-border: #ef4444;
+    --severity-high: #fef3c7;
+    --severity-high-border: #f59e0b;
+    --severity-medium: #dbeafe;
+    --severity-medium-border: #3b82f6;
+    --severity-low: #f0fdf4;
+    --severity-low-border: #22c55e;
+    --font-heading: 'IBM Plex Sans', sans-serif;
+    --font-body: 'Inter', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text-primary);
+    display: flex;
+    min-height: 100vh;
+    line-height: 1.5;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: 280px;
+    min-width: 280px;
+    background: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    padding: 32px 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 100;
+  }
+
+  .sidebar-logo {
+    padding: 0 24px 28px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: 20px;
+  }
+
+  .sidebar-logo h1 {
+    font-family: var(--font-heading);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--sidebar-active);
+    letter-spacing: -0.3px;
+  }
+
+  .sidebar-logo .subtitle {
+    font-size: 11px;
+    color: var(--sidebar-text);
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  .sidebar-section {
+    padding: 0 16px;
+    margin-bottom: 8px;
+  }
+
+  .sidebar-section-title {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(142,142,147,0.6);
+    padding: 8px;
+    font-weight: 600;
+  }
+
+  .sidebar-link {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--sidebar-text);
+    text-decoration: none;
+    transition: all 0.15s ease;
+    gap: 10px;
+    line-height: 1.3;
+  }
+
+  .sidebar-link:hover {
+    background: rgba(255,255,255,0.06);
+    color: var(--sidebar-active);
+  }
+
+  .sidebar-link.active {
+    background: rgba(10,132,255,0.15);
+    color: var(--blue);
+    font-weight: 500;
+  }
+
+  .sidebar-link .icon {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+
+  .sidebar-link .badge {
+    margin-left: auto;
+    background: rgba(255,255,255,0.1);
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 10px;
+    font-weight: 500;
+  }
+
+  /* Main Content */
+  .main {
+    margin-left: 280px;
+    flex: 1;
+    max-width: calc(100vw - 280px);
+    display: flex;
+    justify-content: center;
+    padding: 40px 48px;
+  }
+
+  .content {
+    max-width: 960px;
+    width: 100%;
+  }
+
+  .page-header {
+    margin-bottom: 40px;
+  }
+
+  .page-header .breadcrumb {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .page-header .breadcrumb a {
+    color: var(--blue);
+    text-decoration: none;
+  }
+
+  .page-header h1 {
+    font-family: var(--font-heading);
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+
+  .page-header .meta {
+    display: flex;
+    gap: 16px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: 12px;
+  }
+
+  .page-header .meta span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .tag {
+    display: inline-flex;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+
+  .tag-critical { background: var(--severity-critical); color: var(--red); }
+  .tag-high { background: var(--severity-high); color: var(--amber); }
+  .tag-medium { background: var(--severity-medium); color: var(--blue); }
+  .tag-low { background: var(--severity-low); color: var(--green); }
+
+  /* Section */
+  .section {
+    background: var(--card-bg);
+    border-radius: 12px;
+    border: 1px solid var(--border-light);
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+
+  .section-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .section-header h2 {
+    font-family: var(--font-heading);
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+  }
+
+  .section-header .section-count {
+    font-size: 12px;
+    color: var(--text-secondary);
+    background: var(--bg);
+    padding: 3px 10px;
+    border-radius: 10px;
+    font-weight: 500;
+  }
+
+  .section-body {
+    padding: 24px;
+  }
+
+  .section-body p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+
+  /* Tables */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 0 -24px;
+    padding: 0 24px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  thead th {
+    text-align: left;
+    padding: 10px 12px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-secondary);
+    font-weight: 600;
+    border-bottom: 2px solid var(--border);
+    white-space: nowrap;
+  }
+
+  tbody td {
+    padding: 12px;
+    border-bottom: 1px solid var(--border-light);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  tbody tr:hover {
+    background: rgba(10,132,255,0.03);
+  }
+
+  td.issue-num {
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 12px;
+    width: 36px;
+    text-align: center;
+  }
+
+  td.severity-cell {
+    white-space: nowrap;
+  }
+
+  .current-state {
+    color: var(--text-secondary);
+    font-size: 12.5px;
+  }
+
+  .fix-text {
+    font-weight: 500;
+    font-size: 13px;
+  }
+
+  .ux-reason {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+  }
+
+  /* Card State */
+  .card-states-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+  }
+
+  .card-state {
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    padding: 16px;
+    transition: all 0.2s ease;
+  }
+
+  .card-state:hover {
+    border-color: var(--blue);
+    box-shadow: 0 2px 12px rgba(10,132,255,0.08);
+  }
+
+  .card-state-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .card-state-name {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  .card-state-visual {
+    height: 6px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+  }
+
+  .card-state-desc {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .state-default .card-state-visual { background: var(--card-bg); border: 1px solid var(--border); }
+  .state-loading .card-state-visual { background: linear-gradient(90deg, var(--border-light) 25%, #f5f5f5 50%, var(--border-light) 75%); animation: shimmer 1.5s infinite; }
+  .state-success .card-state-visual { background: var(--green); }
+  .state-error .card-state-visual { background: var(--red); }
+  .state-dismissed .card-state-visual { background: var(--border-light); opacity: 0.5; }
+  .state-expanded .card-state-visual { background: var(--blue); }
+  .state-collapsed .card-state-visual { background: var(--border); }
+  .state-disabled .card-state-visual { background: var(--border-light); opacity: 0.5; }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  /* Transitions */
+  .transitions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 20px;
+  }
+
+  .transition-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    padding: 8px 12px;
+    background: var(--bg);
+    border-radius: 8px;
+  }
+
+  .transition-item .from {
+    font-weight: 500;
+    min-width: 80px;
+  }
+
+  .transition-item .arrow {
+    color: var(--text-secondary);
+    font-size: 14px;
+  }
+
+  .transition-item .to {
+    font-weight: 500;
+    min-width: 80px;
+  }
+
+  .transition-item .trigger {
+    color: var(--text-secondary);
+    font-size: 12px;
+    margin-left: auto;
+  }
+
+  /* Interaction Grid */
+  .interaction-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .interaction-card {
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    padding: 16px;
+  }
+
+  .interaction-card h4 {
+    font-family: var(--font-heading);
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-secondary);
+  }
+
+  .interaction-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .interaction-item:last-child {
+    border-bottom: none;
+  }
+
+  .interaction-item .label {
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .interaction-item .value {
+    color: var(--text-secondary);
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 12px;
+    background: var(--bg);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  /* Auto Layout */
+  .layout-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .layout-card {
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    padding: 16px;
+  }
+
+  .layout-card h4 {
+    font-family: var(--font-heading);
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--text-primary);
+  }
+
+  .layout-prop {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .layout-prop:last-child { border-bottom: none; }
+
+  .layout-prop .prop-name {
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .layout-prop .prop-value {
+    color: var(--text-primary);
+    font-weight: 500;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 12px;
+  }
+
+  /* Accessibility */
+  .a11y-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .a11y-card {
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    padding: 16px;
+  }
+
+  .a11y-card h4 {
+    font-family: var(--font-heading);
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--text-primary);
+  }
+
+  .a11y-item {
+    padding: 8px 0;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border-light);
+    line-height: 1.5;
+  }
+
+  .a11y-item:last-child { border-bottom: none; }
+
+  .a11y-item strong {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 2px;
+    font-size: 12.5px;
+  }
+
+  .a11y-item span {
+    color: var(--text-secondary);
+    font-size: 12.5px;
+  }
+
+  /* Writing Table */
+  .writing-table tbody td:first-child {
+    color: var(--text-secondary);
+    text-decoration: line-through;
+    opacity: 0.7;
+  }
+
+  .writing-table tbody td:last-child {
+    font-weight: 500;
+    color: var(--green);
+  }
+
+  .formula-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  .formula-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 12px;
+    background: var(--bg);
+    border-radius: 8px;
+    font-size: 13px;
+  }
+
+  .formula-step .step-num {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--blue);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .formula-step .step-label {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .formula-step .step-desc {
+    color: var(--text-secondary);
+    font-size: 12.5px;
+  }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background: var(--border-light);
+    margin: 20px 0;
+  }
+
+  /* Status dots */
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 6px;
+  }
+
+  .dot-critical { background: var(--red); }
+  .dot-high { background: var(--amber); }
+  .dot-medium { background: var(--blue); }
+  .dot-low { background: var(--green); }
+
+  /* Summary Bar */
+  .summary-bar {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .summary-item {
+    flex: 1;
+    background: var(--card-bg);
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+  }
+
+  .summary-item .num {
+    font-family: var(--font-heading);
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+
+  .summary-item .label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+    font-weight: 500;
+  }
+
+  .num-critical { color: var(--red); }
+  .num-high { color: var(--amber); }
+  .num-medium { color: var(--blue); }
+  .num-low { color: var(--green); }
+
+  /* Responsive */
+  @media (max-width: 1200px) {
+    .interaction-grid, .layout-grid, .a11y-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .sidebar { display: none; }
+    .main { margin-left: 0; max-width: 100%; padding: 24px 16px; }
+    .summary-bar { flex-wrap: wrap; }
+    .summary-item { min-width: calc(50% - 8px); }
+    .card-states-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Advizmo</h1>
+    <div class="subtitle">Design System</div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">Foundation</div>
+    <a href="#" class="sidebar-link"><span class="icon">🎨</span> Design Tokens</a>
+    <a href="#" class="sidebar-link"><span class="icon">📐</span> Grid & Layout</a>
+    <a href="#" class="sidebar-link"><span class="icon">🔤</span> Typography</a>
+    <a href="#" class="sidebar-link"><span class="icon">🎯</span> Color System</a>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">Components</div>
+    <a href="#" class="sidebar-link"><span class="icon">🔘</span> Buttons</a>
+    <a href="#" class="sidebar-link"><span class="icon">📋</span> Cards</a>
+    <a href="#" class="sidebar-link"><span class="icon">📊</span> Data Display</a>
+    <a href="#" class="sidebar-link"><span class="icon">📝</span> Forms</a>
+    <a href="#" class="sidebar-link"><span class="icon">🧭</span> Navigation</a>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">Screens</div>
+    <a href="#" class="sidebar-link"><span class="icon">🏠</span> Dashboard</a>
+    <a href="#" class="sidebar-link"><span class="icon">💰</span> Accounts</a>
+    <a href="#" class="sidebar-link active"><span class="icon">💡</span> Recommendations <span class="badge">25</span></a>
+    <a href="#" class="sidebar-link"><span class="icon">📈</span> Analytics</a>
+    <a href="#" class="sidebar-link"><span class="icon">⚙️</span> Settings</a>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">Specs</div>
+    <a href="#" class="sidebar-link"><span class="icon">🔍</span> UX Critique</a>
+    <a href="#" class="sidebar-link"><span class="icon">⚡</span> Interactions</a>
+    <a href="#" class="sidebar-link"><span class="icon">♿</span> Accessibility</a>
+    <a href="#" class="sidebar-link"><span class="icon">✍️</span> Copy Guidelines</a>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<main class="main">
+  <div class="content">
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <div class="breadcrumb">
+        <a href="#">Design System</a>
+        <span>›</span>
+        <a href="#">Screens</a>
+        <span>›</span>
+        <span>Recommendations</span>
+      </div>
+      <h1>Recommendation UX Critique &amp; Component Specs</h1>
+      <div class="meta">
+        <span>📅 Updated Jul 20, 2026</span>
+        <span>👤 Design Team</span>
+        <span class="tag tag-critical">25 Issues Found</span>
+      </div>
+    </div>
+
+    <!-- Summary Bar -->
+    <div class="summary-bar">
+      <div class="summary-item">
+        <div class="num num-critical">4</div>
+        <div class="label">Critical</div>
+      </div>
+      <div class="summary-item">
+        <div class="num num-high">8</div>
+        <div class="label">High</div>
+      </div>
+      <div class="summary-item">
+        <div class="num num-medium">10</div>
+        <div class="label">Medium</div>
+      </div>
+      <div class="summary-item">
+        <div class="num num-low">3</div>
+        <div class="label">Low</div>
+      </div>
+    </div>
+
+    <!-- SECTION 1: UX CRITIQUE -->
+    <div class="section">
+      <div class="section-header">
+        <h2>Section 1 — UX Critique</h2>
+        <span class="section-count">25 issues</span>
+      </div>
+      <div class="section-body">
+        <p>Complete audit of the recommendation card experience across hierarchy, clarity, interaction, trust, scalability, and accessibility dimensions.</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Category</th>
+                <th>Severity</th>
+                <th>Current State</th>
+                <th>Proposed Fix</th>
+                <th>UX Reason</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- 1 -->
+              <tr>
+                <td class="issue-num">1</td>
+                <td>Hierarchy</td>
+                <td class="severity-cell"><span class="tag tag-critical">Critical</span></td>
+                <td class="current-state">Warning triangle icon creates anxiety</td>
+                <td class="fix-text">Use helpful icons — checkmarks, lightbulbs, info cues</td>
+                <td class="ux-reason">Users feel scolded, not guided</td>
+              </tr>
+              <!-- 2 -->
+              <tr>
+                <td class="issue-num">2</td>
+                <td>Hierarchy</td>
+                <td class="severity-cell"><span class="tag tag-high">High</span></td>
+                <td class="current-state">"3 things to review" is vague</td>
+                <td class="fix-text">Show specific benefit: "Save $209/year"</td>
+                <td class="ux-reason">Users don't know what or why</td>
+              </tr>
+              <!-- 3 -->
+              <tr>
+                <td class="issue-num">3</td>
+                <td>Hierarchy</td>
+                <td class="severity-cell"><span class="tag tag-high">High</span></td>
+                <td class="current-state">All items appear at equal priority</td>
+                <td class="fix-text">Color-code by urgency: red / amber / blue</td>
+                <td class="ux-reason">Critical items hidden in flat list</td>
+              </tr>
+              <!-- 4 -->
+              <tr>
+                <td class="issue-num">4</td>
+                <td>Hierarchy</td>
+                <td class="severity-cell"><span class="tag tag-medium">Medium</span></td>
+                <td class="current-state">Yellow background suggests caution</td>
+                <td class="fix-text">Use calm white, blue, or green backgrounds</td>
+                <td class="ux-reason">Feels like a system alert, not guidance</td>
+              </tr>
+              <!-- 5 -->
+              <tr>
+                <td class="issue-num">5</td>
+                <td>Clarity</td>
+                <td class="severity-cell"><span class="tag tag-high">High</span></td>
+                <td class="current-state">"Add savings >" — action-first, benefit-last</td>
+                <td class="fix-text">Lead with benefit: "Find idle cash"</td>
+                <td class="ux-reason">Users don't know why they should act</td>
+              </tr>
+              <!-- 6 -->
+              <tr>
+                <td class="issue-num">6</td>
+                <td>Clarity</td>
+                <td class="severity-cell"><span class="tag tag-high">High</span></td>
+                <td class="current-state">No progress indication shown</td>
+                <td class="fix-text">Add progress bar or counter (e.g. 3 of 7)</td>
+                <td class="ux-reason">Users don't know completion status</td>
+              </tr>
+              <!-- 7 -->
+              <tr>
+                <td class="issue-num">7</td>
+                <td>Clarity</td>
+                <td class="severity-cell"><span class="tag tag-medium">Medium</span></td>
+                <td class="current-state">"This is all of them" is confusing</td>
+                <td class="fix-text">Replace with "I've connected all accounts"</td>
+                <td class="ux-reason">Ambiguous meaning — all of what?</td>
+              </tr>
+              <!-- 8 -->
+              <tr>
+                <td class="issue-num">8</td>
+                <td>Clarity</td>
+                <td class="severity-cell"><span class="tag tag-medium">Medium</span></td>
+                <td class="current-state">"Add an account" doesn't specify type</td>
+                <td class="fix-text">Show account type in CTA text</td>
+                <td class="ux-reason">Users guess what to add</td>
+              </tr>
+              <!-- 9 -->
+              <tr>
+                <td class="issue-num">9</td>
+                <td>Clarity</td>
+                <td class="severity-cell"><span class="tag tag-medium">Medium</span></td>
+                <td class="current-state">Long descriptions overflow or wrap poorly</td>
+                <td class="fix-text">Truncate with expandable "Read more"</td>
+                <td class="ux-reason">Text overflow on small screens</td>
+              </tr>
+              <!-- 10 -->
+              <tr>
+                <td class="issue-num">10</td>
+                <td>Clarity</td>
+                <td class="severity-cell"><span class="tag tag-low">Low</span></td>
+                <td class="current-state">No time estimate per action</td>
+                <td class="fix-text">Add "2 minutes" label on each card</td>
+                <td class="ux-reason">Users don't know time commitment</td>
+              </tr>
+              <!-- 11 -->
+              <tr>
+                <td class="issue-num">11</td>
+                <td>Clarity</td>
+                <td class="severity-cell"><span class="tag tag-low">Low</span></td>
+                <td class="current-state">No benefit explanation given</td>
+                <td class="fix-text">Add "What you'll gain" section per card</td>
+                <td class="ux-reason">No motivation to act</td>
+              </tr>
+              <!-- 12 -->
+              <tr>
+                <td class="issue-num">12</td>
+                <td>Interaction</td>
+                <td class="severity-cell"><span class="tag tag-high">High</span></td>
+                <td class="current-state">"Add savings >" styled as text link, not button</td>
+                <td class="fix-text">Use proper primary button styling</td>
+                <td class="ux-reason">Low tap confidence — looks tappable?</td>
+              </tr>
+              <!-- 13 -->
+              <tr>
+                <td class="issue-num">13</td>
+                <td>Interaction</td>
+                <td class="severity-cell"><span class="tag tag-high">High</span></td>
+                <td class="current-state">No loading state on interaction</td>
+                <td class="fix-text">Add skeleton shimmer or spinner on CTA</td>
+                <td class="ux-reason">Users tap multiple times causing duplicates</td>
+              </tr>
+              <!-- 14 -->
+              <tr>
+                <td class="issue-num">14</td>
+                <td>Interaction</td>
+                <td class="severity-cell"><span class="tag tag-high">High</span></td>
+                <td class="current-state">No success state after completing action</td>
+                <td class="fix-text">Add green checkmark animation on success</td>
+                <td class="ux-reason">No completion feedback — did it work?</td>
+              </tr>
+              <!-- 15 -->
+              <tr>
+                <td class="issue-num">15</td>
+                <td>Interaction</td>
+                <td class="severity-cell"><span class="tag tag-medium">Medium</span></td>
+                <td class="current-state">No dismiss or snooze option per card</td>
+                <td class="fix-text">Add X button or snooze per recommendation</td>
+                <td class="ux-reason">Can't hide irrelevant items</td>
+              </tr>
+              <!-- 16 -->
+              <tr>
+                <td class="issue-num">16</td>
+                <td>Interaction</td>
+                <td class="severity-cell"><span class="tag tag-medium">Medium</span></td>
+                <td class="current-state">No expand/collapse — all info shown at once</td>
+                <td class="fix-text">Add progressive disclosure pattern</td>
+                <td class="ux-reason">All info shown at once overwhelms users</td>
+              </tr>
+              <!-- 17 -->
+              <tr>
+                <td class="issue-num">17</td>
+                <td>Trust</td>
+                <td class="severity-cell"><span class="tag tag-high">High</span></td>
+                <td class="current-state">No data source attribution on cards</td>
+                <td class="fix-text">Show "Based on Chase data" or similar</td>
+                <td class="ux-reason">Users don't trust unattributed recommendations</td>
+              </tr>
+              <!-- 18 -->
+              <tr>
+                <td class="issue-num">18</td>
+                <td>Trust</td>
+                <td class="severity-cell"><span class="tag tag-medium">Medium</span></td>
+                <td class="current-state">No timestamp on data</td>
+                <td class="fix-text">Show "Updated 2 min ago" on each card</td>
+                <td class="ux-reason">Stale data concerns erode confidence</td>
+              </tr>
+              <!-- 19 -->
+              <tr>
+                <td class="issue-num">19</td>
+                <td>Trust</td>
+                <td class="severity-cell"><span class="tag tag-medium">Medium</span></td>
+                <td class="current-state">Warning language feels like errors</td>
+                <td class="fix-text">Use advisor tone: "I noticed..." phrasing</td>
+                <td class="ux-reason">Feels like system errors, not guidance</td>
+              </tr>
+              <!-- 20 -->
+              <tr>
+                <td class="issue-num">20</td>
+                <td>Trust</td>
+                <td class="severity-cell"><span class="tag tag-low">Low</span></td>
+                <td class="current-state">No "why this matters" explanation</td>
+                <td class="fix-text">Add expandable explanation per card</td>
+                <td class="ux-reason">Users skip recommendations without context</td>
+              </tr>
+              <!-- 21 -->
+              <tr>
+                <td class="issue-num">21</td>
+                <td>Scalability</td>
+                <td class="severity-cell"><span class="tag tag-medium">Medium</span></td>
+                <td class="current-state">Fixed layout — no support for long text</td>
+                <td class="fix-text">Use Auto Layout with truncation rules</td>
+                <td class="ux-reason">Breaks on long account names</td>
+              </tr>
+              <!-- 22 -->
+              <tr>
+                <td class="issue-num">22</td>
+                <td>Scalability</td>
+                <td class="severity-cell"><span class="tag tag-medium">Medium</span></td>
+                <td class="current-state">No compact or expanded variant designs</td>
+                <td class="fix-text">Design both compact and expanded sizes</td>
+                <td class="ux-reason">Same card used for all contexts</td>
+              </tr>
+              <!-- 23 -->
+              <tr>
+                <td class="issue-num">23</td>
+                <td>Scalability</td>
+                <td class="severity-cell"><span class="tag tag-low">Low</span></td>
+                <td class="current-state">No priority level system</td>
+                <td class="fix-text">Add critical / high / medium / low levels</td>
+                <td class="ux-reason">All items look the same importance</td>
+              </tr>
+              <!-- 24 -->
+              <tr>
+                <td class="issue-num">24</td>
+                <td>Accessibility</td>
+                <td class="severity-cell"><span class="tag tag-high">High</span></td>
+                <td class="current-state">Status communicated by color only</td>
+                <td class="fix-text">Add icons and patterns alongside color</td>
+                <td class="ux-reason">Colorblind users can't distinguish states</td>
+              </tr>
+              <!-- 25 -->
+              <tr>
+                <td class="issue-num">25</td>
+                <td>Accessibility</td>
+                <td class="severity-cell"><span class="tag tag-medium">Medium</span></td>
+                <td class="current-state">No VoiceOver labels on interactive elements</td>
+                <td class="fix-text">Add aria-label to all interactive elements</td>
+                <td class="ux-reason">Screen reader users are lost</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 2: COMPONENT BEHAVIOR -->
+    <div class="section">
+      <div class="section-header">
+        <h2>Section 2 — Component Behavior Specifications</h2>
+        <span class="section-count">8 states</span>
+      </div>
+      <div class="section-body">
+
+        <h3 style="font-family:var(--font-heading);font-size:14px;font-weight:600;margin-bottom:14px;">Card States</h3>
+        <div class="card-states-grid">
+          <!-- Default -->
+          <div class="card-state state-default">
+            <div class="card-state-header">
+              <span class="card-state-name">Default</span>
+              <span class="tag tag-low" style="font-size:10px;">Ready</span>
+            </div>
+            <div class="card-state-visual"></div>
+            <div class="card-state-desc">White background, full opacity, ready for interaction. All CTAs are enabled and tappable.</div>
+          </div>
+          <!-- Loading -->
+          <div class="card-state state-loading">
+            <div class="card-state-header">
+              <span class="card-state-name">Loading</span>
+              <span class="tag tag-medium" style="font-size:10px;">Skeleton</span>
+            </div>
+            <div class="card-state-visual"></div>
+            <div class="card-state-desc">Skeleton shimmer animation, pulsing opacity. No interaction allowed during load.</div>
+          </div>
+          <!-- Success -->
+          <div class="card-state state-success">
+            <div class="card-state-header">
+              <span class="card-state-name">Success</span>
+              <span class="tag tag-low" style="font-size:10px;">Feedback</span>
+            </div>
+            <div class="card-state-visual"></div>
+            <div class="card-state-desc">Green border flash with checkmark animation. Auto-dismisses after 2 seconds.</div>
+          </div>
+          <!-- Error -->
+          <div class="card-state state-error">
+            <div class="card-state-header">
+              <span class="card-state-name">Error</span>
+              <span class="tag tag-critical" style="font-size:10px;">Recoverable</span>
+            </div>
+            <div class="card-state-visual"></div>
+            <div class="card-state-desc">Red border with error message. Shows retry CTA to recover from failure.</div>
+          </div>
+          <!-- Dismissed -->
+          <div class="card-state state-dismissed">
+            <div class="card-state-header">
+              <span class="card-state-name">Dismissed</span>
+              <span class="tag tag-medium" style="font-size:10px;">Reversible</span>
+            </div>
+            <div class="card-state-visual"></div>
+            <div class="card-state-desc">Slides right and fades out over 200ms. Remains retrievable via undo action.</div>
+          </div>
+          <!-- Expanded -->
+          <div class="card-state state-expanded">
+            <div class="card-state-header">
+              <span class="card-state-name">Expanded</span>
+              <span class="tag tag-medium" style="font-size:10px;">Detail</span>
+            </div>
+            <div class="card-state-visual"></div>
+            <div class="card-state-desc">Height animates open over 200ms ease-out. Chevron icon rotates 180°.</div>
+          </div>
+          <!-- Collapsed -->
+          <div class="card-state state-collapsed">
+            <div class="card-state-header">
+              <span class="card-state-name">Collapsed</span>
+              <span class="tag tag-medium" style="font-size:10px;">Compact</span>
+            </div>
+            <div class="card-state-visual"></div>
+            <div class="card-state-desc">Height animates closed over 150ms ease-in. Returns to default compact view.</div>
+          </div>
+          <!-- Disabled -->
+          <div class="card-state state-disabled">
+            <div class="card-state-header">
+              <span class="card-state-name">Disabled</span>
+              <span class="tag tag-low" style="font-size:10px;">Inactive</span>
+            </div>
+            <div class="card-state-visual"></div>
+            <div class="card-state-desc">50% opacity, no touch events, grayed-out text and CTAs. Unavailable state.</div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <h3 style="font-family:var(--font-heading);font-size:14px;font-weight:600;margin-bottom:14px;">State Transitions</h3>
+        <div class="transitions-list">
+          <div class="transition-item">
+            <span class="from">Default</span>
+            <span class="arrow">→</span>
+            <span class="to">Loading</span>
+            <span class="trigger">On user action (immediate)</span>
+          </div>
+          <div class="transition-item">
+            <span class="from">Loading</span>
+            <span class="arrow">→</span>
+            <span class="to">Success</span>
+            <span class="trigger">API response success</span>
+          </div>
+          <div class="transition-item">
+            <span class="from">Loading</span>
+            <span class="arrow">→</span>
+            <span class="to">Error</span>
+            <span class="trigger">API response failure</span>
+          </div>
+          <div class="transition-item">
+            <span class="from">Default</span>
+            <span class="arrow">→</span>
+            <span class="to">Expanded</span>
+            <span class="trigger">Tap chevron / card body</span>
+          </div>
+          <div class="transition-item">
+            <span class="from">Expanded</span>
+            <span class="arrow">→</span>
+            <span class="to">Default</span>
+            <span class="trigger">Tap again / collapse</span>
+          </div>
+          <div class="transition-item">
+            <span class="from">Default</span>
+            <span class="arrow">→</span>
+            <span class="to">Dismissed</span>
+            <span class="trigger">Swipe right / dismiss CTA</span>
+          </div>
+          <div class="transition-item">
+            <span class="from">Dismissed</span>
+            <span class="arrow">→</span>
+            <span class="to">Default</span>
+            <span class="trigger">Undo action</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SECTION 3: INTERACTION GUIDELINES -->
+    <div class="section">
+      <div class="section-header">
+        <h2>Section 3 — Interaction Guidelines</h2>
+        <span class="section-count">4 categories</span>
+      </div>
+      <div class="section-body">
+        <div class="interaction-grid">
+          <!-- Animation -->
+          <div class="interaction-card">
+            <h4>Animation</h4>
+            <div class="interaction-item"><span class="label">Expand</span><span class="value">200ms ease-out</span></div>
+            <div class="interaction-item"><span class="label">Collapse</span><span class="value">150ms ease-in</span></div>
+            <div class="interaction-item"><span class="label">Fade In</span><span class="value">200ms</span></div>
+            <div class="interaction-item"><span class="label">Fade Out</span><span class="value">150ms</span></div>
+            <div class="interaction-item"><span class="label">Slide In</span><span class="value">300ms</span></div>
+            <div class="interaction-item"><span class="label">Skeleton Pulse</span><span class="value">1.5s infinite</span></div>
+            <div class="interaction-item"><span class="label">Success Check</span><span class="value">300ms</span></div>
+            <div class="interaction-item"><span class="label">Error Shake</span><span class="value">200ms</span></div>
+          </div>
+          <!-- Haptics -->
+          <div class="interaction-card">
+            <h4>Haptics</h4>
+            <div class="interaction-item"><span class="label">Success</span><span class="value">UIImpactFeedbackGenerator(.success)</span></div>
+            <div class="interaction-item"><span class="label">Error</span><span class="value">UINotificationFeedbackGenerator(.error)</span></div>
+            <div class="interaction-item"><span class="label">Selection</span><span class="value">UISelectionFeedbackGenerator()</span></div>
+            <div class="interaction-item"><span class="label">Impact</span><span class="value">UIImpactFeedbackGenerator(.medium)</span></div>
+          </div>
+          <!-- Gestures -->
+          <div class="interaction-card">
+            <h4>Gestures</h4>
+            <div class="interaction-item"><span class="label">Tap</span><span class="value">Primary action</span></div>
+            <div class="interaction-item"><span class="label">Long Press</span><span class="value">Secondary options</span></div>
+            <div class="interaction-item"><span class="label">Swipe Right</span><span class="value">Dismiss card</span></div>
+            <div class="interaction-item"><span class="label">Swipe Left</span><span class="value">Reveal actions</span></div>
+            <div class="interaction-item"><span class="label">Pull Down</span><span class="value">Refresh list</span></div>
+          </div>
+          <!-- Timing -->
+          <div class="interaction-card">
+            <h4>Behavior Rules</h4>
+            <div class="interaction-item"><span class="label">Double-tap guard</span><span class="value">300ms debounce</span></div>
+            <div class="interaction-item"><span class="label">Auto-dismiss</span><span class="value">Success state 2s</span></div>
+            <div class="interaction-item"><span class="label">Undo window</span><span class="value">5s snackbar</span></div>
+            <div class="interaction-item"><span class="label">Retry limit</span><span class="value">3 attempts</span></div>
+            <div class="interaction-item"><span class="label">Stale threshold</span><span class="value">> 24h show update</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 4: AUTO LAYOUT -->
+    <div class="section">
+      <div class="section-header">
+        <h2>Section 4 — Auto Layout Specifications</h2>
+        <span class="section-count">4 specs</span>
+      </div>
+      <div class="section-body">
+        <div class="layout-grid">
+          <!-- Card -->
+          <div class="layout-card">
+            <h4>Card Container</h4>
+            <div class="layout-prop"><span class="prop-name">Width</span><span class="prop-value">100%</span></div>
+            <div class="layout-prop"><span class="prop-name">Padding</span><span class="prop-value">16px all sides</span></div>
+            <div class="layout-prop"><span class="prop-name">Gap (internal)</span><span class="prop-value">8px</span></div>
+            <div class="layout-prop"><span class="prop-name">Min Height</span><span class="prop-value">44px</span></div>
+            <div class="layout-prop"><span class="prop-name">Border Radius</span><span class="prop-value">12px</span></div>
+            <div class="layout-prop"><span class="prop-name">Border</span><span class="prop-value">1px solid #e5e5ea</span></div>
+          </div>
+          <!-- Stack -->
+          <div class="layout-card">
+            <h4>Stack Layout</h4>
+            <div class="layout-prop"><span class="prop-name">Direction</span><span class="prop-value">vertical</span></div>
+            <div class="layout-prop"><span class="prop-name">Spacing</span><span class="prop-value">12px</span></div>
+            <div class="layout-prop"><span class="prop-name">Alignment</span><span class="prop-value">leading</span></div>
+            <div class="layout-prop"><span class="prop-name">Cross-axis</span><span class="prop-value">stretch</span></div>
+            <div class="layout-prop"><span class="prop-name">Use case</span><span class="prop-value">Card list, forms</span></div>
+          </div>
+          <!-- Inline -->
+          <div class="layout-card">
+            <h4>Inline Layout</h4>
+            <div class="layout-prop"><span class="prop-name">Direction</span><span class="prop-value">horizontal</span></div>
+            <div class="layout-prop"><span class="prop-name">Spacing</span><span class="prop-value">8px</span></div>
+            <div class="layout-prop"><span class="prop-name">Alignment</span><span class="prop-value">center</span></div>
+            <div class="layout-prop"><span class="prop-name">Wrapping</span><span class="prop-value">wrap</span></div>
+            <div class="layout-prop"><span class="prop-name">Use case</span><span class="prop-value">Tags, meta, badges</span></div>
+          </div>
+          <!-- Responsive -->
+          <div class="layout-card">
+            <h4>Responsive Behavior</h4>
+            <div class="layout-prop"><span class="prop-name">Text reflow</span><span class="prop-value">Up to 200% size</span></div>
+            <div class="layout-prop"><span class="prop-name">Images</span><span class="prop-value">Scale with container</span></div>
+            <div class="layout-prop"><span class="prop-name">CTA (small)</span><span class="prop-value">Full width</span></div>
+            <div class="layout-prop"><span class="prop-name">CTA (large)</span><span class="prop-value">Inline</span></div>
+            <div class="layout-prop"><span class="prop-name">Breakpoint</span><span class="prop-value">430px max</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 5: ACCESSIBILITY -->
+    <div class="section">
+      <div class="section-header">
+        <h2>Section 5 — Accessibility Specifications</h2>
+        <span class="section-count">4 areas</span>
+      </div>
+      <div class="section-body">
+        <div class="a11y-grid">
+          <!-- VoiceOver -->
+          <div class="a11y-card">
+            <h4>VoiceOver Labels</h4>
+            <div class="a11y-item">
+              <strong>Cards</strong>
+              <span>aria-label = [title] + [hint] — e.g. "Save $209 on subscriptions — double tap to expand"</span>
+            </div>
+            <div class="a11y-item">
+              <strong>CTAs</strong>
+              <span>aria-label = [text] + [action] — e.g. "Connect account — opens Chase login"</span>
+            </div>
+            <div class="a11y-item">
+              <strong>Dismiss</strong>
+              <span>aria-label="Dismiss" + hint — e.g. "Dismiss — swipe right to undo"</span>
+            </div>
+            <div class="a11y-item">
+              <strong>Checkboxes</strong>
+              <span>aria-label="Complete" / "Incomplete" with state toggle</span>
+            </div>
+            <div class="a11y-item">
+              <strong>Loading</strong>
+              <span>aria-live="polite" — "Loading recommendations"</span>
+            </div>
+            <div class="a11y-item">
+              <strong>Success</strong>
+              <span>aria-live="assertive" — "Completed: account connected"</span>
+            </div>
+            <div class="a11y-item">
+              <strong>Error</strong>
+              <span>aria-live="assertive" — "Error: [description]. Retry available."</span>
+            </div>
+          </div>
+          <!-- Dynamic Type -->
+          <div class="a11y-card">
+            <h4>Dynamic Type</h4>
+            <div class="a11y-item">
+              <strong>Scale Support</strong>
+              <span>All text respects system Dynamic Type settings</span>
+            </div>
+            <div class="a11y-item">
+              <strong>Layout Reflow</strong>
+              <span>Layouts reflow up to 200% text size without breaking</span>
+            </div>
+            <div class="a11y-item">
+              <strong>No Truncation</strong>
+              <span>Critical information never truncated — CTAs, titles, errors</span>
+            </div>
+            <div class="a11y-item">
+              <strong>Button Resize</strong>
+              <span>Buttons resize to accommodate larger text sizes</span>
+            </div>
+          </div>
+          <!-- Contrast -->
+          <div class="a11y-card">
+            <h4>Contrast Ratios</h4>
+            <div class="a11y-item">
+              <strong>Normal Text</strong>
+              <span>Minimum 4.5:1 contrast ratio against background</span>
+            </div>
+            <div class="a11y-item">
+              <strong>Large Text (18pt+)</strong>
+              <span>Minimum 3:1 contrast ratio against background</span>
+            </div>
+            <div class="a11y-item">
+              <strong>Interactive Elements</strong>
+              <span>Minimum 3:1 ratio against adjacent colors</span>
+            </div>
+            <div class="a11y-item">
+              <strong>Focus Indicator</strong>
+              <span>2px solid #0a84ff with 2px offset — visible on all backgrounds</span>
+            </div>
+          </div>
+          <!-- Touch -->
+          <div class="a11y-card">
+            <h4>Touch Targets</h4>
+            <div class="a11y-item">
+              <strong>Minimum Size</strong>
+              <span>44 × 44 points — per Apple HIG and WCAG 2.5.8</span>
+            </div>
+            <div class="a11y-item">
+              <strong>Spacing</strong>
+              <span>8pt between adjacent targets — prevent mis-taps</span>
+            </div>
+            <div class="a11y-item">
+              <strong>No Overlap</strong>
+              <span>Touch regions never overlap or stack visually</span>
+            </div>
+            <div class="a11y-item">
+              <strong>Active State</strong>
+              <span>All tappable elements show pressed state feedback</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 6: UX WRITING -->
+    <div class="section">
+      <div class="section-header">
+        <h2>Section 6 — UX Writing Guidelines</h2>
+        <span class="section-count">10 rewrites</span>
+      </div>
+      <div class="section-body">
+
+        <h3 style="font-family:var(--font-heading);font-size:14px;font-weight:600;margin-bottom:14px;">Before / After Copy</h3>
+        <div class="table-wrap">
+          <table class="writing-table">
+            <thead>
+              <tr>
+                <th>Instead of (Current)</th>
+                <th>Prefer (Proposed)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Connect your savings account</td><td>Find idle cash</td></tr>
+              <tr><td>Add your other accounts for more accurate suggestions</td><td>See your complete financial picture</td></tr>
+              <tr><td>Review recurring updates</td><td>6 subscriptions changed</td></tr>
+              <tr><td>Connect your checking account</td><td>Track income and expenses</td></tr>
+              <tr><td>Open an Advizmo account</td><td>Start automated investing</td></tr>
+              <tr><td>Review account targets</td><td>Personalize your strategy</td></tr>
+              <tr><td>Review cash cushion</td><td>Protect against surprises</td></tr>
+              <tr><td>Reconnect Chase Checking</td><td>Your Chase data is 3 days old</td></tr>
+              <tr><td>Enable notifications</td><td>Never miss a financial event</td></tr>
+              <tr><td>Complete your profile</td><td>Unlock personalized recommendations</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="divider"></div>
+
+        <h3 style="font-family:var(--font-heading);font-size:14px;font-weight:600;margin-bottom:14px;">Card Copy Formula</h3>
+        <div class="formula-steps">
+          <div class="formula-step">
+            <span class="step-num">1</span>
+            <div>
+              <span class="step-label">Headline</span><br>
+              <span class="step-desc">Lead with the benefit — what the user gains. Keep under 6 words.</span>
+            </div>
+          </div>
+          <div class="formula-step">
+            <span class="step-num">2</span>
+            <div>
+              <span class="step-label">Description</span><br>
+              <span class="step-desc">Explain why in one sentence. Provide context for the recommendation.</span>
+            </div>
+          </div>
+          <div class="formula-step">
+            <span class="step-num">3</span>
+            <div>
+              <span class="step-label">CTA</span><br>
+              <span class="step-desc">Action-oriented verb. Tell the user exactly what to do next.</span>
+            </div>
+          </div>
+          <div class="formula-step">
+            <span class="step-num">4</span>
+            <div>
+              <span class="step-label">Secondary / Time</span><br>
+              <span class="step-desc">Time estimate or secondary info. Set expectations for effort required.</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recurring Review - Complete</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --blue: #0a84ff;
+    --green: #166f47;
+    --green-bg: #e8f8ec;
+    --amber: #c2790a;
+    --amber-bg: #fff5e6;
+    --red: #b91c1c;
+    --red-bg: #ffe8e8;
+    --card: #fff;
+    --text: #1c1c1e;
+    --text2: #8e8e93;
+    --bg: #f2f2f7;
+  }
+
+  body {
+    font-family: 'IBM Plex Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #e8e8ed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 16px 40px;
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  .phone-frame {
+    width: 430px;
+    max-width: 100%;
+    background: var(--bg);
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+    position: relative;
+  }
+
+  /* Status Bar */
+  .status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 24px 4px;
+    background: var(--bg);
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .status-bar .time { font-size: 15px; font-weight: 700; }
+  .status-bar .icons { display: flex; gap: 6px; align-items: center; }
+  .status-bar .icons svg { width: 18px; height: 12px; }
+
+  /* Navigation Header */
+  .nav-header {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px 12px;
+    background: var(--bg);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-header .back-arrow {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  .nav-header .back-arrow svg { width: 20px; height: 20px; stroke: var(--blue); }
+  .nav-header h1 {
+    font-size: 17px;
+    font-weight: 600;
+    margin-left: 4px;
+    flex: 1;
+  }
+  .nav-header .filter-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Bottom Nav */
+  .bottom-nav {
+    position: sticky;
+    bottom: 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 8px 0 20px;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid #e5e5ea;
+  }
+  .bottom-nav .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    font-size: 10px;
+    color: var(--text2);
+    cursor: pointer;
+  }
+  .bottom-nav .nav-item.active { color: var(--blue); }
+  .bottom-nav .nav-item svg { width: 24px; height: 24px; }
+
+  /* Section Headers */
+  .concept-header {
+    margin: 32px 0 16px;
+    padding: 0 16px;
+  }
+  .concept-header h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .concept-header p {
+    font-size: 13px;
+    color: var(--text2);
+    margin-top: 2px;
+  }
+  .concept-header .concept-label {
+    display: inline-block;
+    background: var(--blue);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 8px;
+    letter-spacing: 0.3px;
+  }
+
+  /* KPI Dashboard Card */
+  .kpi-card {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 16px 20px;
+    margin: 0 16px 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .kpi-card .kpi-label {
+    font-size: 12px;
+    color: var(--text2);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .kpi-card .kpi-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-top: 4px;
+  }
+  .kpi-card .kpi-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .kpi-card .kpi-change {
+    font-size: 13px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 8px;
+  }
+  .kpi-card .kpi-change.up { background: var(--red-bg); color: var(--red); }
+  .kpi-card .kpi-change.down { background: var(--green-bg); color: var(--green); }
+  .kpi-card .kpi-sub {
+    font-size: 12px;
+    color: var(--text2);
+    margin-top: 4px;
+  }
+
+  /* ====================== */
+  /* CONCEPT 1: COMPACT LIST */
+  /* ====================== */
+  .compact-list {
+    background: var(--card);
+    border-radius: 16px;
+    margin: 0 16px 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .compact-row {
+    display: flex;
+    align-items: center;
+    height: 56px;
+    padding: 0 16px;
+    gap: 12px;
+    border-bottom: 1px solid #f2f2f7;
+  }
+  .compact-row:last-child { border-bottom: none; }
+  .compact-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .compact-name {
+    font-size: 14px;
+    font-weight: 500;
+    flex: 1;
+    white-space: nowrap;
+  }
+  .compact-badge {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 12px;
+    white-space: nowrap;
+  }
+  .badge-red { background: var(--red-bg); color: var(--red); }
+  .badge-green { background: var(--green-bg); color: var(--green); }
+  .badge-blue { background: #e6f2ff; color: var(--blue); }
+  .badge-amber { background: var(--amber-bg); color: var(--amber); }
+  .badge-gray { background: #f2f2f7; color: var(--text2); }
+
+  .compact-actions {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .action-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: none;
+    transition: transform 0.15s;
+  }
+  .action-btn:active { transform: scale(0.9); }
+  .action-btn.accept { background: var(--green-bg); }
+  .action-btn.accept svg { width: 14px; height: 14px; stroke: var(--green); fill: none; stroke-width: 2.5; }
+  .action-btn.reject { background: #f2f2f7; }
+  .action-btn.reject svg { width: 14px; height: 14px; stroke: var(--text2); fill: none; stroke-width: 2.5; }
+
+  .review-all-link {
+    text-align: center;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--blue);
+    cursor: pointer;
+  }
+
+  /* ======================== */
+  /* CONCEPT 2: EXPANDABLE    */
+  /* ======================== */
+  .expandable-list {
+    background: var(--card);
+    border-radius: 16px;
+    margin: 0 16px 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .expandable-row {
+    border-bottom: 1px solid #f2f2f7;
+  }
+  .expandable-row:last-child { border-bottom: none; }
+  .expandable-collapsed {
+    display: flex;
+    align-items: center;
+    height: 56px;
+    padding: 0 16px;
+    gap: 12px;
+    cursor: pointer;
+  }
+  .expandable-collapsed .compact-name { flex: 1; }
+  .chevron-right {
+    width: 16px;
+    height: 16px;
+    stroke: var(--text2);
+    fill: none;
+    stroke-width: 2;
+    flex-shrink: 0;
+    transition: transform 0.25s;
+  }
+  .expandable-row.expanded .chevron-right { transform: rotate(90deg); }
+
+  .expandable-detail {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, padding 0.35s ease;
+    padding: 0 16px;
+    background: #fafafa;
+  }
+  .expandable-row.expanded .expandable-detail {
+    max-height: 220px;
+    padding: 12px 16px 16px;
+  }
+  .detail-amounts {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+    font-size: 14px;
+  }
+  .detail-amounts .old-price {
+    color: var(--text2);
+    text-decoration: line-through;
+  }
+  .detail-amounts .arrow { color: var(--text2); font-size: 12px; }
+  .detail-amounts .new-price { font-weight: 700; font-size: 16px; }
+  .detail-amounts .diff {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 8px;
+    margin-left: auto;
+  }
+  .detail-reason {
+    font-size: 13px;
+    color: var(--text2);
+    margin-bottom: 12px;
+  }
+  .detail-actions {
+    display: flex;
+    gap: 8px;
+  }
+  .detail-btn {
+    flex: 1;
+    padding: 8px 0;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+  }
+  .detail-btn.accept-detail { background: var(--green); color: #fff; }
+  .detail-btn.reject-detail { background: #f2f2f7; color: var(--text); }
+
+  /* ==================== */
+  /* CONCEPT 3: CARD STACK */
+  /* ==================== */
+  .card-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 0 16px;
+    margin-bottom: 12px;
+  }
+  .review-card {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .review-card .card-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .card-merchant { font-size: 16px; font-weight: 700; }
+  .card-amounts {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .card-old {
+    font-size: 15px;
+    color: var(--text2);
+    text-decoration: line-through;
+  }
+  .card-arrow { color: var(--text2); font-size: 12px; }
+  .card-new { font-size: 18px; font-weight: 700; }
+  .card-diff-badge {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 10px;
+    margin-left: auto;
+  }
+  .card-reason {
+    font-size: 13px;
+    color: var(--text2);
+    margin-bottom: 12px;
+  }
+  .card-actions {
+    display: flex;
+    gap: 8px;
+  }
+  .card-btn {
+    flex: 1;
+    padding: 10px 0;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+  }
+  .card-btn.accept-card { background: var(--green); color: #fff; }
+  .card-btn.reject-card { background: #f2f2f7; color: var(--text); }
+
+  /* ========================= */
+  /* CONCEPT 4: GROUPED        */
+  /* ========================= */
+  .grouped-section {
+    margin: 0 16px 12px;
+    background: var(--card);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .grouped-header {
+    display: flex;
+    align-items: center;
+    padding: 14px 16px;
+    cursor: pointer;
+    gap: 10px;
+    border-bottom: 1px solid #f2f2f7;
+  }
+  .grouped-header .group-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .grouped-header .group-title {
+    font-size: 14px;
+    font-weight: 600;
+    flex: 1;
+  }
+  .grouped-header .group-count {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text2);
+    background: #f2f2f7;
+    padding: 2px 8px;
+    border-radius: 10px;
+  }
+  .grouped-header .group-chevron {
+    width: 16px;
+    height: 16px;
+    stroke: var(--text2);
+    fill: none;
+    stroke-width: 2;
+    transition: transform 0.25s;
+  }
+  .grouped-section.open .grouped-header .group-chevron {
+    transform: rotate(180deg);
+  }
+  .grouped-items {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease;
+  }
+  .grouped-section.open .grouped-items {
+    max-height: 500px;
+  }
+  .grouped-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    gap: 12px;
+    border-bottom: 1px solid #f9f9f9;
+  }
+  .grouped-item:last-child { border-bottom: none; }
+  .grouped-item .item-name {
+    flex: 1;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .grouped-item .item-amount {
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .grouped-item .item-reason {
+    font-size: 12px;
+    color: var(--text2);
+    width: 100%;
+    padding-left: 40px;
+    margin-top: -4px;
+    padding-bottom: 4px;
+  }
+
+  /* ==================== */
+  /* CONCEPT 5: TIMELINE  */
+  /* ==================== */
+  .timeline {
+    padding: 0 16px;
+    margin-bottom: 12px;
+    position: relative;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 31px;
+    top: 20px;
+    bottom: 20px;
+    width: 2px;
+    background: #d1d1d6;
+  }
+  .timeline-item {
+    display: flex;
+    gap: 16px;
+    position: relative;
+    margin-bottom: 16px;
+  }
+  .timeline-dot-col {
+    width: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    padding-top: 16px;
+  }
+  .timeline-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--card);
+    z-index: 2;
+    flex-shrink: 0;
+  }
+  .timeline-date {
+    font-size: 10px;
+    color: var(--text2);
+    margin-top: 6px;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .timeline-card {
+    flex: 1;
+    background: var(--card);
+    border-radius: 14px;
+    padding: 14px 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .timeline-card .tl-merchant {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .timeline-card .tl-amounts {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 4px;
+  }
+  .timeline-card .tl-old {
+    font-size: 13px;
+    color: var(--text2);
+    text-decoration: line-through;
+  }
+  .timeline-card .tl-arrow { font-size: 11px; color: var(--text2); }
+  .timeline-card .tl-new { font-size: 15px; font-weight: 700; }
+  .timeline-card .tl-reason {
+    font-size: 12px;
+    color: var(--text2);
+    margin-bottom: 10px;
+  }
+  .timeline-card .tl-actions {
+    display: flex;
+    gap: 8px;
+  }
+  .timeline-card .tl-btn {
+    flex: 1;
+    padding: 7px 0;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+  }
+  .tl-btn.accept-tl { background: var(--green); color: #fff; }
+  .tl-btn.reject-tl { background: #f2f2f7; color: var(--text); }
+
+  /* Total Row */
+  .total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 16px 20px;
+    padding: 14px 16px;
+    background: var(--card);
+    border-radius: 14px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .total-row .total-label {
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .total-row .total-amounts {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .total-row .total-old {
+    font-size: 13px;
+    color: var(--text2);
+    text-decoration: line-through;
+  }
+  .total-row .total-new { font-size: 16px; font-weight: 700; }
+  .total-row .total-diff {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 8px;
+    background: var(--red-bg);
+    color: var(--red);
+  }
+
+  /* Scroll indicator */
+  .scroll-hint {
+    text-align: center;
+    font-size: 12px;
+    color: var(--text2);
+    margin: 8px 0 4px;
+  }
+
+  .concept-divider {
+    height: 1px;
+    background: #d1d1d6;
+    margin: 32px 40px;
+  }
+</style>
+</head>
+<body>
+
+<div class="phone-frame">
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span class="time">9:41</span>
+    <div class="icons">
+      <svg viewBox="0 0 18 12"><path d="M1 8.5h2v3H1zM5 6h2v5.5H5zM9 3.5h2v8H9zM13 1h2v10.5h-2z" fill="#1c1c1e"/></svg>
+      <svg viewBox="0 0 18 12"><path d="M9 2.5C6.5 2.5 4.3 3.6 2.8 5.3l1.1 1.1C5.1 5 6.9 4.1 9 4.1s3.9.9 5.1 2.3l1.1-1.1C13.7 3.6 11.5 2.5 9 2.5z" fill="#1c1c1e"/><path d="M9 5.7c-1.7 0-3.2.7-4.3 1.8l1.1 1.1c.8-.8 1.9-1.3 3.2-1.3s2.4.5 3.2 1.3l1.1-1.1C12.2 6.4 10.7 5.7 9 5.7z" fill="#1c1c1e"/><circle cx="9" cy="10" r="1.5" fill="#1c1c1e"/></svg>
+      <svg viewBox="0 0 25 12"><rect x="0" y="1" width="21" height="10" rx="2" ry="2" stroke="#1c1c1e" stroke-width="1" fill="none"/><rect x="2" y="3" width="15" height="6" rx="1" fill="#1c1c1e"/><path d="M23 4.5v3a1.5 1.5 0 000-3z" fill="#1c1c1e"/></svg>
+    </div>
+  </div>
+
+  <!-- Nav Header -->
+  <div class="nav-header">
+    <div class="back-arrow">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M15 18l-6-6 6-6"/>
+      </svg>
+    </div>
+    <h1>Recurring Review</h1>
+    <div class="filter-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#8e8e93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+        <line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="20" y2="12"/><line x1="12" y1="18" x2="20" y2="18"/>
+      </svg>
+    </div>
+  </div>
+
+  <div style="padding-bottom: 60px;">
+
+    <!-- ========== CONCEPT 1: COMPACT LIST ========== -->
+    <div class="concept-header">
+      <span class="concept-label">CONCEPT 1</span>
+      <h2>Compact List</h2>
+      <p>Single-row items with inline actions. Minimal, fast-scan layout.</p>
+    </div>
+
+    <!-- KPI Dashboard -->
+    <div class="kpi-card">
+      <div class="kpi-label">Net Worth Impact</div>
+      <div class="kpi-row">
+        <span class="kpi-value">$246.95</span>
+        <span class="kpi-change up">+$10.49</span>
+      </div>
+      <div class="kpi-sub">Monthly recurring total • 6 subscriptions tracked</div>
+    </div>
+
+    <div class="compact-list">
+      <div class="compact-row">
+        <div class="compact-icon" style="background:#e50914;">N</div>
+        <span class="compact-name">Netflix</span>
+        <span class="compact-badge badge-red">+$2.50</span>
+        <div class="compact-actions">
+          <button class="action-btn accept"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></button>
+          <button class="action-btn reject"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+      </div>
+      <div class="compact-row">
+        <div class="compact-icon" style="background:#1db954;">S</div>
+        <span class="compact-name">Spotify</span>
+        <span class="compact-badge badge-red">+$1.00</span>
+        <div class="compact-actions">
+          <button class="action-btn accept"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></button>
+          <button class="action-btn reject"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+      </div>
+      <div class="compact-row">
+        <div class="compact-icon" style="background:#f5a623;">E</div>
+        <span class="compact-name">Electric</span>
+        <span class="compact-badge badge-green">-$44.00</span>
+        <div class="compact-actions">
+          <button class="action-btn accept"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></button>
+          <button class="action-btn reject"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+      </div>
+      <div class="compact-row">
+        <div class="compact-icon" style="background:var(--blue);">G</div>
+        <span class="compact-name">Gym</span>
+        <span class="compact-badge badge-blue">New</span>
+        <div class="compact-actions">
+          <button class="action-btn accept"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></button>
+          <button class="action-btn reject"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+      </div>
+      <div class="compact-row">
+        <div class="compact-icon" style="background:#6b3fa0;">H</div>
+        <span class="compact-name">HBO Max</span>
+        <span class="compact-badge badge-gray">Cancelled</span>
+        <div class="compact-actions">
+          <button class="action-btn accept"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></button>
+          <button class="action-btn reject"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+      </div>
+      <div class="compact-row">
+        <div class="compact-icon" style="background:var(--amber);">C</div>
+        <span class="compact-name">Cloud Storage</span>
+        <span class="compact-badge badge-amber">Paused</span>
+        <div class="compact-actions">
+          <button class="action-btn accept"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></button>
+          <button class="action-btn reject"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+      </div>
+      <div class="review-all-link">Review all changes →</div>
+    </div>
+
+    <!-- Total -->
+    <div class="total-row">
+      <span class="total-label">Total Monthly</span>
+      <div class="total-amounts">
+        <span class="total-old">$236.46</span>
+        <span class="total-new">$246.95</span>
+        <span class="total-diff">+$10.49</span>
+      </div>
+    </div>
+
+    <div class="concept-divider"></div>
+
+    <!-- ========== CONCEPT 2: EXPANDABLE ROWS ========== -->
+    <div class="concept-header">
+      <span class="concept-label">CONCEPT 2</span>
+      <h2>Expandable Rows</h2>
+      <p>Tap to reveal details inline. One expanded at a time.</p>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-label">Net Worth Impact</div>
+      <div class="kpi-row">
+        <span class="kpi-value">$246.95</span>
+        <span class="kpi-change up">+$10.49</span>
+      </div>
+      <div class="kpi-sub">Monthly recurring total • 6 subscriptions tracked</div>
+    </div>
+
+    <div class="expandable-list">
+      <!-- Netflix — Expanded -->
+      <div class="expandable-row expanded" onclick="this.classList.toggle('expanded')">
+        <div class="expandable-collapsed">
+          <div class="compact-icon" style="background:#e50914;">N</div>
+          <span class="compact-name">Netflix</span>
+          <span class="compact-badge badge-red">+$2.50</span>
+          <svg class="chevron-right" viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
+        </div>
+        <div class="expandable-detail">
+          <div class="detail-amounts">
+            <span class="old-price">$15.49</span>
+            <span class="arrow">→</span>
+            <span class="new-price">$17.99</span>
+            <span class="diff badge-red" style="background:var(--red-bg);color:var(--red);">+$2.50</span>
+          </div>
+          <div class="detail-reason">Price increase — Standard plan rate adjusted</div>
+          <div class="detail-actions">
+            <button class="detail-btn accept-detail">Accept</button>
+            <button class="detail-btn reject-detail">Reject</button>
+          </div>
+        </div>
+      </div>
+      <!-- Spotify -->
+      <div class="expandable-row" onclick="this.classList.toggle('expanded')">
+        <div class="expandable-collapsed">
+          <div class="compact-icon" style="background:#1db954;">S</div>
+          <span class="compact-name">Spotify</span>
+          <span class="compact-badge badge-red">+$1.00</span>
+          <svg class="chevron-right" viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
+        </div>
+        <div class="expandable-detail">
+          <div class="detail-amounts">
+            <span class="old-price">$9.99</span>
+            <span class="arrow">→</span>
+            <span class="new-price">$10.99</span>
+            <span class="diff badge-red" style="background:var(--red-bg);color:var(--red);">+$1.00</span>
+          </div>
+          <div class="detail-reason">Annual adjustment — Yearly price update</div>
+          <div class="detail-actions">
+            <button class="detail-btn accept-detail">Accept</button>
+            <button class="detail-btn reject-detail">Reject</button>
+          </div>
+        </div>
+      </div>
+      <!-- Electric -->
+      <div class="expandable-row" onclick="this.classList.toggle('expanded')">
+        <div class="expandable-collapsed">
+          <div class="compact-icon" style="background:#f5a623;">E</div>
+          <span class="compact-name">Electric</span>
+          <span class="compact-badge badge-green">-$44.00</span>
+          <svg class="chevron-right" viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
+        </div>
+        <div class="expandable-detail">
+          <div class="detail-amounts">
+            <span class="old-price">$142.00</span>
+            <span class="arrow">→</span>
+            <span class="new-price">$98.00</span>
+            <span class="diff badge-green" style="background:var(--green-bg);color:var(--green);">-$44.00</span>
+          </div>
+          <div class="detail-reason">Lower usage — Reduced consumption this month</div>
+          <div class="detail-actions">
+            <button class="detail-btn accept-detail">Accept</button>
+            <button class="detail-btn reject-detail">Reject</button>
+          </div>
+        </div>
+      </div>
+      <!-- Gym -->
+      <div class="expandable-row" onclick="this.classList.toggle('expanded')">
+        <div class="expandable-collapsed">
+          <div class="compact-icon" style="background:var(--blue);">G</div>
+          <span class="compact-name">Gym</span>
+          <span class="compact-badge badge-blue">New</span>
+          <svg class="chevron-right" viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
+        </div>
+        <div class="expandable-detail">
+          <div class="detail-amounts">
+            <span class="new-price">$49.99</span>
+            <span class="diff badge-blue" style="background:#e6f2ff;color:var(--blue);">New charge</span>
+          </div>
+          <div class="detail-reason">New subscription — Monthly gym membership</div>
+          <div class="detail-actions">
+            <button class="detail-btn accept-detail">Accept</button>
+            <button class="detail-btn reject-detail">Reject</button>
+          </div>
+        </div>
+      </div>
+      <!-- HBO Max -->
+      <div class="expandable-row" onclick="this.classList.toggle('expanded')">
+        <div class="expandable-collapsed">
+          <div class="compact-icon" style="background:#6b3fa0;">H</div>
+          <span class="compact-name">HBO Max</span>
+          <span class="compact-badge badge-gray">Cancelled</span>
+          <svg class="chevron-right" viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
+        </div>
+        <div class="expandable-detail">
+          <div class="detail-amounts">
+            <span class="old-price">$15.99</span>
+            <span class="diff badge-gray" style="background:#f2f2f7;color:var(--text2);">Cancelled</span>
+          </div>
+          <div class="detail-reason">Subscription cancelled — No longer active</div>
+          <div class="detail-actions">
+            <button class="detail-btn accept-detail">Accept</button>
+            <button class="detail-btn reject-detail">Reject</button>
+          </div>
+        </div>
+      </div>
+      <!-- Cloud Storage -->
+      <div class="expandable-row" onclick="this.classList.toggle('expanded')">
+        <div class="expandable-collapsed">
+          <div class="compact-icon" style="background:var(--amber);">C</div>
+          <span class="compact-name">Cloud Storage</span>
+          <span class="compact-badge badge-amber">Paused</span>
+          <svg class="chevron-right" viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
+        </div>
+        <div class="expandable-detail">
+          <div class="detail-amounts">
+            <span class="old-price">$2.99</span>
+            <span class="diff badge-amber" style="background:var(--amber-bg);color:var(--amber);">Paused</span>
+          </div>
+          <div class="detail-reason">Subscription paused — Billing suspended</div>
+          <div class="detail-actions">
+            <button class="detail-btn accept-detail">Accept</button>
+            <button class="detail-btn reject-detail">Reject</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="total-row">
+      <span class="total-label">Total Monthly</span>
+      <div class="total-amounts">
+        <span class="total-old">$236.46</span>
+        <span class="total-new">$246.95</span>
+        <span class="total-diff">+$10.49</span>
+      </div>
+    </div>
+
+    <div class="concept-divider"></div>
+
+    <!-- ========== CONCEPT 3: CARD STACK ========== -->
+    <div class="concept-header">
+      <span class="concept-label">CONCEPT 3</span>
+      <h2>Card Stack</h2>
+      <p>Full detail cards in a scrollable stack. Rich info at a glance.</p>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-label">Net Worth Impact</div>
+      <div class="kpi-row">
+        <span class="kpi-value">$246.95</span>
+        <span class="kpi-change up">+$10.49</span>
+      </div>
+      <div class="kpi-sub">Monthly recurring total • 6 subscriptions tracked</div>
+    </div>
+
+    <div class="card-stack">
+      <!-- Netflix -->
+      <div class="review-card">
+        <div class="card-top">
+          <div class="card-icon" style="background:#e50914;">N</div>
+          <span class="card-merchant">Netflix</span>
+        </div>
+        <div class="card-amounts">
+          <span class="card-old">$15.49</span>
+          <span class="card-arrow">→</span>
+          <span class="card-new">$17.99</span>
+          <span class="card-diff-badge badge-red" style="background:var(--red-bg);color:var(--red);">+$2.50</span>
+        </div>
+        <div class="card-reason">Price increase — Standard plan rate adjusted</div>
+        <div class="card-actions">
+          <button class="card-btn accept-card">Accept</button>
+          <button class="card-btn reject-card">Reject</button>
+        </div>
+      </div>
+      <!-- Spotify -->
+      <div class="review-card">
+        <div class="card-top">
+          <div class="card-icon" style="background:#1db954;">S</div>
+          <span class="card-merchant">Spotify</span>
+        </div>
+        <div class="card-amounts">
+          <span class="card-old">$9.99</span>
+          <span class="card-arrow">→</span>
+          <span class="card-new">$10.99</span>
+          <span class="card-diff-badge badge-red" style="background:var(--red-bg);color:var(--red);">+$1.00</span>
+        </div>
+        <div class="card-reason">Annual adjustment — Yearly price update</div>
+        <div class="card-actions">
+          <button class="card-btn accept-card">Accept</button>
+          <button class="card-btn reject-card">Reject</button>
+        </div>
+      </div>
+      <!-- Electric -->
+      <div class="review-card">
+        <div class="card-top">
+          <div class="card-icon" style="background:#f5a623;">E</div>
+          <span class="card-merchant">Electric</span>
+        </div>
+        <div class="card-amounts">
+          <span class="card-old">$142.00</span>
+          <span class="card-arrow">→</span>
+          <span class="card-new">$98.00</span>
+          <span class="card-diff-badge badge-green" style="background:var(--green-bg);color:var(--green);">-$44.00</span>
+        </div>
+        <div class="card-reason">Lower usage — Reduced consumption this month</div>
+        <div class="card-actions">
+          <button class="card-btn accept-card">Accept</button>
+          <button class="card-btn reject-card">Reject</button>
+        </div>
+      </div>
+      <!-- Gym -->
+      <div class="review-card">
+        <div class="card-top">
+          <div class="card-icon" style="background:var(--blue);">G</div>
+          <span class="card-merchant">Gym</span>
+        </div>
+        <div class="card-amounts">
+          <span class="card-new">$49.99</span>
+          <span class="card-diff-badge badge-blue" style="background:#e6f2ff;color:var(--blue);">New charge</span>
+        </div>
+        <div class="card-reason">New subscription — Monthly gym membership</div>
+        <div class="card-actions">
+          <button class="card-btn accept-card">Accept</button>
+          <button class="card-btn reject-card">Reject</button>
+        </div>
+      </div>
+      <!-- HBO Max -->
+      <div class="review-card">
+        <div class="card-top">
+          <div class="card-icon" style="background:#6b3fa0;">H</div>
+          <span class="card-merchant">HBO Max</span>
+        </div>
+        <div class="card-amounts">
+          <span class="card-old">$15.99</span>
+          <span class="card-diff-badge badge-gray" style="background:#f2f2f7;color:var(--text2);">Cancelled</span>
+        </div>
+        <div class="card-reason">Subscription cancelled — No longer active</div>
+        <div class="card-actions">
+          <button class="card-btn accept-card">Accept</button>
+          <button class="card-btn reject-card">Reject</button>
+        </div>
+      </div>
+      <!-- Cloud Storage -->
+      <div class="review-card">
+        <div class="card-top">
+          <div class="card-icon" style="background:var(--amber);">C</div>
+          <span class="card-merchant">Cloud Storage</span>
+        </div>
+        <div class="card-amounts">
+          <span class="card-old">$2.99</span>
+          <span class="card-diff-badge badge-amber" style="background:var(--amber-bg);color:var(--amber);">Paused</span>
+        </div>
+        <div class="card-reason">Subscription paused — Billing suspended</div>
+        <div class="card-actions">
+          <button class="card-btn accept-card">Accept</button>
+          <button class="card-btn reject-card">Reject</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="total-row">
+      <span class="total-label">Total Monthly</span>
+      <div class="total-amounts">
+        <span class="total-old">$236.46</span>
+        <span class="total-new">$246.95</span>
+        <span class="total-diff">+$10.49</span>
+      </div>
+    </div>
+
+    <div class="concept-divider"></div>
+
+    <!-- ========== CONCEPT 4: GROUPED BY TYPE ========== -->
+    <div class="concept-header">
+      <span class="concept-label">CONCEPT 4</span>
+      <h2>Grouped by Type</h2>
+      <p>Collapsible sections grouped by change category.</p>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-label">Net Worth Impact</div>
+      <div class="kpi-row">
+        <span class="kpi-value">$246.95</span>
+        <span class="kpi-change up">+$10.49</span>
+      </div>
+      <div class="kpi-sub">Monthly recurring total • 6 subscriptions tracked</div>
+    </div>
+
+    <!-- Increased — Expanded -->
+    <div class="grouped-section open" onclick="this.classList.toggle('open')">
+      <div class="grouped-header">
+        <div class="group-dot" style="background:var(--red);"></div>
+        <span class="group-title" style="color:var(--red);">Increased</span>
+        <span class="group-count">2</span>
+        <svg class="group-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="grouped-items">
+        <div class="grouped-item">
+          <div class="compact-icon" style="background:#e50914; width:24px; height:24px; font-size:10px;">N</div>
+          <span class="item-name">Netflix</span>
+          <span class="item-amount" style="color:var(--red);">+$2.50</span>
+        </div>
+        <div class="grouped-item">
+          <div class="compact-icon" style="background:#1db954; width:24px; height:24px; font-size:10px;">S</div>
+          <span class="item-name">Spotify</span>
+          <span class="item-amount" style="color:var(--red);">+$1.00</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Decreased — Collapsed -->
+    <div class="grouped-section" onclick="this.classList.toggle('open')">
+      <div class="grouped-header">
+        <div class="group-dot" style="background:var(--green);"></div>
+        <span class="group-title" style="color:var(--green);">Decreased</span>
+        <span class="group-count">1</span>
+        <svg class="group-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="grouped-items">
+        <div class="grouped-item">
+          <div class="compact-icon" style="background:#f5a623; width:24px; height:24px; font-size:10px;">E</div>
+          <span class="item-name">Electric</span>
+          <span class="item-amount" style="color:var(--green);">-$44.00</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- New — Collapsed -->
+    <div class="grouped-section" onclick="this.classList.toggle('open')">
+      <div class="grouped-header">
+        <div class="group-dot" style="background:var(--blue);"></div>
+        <span class="group-title" style="color:var(--blue);">New</span>
+        <span class="group-count">1</span>
+        <svg class="group-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="grouped-items">
+        <div class="grouped-item">
+          <div class="compact-icon" style="background:var(--blue); width:24px; height:24px; font-size:10px;">G</div>
+          <span class="item-name">Gym</span>
+          <span class="item-amount" style="color:var(--blue);">$49.99</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cancelled — Collapsed -->
+    <div class="grouped-section" onclick="this.classList.toggle('open')">
+      <div class="grouped-header">
+        <div class="group-dot" style="background:var(--text2);"></div>
+        <span class="group-title" style="color:var(--text2);">Cancelled</span>
+        <span class="group-count">1</span>
+        <svg class="group-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="grouped-items">
+        <div class="grouped-item">
+          <div class="compact-icon" style="background:#6b3fa0; width:24px; height:24px; font-size:10px;">H</div>
+          <span class="item-name">HBO Max</span>
+          <span class="item-amount" style="color:var(--text2);">$15.99</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Paused — Collapsed -->
+    <div class="grouped-section" onclick="this.classList.toggle('open')">
+      <div class="grouped-header">
+        <div class="group-dot" style="background:var(--amber);"></div>
+        <span class="group-title" style="color:var(--amber);">Paused</span>
+        <span class="group-count">1</span>
+        <svg class="group-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="grouped-items">
+        <div class="grouped-item">
+          <div class="compact-icon" style="background:var(--amber); width:24px; height:24px; font-size:10px;">C</div>
+          <span class="item-name">Cloud Storage</span>
+          <span class="item-amount" style="color:var(--amber);">$2.99</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="total-row">
+      <span class="total-label">Total Monthly</span>
+      <div class="total-amounts">
+        <span class="total-old">$236.46</span>
+        <span class="total-new">$246.95</span>
+        <span class="total-diff">+$10.49</span>
+      </div>
+    </div>
+
+    <div class="concept-divider"></div>
+
+    <!-- ========== CONCEPT 5: TIMELINE ========== -->
+    <div class="concept-header">
+      <span class="concept-label">CONCEPT 5</span>
+      <h2>Timeline</h2>
+      <p>Chronological view with color-coded dots and connected line.</p>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-label">Net Worth Impact</div>
+      <div class="kpi-row">
+        <span class="kpi-value">$246.95</span>
+        <span class="kpi-change up">+$10.49</span>
+      </div>
+      <div class="kpi-sub">Monthly recurring total • 6 subscriptions tracked</div>
+    </div>
+
+    <div class="timeline">
+      <!-- Netflix — Jan 1 -->
+      <div class="timeline-item">
+        <div class="timeline-dot-col">
+          <div class="timeline-dot" style="background:var(--red);"></div>
+          <span class="timeline-date">Jan 1</span>
+        </div>
+        <div class="timeline-card">
+          <div class="tl-merchant">Netflix</div>
+          <div class="tl-amounts">
+            <span class="tl-old">$15.49</span>
+            <span class="tl-arrow">→</span>
+            <span class="tl-new">$17.99</span>
+            <span class="compact-badge badge-red" style="font-size:11px; padding:2px 8px;">+$2.50</span>
+          </div>
+          <div class="tl-reason">Price increase</div>
+          <div class="tl-actions">
+            <button class="tl-btn accept-tl">Accept</button>
+            <button class="tl-btn reject-tl">Reject</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Spotify — Jan 3 -->
+      <div class="timeline-item">
+        <div class="timeline-dot-col">
+          <div class="timeline-dot" style="background:var(--red);"></div>
+          <span class="timeline-date">Jan 3</span>
+        </div>
+        <div class="timeline-card">
+          <div class="tl-merchant">Spotify</div>
+          <div class="tl-amounts">
+            <span class="tl-old">$9.99</span>
+            <span class="tl-arrow">→</span>
+            <span class="tl-new">$10.99</span>
+            <span class="compact-badge badge-red" style="font-size:11px; padding:2px 8px;">+$1.00</span>
+          </div>
+          <div class="tl-reason">Annual adjustment</div>
+          <div class="tl-actions">
+            <button class="tl-btn accept-tl">Accept</button>
+            <button class="tl-btn reject-tl">Reject</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Electric — Jan 5 -->
+      <div class="timeline-item">
+        <div class="timeline-dot-col">
+          <div class="timeline-dot" style="background:var(--green);"></div>
+          <span class="timeline-date">Jan 5</span>
+        </div>
+        <div class="timeline-card">
+          <div class="tl-merchant">Electric</div>
+          <div class="tl-amounts">
+            <span class="tl-old">$142.00</span>
+            <span class="tl-arrow">→</span>
+            <span class="tl-new">$98.00</span>
+            <span class="compact-badge badge-green" style="font-size:11px; padding:2px 8px;">-$44.00</span>
+          </div>
+          <div class="tl-reason">Lower usage</div>
+          <div class="tl-actions">
+            <button class="tl-btn accept-tl">Accept</button>
+            <button class="tl-btn reject-tl">Reject</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gym — Jan 8 -->
+      <div class="timeline-item">
+        <div class="timeline-dot-col">
+          <div class="timeline-dot" style="background:var(--blue);"></div>
+          <span class="timeline-date">Jan 8</span>
+        </div>
+        <div class="timeline-card">
+          <div class="tl-merchant">Gym</div>
+          <div class="tl-amounts">
+            <span class="tl-new">$49.99</span>
+            <span class="compact-badge badge-blue" style="font-size:11px; padding:2px 8px;">New charge</span>
+          </div>
+          <div class="tl-reason">New subscription</div>
+          <div class="tl-actions">
+            <button class="tl-btn accept-tl">Accept</button>
+            <button class="tl-btn reject-tl">Reject</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- HBO Max — Jan 12 -->
+      <div class="timeline-item">
+        <div class="timeline-dot-col">
+          <div class="timeline-dot" style="background:var(--text2);"></div>
+          <span class="timeline-date">Jan 12</span>
+        </div>
+        <div class="timeline-card">
+          <div class="tl-merchant">HBO Max</div>
+          <div class="tl-amounts">
+            <span class="tl-old">$15.99</span>
+            <span class="compact-badge badge-gray" style="font-size:11px; padding:2px 8px;">Cancelled</span>
+          </div>
+          <div class="tl-reason">Subscription cancelled</div>
+          <div class="tl-actions">
+            <button class="tl-btn accept-tl">Accept</button>
+            <button class="tl-btn reject-tl">Reject</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cloud Storage — Jan 15 -->
+      <div class="timeline-item">
+        <div class="timeline-dot-col">
+          <div class="timeline-dot" style="background:var(--amber);"></div>
+          <span class="timeline-date">Jan 15</span>
+        </div>
+        <div class="timeline-card">
+          <div class="tl-merchant">Cloud Storage</div>
+          <div class="tl-amounts">
+            <span class="tl-old">$2.99</span>
+            <span class="compact-badge badge-amber" style="font-size:11px; padding:2px 8px;">Paused</span>
+          </div>
+          <div class="tl-reason">Subscription paused</div>
+          <div class="tl-actions">
+            <button class="tl-btn accept-tl">Accept</button>
+            <button class="tl-btn reject-tl">Reject</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="total-row">
+      <span class="total-label">Total Monthly</span>
+      <div class="total-amounts">
+        <span class="total-old">$236.46</span>
+        <span class="total-new">$246.95</span>
+        <span class="total-diff">+$10.49</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Nav -->
+  <div class="bottom-nav">
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+      </svg>
+      <span>Dashboard</span>
+    </div>
+    <div class="nav-item active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="3"/>
+      </svg>
+      <span>Recurring</span>
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+      </svg>
+      <span>Import</span>
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+      </svg>
+      <span>Reports</span>
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+      </svg>
+      <span>Profile</span>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

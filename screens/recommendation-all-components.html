@@ -1,0 +1,1319 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advizmo - Recommendation Card Components</title>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --blue: #0a84ff;
+            --green: #166f47;
+            --green-bg: #e8f8ec;
+            --amber: #c2790a;
+            --amber-bg: #fff5e6;
+            --red: #b91c1c;
+            --red-bg: #ffe8e8;
+            --blue-bg: #e8f0ff;
+            --card: #fff;
+            --text: #1c1c1e;
+            --text2: #8e8e93;
+            --sidebar-bg: #1c1c1e;
+            --bg: #f2f2f7;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'IBM Plex Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            min-height: 100vh;
+        }
+        .sidebar {
+            width: 260px;
+            background: var(--sidebar-bg);
+            color: #fff;
+            position: fixed;
+            top: 0; left: 0; bottom: 0;
+            overflow-y: auto;
+            z-index: 100;
+            padding: 24px 0;
+        }
+        .sidebar-logo {
+            padding: 0 24px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 16px;
+        }
+        .sidebar-logo h2 { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; }
+        .sidebar-logo span { font-size: 11px; color: rgba(255,255,255,0.5); display: block; margin-top: 2px; }
+        .sidebar nav a {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 24px; color: rgba(255,255,255,0.6);
+            text-decoration: none; font-size: 13px; font-weight: 500;
+            transition: all 0.15s; border-left: 3px solid transparent;
+        }
+        .sidebar nav a:hover, .sidebar nav a.active {
+            color: #fff; background: rgba(255,255,255,0.06); border-left-color: var(--blue);
+        }
+        .sidebar nav a .cat-icon {
+            width: 28px; height: 28px; border-radius: 7px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px; flex-shrink: 0;
+        }
+        .sidebar nav a .cat-count {
+            margin-left: auto; background: rgba(255,255,255,0.12);
+            padding: 1px 7px; border-radius: 10px;
+            font-size: 11px; color: rgba(255,255,255,0.5);
+        }
+        .main {
+            margin-left: 260px; flex: 1;
+            min-height: 100vh; display: flex; flex-direction: column;
+        }
+        .status-bar {
+            height: 44px; background: #fff;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 20px; font-size: 12px; font-weight: 600;
+            color: var(--text); border-bottom: 1px solid #e5e5ea;
+        }
+        .status-bar .time { font-weight: 700; }
+        .status-bar .icons { display: flex; gap: 6px; font-size: 11px; }
+        .header {
+            background: #fff; padding: 16px 24px;
+            border-bottom: 1px solid #e5e5ea;
+            position: sticky; top: 0; z-index: 50;
+        }
+        .header h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.4px; }
+        .header p { font-size: 13px; color: var(--text2); margin-top: 2px; }
+        .content {
+            max-width: 430px; margin: 0 auto;
+            padding: 20px 16px 100px; width: 100%;
+        }
+        .category-section { margin-bottom: 32px; }
+        .category-header {
+            display: flex; align-items: center; gap: 10px;
+            margin-bottom: 16px; padding-bottom: 12px;
+            border-bottom: 1px solid #e5e5ea;
+        }
+        .category-header .cat-icon-lg {
+            width: 36px; height: 36px; border-radius: 9px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px; flex-shrink: 0;
+        }
+        .category-header h2 { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; }
+        .category-header .cat-meta { margin-left: auto; text-align: right; }
+        .category-header .cat-meta .count { font-size: 12px; color: var(--text2); font-weight: 500; }
+        .category-header .cat-meta .label { font-size: 11px; color: var(--text2); }
+        .concept-label {
+            font-size: 11px; font-weight: 600; color: var(--text2);
+            text-transform: uppercase; letter-spacing: 0.5px;
+            margin-bottom: 8px; padding-left: 4px;
+        }
+        .card-wrap { margin-bottom: 20px; }
+        .rec-card {
+            background: var(--card); border-radius: 14px; padding: 18px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+            position: relative; overflow: hidden;
+        }
+        .cta-btn {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 10px 18px; border-radius: 10px;
+            font-size: 14px; font-weight: 600; border: none;
+            cursor: pointer; transition: opacity 0.15s; text-decoration: none;
+        }
+        .cta-btn:hover { opacity: 0.85; }
+        .cta-btn.blue { background: var(--blue); color: #fff; }
+        .cta-btn.green { background: var(--green); color: #fff; }
+        .cta-btn.outline { background: transparent; border: 1.5px solid var(--blue); color: var(--blue); }
+        .cta-btn.white { background: #fff; color: var(--text); }
+        .cta-btn.small { padding: 7px 14px; font-size: 13px; }
+        .progress-bar {
+            height: 6px; background: #e5e5ea;
+            border-radius: 3px; overflow: hidden; margin: 8px 0;
+        }
+        .progress-bar .fill { height: 100%; border-radius: 3px; }
+        .benefit-list { list-style: none; margin: 10px 0; }
+        .benefit-list li {
+            display: flex; align-items: flex-start; gap: 8px;
+            padding: 5px 0; font-size: 13px; color: var(--text); line-height: 1.4;
+        }
+        .benefit-list li .check { flex-shrink: 0; margin-top: 1px; }
+        .checklist-item {
+            display: flex; align-items: center; gap: 10px; padding: 8px 0; font-size: 14px;
+        }
+        .checklist-item .circle {
+            width: 22px; height: 22px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; font-size: 11px;
+        }
+        .checklist-item .circle.done { background: var(--green); color: #fff; }
+        .checklist-item .circle.empty { border: 2px solid #d1d1d6; color: transparent; }
+        .category-divider { height: 1px; background: #e5e5ea; margin: 8px 0 32px; }
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 260px; right: 0;
+            height: 83px; background: #fff; border-top: 1px solid #e5e5ea;
+            display: flex; align-items: flex-start; justify-content: center;
+            padding-top: 8px; gap: 32px; z-index: 50;
+        }
+        .bottom-nav a {
+            display: flex; flex-direction: column; align-items: center;
+            gap: 3px; text-decoration: none; color: var(--text2);
+            font-size: 10px; font-weight: 500;
+        }
+        .bottom-nav a.active { color: var(--blue); }
+        .bottom-nav a .nav-icon {
+            width: 24px; height: 24px; display: flex;
+            align-items: center; justify-content: center; font-size: 18px;
+        }
+        .progress-ring { display: block; }
+        .comparison-cols {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0;
+        }
+        .comparison-col { padding: 12px; border-radius: 10px; font-size: 12px; }
+        .comparison-col .col-label { font-weight: 600; font-size: 13px; margin-bottom: 4px; }
+        .comparison-col .col-desc { font-size: 11px; line-height: 1.4; }
+        .comparison-col.negative { background: #f2f2f7; color: var(--text2); }
+        .comparison-col.positive { background: var(--green-bg); color: var(--green); }
+        .step-num {
+            width: 28px; height: 28px; border-radius: 50%;
+            background: var(--blue); color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px; font-weight: 700; flex-shrink: 0;
+        }
+        .dark-gradient {
+            background: linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%); color: #fff;
+        }
+        .dark-gradient .subtitle { color: rgba(255,255,255,0.6); }
+        .trust-icon {
+            width: 44px; height: 44px; background: var(--green-bg);
+            border-radius: 12px; display: flex; align-items: center;
+            justify-content: center; font-size: 22px; margin-bottom: 12px;
+        }
+        .time-badge {
+            display: inline-flex; align-items: center; gap: 4px;
+            background: #f2f2f7; padding: 3px 8px; border-radius: 6px;
+            font-size: 11px; color: var(--text2); font-weight: 500; margin-top: 8px;
+        }
+        .conv-accent { border-left: 4px solid var(--blue); padding-left: 16px; }
+        .highlight-dollar {
+            font-size: 28px; font-weight: 700; color: var(--text); letter-spacing: -0.5px;
+        }
+        .tag {
+            display: inline-block; padding: 3px 8px; border-radius: 6px;
+            font-size: 11px; font-weight: 600;
+        }
+        .tag.onetime { background: var(--amber-bg); color: var(--amber); }
+        .stat-row { display: flex; gap: 12px; margin: 10px 0; }
+        .stat-box { flex: 1; padding: 10px; border-radius: 10px; text-align: center; }
+        .stat-box .stat-val { font-size: 18px; font-weight: 700; }
+        .stat-box .stat-label { font-size: 11px; margin-top: 2px; }
+        .stat-box.blue-bg { background: var(--blue-bg); }
+        .stat-box.green-bg { background: var(--green-bg); }
+        .stat-box.amber-bg { background: var(--amber-bg); }
+        .stat-box.red-bg { background: var(--red-bg); }
+        .card-footer {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-top: 14px; padding-top: 12px; border-top: 1px solid #f2f2f7;
+        }
+        .card-footer .secondary-link {
+            font-size: 13px; color: var(--text2); text-decoration: none; font-weight: 500;
+        }
+        .card-footer .secondary-link:hover { color: var(--text); }
+        .card-icon {
+            width: 42px; height: 42px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; flex-shrink: 0;
+        }
+
+        /* Additional utility classes */
+        .mb-0 { margin-bottom: 0; }
+        .mb-4 { margin-bottom: 4px; }
+        .mb-8 { margin-bottom: 8px; }
+        .mb-12 { margin-bottom: 12px; }
+        .mb-16 { margin-bottom: 16px; }
+        .mt-8 { margin-top: 8px; }
+        .mt-12 { margin-top: 12px; }
+        .mt-16 { margin-top: 16px; }
+
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+
+        .font-bold { font-weight: 700; }
+        .font-semibold { font-weight: 600; }
+        .font-medium { font-weight: 500; }
+
+        .text-blue { color: var(--blue); }
+        .text-green { color: var(--green); }
+        .text-amber { color: var(--amber); }
+        .text-red { color: var(--red); }
+        .text-muted { color: var(--text2); }
+
+        .bg-blue { background: var(--blue); }
+        .bg-green { background: var(--green); }
+        .bg-blue-bg { background: var(--blue-bg); }
+        .bg-green-bg { background: var(--green-bg); }
+        .bg-amber-bg { background: var(--amber-bg); }
+        .bg-red-bg { background: var(--red-bg); }
+
+        .rounded-full { border-radius: 50%; }
+        .rounded-lg { border-radius: 10px; }
+        .rounded-xl { border-radius: 14px; }
+
+        .flex { display: flex; }
+        .flex-col { flex-direction: column; }
+        .items-center { align-items: center; }
+        .justify-center { justify-content: center; }
+        .justify-between { justify-content: space-between; }
+        .gap-8 { gap: 8px; }
+        .gap-12 { gap: 12px; }
+        .gap-16 { gap: 16px; }
+
+        .w-full { width: 100%; }
+        .flex-1 { flex: 1; }
+        .flex-shrink-0 { flex-shrink: 0; }
+
+        /* Pulse animation for attention */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        .animate-pulse { animation: pulse 2s infinite; }
+
+        /* Card hover effect */
+        .rec-card-hover {
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+        .rec-card-hover:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+        }
+
+        /* Section annotation */
+        .section-note {
+            background: var(--blue-bg);
+            color: var(--blue);
+            font-size: 11px;
+            font-weight: 600;
+            padding: 6px 10px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            display: inline-block;
+        }
+
+        /* Icon circle variants */
+        .icon-circle {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+        .icon-circle.sm {
+            width: 36px;
+            height: 36px;
+            font-size: 16px;
+        }
+        .icon-circle.lg {
+            width: 56px;
+            height: 56px;
+            font-size: 26px;
+        }
+
+        /* Divider inside card */
+        .card-divider {
+            height: 1px;
+            background: #f2f2f7;
+            margin: 12px 0;
+        }
+
+        /* Inline badge */
+        .inline-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .inline-badge.blue {
+            background: var(--blue-bg);
+            color: var(--blue);
+        }
+        .inline-badge.green {
+            background: var(--green-bg);
+            color: var(--green);
+        }
+        .inline-badge.amber {
+            background: var(--amber-bg);
+            color: var(--amber);
+        }
+        .inline-badge.red {
+            background: var(--red-bg);
+            color: var(--red);
+        }
+
+        /* Skeleton / placeholder */
+        .skeleton-line {
+            height: 10px;
+            background: #e5e5ea;
+            border-radius: 5px;
+            margin-bottom: 6px;
+        }
+        .skeleton-line.short { width: 60%; }
+        .skeleton-line.medium { width: 80%; }
+
+        /* Scroll indicator dot */
+        .scroll-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #d1d1d6;
+            display: inline-block;
+        }
+        .scroll-dot.active {
+            background: var(--blue);
+        }
+
+        /* Tooltip-like label */
+        .tooltip-label {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(0,0,0,0.06);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text2);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            .main { margin-left: 0; }
+            .bottom-nav { left: 0; }
+            .content { padding: 16px 12px 100px; }
+        }
+
+        /* Smooth scroll */
+        html { scroll-behavior: smooth; }
+
+        /* Selection highlight */
+        ::selection {
+            background: var(--blue-bg);
+            color: var(--blue);
+        }
+
+        /* Focus styles */
+        button:focus-visible,
+        a:focus-visible {
+            outline: 2px solid var(--blue);
+            outline-offset: 2px;
+        }
+
+        /* Card inner shadow variant */
+        .rec-card.inset {
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.06);
+        }
+
+        /* Dashed border variant */
+        .rec-card.dashed {
+            border: 2px dashed #d1d1d6;
+            background: transparent;
+        }
+
+        /* Banner card */
+        .banner-card {
+            background: linear-gradient(135deg, var(--blue) 0%, #0066cc 100%);
+            color: #fff;
+            border-radius: 14px;
+            padding: 20px;
+        }
+        .banner-card.green {
+            background: linear-gradient(135deg, var(--green) 0%, #0f5132 100%);
+        }
+        .banner-card.amber {
+            background: linear-gradient(135deg, var(--amber) 0%, #8a5a0a 100%);
+        }
+
+        /* Counter badge */
+        .counter-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 20px;
+            height: 20px;
+            padding: 0 6px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .counter-badge.blue {
+            background: var(--blue);
+            color: #fff;
+        }
+        .counter-badge.green {
+            background: var(--green);
+            color: #fff;
+        }
+
+        /* Subtitle text */
+        .card-subtitle {
+            font-size: 13px;
+            color: var(--text2);
+            line-height: 1.5;
+        }
+
+        /* Micro interaction hint */
+        .swipe-hint {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            color: var(--text2);
+            margin-top: 8px;
+        }
+        .swipe-hint .arrow {
+            display: inline-block;
+            animation: swipe 1.5s infinite;
+        }
+        @keyframes swipe {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(4px); }
+        }
+
+        /* Stacked cards offset */
+        .card-stack {
+            position: relative;
+        }
+        .card-stack::before,
+        .card-stack::after {
+            content: '';
+            position: absolute;
+            left: 4px;
+            right: 4px;
+            height: 100%;
+            background: #fff;
+            border-radius: 14px;
+            z-index: -1;
+        }
+        .card-stack::before {
+            top: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+        .card-stack::after {
+            top: 8px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+        }
+
+        /* Category color coding */
+        .cat-blue { --cat-color: var(--blue); --cat-bg: var(--blue-bg); }
+        .cat-green { --cat-color: var(--green); --cat-bg: var(--green-bg); }
+        .cat-amber { --cat-color: var(--amber); --cat-bg: var(--amber-bg); }
+        .cat-red { --cat-color: var(--red); --cat-bg: var(--red-bg); }
+    </style>
+</head>
+<body>
+<!-- Sidebar -->
+<aside class="sidebar">
+    <div class="sidebar-logo">
+        <h2>Advizmo</h2>
+        <span>Design System</span>
+    </div>
+    <nav>
+        <a href="#cat1">
+            <span class="cat-icon" style="background:#0a84ff22;color:#0a84ff;">&#128279;</span>
+            Partial Connection
+            <span class="cat-count">5</span>
+        </a>
+        <a href="#cat2">
+            <span class="cat-icon" style="background:#166f4722;color:#166f47;">&#127974;</span>
+            No Accounts
+            <span class="cat-count">5</span>
+        </a>
+        <a href="#cat3">
+            <span class="cat-icon" style="background:#0a84ff22;color:#0a84ff;">&#128179;</span>
+            Connect Checking
+            <span class="cat-count">5</span>
+        </a>
+        <a href="#cat4">
+            <span class="cat-icon" style="background:#c2790a22;color:#c2790a;">&#128176;</span>
+            Fund Account
+            <span class="cat-count">5</span>
+        </a>
+        <a href="#cat5">
+            <span class="cat-icon" style="background:#b91c1c22;color:#b91c1c;">&#128260;</span>
+            Initial Review
+            <span class="cat-count">5</span>
+        </a>
+        <a href="#cat6">
+            <span class="cat-icon" style="background:#0a84ff22;color:#0a84ff;">&#128100;</span>
+            Complete Profile
+            <span class="cat-count">5</span>
+        </a>
+        <a href="#cat7">
+            <span class="cat-icon" style="background:#166f4722;color:#166f47;">&#127919;</span>
+            Account Targets
+            <span class="cat-count">5</span>
+        </a>
+        <a href="#cat8">
+            <span class="cat-icon" style="background:#c2790a22;color:#c2790a;">&#128737;</span>
+            Cash Cushion
+            <span class="cat-count">5</span>
+        </a>
+    </nav>
+</aside>
+
+<div class="main">
+    <div class="status-bar">
+        <span class="time">9:41</span>
+        <span class="icons">&#128246; &#128267;</span>
+    </div>
+    <div class="header">
+        <h1>Recommendation Cards</h1>
+        <p>8 categories x 5 concepts = 40 variations</p>
+    </div>
+    <div class="content">
+<!-- ====== CATEGORY 1: Partial Account Connection ====== -->
+<section class="category-section" id="cat1">
+    <div class="category-header">
+        <div class="cat-icon-lg" style="background:var(--blue-bg);color:var(--blue);">&#128279;</div>
+        <div><h2>Partial Account Connection</h2></div>
+        <div class="cat-meta">
+            <div class="count">5 concepts</div>
+            <div class="label">Add account CTA</div>
+        </div>
+    </div>
+
+    <!-- Concept 1: Compact Banner -->
+    <div class="card-wrap">
+        <div class="concept-label">Concept 1 &mdash; Compact Banner</div>
+        <div class="rec-card" style="border-left:4px solid var(--blue);display:flex;align-items:center;gap:14px;">
+            <div style="background:var(--blue-bg);color:var(--blue);width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">+</div>
+            <div style="flex:1;min-width:0;">
+                <div style="font-size:15px;font-weight:600;">2 of 4 accounts connected</div>
+                <div class="progress-bar" style="margin-top:6px;">
+                    <div class="fill" style="width:50%;background:var(--blue);"></div>
+                </div>
+                <div style="font-size:12px;color:var(--text2);margin-top:2px;">Connect more for a complete picture</div>
+            </div>
+            <button class="cta-btn blue small">Add account</button>
+        </div>
+    </div>
+
+    <!-- Concept 2: Card with Benefits -->
+    <div class="card-wrap">
+        <div class="concept-label">Concept 2 &mdash; Card with Benefits</div>
+        <div class="rec-card">
+            <div style="font-size:16px;font-weight:700;margin-bottom:4px;">See your complete financial picture</div>
+            <div style="font-size:13px;color:var(--text2);margin-bottom:10px;">Connect all your accounts for a full view</div>
+            <ul class="benefit-list">
+                <li><span class="check" style="color:var(--green);">&#10003;</span> Track all spending in one place</li>
+                <li><span class="check" style="color:var(--green);">&#10003;</span> Get personalized recommendations</li>
+                <li><span class="check" style="color:var(--green);">&#10003;</span> See your real net worth</li>
+            </ul>
+            <button class="cta-btn blue" style="margin-top:4px;">Add account &rarr;</button>
+        </div>
+    </div>
+
+    <!-- Concept 3: Checklist Preview -->
+    <div class="card-wrap">
+        <div class="concept-label">Concept 3 &mdash; Checklist Preview</div>
+        <div class="rec-card">
+            <div style="font-size:16px;font-weight:700;margin-bottom:10px;">Connect your accounts</div>
+            <div class="checklist-item">
+                <div class="circle done">&#10003;</div>
+                <div>
+                    <div style="font-size:14px;font-weight:500;">Checking account</div>
+                    <div style="font-size:12px;color:var(--green);">Connected</div>
+                </div>
+            </div>
+            <div class="checklist-item">
+                <div class="circle done">&#10003;</div>
+                <div>
+                    <div style="font-size:14px;font-weight:500;">Savings account</div>
+                    <div style="font-size:12px;color:var(--green);">Connected</div>
+                </div>
+            </div>
+            <div class="checklist-item">
+                <div class="circle empty"></div>
+                <div>
+                    <div style="font-size:14px;font-weight:500;">Investment account</div>
+                    <div style="font-size:12px;color:var(--text2);">Not connected</div>
+                </div>
+            </div>
+            <div class="checklist-item">
+                <div class="circle empty"></div>
+                <div>
+                    <div style="font-size:14px;font-weight:500;">Credit card</div>
+                    <div style="font-size:12px;color:var(--text2);">Not connected</div>
+                </div>
+            </div>
+            <button class="cta-btn blue" style="width:100%;margin-top:14px;justify-content:center;">Add account</button>
+            <div style="text-align:center;margin-top:8px;">
+                <a href="#" style="font-size:13px;color:var(--text2);text-decoration:none;">These are all my accounts</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Concept 4: Progress Ring -->
+    <div class="card-wrap">
+        <div class="concept-label">Concept 4 &mdash; Progress Ring</div>
+        <div class="rec-card" style="display:flex;align-items:center;gap:16px;">
+            <svg class="progress-ring" width="64" height="64" viewBox="0 0 64 64">
+                <circle cx="32" cy="32" r="28" stroke="#e5e5ea" stroke-width="6" fill="none"/>
+                <circle cx="32" cy="32" r="28" stroke="#0a84ff" stroke-width="6" fill="none"
+                    stroke-dasharray="175.93" stroke-dashoffset="87.96"
+                    stroke-linecap="round" transform="rotate(-90 32 32)"/>
+                <text x="32" y="32" text-anchor="middle" dominant-baseline="central"
+                    font-size="14" font-weight="700" fill="#1c1c1e">50%</text>
+            </svg>
+            <div style="flex:1;">
+                <div style="font-size:15px;font-weight:600;">2 accounts connected</div>
+                <div style="font-size:12px;color:var(--text2);margin-top:2px;">Connect 2 more for full insights</div>
+                <button class="cta-btn blue small" style="margin-top:10px;">Add account</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Concept 5: Conversational -->
+    <div class="card-wrap">
+        <div class="concept-label">Concept 5 &mdash; Conversational</div>
+        <div class="rec-card conv-accent">
+            <div style="font-size:15px;font-weight:500;line-height:1.5;color:var(--text);">
+                You've connected checking and savings. Add investments for a complete view of your finances.
+            </div>
+            <button class="cta-btn blue" style="margin-top:12px;">Add account</button>
+            <div style="margin-top:8px;">
+                <a href="#" style="font-size:13px;color:var(--text2);text-decoration:none;">These are all my accounts</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="category-divider"></div>
+<!-- ====== CATEGORY 2: No External Accounts - Onboarding ====== -->
+<section class="category-section" id="cat2">
+    <div class="category-header">
+        <div class="cat-icon-lg" style="background:var(--green-bg);color:var(--green);">&#127974;</div>
+        <div><h2>No External Accounts &mdash; Onboarding</h2></div>
+        <div class="cat-meta">
+            <div class="count">5 concepts</div>
+            <div class="label">First account CTA</div>
+        </div>
+    </div>
+
+    <!-- Concept 1: Welcome Card -->
+    <div class="card-wrap">
+        <div class="concept-label">Concept 1 &mdash; Welcome Card</div>
+        <div class="rec-card dark-gradient" style="text-align:center;padding:32px 24px;">
+            <div style="font-size:28px;margin-bottom:8px;">&#128640;</div>
+            <div style="font-size:22px;font-weight:700;color:#fff;margin-bottom:6px;">Welcome to Advizmo</div>
+            <div class="subtitle" style="font-size:14px;margin-bottom:20px;">Connect your first account to get started with personalized financial insights.</div>
+            <button class="cta-btn white" style="width:100%;justify-content:center;">Connect account &rarr;</button>
+        </div>
+    </div>
+
+    <!-- Concept 2: Benefit Card -->
+    <div class="card-wrap">
+        <div class="concept-label">Concept 2 &mdash; Benefit Card</div>
+        <div class="rec-card">
+            <div style="font-size:17px;font-weight:700;margin-bottom:4px;">See all your money in one place</div>
+            <div style="font-size:13px;color:var(--text2);margin-bottom:8px;">Connect your first account in under 2 minutes</div>
+            <ul class="benefit-list">
+                <li><span class="check" style="color:var(--green);">&#10003;</span> Automatic transaction tracking</li>
+                <li><span class="check" style="color:var(--green);">&#10003;</span> Personalized insights and recommendations</li>
+                <li><span class="check" style="color:var(--green);">&#10003;</span> Real-time balance updates</li>
+            </ul>
+            <div style="display:flex;align-items:center;gap:10px;margin-top:14px;">
+                <button class="cta-btn blue">Connect account &rarr;</button>
+                <span class="time-badge">&#9201; 2 minutes</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Concept 3: Trust Card -->
+    <div class="card-wrap">
+        <div class="concept-label">Concept 3 &mdash; Trust Card</div>
+        <div class="rec-card">
+            <div class="trust-icon">&#128737;</div>
+            <div style="font-size:17px;font-weight:700;margin-bottom:4px;">Bank-level security</div>
+            <div style="font-size:13px;color:var(--text2);line-height:1.5;margin-bottom:14px;">Your data is encrypted with 256-bit AES and never shared with third parties. We use the same security as major banks.</div>
+            <button class="cta-btn blue">Connect securely &rarr;</button>
+        </div>
+    </div>
+
+    <!-- Concept 4: Step Indicator -->
+    <div class="card-wrap">
+        <div class="concept-label">Concept 4 &mdash; Step / Animated</div>
+        <div class="rec-card">
+            <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;">
+                <div class="step-num">1</div>
+                <div>
+                    <div style="font-size:16px;font-weight:700;">Step 1: Connect your bank</div>
+                    <div style="font-size:12px;color:var(--text2);">This is where it all begins</div>
+                </div>
+            </div>
+            <div style="background:var(--blue-bg);border-radius:10px;padding:16px;text-align:center;margin-bottom:14px;">
+                <div style="font-size:32px;margin-bottom:4px;">&#127974;</div>
+                <div style="font-size:13px;color:var(--blue);font-weight:500;">Secure bank connection</div>
+            </div>
+            <button class="cta-btn blue" style="width:100%;justify-content:center;">Get started &rarr;</button>
+        </div>
+    </div>
+
+    <!-- Concept 5: Minimal -->
+    <div class="card-wrap">
+        <div class="concept-label">Concept 5 &mdash; Minimal</div>
+        <div class="rec-card" style="text-align:center;padding:28px 20px;">
+            <div style="font-size:17px;font-weight:700;margin-bottom:4px;">Connect your first account</div>
+            <div style="font-size:13px;color:var(--text2);margin-bottom:16px;">Start in 2 minutes</div>
+            <button class="cta-btn blue" style="width:100%;justify-content:center;">Connect account &rarr;</button>
+        </div>
+    </div>
+</section>
+
+<div class="category-divider"></div>
+<!-- ====== CATEGORY 3: Connect Checking ====== -->
+<section class="category-section" id="cat3">
+    <div class="category-header">
+        <div class="cat-icon-lg" style="background:var(--blue-bg);color:var(--blue);">&#128179;</div>
+        <div><h2>Connect Checking</h2></div>
+        <div class="cat-meta">
+            <div class="count">5 concepts</div>
+            <div class="label">Track income and expenses</div>
+        </div>
+    </div>
+
+    <!-- Concept 1: Benefit-First -->
+    <div class="card-wrap">
+        <div class="concept-label">Concept 1 &mdash; Benefit-First</div>
+        <div class="rec-card">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+                <div class="card-icon" style="background:var(--blue-bg);color:var(--blue);">&#128181;</div>
+                <div style="font-size:17px;font-weight:700;">Track every dollar automatically</div>
+            </div>
+            <div style="font-size:13px;color:var(--text2);line-height:1.5;margin-bottom:14px;">Connect your checking account to see income, expenses, and cash flow in real time. No manual entry needed.</div>
+            <button class="cta-btn blue">Connect checking &rarr;</button>
+        </div>
+    </div>
+
+    <!-- Concept 2: Comparison -->
+    <div class="card-wrap">
+        <div class="concept-label">Concept 2 &mdash; Comparison</div>
+        <div class="rec-card">
+            <div style="font-size:16px;font-weight:700;margin-bottom:10px;">Connect checking for better insights</div>
+            <div class="comparison-cols">
+                <div class="comparison-col negative">
+                    <div class="col-label" style="color:var(--text2);">Without checking</div>
+                    <div class="col-desc">Partial view of your finances, manual tracking</div>
+                </div>
+                <div class="comparison-col positive">
+                    <div class="col-label">With checking</div>
+                    <div class="col-desc">Complete picture, automatic cash flow tracking</div>
+                </div>
+            </div>
+            <button class="cta-btn blue" style="width:100%;margin-top:8px;justify-content:center;">Connect checking &rarr;</button>
+        </div>
+    </div>
+
+    <!-- Concept 3: Insight-Led -->
+    <div class="card-wrap">
+        <div class="concept-label">Concept 3 &mdash; Insight-Led</div>
+        <div class="rec-card" style="border-left:4px solid var(--amber);background:var(--amber-bg);">
+            <div style="font-size:14px;font-weight:600;color:var(--amber);margin-bottom:6px;">&#9889; Insight</div>
+            <div style="font-size:15px;font-weight:600;margin-bottom:4px;">Your savings are connected but we can't see cash flow</div>
+            <div style="font-size:13px;color:var(--text2);margin-bottom:12px;">Connect checking to unlock automatic income and expense tracking.</div>
+            <button class="cta-btn blue">Connect checking &rarr;</button>
+        </div>
+    </div>
+
+    <!-- Concept 4: Minimal -->
+    <div class="card-wrap">
+        <div class="concept-label">Concept 4 &mdash; Minimal</div>
+        <div class="rec-card" style="display:flex;align-items:center;gap:12px;">
+            <div class="card-icon" style="background:var(--blue-bg);color:var(--blue);">&#127974;</div>
+            <div style="flex:1;">
+                <div style="font-size:15px;font-weight:600;">Connect checking</div>
+                <span class="time-badge">&#9201; 2 minutes</span>
+            </div>
+            <button class="cta-btn blue small">Connect &rarr;</button>
+        </div>
+    </div>
+
+    <!-- Concept 5: Conversational -->
+    <div class="card-wrap">
+        <div class="concept-label">Concept 5 &mdash; Conversational</div>
+        <div class="rec-card conv-accent">
+            <div style="font-size:15px;font-weight:500;line-height:1.5;color:var(--text);">
+                I can't see your income and expenses yet. Add your checking account for automatic tracking of every transaction.
+            </div>
+            <button class="cta-btn blue" style="margin-top:12px;">Connect checking &rarr;</button>
+        </div>
+    </div>
+</section>
+
+<div class="category-divider"></div>
+<!-- ====== CATEGORY 4: Fund Advizmo Account ====== -->
+<section class="category-section" id="cat4">
+    <div class="category-header">
+        <div class="cat-icon-lg" style="background:var(--amber-bg);color:var(--amber);">&#128176;</div>
+        <div><h2>Fund Advizmo Account</h2></div>
+        <div class="cat-meta">
+            <div class="count">5 concepts</div>
+            <div class="label">Move money to invest</div>
+        </div>
+    </div>
+
+    <!-- Concept 1: Amount-Focused -->
+    <div class="card-wrap">
+        <div class="concept-label">Concept 1 &mdash; Amount-Focused</div>
+        <div class="rec-card">
+            <div style="font-size:12px;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;font-weight:600;margin-bottom:4px;">Idle cash detected</div>
+            <div class="highlight-dollar">$4,200</div>
+            <div style="font-size:13px;color:var(--text2);margin:4px 0 12px;">sitting in checking earning 0.01%</div>
+            <div style="background:var(--green-bg);border-radius:8px;padding:10px 14px;display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+                <span style="color:var(--green);font-weight:600;">&rarr;</span>
+                <span style="font-size:13px;color:var(--green);font-weight:500;">Move to start earning <strong>5.0% APY</strong></span>
+            </div>
+            <button class="cta-btn green" style="width:100%;justify-content:center;">Fund account &rarr;</button>
+        </div>
+    </div>
+
+    <!-- Concept 2: Goal-Oriented -->
+    <div class="card-wrap">
+        <div class="concept-label">Concept 2 &mdash; Goal-Oriented</div>
+        <div class="rec-card" style="text-align:center;padding:28px 20px;">
+            <div style="font-size:32px;margin-bottom:8px;">&#127793;</div>
+            <div style="font-size:18px;font-weight:700;margin-bottom:4px;">Start building wealth</div>
+            <div style="font-size:13px;color:var(--text2);margin-bottom:18px;">Your first investment is 2 minutes away</div>
+            <button class="cta-btn green" style="width:100%;justify-content:center;">Fund account &rarr;</button>
+        </div>
+    </div>
+
+    <!-- Concept 3: Comparison -->
+    <div class="card-wrap">
+        <div class="concept-label">Concept 3 &mdash; Comparison</div>
+        <div class="rec-card">
+            <div style="font-size:16px;font-weight:700;margin-bottom:10px;">Put your money to work</div>
+            <div class="comparison-cols">
+                <div class="comparison-col negative">
+                    <div class="col-label">Checking</div>
+                    <div class="col-desc" style="font-size:20px;font-weight:700;margin-top:4px;">0.01%</div>
+                    <div class="col-desc">APY</div>
+                </div>
+                <div class="comparison-col positive">
+                    <div class="col-label">Advizmo</div>
+                    <div class="col-desc" style="font-size:20px;font-weight:700;margin-top:4px;color:var(--green);">5.0%</div>
+                    <div class="col-desc">APY</div>
+                </div>
+            </div>
+            <div style="text-align:center;margin:12px 0;font-size:14px;font-weight:600;color:var(--green);">+$209/year on $4,200</div>
+            <button class="cta-btn green" style="width:100%;justify-content:center;">Fund account &rarr;</button>
+        </div>
+    </div>
+
+    <!-- Concept 4: Step Indicator -->
+    <div class="card-wrap">
+        <div class="concept-label">Concept 4 &mdash; Step Indicator</div>
+        <div class="rec-card">
+            <div style="font-size:12px;color:var(--text2);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Step 3 of 4</div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+                <div style="height:6px;flex:1;border-radius:3px;background:var(--green);"></div>
+                <div style="height:6px;flex:1;border-radius:3px;background:var(--green);"></div>
+                <div style="height:6px;flex:1;border-radius:3px;background:var(--blue);"></div>
+                <div style="height:6px;flex:1;border-radius:3px;background:#e5e5ea;"></div>
+            </div>
+            <div style="font-size:17px;font-weight:700;margin-bottom:4px;">Fund your account</div>
+            <div style="font-size:13px;color:var(--text2);margin-bottom:14px;">Transfer money to start automated investing.</div>
+            <button class="cta-btn green" style="width:100%;justify-content:center;">Fund account &rarr;</button>
+        </div>
+    </div>
+
+    <!-- Concept 5: Conversational -->
+    <div class="card-wrap">
+        <div class="concept-label">Concept 5 &mdash; Conversational</div>
+        <div class="rec-card conv-accent">
+            <div style="font-size:15px;font-weight:500;line-height:1.5;color:var(--text);">
+                Ready to put your money to work? Fund your account to start automated investing and earn up to 5.0% APY.
+            </div>
+            <button class="cta-btn green" style="margin-top:12px;">Fund account &rarr;</button>
+        </div>
+    </div>
+</section>
+
+<div class="category-divider"></div>
+<!-- ====== CATEGORY 5: Initial Review Recurring ====== -->
+<section class="category-section" id="cat5">
+    <div class="category-header">
+        <div class="cat-icon-lg" style="background:var(--red-bg);color:var(--red);">&#128260;</div>
+        <div><h2>Initial Review Recurring</h2></div>
+        <div class="cat-meta">
+            <div class="count">5 concepts</div>
+            <div class="label">One-time only</div>
+        </div>
+    </div>
+
+    <!-- Concept 1: One-Time -->
+    <div class="card-wrap">
+        <div class="concept-label">Concept 1 &mdash; One-Time</div>
+        <div class="rec-card">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                <span class="tag onetime">ONE-TIME</span>
+            </div>
+            <div style="font-size:17px;font-weight:700;margin-bottom:4px;">Review your subscriptions</div>
+            <div style="font-size:13px;color:var(--text2);margin-bottom:12px;">We found 6 recurring charges on your accounts</div>
+            <div class="stat-row">
+                <div class="stat-box red-bg">
+                    <div class="stat-val" style="color:var(--red);">6</div>
+                    <div class="stat-label" style="color:var(--red);">Recurring charges</div>
+                </div>
+                <div class="stat-box amber-bg">
+                    <div class="stat-val" style="color:var(--amber);">$89</div>
+                    <div class="stat-label" style="color:var(--amber);">Monthly total</div>
+                </div>
+            </div>
+            <button class="cta-btn blue" style="width:100%;margin-top:8px;justify-content:center;">Review subscriptions &rarr;</button>
+        </div>
+    </div>
+
+    <!-- Concept 2: Time Estimate -->
+    <div class="card-wrap">
+        <div class="concept-label">Concept 2 &mdash; Time Estimate</div>
+        <div class="rec-card" style="display:flex;align-items:center;gap:14px;">
+            <div style="width:48px;height:48px;border-radius:12px;background:var(--amber-bg);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;">&#9201;</div>
+            <div style="flex:1;">
+                <div style="font-size:15px;font-weight:600;">2-minute review</div>
+                <div style="font-size:13px;color:var(--text2);">Understand where your money goes monthly</div>
+            </div>
+            <button class="cta-btn blue small">Review &rarr;</button>
+        </div>
+    </div>
+
+    <!-- Concept 3: Benefit-Led -->
+    <div class="card-wrap">
+        <div class="concept-label">Concept 3 &mdash; Benefit-Led</div>
+        <div class="rec-card">
+            <div style="font-size:17px;font-weight:700;margin-bottom:4px;">Know exactly what you're spending on</div>
+            <div style="font-size:13px;color:var(--text2);margin-bottom:10px;">Review once, track forever. Identify subscriptions you forgot about and cancel what you don't use.</div>
+            <ul class="benefit-list">
+                <li><span class="check" style="color:var(--green);">&#10003;</span> Find forgotten subscriptions</li>
+                <li><span class="check" style="color:var(--green);">&#10003;</span> Cancel what you don't use</li>
+            </ul>
+            <button class="cta-btn blue" style="margin-top:6px;">Review subscriptions &rarr;</button>
+        </div>
+    </div>
+
+    <!-- Concept 4: Curiosity -->
+    <div class="card-wrap">
+        <div class="concept-label">Concept 4 &mdash; Curiosity</div>
+        <div class="rec-card" style="border-left:4px solid var(--amber);background:var(--amber-bg);">
+            <div style="font-size:17px;font-weight:700;margin-bottom:4px;">We found 6 subscriptions</div>
+            <div style="font-size:13px;color:var(--text2);margin-bottom:12px;">Want to see what changed this month? Some charges may surprise you.</div>
+            <button class="cta-btn blue">Review what changed &rarr;</button>
+        </div>
+    </div>
+
+    <!-- Concept 5: Minimal -->
+    <div class="card-wrap">
+        <div class="concept-label">Concept 5 &mdash; Minimal</div>
+        <div class="rec-card" style="display:flex;align-items:center;gap:12px;">
+            <div style="width:40px;height:40px;border-radius:50%;background:var(--red-bg);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">&#128260;</div>
+            <div style="flex:1;">
+                <div style="font-size:15px;font-weight:600;">Review recurring transactions</div>
+                <span class="time-badge">&#9201; Takes 2 minutes</span>
+            </div>
+            <button class="cta-btn blue small">Review &rarr;</button>
+        </div>
+    </div>
+</section>
+
+<div class="category-divider"></div>
+<!-- ====== CATEGORY 6: Complete Profile ====== -->
+<section class="category-section" id="cat6">
+    <div class="category-header">
+        <div class="cat-icon-lg" style="background:var(--blue-bg);color:var(--blue);">&#128100;</div>
+        <div><h2>Complete Profile</h2></div>
+        <div class="cat-meta">
+            <div class="count">5 concepts</div>
+            <div class="label">Personalize recommendations</div>
+        </div>
+    </div>
+
+    <!-- Concept 1: Benefit Stack -->
+    <div class="card-wrap">
+        <div class="concept-label">Concept 1 &mdash; Benefit Stack</div>
+        <div class="rec-card">
+            <div style="font-size:17px;font-weight:700;margin-bottom:4px;">Personalize your experience</div>
+            <div style="font-size:13px;color:var(--text2);margin-bottom:10px;">Complete your profile to unlock tailored recommendations</div>
+            <ul class="benefit-list">
+                <li><span class="check" style="color:var(--green);">&#10003;</span> Recommendations matched to your goals</li>
+                <li><span class="check" style="color:var(--green);">&#10003;</span> Priority based on your financial situation</li>
+                <li><span class="check" style="color:var(--green);">&#10003;</span> Alerts relevant to your spending habits</li>
+            </ul>
+            <button class="cta-btn blue" style="margin-top:6px;">Complete profile &rarr;</button>
+        </div>
+    </div>
+
+    <!-- Concept 2: Progress -->
+    <div class="card-wrap">
+        <div class="concept-label">Concept 2 &mdash; Progress</div>
+        <div class="rec-card">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+                <div style="font-size:15px;font-weight:600;">Profile completion</div>
+                <div style="font-size:14px;font-weight:700;color:var(--blue);">60%</div>
+            </div>
+            <div class="progress-bar">
+                <div class="fill" style="width:60%;background:var(--blue);"></div>
+            </div>
+            <div style="font-size:13px;color:var(--text2);margin:10px 0;">Complete your profile for better, more personalized recommendations.</div>
+            <button class="cta-btn blue" style="width:100%;justify-content:center;">Complete profile &rarr;</button>
+        </div>
+    </div>
+
+    <!-- Concept 3: Personalization -->
+    <div class="card-wrap">
+        <div class="concept-label">Concept 3 &mdash; Personalization</div>
+        <div class="rec-card" style="text-align:center;padding:28px 20px;">
+            <div style="font-size:32px;margin-bottom:8px;">&#10024;</div>
+            <div style="font-size:17px;font-weight:700;margin-bottom:4px;">The more we know, the better we help</div>
+            <div style="font-size:13px;color:var(--text2);margin-bottom:16px;">Tell us about yourself so we can tailor every recommendation to your unique situation.</div>
+            <button class="cta-btn blue" style="width:100%;justify-content:center;">Complete profile &rarr;</button>
+        </div>
+    </div>
+
+    <!-- Concept 4: Minimal -->
+    <div class="card-wrap">
+        <div class="concept-label">Concept 4 &mdash; Minimal</div>
+        <div class="rec-card" style="display:flex;align-items:center;gap:12px;">
+            <div style="width:42px;height:42px;border-radius:50%;background:var(--blue-bg);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">&#128100;</div>
+            <div style="flex:1;">
+                <div style="font-size:15px;font-weight:600;">Complete your profile</div>
+                <div style="font-size:12px;color:var(--text2);">For personalized recommendations</div>
+            </div>
+            <button class="cta-btn blue small">Complete &rarr;</button>
+        </div>
+    </div>
+
+    <!-- Concept 5: Conversational -->
+    <div class="card-wrap">
+        <div class="concept-label">Concept 5 &mdash; Conversational</div>
+        <div class="rec-card conv-accent">
+            <div style="font-size:15px;font-weight:500;line-height:1.5;color:var(--text);">
+                Tell us about yourself so we can tailor recommendations to your goals. It only takes a minute and helps us serve you better.
+            </div>
+            <button class="cta-btn blue" style="margin-top:12px;">Complete profile &rarr;</button>
+        </div>
+    </div>
+</section>
+
+<div class="category-divider"></div>
+<!-- ====== CATEGORY 7: Review Account Targets ====== -->
+<section class="category-section" id="cat7">
+    <div class="category-header">
+        <div class="cat-icon-lg" style="background:var(--green-bg);color:var(--green);">&#127919;</div>
+        <div><h2>Review Account Targets</h2></div>
+        <div class="cat-meta">
+            <div class="count">5 concepts</div>
+            <div class="label">Set targets for advice</div>
+        </div>
+    </div>
+
+    <!-- Concept 1: Outcome-Led -->
+    <div class="card-wrap">
+        <div class="concept-label">Concept 1 &mdash; Outcome-Led</div>
+        <div class="rec-card">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+                <div style="width:42px;height:42px;border-radius:12px;background:var(--green-bg);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">&#127919;</div>
+                <div style="font-size:17px;font-weight:700;">Set targets, get better recommendations</div>
+            </div>
+            <div style="font-size:13px;color:var(--text2);line-height:1.5;margin-bottom:14px;">When we know your goals, we can give you advice that actually matters. Set savings targets, spending limits, and investment goals.</div>
+            <button class="cta-btn green">Set targets &rarr;</button>
+        </div>
+    </div>
+
+    <!-- Concept 2: Progress -->
+    <div class="card-wrap">
+        <div class="concept-label">Concept 2 &mdash; Progress</div>
+        <div class="rec-card">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+                <div style="width:36px;height:36px;border-radius:50%;background:#f2f2f7;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">&mdash;</div>
+                <div>
+                    <div style="font-size:15px;font-weight:600;">No targets set yet</div>
+                    <div style="font-size:12px;color:var(--text2);">Define your financial goals to get started</div>
+                </div>
+            </div>
+            <div style="background:#f2f2f7;border-radius:8px;padding:12px;margin:10px 0;">
+                <div style="font-size:13px;color:var(--text2);text-align:center;">Set targets for savings, spending, and investments</div>
+            </div>
+            <button class="cta-btn green" style="width:100%;justify-content:center;">Define goals &rarr;</button>
+        </div>
+    </div>
+
+    <!-- Concept 3: Comparison -->
+    <div class="card-wrap">
+        <div class="concept-label">Concept 3 &mdash; Comparison</div>
+        <div class="rec-card">
+            <div style="font-size:16px;font-weight:700;margin-bottom:10px;">Targets make recommendations better</div>
+            <div class="comparison-cols">
+                <div class="comparison-col negative">
+                    <div class="col-label" style="color:var(--text2);">Without targets</div>
+                    <div class="col-desc">Generic advice that may not fit your situation</div>
+                </div>
+                <div class="comparison-col positive">
+                    <div class="col-label">With targets</div>
+                    <div class="col-desc">Personalized strategy aligned with your goals</div>
+                </div>
+            </div>
+            <button class="cta-btn green" style="width:100%;margin-top:8px;justify-content:center;">Set targets &rarr;</button>
+        </div>
+    </div>
+
+    <!-- Concept 4: Minimal -->
+    <div class="card-wrap">
+        <div class="concept-label">Concept 4 &mdash; Minimal</div>
+        <div class="rec-card" style="display:flex;align-items:center;gap:12px;">
+            <div style="width:42px;height:42px;border-radius:50%;background:var(--green-bg);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">&#127919;</div>
+            <div style="flex:1;">
+                <div style="font-size:15px;font-weight:600;">Review your targets</div>
+                <div style="font-size:12px;color:var(--text2);">Personalize your strategy</div>
+            </div>
+            <button class="cta-btn green small">Review &rarr;</button>
+        </div>
+    </div>
+
+    <!-- Concept 5: Conversational -->
+    <div class="card-wrap">
+        <div class="concept-label">Concept 5 &mdash; Conversational</div>
+        <div class="rec-card conv-accent" style="border-left-color:var(--green);">
+            <div style="font-size:15px;font-weight:500;line-height:1.5;color:var(--text);">
+                What are you saving for? Set targets so I can give you better advice tailored to your financial goals.
+            </div>
+            <button class="cta-btn green" style="margin-top:12px;">Set targets &rarr;</button>
+        </div>
+    </div>
+</section>
+
+<div class="category-divider"></div>
+<!-- ====== CATEGORY 8: Review Cash Cushion ====== -->
+<section class="category-section" id="cat8">
+    <div class="category-header">
+        <div class="cat-icon-lg" style="background:var(--amber-bg);color:var(--amber);">&#128737;</div>
+        <div><h2>Review Cash Cushion</h2></div>
+        <div class="cat-meta">
+            <div class="count">5 concepts</div>
+            <div class="label">Protect investments</div>
+        </div>
+    </div>
+
+    <!-- Concept 1: Protection -->
+    <div class="card-wrap">
+        <div class="concept-label">Concept 1 &mdash; Protection</div>
+        <div class="rec-card">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+                <div style="width:42px;height:42px;border-radius:12px;background:var(--blue-bg);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">&#128737;</div>
+                <div style="font-size:17px;font-weight:700;">Protect yourself from unexpected expenses</div>
+            </div>
+            <div style="font-size:13px;color:var(--text2);line-height:1.5;margin-bottom:14px;">A cash cushion ensures unexpected costs don't force you to sell investments at a bad time. Set aside 3-6 months of expenses.</div>
+            <div class="stat-row">
+                <div class="stat-box blue-bg">
+                    <div class="stat-val" style="color:var(--blue);font-size:16px;">3-6</div>
+                    <div class="stat-label" style="color:var(--blue);">Months of expenses</div>
+                </div>
+                <div class="stat-box green-bg">
+                    <div class="stat-val" style="color:var(--green);font-size:16px;">Safe</div>
+                    <div class="stat-label" style="color:var(--green);">Investments protected</div>
+                </div>
+            </div>
+            <button class="cta-btn blue" style="width:100%;margin-top:6px;justify-content:center;">Set cushion &rarr;</button>
+        </div>
+    </div>
+
+    <!-- Concept 2: Peace of Mind -->
+    <div class="card-wrap">
+        <div class="concept-label">Concept 2 &mdash; Peace of Mind</div>
+        <div class="rec-card" style="text-align:center;padding:28px 20px;">
+            <div style="font-size:32px;margin-bottom:8px;">&#128564;</div>
+            <div style="font-size:17px;font-weight:700;margin-bottom:4px;">Sleep better knowing you're covered</div>
+            <div style="font-size:13px;color:var(--text2);margin-bottom:16px;">A cash cushion means unexpected expenses won't derail your financial plan.</div>
+            <button class="cta-btn blue" style="width:100%;justify-content:center;">Set up cushion &rarr;</button>
+        </div>
+    </div>
+
+    <!-- Concept 3: Smart Planning -->
+    <div class="card-wrap">
+        <div class="concept-label">Concept 3 &mdash; Smart Planning</div>
+        <div class="rec-card">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+                <div style="width:42px;height:42px;border-radius:12px;background:var(--amber-bg);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">&#128161;</div>
+                <div style="font-size:17px;font-weight:700;">A cash cushion keeps your investments on track</div>
+            </div>
+            <div style="font-size:13px;color:var(--text2);line-height:1.5;margin-bottom:14px;">Without a cushion, one emergency can wipe out months of investment gains. Build a safety net first.</div>
+            <ul class="benefit-list">
+                <li><span class="check" style="color:var(--green);">&#10003;</span> Avoid selling investments during emergencies</li>
+                <li><span class="check" style="color:var(--green);">&#10003;</span> Keep your portfolio growing uninterrupted</li>
+                <li><span class="check" style="color:var(--green);">&#10003;</span> Peace of mind for the unexpected</li>
+            </ul>
+            <button class="cta-btn blue" style="margin-top:6px;">Set cushion &rarr;</button>
+        </div>
+    </div>
+
+    <!-- Concept 4: Minimal -->
+    <div class="card-wrap">
+        <div class="concept-label">Concept 4 &mdash; Minimal</div>
+        <div class="rec-card" style="display:flex;align-items:center;gap:12px;">
+            <div style="width:42px;height:42px;border-radius:50%;background:var(--amber-bg);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">&#128737;</div>
+            <div style="flex:1;">
+                <div style="font-size:15px;font-weight:600;">Review your cash cushion</div>
+                <div style="font-size:12px;color:var(--text2);">Protect against surprises</div>
+            </div>
+            <button class="cta-btn blue small">Review &rarr;</button>
+        </div>
+    </div>
+
+    <!-- Concept 5: Conversational -->
+    <div class="card-wrap">
+        <div class="concept-label">Concept 5 &mdash; Conversational</div>
+        <div class="rec-card conv-accent">
+            <div style="font-size:15px;font-weight:500;line-height:1.5;color:var(--text);">
+                What if an unexpected expense came up? Set a cash cushion to keep your investments safe and your financial plan on track.
+            </div>
+            <button class="cta-btn blue" style="margin-top:12px;">Set cushion &rarr;</button>
+        </div>
+    </div>
+</section>
+
+    </div><!-- end .content -->
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <a href="#" class="active">
+            <span class="nav-icon">&#127968;</span>
+            Home
+        </a>
+        <a href="#">
+            <span class="nav-icon">&#128200;</span>
+            Insights
+        </a>
+        <a href="#">
+            <span class="nav-icon">&#128176;</span>
+            Accounts
+        </a>
+        <a href="#">
+            <span class="nav-icon">&#128176;</span>
+            Invest
+        </a>
+        <a href="#">
+            <span class="nav-icon">&#9881;</span>
+            Settings
+        </a>
+    </div>
+
+</div><!-- end .main -->
+</body>
+</html>
