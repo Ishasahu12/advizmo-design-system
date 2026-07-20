@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<title>Advizmo — Milestones</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f2f2f7;
+    --card: #fff;
+    --text: #1c1c1e;
+    --text2: #8e8e93;
+    --border: rgba(0,0,0,.06);
+    --blue: #0a84ff;
+    --green: #166f47;
+    --green-bg: #e8f8ec;
+    --amber: #c2790a;
+    --amber-bg: #fff5e6;
+    --red: #b91c1c;
+    --red-bg: #ffe8e8;
+    --blue-bg: #e8f0ff;
+    --radius: 16px;
+    --radius-sm: 12px;
+    --font-heading: 'IBM Plex Sans', -apple-system, sans-serif;
+    --font-body: 'Inter', -apple-system, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    max-width: 430px;
+    margin: 0 auto;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── iOS Status Bar ── */
+  .status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 28px 8px;
+    background: var(--bg);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .status-bar .time {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.3px;
+  }
+  .status-bar .icons {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .status-bar .icons svg { width: 18px; height: 12px; }
+
+  /* ── Sticky Header ── */
+  .header {
+    position: sticky;
+    top: 40px;
+    z-index: 99;
+    background: var(--bg);
+    padding: 8px 20px 14px;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .header h1 {
+    font-family: var(--font-heading);
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+
+  /* ── Main Content ── */
+  .content { padding: 16px 16px 110px; }
+
+  /* ── Progress Ring Section ── */
+  .ring-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 0 28px;
+  }
+  .ring-container {
+    position: relative;
+    width: 160px;
+    height: 160px;
+    margin-bottom: 20px;
+  }
+  .ring-svg {
+    width: 160px;
+    height: 160px;
+    transform: rotate(-90deg);
+  }
+  .ring-track {
+    fill: none;
+    stroke: #e8e8ed;
+    stroke-width: 10;
+  }
+  .ring-fill {
+    fill: none;
+    stroke: url(#ringGradient);
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 408.4;
+    stroke-dashoffset: 408.4;
+    transition: stroke-dashoffset 1.5s cubic-bezier(.4,0,.2,1);
+  }
+  .ring-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  .ring-pct {
+    font-family: var(--font-heading);
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    line-height: 1;
+    color: var(--text);
+  }
+  .ring-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text2);
+    margin-top: 2px;
+  }
+  .ring-subtitle {
+    font-size: 15px;
+    color: var(--text2);
+    text-align: center;
+    max-width: 240px;
+    line-height: 1.4;
+    margin-top: 4px;
+  }
+
+  /* ── Milestone Badges Row ── */
+  .badges-row {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+    max-width: 300px;
+  }
+  .milestone-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    transition: all .4s cubic-bezier(.4,0,.2,1);
+  }
+  .milestone-dot.done {
+    background: var(--green);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(22,111,71,.25);
+  }
+  .milestone-dot.pending {
+    background: #e8e8ed;
+    color: var(--text2);
+  }
+  .milestone-dot.active {
+    background: var(--blue);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(10,132,255,.3);
+    animation: dot-pulse 2s infinite;
+  }
+  @keyframes dot-pulse {
+    0%, 100% { box-shadow: 0 2px 8px rgba(10,132,255,.3); }
+    50% { box-shadow: 0 2px 16px rgba(10,132,255,.5); }
+  }
+
+  /* ── Celebration Banner ── */
+  .celebration {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px;
+    background: linear-gradient(135deg, var(--green-bg), #d4f5de);
+    border-radius: var(--radius-sm);
+    margin-bottom: 20px;
+    border: 1px solid rgba(22,111,71,.1);
+  }
+  .celebration-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .celebration-icon svg { width: 18px; height: 18px; color: #fff; }
+  .celebration-text {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--green);
+    line-height: 1.4;
+  }
+  .celebration-text strong { font-weight: 700; }
+
+  /* ── Section Headers ── */
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+    padding: 0 4px;
+  }
+  .section-header h2 {
+    font-family: var(--font-heading);
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+  .section-header .badge {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text2);
+  }
+
+  /* ── Milestone Cards ── */
+  .milestone-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    border: 0.5px solid var(--border);
+    box-shadow: 0 1px 3px rgba(0,0,0,.04);
+    margin-bottom: 12px;
+    overflow: hidden;
+    transition: all .3s ease;
+  }
+  .milestone-card:active { transform: scale(.99); }
+
+  .milestone-row {
+    display: flex;
+    align-items: center;
+    padding: 16px 18px;
+    gap: 14px;
+    cursor: pointer;
+  }
+
+  /* Milestone Number */
+  .milestone-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading);
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+    transition: all .3s ease;
+  }
+  .milestone-card.pending .milestone-num {
+    background: #f2f2f7;
+    color: var(--text2);
+  }
+  .milestone-card.done .milestone-num {
+    background: var(--green);
+    color: #fff;
+  }
+  .milestone-card.active .milestone-num {
+    background: var(--blue);
+    color: #fff;
+  }
+
+  /* Card Content */
+  .card-body { flex: 1; min-width: 0; }
+  .card-title {
+    font-family: var(--font-heading);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+    margin-bottom: 2px;
+  }
+  .milestone-card.done .card-title { color: var(--text2); }
+  .card-benefit {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.4;
+  }
+  .card-time {
+    font-size: 11px;
+    color: var(--text2);
+    margin-top: 3px;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+  .card-time svg { width: 11px; height: 11px; }
+
+  /* Done Badge */
+  .done-badge {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--green);
+    background: var(--green-bg);
+    padding: 4px 10px;
+    border-radius: 8px;
+    flex-shrink: 0;
+    letter-spacing: 0.2px;
+  }
+
+  /* CTA Button */
+  .card-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 10px;
+    padding: 8px 16px;
+    background: var(--blue);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-family: var(--font-heading);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .2s ease;
+  }
+  .card-cta:active { transform: scale(.96); opacity: .9; }
+  .card-cta svg { width: 14px; height: 14px; }
+
+  .card-cta.amber { background: var(--amber); }
+
+  /* ── Expanded Card Detail ── */
+  .card-detail {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .4s cubic-bezier(.4,0,.2,1);
+    background: #fafafa;
+    border-top: 0.5px solid transparent;
+  }
+  .milestone-card.expanded .card-detail {
+    max-height: 400px;
+    border-top-color: var(--border);
+  }
+  .card-detail-inner {
+    padding: 16px 18px 18px;
+  }
+  .detail-desc {
+    font-size: 14px;
+    line-height: 1.55;
+    color: #3a3a3c;
+    margin-bottom: 12px;
+  }
+
+  /* ── Loading State ── */
+  .milestone-card.loading .milestone-num {
+    border: 2px solid var(--blue);
+    background: transparent;
+    color: var(--blue);
+    animation: pulse-border 1.5s infinite;
+  }
+  .milestone-card.loading .card-title { color: var(--text2); }
+  @keyframes pulse-border { 0%, 100% { border-color: var(--blue); } 50% { border-color: rgba(10,132,255,.3); } }
+
+  /* ── Disabled State ── */
+  .milestone-card.disabled { opacity: .4; pointer-events: none; }
+
+  /* ── Dismissed ── */
+  .milestone-card.dismissed {
+    max-height: 0;
+    margin-bottom: 0;
+    padding: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: all .4s ease;
+  }
+
+  /* ── Success Flash ── */
+  .milestone-card.success .milestone-num {
+    animation: success-pop .5s cubic-bezier(.4,0,.2,1);
+  }
+  @keyframes success-pop {
+    0% { transform: scale(1); }
+    30% { transform: scale(1.3); }
+    100% { transform: scale(1); }
+  }
+
+  /* ── Progress Card ── */
+  .progress-mini {
+    background: var(--card);
+    border-radius: var(--radius);
+    border: 0.5px solid var(--border);
+    box-shadow: 0 1px 3px rgba(0,0,0,.04);
+    padding: 16px 18px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .progress-mini-ring {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+  }
+  .progress-mini-ring svg { width: 44px; height: 44px; transform: rotate(-90deg); }
+  .mini-track { fill: none; stroke: #e8e8ed; stroke-width: 4; }
+  .mini-fill { fill: none; stroke: var(--blue); stroke-width: 4; stroke-linecap: round; stroke-dasharray: 113.1; transition: stroke-dashoffset 1s ease; }
+  .progress-mini-text { flex: 1; }
+  .progress-mini-title {
+    font-family: var(--font-heading);
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .progress-mini-sub {
+    font-size: 13px;
+    color: var(--text2);
+  }
+
+  /* ── Dashboard Context ── */
+  .dashboard-context {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 0.5px solid var(--border);
+  }
+  .context-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 10px;
+    padding: 0 4px;
+  }
+  .kpi-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 20px;
+    border: 0.5px solid var(--border);
+    box-shadow: 0 1px 3px rgba(0,0,0,.04);
+    margin-bottom: 12px;
+  }
+  .kpi-label {
+    font-size: 13px;
+    color: var(--text2);
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .kpi-value {
+    font-family: var(--font-heading);
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: -1px;
+    line-height: 1.1;
+  }
+  .kpi-change {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--green);
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+  .accounts-peek {
+    background: var(--card);
+    border-radius: var(--radius);
+    border: 0.5px solid var(--border);
+    box-shadow: 0 1px 3px rgba(0,0,0,.04);
+    overflow: hidden;
+  }
+  .accounts-peek-header {
+    padding: 16px 18px 12px;
+    font-family: var(--font-heading);
+    font-size: 17px;
+    font-weight: 600;
+  }
+  .account-row {
+    display: flex;
+    align-items: center;
+    padding: 12px 18px;
+    gap: 12px;
+  }
+  .account-row:not(:last-child) { border-bottom: 0.5px solid var(--border); }
+  .account-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .account-info { flex: 1; }
+  .account-name { font-size: 14px; font-weight: 500; }
+  .account-type { font-size: 12px; color: var(--text2); }
+  .account-balance {
+    font-family: var(--font-heading);
+    font-size: 14px;
+    font-weight: 600;
+    text-align: right;
+  }
+
+  /* ── Bottom Nav ── */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 430px;
+    background: rgba(255,255,255,.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 0.5px solid var(--border);
+    display: flex;
+    justify-content: space-around;
+    padding: 8px 0 28px;
+    z-index: 100;
+  }
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 4px 16px;
+    min-width: 64px;
+  }
+  .nav-item svg { width: 24px; height: 24px; color: #8e8e93; transition: color .2s; }
+  .nav-item span { font-size: 10px; font-weight: 500; color: #8e8e93; transition: color .2s; }
+  .nav-item.active svg { color: var(--blue); }
+  .nav-item.active span { color: var(--blue); font-weight: 600; }
+
+  /* ── Confetti ── */
+  .confetti-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 200;
+    overflow: hidden;
+  }
+  .confetti-piece {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    animation: confetti-fall 2.5s ease-in forwards;
+    opacity: 0;
+  }
+  @keyframes confetti-fall {
+    0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- iOS Status Bar -->
+<div class="status-bar">
+  <span class="time">9:41</span>
+  <div class="icons">
+    <svg viewBox="0 0 18 12" fill="currentColor"><path d="M1 8.5h1.5v3H1zM4 6h1.5v5.5H4zM7 3.5h1.5v8H7zM10 1.5h1.5v10H10z"/></svg>
+    <svg viewBox="0 0 18 12" fill="currentColor"><path d="M9 2C6.24 2 3.72 3.09 1.84 4.86l1.41 1.41C4.82 4.72 6.82 3.75 9 3.75s4.18.97 5.75 2.52l1.41-1.41C14.28 3.09 11.76 2 9 2zm0 3.5c-1.66 0-3.14.67-4.22 1.76l1.41 1.41c.72-.72 1.69-1.17 2.81-1.17s2.09.45 2.81 1.17l1.41-1.41A5.97 5.97 0 009 5.5zM9 9a1.5 1.5 0 100 3 1.5 1.5 0 000-3z"/></svg>
+    <svg viewBox="0 0 27 12" fill="currentColor"><rect x="0" y="1" width="22" height="10" rx="2.5" ry="2.5" stroke="currentColor" fill="none" stroke-width="1"/><rect x="2" y="3" width="16" height="6" rx="1" fill="currentColor"/><path d="M23 4.5v3a1.5 1.5 0 000-3z"/></svg>
+  </div>
+</div>
+
+<!-- Sticky Header -->
+<div class="header">
+  <h1>Overview</h1>
+</div>
+
+<!-- Main Content -->
+<div class="content">
+
+  <!-- Progress Ring Section -->
+  <div class="ring-section">
+    <div class="ring-container">
+      <svg class="ring-svg" viewBox="0 0 160 160">
+        <defs>
+          <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#0a84ff"/>
+            <stop offset="100%" stop-color="#4da3ff"/>
+          </linearGradient>
+        </defs>
+        <circle class="ring-track" cx="80" cy="80" r="65"/>
+        <circle class="ring-fill" id="ringFill" cx="80" cy="80" r="65"/>
+      </svg>
+      <div class="ring-center">
+        <div class="ring-pct" id="ringPct">42%</div>
+        <div class="ring-label">Complete</div>
+      </div>
+    </div>
+    <div class="ring-subtitle">Your financial setup is 42% complete</div>
+
+    <!-- Milestone Badges -->
+    <div class="badges-row">
+      <div class="milestone-dot done" title="Savings">1</div>
+      <div class="milestone-dot done" title="Investments">2</div>
+      <div class="milestone-dot done" title="Advizmo Account">3</div>
+      <div class="milestone-dot done" title="Recurring">4</div>
+      <div class="milestone-dot done" title="Profile">5</div>
+      <div class="milestone-dot active" title="Checking">6</div>
+      <div class="milestone-dot pending">7</div>
+      <div class="milestone-dot pending">8</div>
+      <div class="milestone-dot pending">9</div>
+      <div class="milestone-dot pending">10</div>
+      <div class="milestone-dot pending">11</div>
+      <div class="milestone-dot pending">12</div>
+    </div>
+  </div>
+
+  <!-- Celebration Banner -->
+  <div class="celebration" id="celebrationBanner">
+    <div class="celebration-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
+    </div>
+    <div class="celebration-text">
+      <strong>Nice work!</strong> You've completed 5 milestones. Keep going — you're building something great.
+    </div>
+  </div>
+
+  <!-- Mini Progress Summary -->
+  <div class="progress-mini">
+    <div class="progress-mini-ring">
+      <svg viewBox="0 0 44 44">
+        <circle class="mini-track" cx="22" cy="22" r="18"/>
+        <circle class="mini-fill" id="miniFill" cx="22" cy="22" r="18"/>
+      </svg>
+    </div>
+    <div class="progress-mini-text">
+      <div class="progress-mini-title">5 of 12 milestones</div>
+      <div class="progress-mini-sub">About 8 minutes to go</div>
+    </div>
+  </div>
+
+  <!-- Next Steps -->
+  <div class="section-header">
+    <h2>Next steps</h2>
+    <span class="badge">7 remaining</span>
+  </div>
+
+  <!-- Completed Milestones (first 3 shown) -->
+
+  <!-- Milestone 1: Connect Savings — DONE -->
+  <div class="milestone-card done" data-milestone="1">
+    <div class="milestone-row" onclick="toggleMilestone(this.parentElement)">
+      <div class="milestone-num">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M2.5 7.5l3 3 6-6"/></svg>
+      </div>
+      <div class="card-body">
+        <div class="card-title">Connect Savings</div>
+        <div class="card-benefit">Spot idle cash and put it to work</div>
+      </div>
+      <span class="done-badge">Done</span>
+    </div>
+    <div class="card-detail">
+      <div class="card-detail-inner">
+        <div class="detail-desc">Your savings account is connected. Advizmo is monitoring your balances and will alert you when there's idle cash to invest.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Milestone 2: Connect Investment Accounts — DONE -->
+  <div class="milestone-card done" data-milestone="2">
+    <div class="milestone-row" onclick="toggleMilestone(this.parentElement)">
+      <div class="milestone-num">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M2.5 7.5l3 3 6-6"/></svg>
+      </div>
+      <div class="card-body">
+        <div class="card-title">Connect Investment Accounts</div>
+        <div class="card-benefit">Complete portfolio view across all brokerages</div>
+      </div>
+      <span class="done-badge">Done</span>
+    </div>
+    <div class="card-detail">
+      <div class="card-detail-inner">
+        <div class="detail-desc">Your brokerage accounts are linked. Advizmo now tracks your full investment portfolio and performance.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Milestone 3: Open Advizmo Account — DONE -->
+  <div class="milestone-card done" data-milestone="3">
+    <div class="milestone-row" onclick="toggleMilestone(this.parentElement)">
+      <div class="milestone-num">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M2.5 7.5l3 3 6-6"/></svg>
+      </div>
+      <div class="card-body">
+        <div class="card-title">Open Advizmo Account</div>
+        <div class="card-benefit">Start automated investing in minutes</div>
+      </div>
+      <span class="done-badge">Done</span>
+    </div>
+    <div class="card-detail">
+      <div class="card-detail-inner">
+        <div class="detail-desc">Your Advizmo account is active and ready. You can now use Auto Invest and other premium features.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Remaining Milestones with CTAs -->
+
+  <!-- Milestone 6: Connect Checking — ACTIVE -->
+  <div class="milestone-card active" data-milestone="6">
+    <div class="milestone-row" onclick="toggleMilestone(this.parentElement)">
+      <div class="milestone-num">6</div>
+      <div class="card-body">
+        <div class="card-title">Connect Checking</div>
+        <div class="card-benefit">See your complete cash flow picture</div>
+        <div class="card-time">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          ~2 minutes
+        </div>
+        <button class="card-cta" onclick="event.stopPropagation(); completeMilestone(this, 6)">
+          Connect checking
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="card-detail">
+      <div class="card-detail-inner">
+        <div class="detail-desc">You've added savings or investments. Add checking so Advizmo can see what's coming in and going out. This unlocks cash flow insights and smarter recommendations.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Milestone 7: Review Targets — PENDING -->
+  <div class="milestone-card pending" data-milestone="7">
+    <div class="milestone-row" onclick="toggleMilestone(this.parentElement)">
+      <div class="milestone-num">7</div>
+      <div class="card-body">
+        <div class="card-title">Review Targets</div>
+        <div class="card-benefit">Personalized recommendations that match your goals</div>
+        <div class="card-time">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          ~1 minute
+        </div>
+        <button class="card-cta" onclick="event.stopPropagation(); completeMilestone(this, 7)">
+          Set your targets
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="card-detail">
+      <div class="card-detail-inner">
+        <div class="detail-desc">Set financial targets so Advizmo knows what you're working toward — whether it's saving for a home, paying off debt, or building wealth.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Milestone 8: Review Cushions — PENDING -->
+  <div class="milestone-card pending" data-milestone="8">
+    <div class="milestone-row" onclick="toggleMilestone(this.parentElement)">
+      <div class="milestone-num">8</div>
+      <div class="card-body">
+        <div class="card-title">Review Cushions</div>
+        <div class="card-benefit">Stay protected when life throws curveballs</div>
+        <div class="card-time">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          ~1 minute
+        </div>
+        <button class="card-cta" onclick="event.stopPropagation(); completeMilestone(this, 8)">
+          Set up cushions
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="card-detail">
+      <div class="card-detail-inner">
+        <div class="detail-desc">Set aside emergency funds so unexpected expenses don't derail your goals. Advizmo helps you determine the right amount based on your spending patterns.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Milestone 9: Complete Profile — PENDING -->
+  <div class="milestone-card pending" data-milestone="9">
+    <div class="milestone-row" onclick="toggleMilestone(this.parentElement)">
+      <div class="milestone-num">9</div>
+      <div class="card-body">
+        <div class="card-title">Complete Profile</div>
+        <div class="card-benefit">Recommendations built for your unique situation</div>
+        <div class="card-time">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          ~1 minute
+        </div>
+        <button class="card-cta" onclick="event.stopPropagation(); completeMilestone(this, 9)">
+          Complete profile
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="card-detail">
+      <div class="card-detail-inner">
+        <div class="detail-desc">Complete your profile for personalized recommendations tailored to your financial situation and goals.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Milestone 10: Connect More Accounts — PENDING -->
+  <div class="milestone-card pending" data-milestone="10">
+    <div class="milestone-row" onclick="toggleMilestone(this.parentElement)">
+      <div class="milestone-num">10</div>
+      <div class="card-body">
+        <div class="card-title">Connect More Accounts</div>
+        <div class="card-benefit">More data means smarter recommendations</div>
+        <div class="card-time">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          ~2 minutes
+        </div>
+        <button class="card-cta" onclick="event.stopPropagation(); completeMilestone(this, 10)">
+          Add accounts
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="card-detail">
+      <div class="card-detail-inner">
+        <div class="detail-desc">Make sure you've connected all your accounts for accurate suggestions. Every account adds clarity to your financial picture.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Milestone 11: Reconnect Account — PENDING (amber) -->
+  <div class="milestone-card pending" data-milestone="11">
+    <div class="milestone-row" onclick="toggleMilestone(this.parentElement)">
+      <div class="milestone-num" style="background: var(--amber-bg); color: var(--amber);">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 0119 12.55M5 12.55a10.94 10.94 0 015.17-2.39M10.71 5.05A16 16 0 0122.56 9M1.42 9a15.91 15.91 0 014.7-2.88M8.53 16.11a6 6 0 016.95 0M12 20h.01"/></svg>
+      </div>
+      <div class="card-body">
+        <div class="card-title">Reconnect Account</div>
+        <div class="card-benefit">Keep your data fresh and recommendations accurate</div>
+        <div class="card-time">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          ~1 minute
+        </div>
+        <button class="card-cta amber" onclick="event.stopPropagation(); completeMilestone(this, 11)">
+          Reconnect Chase
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="card-detail">
+      <div class="card-detail-inner">
+        <div class="detail-desc">Your Chase connection expired. Reconnect to keep your data fresh and recommendations accurate. This only takes a moment.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Milestone 12: Open Auto Invest — PENDING -->
+  <div class="milestone-card pending" data-milestone="12">
+    <div class="milestone-row" onclick="toggleMilestone(this.parentElement)">
+      <div class="milestone-num">12</div>
+      <div class="card-body">
+        <div class="card-title">Open Auto Invest</div>
+        <div class="card-benefit">Put idle cash to work automatically</div>
+        <div class="card-time">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          ~2 minutes
+        </div>
+        <button class="card-cta" onclick="event.stopPropagation(); completeMilestone(this, 12)">
+          Open Auto Invest
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="card-detail">
+      <div class="card-detail-inner">
+        <div class="detail-desc">Let Advizmo automatically invest your idle cash so your money works for you around the clock. Set your risk preference and let it run.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dashboard Context -->
+  <div class="dashboard-context">
+    <div class="context-label">Your Finances</div>
+
+    <div class="kpi-card">
+      <div class="kpi-label">Net Worth</div>
+      <div class="kpi-value">$48,293</div>
+      <div class="kpi-change">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M6 2l4 5H2z"/></svg>
+        +2.4% this month
+      </div>
+    </div>
+
+    <div class="accounts-peek">
+      <div class="accounts-peek-header">Connected Accounts</div>
+      <div class="account-row">
+        <div class="account-icon" style="background: linear-gradient(135deg, #166f47, #1a9a5c);">CH</div>
+        <div class="account-info">
+          <div class="account-name">Chase Savings</div>
+          <div class="account-type">Savings Account</div>
+        </div>
+        <div class="account-balance">$12,450</div>
+      </div>
+      <div class="account-row">
+        <div class="account-icon" style="background: linear-gradient(135deg, #0a84ff, #4da3ff);">VF</div>
+        <div class="account-info">
+          <div class="account-name">Vanguard</div>
+          <div class="account-type">Brokerage</div>
+        </div>
+        <div class="account-balance">$31,200</div>
+      </div>
+      <div class="account-row">
+        <div class="account-icon" style="background: linear-gradient(135deg, #c2790a, #e6951a);">AD</div>
+        <div class="account-info">
+          <div class="account-name">Advizmo Auto Invest</div>
+          <div class="account-type">Investment Account</div>
+        </div>
+        <div class="account-balance">$4,643</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Confetti Container -->
+<div class="confetti-container" id="confettiContainer"></div>
+
+<!-- Bottom Navigation -->
+<nav class="bottom-nav">
+  <button class="nav-item active">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 12.5l9-9 9 9M5 11v7a2 2 0 002 2h10a2 2 0 002-2v-7"/></svg>
+    <span>Home</span>
+  </button>
+  <button class="nav-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="3"/></svg>
+    <span>Invest</span>
+  </button>
+  <button class="nav-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 14l2 2 4-4"/></svg>
+    <span>Plan</span>
+  </button>
+  <button class="nav-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 10-16 0"/></svg>
+    <span>Profile</span>
+  </button>
+</nav>
+
+<script>
+// Animate ring on load
+document.addEventListener('DOMContentLoaded', () => {
+  const circumference = 2 * Math.PI * 65;
+  const pct = 42;
+  const offset = circumference - (pct / 100) * circumference;
+
+  setTimeout(() => {
+    document.getElementById('ringFill').style.strokeDashoffset = offset;
+  }, 300);
+
+  // Mini ring
+  const miniCirc = 2 * Math.PI * 18;
+  const miniOffset = miniCirc - (pct / 100) * miniCirc;
+  setTimeout(() => {
+    document.getElementById('miniFill').style.strokeDashoffset = miniOffset;
+  }, 500);
+});
+
+function toggleMilestone(card) {
+  const wasExpanded = card.classList.contains('expanded');
+
+  // Collapse all
+  document.querySelectorAll('.milestone-card').forEach(c => {
+    if (!c.classList.contains('done')) {
+      c.classList.remove('expanded');
+    }
+  });
+
+  if (!wasExpanded && !card.classList.contains('done')) {
+    card.classList.add('expanded');
+  }
+}
+
+function completeMilestone(btn, num) {
+  const card = btn.closest('.milestone-card');
+  const row = card.querySelector('.milestone-row');
+
+  btn.textContent = 'Connecting...';
+  btn.disabled = true;
+
+  setTimeout(() => {
+    // Update card state
+    card.classList.remove('pending', 'active');
+    card.classList.add('done', 'success');
+
+    // Update number circle
+    const numEl = card.querySelector('.milestone-num');
+    numEl.innerHTML = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M2.5 7.5l3 3 6-6"/></svg>';
+
+    // Add done badge
+    const badge = document.createElement('span');
+    badge.className = 'done-badge';
+    badge.textContent = 'Done';
+    row.appendChild(badge);
+
+    // Remove CTA
+    btn.remove();
+
+    // Collapse detail
+    card.classList.remove('expanded');
+
+    setTimeout(() => card.classList.remove('success'), 500);
+
+    // Update ring and progress
+    updateAllProgress(num);
+
+    // Confetti for milestones 6 and 12
+    if (num === 6 || num === 12) {
+      launchConfetti();
+    }
+  }, 1200);
+}
+
+function updateAllProgress(completedNum) {
+  const total = 12;
+  const completed = document.querySelectorAll('.milestone-card.done').length;
+  const pct = Math.round((completed / total) * 100);
+  const remaining = total - completed;
+  const minutesLeft = Math.max(0, Math.round(remaining * 0.7));
+
+  // Update ring
+  const circumference = 2 * Math.PI * 65;
+  const offset = circumference - (pct / 100) * circumference;
+  document.getElementById('ringFill').style.strokeDashoffset = offset;
+
+  // Update percentage
+  document.getElementById('ringPct').textContent = `${pct}%`;
+
+  // Update subtitle
+  document.querySelector('.ring-subtitle').textContent = `Your financial setup is ${pct}% complete`;
+
+  // Update badges
+  const dots = document.querySelectorAll('.milestone-dot');
+  dots.forEach((dot, i) => {
+    if (i < completed) {
+      dot.classList.remove('pending', 'active');
+      dot.classList.add('done');
+    } else if (i === completed) {
+      dot.classList.remove('done', 'pending');
+      dot.classList.add('active');
+    } else {
+      dot.classList.remove('done', 'active');
+      dot.classList.add('pending');
+    }
+  });
+
+  // Mini ring
+  const miniCirc = 2 * Math.PI * 18;
+  const miniOffset = miniCirc - (pct / 100) * miniCirc;
+  document.getElementById('miniFill').style.strokeDashoffset = miniOffset;
+
+  // Mini text
+  document.querySelector('.progress-mini-title').textContent = `${completed} of ${total} milestones`;
+  document.querySelector('.progress-mini-sub').textContent = `${minutesLeft === 0 ? 'All done!' : `About ${minutesLeft} minute${minutesLeft !== 1 ? 's' : ''} to go`}`;
+
+  // Celebration banner
+  if (completed >= 5) {
+    document.querySelector('.celebration-text').innerHTML = `<strong>Nice work!</strong> You've completed ${completed} milestone${completed !== 1 ? 's' : ''}. ${remaining === 0 ? 'All milestones complete!' : 'Keep going — you\'re building something great.'}`;
+  }
+
+  // Section badge
+  document.querySelector('.section-header .badge').textContent = `${remaining} remaining`;
+
+  // Check if all done
+  if (remaining === 0) {
+    document.querySelector('.section-header h2').textContent = 'All complete!';
+    document.querySelector('.celebration-text').innerHTML = '<strong>Congratulations!</strong> You\'ve completed all 12 milestones. Your financial setup is fully optimized.';
+    launchConfetti();
+  }
+}
+
+function launchConfetti() {
+  const container = document.getElementById('confettiContainer');
+  const colors = ['#0a84ff', '#166f47', '#c2790a', '#ff375f', '#ffd60a', '#bf5af2'];
+
+  for (let i = 0; i < 40; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = `${Math.random() * 100}%`;
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.animationDelay = `${Math.random() * 0.8}s`;
+    piece.style.animationDuration = `${1.5 + Math.random() * 1.5}s`;
+    piece.style.width = `${6 + Math.random() * 6}px`;
+    piece.style.height = `${6 + Math.random() * 6}px`;
+    piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    container.appendChild(piece);
+  }
+
+  setTimeout(() => { container.innerHTML = ''; }, 3500);
+}
+</script>
+</body>
+</html>
