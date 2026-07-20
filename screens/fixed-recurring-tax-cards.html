@@ -1,0 +1,1893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fixed Recurring & Tax Cards — Advizmo Design System</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue: #0a84ff;
+  --green: #166f47;
+  --green-bg: #e8f8ec;
+  --amber: #c2790a;
+  --amber-bg: #fff5e6;
+  --red: #b91c1c;
+  --red-bg: #ffe8e8;
+  --blue-bg: #e8f0ff;
+  --card: #fff;
+  --text: #1c1c1e;
+  --text2: #8e8e93;
+  --sidebar-bg: #1c1c1e;
+  --bg: #f2f2f7;
+  --sidebar-w: 240px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'IBM Plex Sans','Inter',system-ui,sans-serif; background:var(--bg); color:var(--text); display:flex; min-height:100vh; }
+
+/* Sidebar */
+.sidebar { position:fixed; top:0; left:0; width:var(--sidebar-w); height:100vh; background:var(--sidebar-bg); color:#fff; overflow-y:auto; z-index:100; padding:20px 0; }
+.sidebar-logo { padding:0 20px 20px; border-bottom:1px solid #333; margin-bottom:12px; }
+.sidebar-logo h2 { font-size:15px; font-weight:700; color:#fff; }
+.sidebar-logo span { font-size:11px; color:var(--text2); }
+.sidebar h3 { font-size:11px; text-transform:uppercase; letter-spacing:0.5px; color:#666; padding:12px 20px 4px; font-weight:600; }
+.sidebar a { display:block; padding:7px 20px; color:#999; text-decoration:none; font-size:13px; transition:all .15s; border-left:3px solid transparent; }
+.sidebar a:hover { color:#fff; background:rgba(255,255,255,.05); }
+.sidebar a.active { color:var(--blue); border-left-color:var(--blue); background:rgba(10,132,255,.08); }
+.sidebar a.sub { padding-left:36px; font-size:12px; }
+
+/* Main */
+.main { margin-left:var(--sidebar-w); flex:1; min-width:0; }
+.ios-bar { height:44px; background:#000; display:flex; align-items:center; justify-content:space-between; padding:0 20px; color:#fff; font-size:12px; font-weight:600; position:sticky; top:0; z-index:90; }
+.ios-bar .time { }
+.ios-bar .icons { display:flex; gap:6px; }
+.header { background:#fff; border-bottom:1px solid #e5e5ea; padding:14px 24px; position:sticky; top:44px; z-index:80; }
+.header h1 { font-size:20px; font-weight:700; }
+.header p { font-size:12px; color:var(--text2); margin-top:2px; }
+.content { padding:24px; max-width:900px; }
+.section-title { font-size:22px; font-weight:700; margin:32px 0 6px; padding-top:24px; border-top:1px solid #e5e5ea; }
+.section-title:first-child { border-top:none; margin-top:0; padding-top:0; }
+.section-sub { font-size:13px; color:var(--text2); margin-bottom:20px; }
+.variant-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--text2); margin:24px 0 10px; }
+.vs { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:24px; }
+@media(max-width:900px){ .vs{grid-template-columns:1fr;} }
+.card-shell { background:#fff; border-radius:16px; padding:20px; box-shadow:0 1px 3px rgba(0,0,0,.06); border:1px solid #e5e5ea; }
+.card-shell.before { border:2px solid #ff3b30; position:relative; }
+.card-shell.after { border:2px solid #34c759; position:relative; }
+.badge-before, .badge-after { position:absolute; top:-10px; left:16px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; padding:2px 10px; border-radius:10px; color:#fff; }
+.badge-before { background:#ff3b30; }
+.badge-after { background:#34c759; }
+
+/* Phone frame */
+.phone-frame { width:375px; margin:0 auto; background:var(--bg); border-radius:24px; border:3px solid #333; overflow:hidden; box-shadow:0 8px 32px rgba(0,0,0,.15); }
+.phone-top { height:44px; background:#000; display:flex; align-items:center; justify-content:space-between; padding:0 20px; color:#fff; font-size:13px; font-weight:600; }
+.phone-body { padding:16px; background:var(--bg); min-height:200px; }
+.phone-bottom-nav { height:50px; background:#fff; border-top:1px solid #e5e5ea; display:flex; align-items:center; justify-content:space-around; }
+.phone-bottom-nav span { font-size:10px; color:var(--text2); text-align:center; }
+.phone-bottom-nav span.active { color:var(--blue); }
+
+/* Semantic surfaces */
+.surface-amber { background: linear-gradient(135deg, #fff5e6 0%, #ffe8c8 100%); border-radius:14px; padding:18px; }
+.surface-green { background: linear-gradient(135deg, #e8f8ec 0%, #d0f5d8 100%); border-radius:14px; padding:18px; }
+.surface-blue { background: linear-gradient(135deg, #e8f0ff 0%, #d0e4ff 100%); border-radius:14px; padding:18px; }
+.surface-red { background: linear-gradient(135deg, #ffe8e8 0%, #ffd0d0 100%); border-radius:14px; padding:18px; }
+.surface-dark { background: linear-gradient(135deg, #2c2c2e 0%, #1c1c1e 100%); border-radius:14px; padding:18px; color:#fff; }
+
+/* Buttons */
+.btn { display:inline-flex; align-items:center; gap:6px; padding:10px 20px; border-radius:10px; font-size:14px; font-weight:600; border:none; cursor:pointer; }
+.btn-blue { background:var(--blue); color:#fff; }
+.btn-green { background:var(--green); color:#fff; }
+.btn-amber { background:var(--amber); color:#fff; }
+.btn-outline { background:transparent; border:1.5px solid #d1d1d6; color:var(--text); }
+.btn-sm { padding:6px 14px; font-size:12px; }
+.btn-ghost { background:transparent; color:var(--blue); font-size:13px; font-weight:500; border:none; padding:6px 0; }
+
+/* Pills / badges */
+.pill { display:inline-block; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:600; }
+.pill-gray { background:#e5e5ea; color:#636366; }
+.pill-red { background:var(--red-bg); color:var(--red); }
+.pill-green { background:var(--green-bg); color:var(--green); }
+.pill-amber { background:var(--amber-bg); color:var(--amber); }
+.pill-blue { background:var(--blue-bg); color:var(--blue); }
+
+/* List items */
+.list-item { display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid rgba(0,0,0,.05); }
+.list-item:last-child { border-bottom:none; }
+.list-icon { width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; }
+.list-icon.amber { background:#fff5e6; }
+.list-icon.green { background:#e8f8ec; }
+.list-icon.blue { background:#e8f0ff; }
+.list-icon.red { background:#ffe8e8; }
+.list-icon.gray { background:#f2f2f7; }
+.list-text { flex:1; }
+.list-text .name { font-size:13px; font-weight:600; }
+.list-text .desc { font-size:11px; color:var(--text2); margin-top:1px; }
+
+/* Progress ring */
+.progress-ring { width:120px; height:120px; border-radius:50%; position:relative; display:flex; align-items:center; justify-content:center; }
+
+/* Timeline */
+.timeline { position:relative; padding-left:24px; }
+.timeline::before { content:''; position:absolute; left:7px; top:4px; bottom:4px; width:2px; background:#e5e5ea; }
+.timeline-item { position:relative; padding-bottom:16px; }
+.timeline-dot { width:14px; height:14px; border-radius:50%; position:absolute; left:-24px; top:2px; border:2px solid #fff; }
+.timeline-date { font-size:10px; color:var(--text2); margin-bottom:2px; }
+
+/* Steps */
+.step { display:flex; gap:12px; margin-bottom:12px; }
+.step-num { width:24px; height:24px; border-radius:50%; background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0; }
+.step-text { font-size:13px; color:var(--text); padding-top:3px; }
+
+/* Expandable */
+.expandable { border-top:1px solid rgba(0,0,0,.06); padding-top:10px; margin-top:10px; }
+.expand-toggle { font-size:12px; color:var(--blue); cursor:pointer; font-weight:500; }
+
+/* Bottom nav fixed */
+.bottom-nav-fixed { position:fixed; bottom:0; left:var(--sidebar-w); right:0; height:56px; background:#fff; border-top:1px solid #e5e5ea; display:flex; align-items:center; justify-content:space-around; z-index:80; }
+.bottom-nav-fixed span { font-size:10px; color:var(--text2); text-align:center; display:flex; flex-direction:column; align-items:center; gap:2px; }
+.bottom-nav-fixed span.active { color:var(--blue); }
+.bottom-nav-fixed span svg { width:20px; height:20px; }
+
+/* Utilities */
+.mt-8 { margin-top:8px; }
+.mt-12 { margin-top:12px; }
+.mt-16 { margin-top:16px; }
+.mb-8 { margin-bottom:8px; }
+.mb-12 { margin-bottom:12px; }
+.text-sm { font-size:12px; }
+.text-xs { font-size:11px; }
+.text-red { color:var(--red); }
+.text-green { color:var(--green); }
+.text-blue { color:var(--blue); }
+.text-amber { color:var(--amber); }
+.text-gray { color:var(--text2); }
+.fw-600 { font-weight:600; }
+.fw-700 { font-weight:700; }
+.flex { display:flex; }
+.flex-col { flex-direction:column; }
+.items-center { align-items:center; }
+.gap-8 { gap:8px; }
+.gap-12 { gap:12px; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h2>Advizmo Design System</h2>
+    <span>Component Reference v2.0</span>
+  </div>
+  <h3>Sections</h3>
+  <a href="#s1">Recurring Review</a>
+  <a href="#s1a" class="sub">Before vs After</a>
+  <a href="#s1v1" class="sub">Variant 1 — Financial Summary</a>
+  <a href="#s1v2" class="sub">Variant 2 — Compact</a>
+  <a href="#s1v3" class="sub">Variant 3 — AI Recommendation</a>
+  <a href="#s1v4" class="sub">Variant 4 — Timeline</a>
+  <a href="#s1v5" class="sub">Variant 5 — Checklist</a>
+  <a href="#s1s">Single Item States</a>
+  <a href="#s2">Tax Harvesting</a>
+  <a href="#s2a" class="sub">Before vs After</a>
+  <a href="#s2v1" class="sub">Variant 1 — Activation</a>
+  <a href="#s2v2" class="sub">Variant 2 — Progress</a>
+  <a href="#s2v3" class="sub">Variant 3 — Opportunity</a>
+  <a href="#s2v4" class="sub">Variant 4 — AI Guidance</a>
+  <a href="#s2v5" class="sub">Variant 5 — Completed</a>
+  <a href="#s2s">Scenario States</a>
+  <a href="#final">Production Components</a>
+  <h3>Tokens</h3>
+  <a href="#tokens">Colors & Spacing</a>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="ios-bar">
+    <span class="time">9:41</span>
+    <span class="icons">
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="white"><rect x="0" y="4" width="3" height="8" rx="0.5"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="0.5"/><rect x="9" y="1" width="3" height="11" rx="0.5"/><rect x="13.5" y="0" width="3" height="12" rx="0.5"/></svg>
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="white"><path d="M8 2C5 2 2.5 3.5 1 6c1.5 2.5 4 4 7 4s5.5-1.5 7-4c-1.5-2.5-4-4-7-4z"/></svg>
+      <svg width="24" height="12" viewBox="0 0 24 12" fill="white"><rect x="0" y="1" width="20" height="10" rx="2" stroke="white" stroke-width="1" fill="none"/><rect x="21" y="3.5" width="2" height="5" rx="0.5"/><rect x="1.5" y="2.5" width="17" height="7" rx="1" fill="white"/></svg>
+    </span>
+  </div>
+  <div class="header">
+    <h1>Recurring Review & Tax Harvesting</h1>
+    <p>Fixed card components — Before vs After comparison</p>
+  </div>
+
+  <div class="content">
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- SECTION 1: RECURRING REVIEW -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <h2 class="section-title" id="s1">Section 1: Recurring Review</h2>
+    <p class="section-sub">Comparing the current problematic design with fixed variants.</p>
+
+    <!-- BEFORE vs AFTER -->
+    <div class="vs" id="s1a">
+      <!-- BEFORE -->
+      <div class="card-shell before">
+        <span class="badge-before">Before</span>
+        <div class="surface-amber" style="margin-top:8px;">
+          <div style="font-size:14px; font-weight:700; margin-bottom:4px;">Recurring Items Updated</div>
+          <div class="pill pill-gray mb-8">Changed</div>
+          <div class="list-item">
+            <div class="list-icon amber">🎬</div>
+            <div class="list-text">
+              <div class="name">Netflix — Standard Plan</div>
+            </div>
+            <span class="pill pill-gray">Changed</span>
+          </div>
+          <div class="list-item">
+            <div class="list-icon amber">🎵</div>
+            <div class="list-text">
+              <div class="name">Spotify — Premium</div>
+            </div>
+            <span class="pill pill-gray">Changed</span>
+          </div>
+          <div class="list-item">
+            <div class="list-icon amber">⚡</div>
+            <div class="list-text">
+              <div class="name">Electric Company</div>
+            </div>
+            <span class="pill pill-gray">Changed</span>
+          </div>
+          <div class="mt-16">
+            <button class="btn btn-blue btn-sm">Review</button>
+          </div>
+        </div>
+        <div class="text-xs text-gray mt-12">Problems: generic title, meaningless badges, no financial impact, no time estimate, no explanation of why review matters.</div>
+      </div>
+
+      <!-- AFTER -->
+      <div class="card-shell after">
+        <span class="badge-after">After</span>
+        <div class="surface-amber" style="margin-top:8px;">
+          <div style="font-size:18px; font-weight:700; margin-bottom:2px;">6 subscriptions changed</div>
+          <div class="text-sm fw-600 mt-4">Your monthly cost: $236.46 → $246.95</div>
+          <div class="text-sm text-red fw-700 mt-4">+$10.49/mo (+$125.88/yr)</div>
+
+          <div class="mt-16" style="border-top:1px solid rgba(0,0,0,.08); padding-top:12px;">
+            <div class="text-xs fw-700 text-red mb-8">Increased</div>
+            <div class="list-item" style="padding:6px 0;">
+              <div class="list-icon red">🎬</div>
+              <div class="list-text"><div class="name">Netflix</div></div>
+              <span class="text-xs text-red fw-600">+$2.50</span>
+            </div>
+            <div class="list-item" style="padding:6px 0;">
+              <div class="list-icon red">🎵</div>
+              <div class="list-text"><div class="name">Spotify</div></div>
+              <span class="text-xs text-red fw-600">+$1.00</span>
+            </div>
+          </div>
+
+          <div class="mt-8" style="border-top:1px solid rgba(0,0,0,.08); padding-top:12px;">
+            <div class="text-xs fw-700 text-green mb-8">Decreased</div>
+            <div class="list-item" style="padding:6px 0;">
+              <div class="list-icon green">⚡</div>
+              <div class="list-text"><div class="name">Electric Company</div></div>
+              <span class="text-xs text-green fw-600">-$44.00</span>
+            </div>
+          </div>
+
+          <div class="mt-8" style="border-top:1px solid rgba(0,0,0,.08); padding-top:12px;">
+            <div class="text-xs fw-700 text-blue mb-8">New</div>
+            <div class="list-item" style="padding:6px 0;">
+              <div class="list-icon blue">🏋️</div>
+              <div class="list-text"><div class="name">Gym Membership</div></div>
+              <span class="text-xs text-blue fw-600">$49.99</span>
+            </div>
+          </div>
+
+          <div class="mt-8" style="border-top:1px solid rgba(0,0,0,.08); padding-top:12px;">
+            <div class="text-xs fw-700 text-gray mb-8">Cancelled</div>
+            <div class="list-item" style="padding:6px 0;">
+              <div class="list-icon gray">📺</div>
+              <div class="list-text"><div class="name">HBO Max</div></div>
+              <span class="text-xs text-gray fw-600">-$15.99</span>
+            </div>
+          </div>
+
+          <div class="mt-8" style="border-top:1px solid rgba(0,0,0,.08); padding-top:12px;">
+            <div class="text-xs fw-700 text-amber mb-8">Paused</div>
+            <div class="list-item" style="padding:6px 0;">
+              <div class="list-icon amber">☁️</div>
+              <div class="list-text"><div class="name">Cloud Storage</div></div>
+              <span class="text-xs text-amber fw-600">Paused</span>
+            </div>
+          </div>
+
+          <div class="mt-16 flex items-center gap-8">
+            <button class="btn btn-amber">Review all changes →</button>
+            <button class="btn-ghost">Accept all</button>
+          </div>
+          <div class="text-xs text-gray mt-8">⏱ 5 minutes to review</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VARIANT 1: FINANCIAL SUMMARY (Primary) -->
+    <div class="variant-label" id="s1v1">Variant 1 — Financial Summary (Primary)</div>
+    <div style="max-width:430px;">
+      <div class="phone-frame">
+        <div class="phone-top">
+          <span>9:41</span>
+          <span>●●●</span>
+        </div>
+        <div class="phone-body">
+          <div class="surface-amber">
+            <div style="font-size:18px; font-weight:700; margin-bottom:2px;">6 subscriptions changed</div>
+            <div class="text-sm fw-600 mt-4">Your monthly cost: $236.46 → $246.95</div>
+            <div class="text-sm text-red fw-700 mt-4">+$10.49/mo (+$125.88/yr)</div>
+
+            <div class="mt-16" style="border-top:1px solid rgba(0,0,0,.08); padding-top:12px;">
+              <div class="flex items-center gap-8 mb-8">
+                <span class="pill pill-red">Increased</span>
+                <span class="text-xs text-gray">2 items</span>
+              </div>
+              <div class="list-item" style="padding:6px 0;">
+                <div class="list-icon red">🎬</div>
+                <div class="list-text"><div class="name">Netflix — Standard Plan</div><div class="desc">Billed monthly</div></div>
+                <span class="text-xs text-red fw-600">+$2.50/mo</span>
+              </div>
+              <div class="list-item" style="padding:6px 0;">
+                <div class="list-icon red">🎵</div>
+                <div class="list-text"><div class="name">Spotify — Premium</div><div class="desc">Billed monthly</div></div>
+                <span class="text-xs text-red fw-600">+$1.00/mo</span>
+              </div>
+            </div>
+
+            <div class="mt-8" style="border-top:1px solid rgba(0,0,0,.08); padding-top:12px;">
+              <div class="flex items-center gap-8 mb-8">
+                <span class="pill pill-green">Decreased</span>
+                <span class="text-xs text-gray">1 item</span>
+              </div>
+              <div class="list-item" style="padding:6px 0;">
+                <div class="list-icon green">⚡</div>
+                <div class="list-text"><div class="name">Electric Company</div><div class="desc">Billed monthly</div></div>
+                <span class="text-xs text-green fw-600">-$44.00/mo</span>
+              </div>
+            </div>
+
+            <div class="mt-8" style="border-top:1px solid rgba(0,0,0,.08); padding-top:12px;">
+              <div class="flex items-center gap-8 mb-8">
+                <span class="pill pill-blue">New</span>
+                <span class="text-xs text-gray">1 item</span>
+              </div>
+              <div class="list-item" style="padding:6px 0;">
+                <div class="list-icon blue">🏋️</div>
+                <div class="list-text"><div class="name">Gym Membership</div><div class="desc">New recurring charge</div></div>
+                <span class="text-xs text-blue fw-600">$49.99/mo</span>
+              </div>
+            </div>
+
+            <div class="mt-8" style="border-top:1px solid rgba(0,0,0,.08); padding-top:12px;">
+              <div class="flex items-center gap-8 mb-8">
+                <span class="pill pill-gray">Cancelled</span>
+              </div>
+              <div class="list-item" style="padding:6px 0;">
+                <div class="list-icon gray">📺</div>
+                <div class="list-text"><div class="name">HBO Max</div></div>
+                <span class="text-xs text-gray fw-600">-$15.99/mo</span>
+              </div>
+            </div>
+
+            <div class="mt-8" style="border-top:1px solid rgba(0,0,0,.08); padding-top:12px;">
+              <div class="flex items-center gap-8 mb-8">
+                <span class="pill pill-amber">Paused</span>
+              </div>
+              <div class="list-item" style="padding:6px 0;">
+                <div class="list-icon amber">☁️</div>
+                <div class="list-text"><div class="name">Cloud Storage</div></div>
+                <span class="text-xs text-amber fw-600">Paused</span>
+              </div>
+            </div>
+
+            <div class="mt-16 flex items-center gap-8">
+              <button class="btn btn-amber">Review all changes →</button>
+              <button class="btn-ghost">Accept all</button>
+            </div>
+            <div class="text-xs text-gray mt-8">⏱ 5 minutes to review</div>
+          </div>
+        </div>
+        <div class="phone-bottom-nav">
+          <span class="active">🏠<br>Home</span>
+          <span>📊<br>Invest</span>
+          <span>💰<br>Spend</span>
+          <span>📋<br>Plan</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- VARIANT 2: COMPACT SUMMARY -->
+    <div class="variant-label" id="s1v2">Variant 2 — Compact Summary (Secondary)</div>
+    <div style="max-width:430px;">
+      <div class="card-shell" style="padding:12px; display:flex; align-items:center; gap:12px; cursor:pointer;">
+        <div style="width:40px; height:40px; border-radius:12px; background:linear-gradient(135deg, #fff5e6, #ffe8c8); display:flex; align-items:center; justify-content:center; font-size:18px;">📋</div>
+        <div style="flex:1;">
+          <div style="font-size:14px; font-weight:600;">6 subscriptions changed</div>
+          <div class="text-xs text-gray mt-4">Netflix, Spotify, Electric, Gym, HBO Max, Cloud Storage</div>
+        </div>
+        <span class="pill pill-red">+$10.49/mo</span>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="#8e8e93"><path d="M6 4l4 4-4 4" stroke="#8e8e93" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      </div>
+    </div>
+
+    <!-- VARIANT 3: AI RECOMMENDATION -->
+    <div class="variant-label" id="s1v3">Variant 3 — AI Recommendation</div>
+    <div style="max-width:430px;">
+      <div class="surface-dark" style="border-radius:16px;">
+        <div class="flex items-center gap-12 mb-12">
+          <div style="width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg, #0a84ff, #5856d6); display:flex; align-items:center; justify-content:center; font-size:18px;">🤖</div>
+          <div>
+            <div style="font-size:14px; font-weight:600;">I found 6 changes in your subscriptions</div>
+            <div class="text-xs" style="color:#999; margin-top:2px;">AI Assistant • just now</div>
+          </div>
+        </div>
+        <div style="font-size:14px; line-height:1.5; color:#ccc; margin-bottom:16px;">
+          Your monthly cost increased by <strong style="color:#ff9f0a;">$10.49</strong>. Netflix and Spotify went up in price. Electric Company went down. A new Gym Membership was detected.
+        </div>
+        <div style="background:rgba(255,255,255,.08); border-radius:10px; padding:12px; margin-bottom:16px;">
+          <div class="text-xs" style="color:#999; margin-bottom:4px;">Recommendation</div>
+          <div style="font-size:13px; color:#fff;">Review these to stay on top of your spending. Netflix increased from $15.49 to $17.99 — effective next billing cycle.</div>
+        </div>
+        <button class="btn btn-blue" style="width:100%; justify-content:center;">Review changes →</button>
+      </div>
+    </div>
+
+    <!-- VARIANT 4: TIMELINE -->
+    <div class="variant-label" id="s1v4">Variant 4 — Timeline</div>
+    <div style="max-width:430px;">
+      <div class="card-shell">
+        <div class="fw-700 mb-12">Subscription Changes Timeline</div>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-dot" style="background:var(--blue);"></div>
+            <div class="timeline-date">Today, 2:30 PM</div>
+            <div class="card-shell" style="padding:10px; margin-left:4px;">
+              <div class="flex items-center gap-8">
+                <div class="list-icon blue" style="width:28px; height:28px; font-size:12px;">🏋️</div>
+                <div>
+                  <div class="text-sm fw-600">Gym Membership — New</div>
+                  <div class="text-xs text-blue">+$49.99/mo</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot" style="background:var(--green);"></div>
+            <div class="timeline-date">Yesterday, 9:15 AM</div>
+            <div class="card-shell" style="padding:10px; margin-left:4px;">
+              <div class="flex items-center gap-8">
+                <div class="list-icon green" style="width:28px; height:28px; font-size:12px;">⚡</div>
+                <div>
+                  <div class="text-sm fw-600">Electric Company — Decreased</div>
+                  <div class="text-xs text-green">-$44.00/mo</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot" style="background:var(--red);"></div>
+            <div class="timeline-date">Jul 15, 2026</div>
+            <div class="card-shell" style="padding:10px; margin-left:4px;">
+              <div class="flex items-center gap-8">
+                <div class="list-icon red" style="width:28px; height:28px; font-size:12px;">🎬</div>
+                <div>
+                  <div class="text-sm fw-600">Netflix — Increased</div>
+                  <div class="text-xs text-red">+$2.50/mo ($15.49 → $17.99)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot" style="background:var(--red);"></div>
+            <div class="timeline-date">Jul 12, 2026</div>
+            <div class="card-shell" style="padding:10px; margin-left:4px;">
+              <div class="flex items-center gap-8">
+                <div class="list-icon red" style="width:28px; height:28px; font-size:12px;">🎵</div>
+                <div>
+                  <div class="text-sm fw-600">Spotify — Increased</div>
+                  <div class="text-xs text-red">+$1.00/mo ($9.99 → $10.99)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="timeline-item" style="padding-bottom:0;">
+            <div class="timeline-dot" style="background:#8e8e93;"></div>
+            <div class="timeline-date">Jul 10, 2026</div>
+            <div class="card-shell" style="padding:10px; margin-left:4px;">
+              <div class="flex items-center gap-8">
+                <div class="list-icon gray" style="width:28px; height:28px; font-size:12px;">📺</div>
+                <div>
+                  <div class="text-sm fw-600">HBO Max — Cancelled</div>
+                  <div class="text-xs text-gray">-$15.99/mo saved</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VARIANT 5: CHECKLIST -->
+    <div class="variant-label" id="s1v5">Variant 5 — Checklist</div>
+    <div style="max-width:430px;">
+      <div class="card-shell">
+        <div class="flex items-center justify-between mb-12">
+          <div class="fw-700">Review subscriptions</div>
+          <div class="text-xs text-gray">2 of 6 reviewed</div>
+        </div>
+        <!-- Progress bar -->
+        <div style="height:6px; background:#e5e5ea; border-radius:3px; margin-bottom:16px;">
+          <div style="height:100%; width:33%; background:var(--green); border-radius:3px;"></div>
+        </div>
+
+        <div class="list-item" style="padding:8px 0;">
+          <div style="width:20px; height:20px; border-radius:6px; background:var(--green); display:flex; align-items:center; justify-content:center;"><svg width="12" height="12" viewBox="0 0 12 12" fill="white"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="2" fill="none"/></svg></div>
+          <div class="list-icon green" style="width:32px; height:32px; font-size:14px;">⚡</div>
+          <div class="list-text"><div class="name text-sm">Electric Company</div><div class="desc">Decreased $44/mo</div></div>
+          <span class="pill pill-green text-xs">Accepted</span>
+        </div>
+        <div class="list-item" style="padding:8px 0;">
+          <div style="width:20px; height:20px; border-radius:6px; background:var(--green); display:flex; align-items:center; justify-content:center;"><svg width="12" height="12" viewBox="0 0 12 12" fill="white"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="2" fill="none"/></svg></div>
+          <div class="list-icon gray" style="width:32px; height:32px; font-size:14px;">📺</div>
+          <div class="list-text"><div class="name text-sm">HBO Max</div><div class="desc">Cancelled</div></div>
+          <span class="pill pill-gray text-xs">Accepted</span>
+        </div>
+        <div class="list-item" style="padding:8px 0;">
+          <div style="width:20px; height:20px; border-radius:6px; border:2px solid #d1d1d6;"></div>
+          <div class="list-icon red" style="width:32px; height:32px; font-size:14px;">🎬</div>
+          <div class="list-text"><div class="name text-sm">Netflix</div><div class="desc">Increased $2.50/mo</div></div>
+          <span class="pill pill-red text-xs">Review</span>
+        </div>
+        <div class="list-item" style="padding:8px 0;">
+          <div style="width:20px; height:20px; border-radius:6px; border:2px solid #d1d1d6;"></div>
+          <div class="list-icon red" style="width:32px; height:32px; font-size:14px;">🎵</div>
+          <div class="list-text"><div class="name text-sm">Spotify</div><div class="desc">Increased $1.00/mo</div></div>
+          <span class="pill pill-red text-xs">Review</span>
+        </div>
+        <div class="list-item" style="padding:8px 0;">
+          <div style="width:20px; height:20px; border-radius:6px; border:2px solid #d1d1d6;"></div>
+          <div class="list-icon blue" style="width:32px; height:32px; font-size:14px;">🏋️</div>
+          <div class="list-text"><div class="name text-sm">Gym Membership</div><div class="desc">New $49.99/mo</div></div>
+          <span class="pill pill-blue text-xs">Review</span>
+        </div>
+        <div class="list-item" style="padding:8px 0; border-bottom:none;">
+          <div style="width:20px; height:20px; border-radius:6px; border:2px solid #d1d1d6;"></div>
+          <div class="list-icon amber" style="width:32px; height:32px; font-size:14px;">☁️</div>
+          <div class="list-text"><div class="name text-sm">Cloud Storage</div><div class="desc">Paused</div></div>
+          <span class="pill pill-amber text-xs">Review</span>
+        </div>
+        <button class="btn btn-amber mt-16" style="width:100%; justify-content:center;">Continue reviewing →</button>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- SECTION 1B: SINGLE ITEM STATES -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <h2 class="section-title" id="s1s">Recurring — Single Item States</h2>
+    <p class="section-sub">Individual card states for each subscription change scenario.</p>
+
+    <div style="max-width:430px;">
+      <!-- Scenario 1: Price Increased -->
+      <div class="variant-label">Scenario 1 — Price Increased</div>
+      <div class="card-shell">
+        <div class="flex items-center gap-12 mb-12">
+          <div class="list-icon red" style="width:44px; height:44px; font-size:20px;">🎬</div>
+          <div>
+            <div class="fw-700">Netflix increased</div>
+            <div class="text-xs text-gray">from $15.49 to $17.99/mo</div>
+          </div>
+        </div>
+        <div style="background:var(--red-bg); border-radius:10px; padding:12px; margin-bottom:12px;">
+          <div class="text-sm text-red fw-700">+$2.50/mo (+$30/yr)</div>
+          <div class="text-xs text-gray mt-4">Price increase effective next billing cycle</div>
+        </div>
+        <div class="flex items-center gap-8">
+          <button class="btn btn-outline btn-sm">Reject</button>
+          <button class="btn btn-blue btn-sm">Accept</button>
+        </div>
+      </div>
+
+      <!-- Scenario 2: Price Decreased -->
+      <div class="variant-label">Scenario 2 — Price Decreased</div>
+      <div class="card-shell">
+        <div class="flex items-center gap-12 mb-12">
+          <div class="list-icon green" style="width:44px; height:44px; font-size:20px;">⚡</div>
+          <div>
+            <div class="fw-700">Electric Company decreased</div>
+            <div class="text-xs text-gray">from $142 to $98/mo</div>
+          </div>
+        </div>
+        <div style="background:var(--green-bg); border-radius:10px; padding:12px; margin-bottom:12px;">
+          <div class="text-sm text-green fw-700">-$44/mo (-$528/yr)</div>
+          <div class="text-xs text-gray mt-4">Lower usage this month</div>
+        </div>
+        <button class="btn btn-green btn-sm">Accept savings ✓</button>
+      </div>
+
+      <!-- Scenario 3: New Subscription -->
+      <div class="variant-label">Scenario 3 — New Subscription</div>
+      <div class="card-shell">
+        <div class="flex items-center gap-12 mb-12">
+          <div class="list-icon blue" style="width:44px; height:44px; font-size:20px;">🏋️</div>
+          <div>
+            <div class="fw-700">New charge: Gym Membership</div>
+            <div class="text-xs text-gray">Detected recurring charge</div>
+          </div>
+        </div>
+        <div style="background:var(--blue-bg); border-radius:10px; padding:12px; margin-bottom:12px;">
+          <div class="text-sm text-blue fw-700">+$49.99/mo (+$599.88/yr)</div>
+          <div class="text-xs text-gray mt-4">New recurring charge detected</div>
+        </div>
+        <div class="flex items-center gap-8">
+          <button class="btn btn-outline btn-sm">Dismiss</button>
+          <button class="btn btn-blue btn-sm">Track this →</button>
+        </div>
+      </div>
+
+      <!-- Scenario 4: Cancelled -->
+      <div class="variant-label">Scenario 4 — Cancelled</div>
+      <div class="card-shell">
+        <div class="flex items-center gap-12 mb-12">
+          <div class="list-icon gray" style="width:44px; height:44px; font-size:20px;">📺</div>
+          <div>
+            <div class="fw-700">HBO Max cancelled</div>
+            <div class="text-xs text-gray">Subscription ended</div>
+          </div>
+        </div>
+        <div style="background:var(--green-bg); border-radius:10px; padding:12px; margin-bottom:12px;">
+          <div class="text-sm text-green fw-700">-$15.99/mo saved ($191.88/yr)</div>
+          <div class="text-xs text-gray mt-4">Subscription cancelled by merchant</div>
+        </div>
+        <button class="btn btn-green btn-sm">Got it ✓</button>
+      </div>
+
+      <!-- Scenario 5: Paused -->
+      <div class="variant-label">Scenario 5 — Paused</div>
+      <div class="card-shell">
+        <div class="flex items-center gap-12 mb-12">
+          <div class="list-icon amber" style="width:44px; height:44px; font-size:20px;">☁️</div>
+          <div>
+            <div class="fw-700">Cloud Storage paused</div>
+            <div class="text-xs text-gray">Payment temporarily stopped</div>
+          </div>
+        </div>
+        <div style="background:var(--amber-bg); border-radius:10px; padding:12px; margin-bottom:12px;">
+          <div class="text-sm text-amber fw-700">Payment paused — $2.99/mo</div>
+          <div class="text-xs text-gray mt-4">Payment paused by provider</div>
+        </div>
+        <button class="btn btn-outline btn-sm">View details</button>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- SECTION 2: TAX HARVESTING -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <h2 class="section-title" id="s2">Section 2: Tax Loss Harvesting</h2>
+    <p class="section-sub">Comparing the current disconnected design with fixed activation variants.</p>
+
+    <!-- BEFORE vs AFTER -->
+    <div class="vs" id="s2a">
+      <!-- BEFORE -->
+      <div class="card-shell before">
+        <span class="badge-before">Before</span>
+        <div style="margin-top:8px;">
+          <div style="font-size:16px; font-weight:700; margin-bottom:10px;">Tax Loss Harvesting</div>
+          <div style="font-size:13px; color:var(--text2); line-height:1.5; margin-bottom:16px;">
+            Tax loss harvesting is a strategy where you sell investments at a loss to offset capital gains, potentially reducing your tax liability.
+          </div>
+          <div style="display:flex; gap:16px; margin-bottom:16px;">
+            <div style="text-align:center;">
+              <div style="font-size:20px; font-weight:700;">$0</div>
+              <div class="text-xs text-gray">tax saved</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:20px; font-weight:700;">$0</div>
+              <div class="text-xs text-gray">harvested</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:20px; font-weight:700;">0</div>
+              <div class="text-xs text-gray">opportunities</div>
+            </div>
+          </div>
+          <button class="btn btn-blue btn-sm">Enable</button>
+        </div>
+        <div class="text-xs text-gray mt-12">Problems: generic info card, zero metrics feel useless, button disconnected from value, no explanation of why it matters.</div>
+      </div>
+
+      <!-- AFTER -->
+      <div class="card-shell after">
+        <span class="badge-after">After</span>
+        <div class="surface-green" style="margin-top:8px;">
+          <div style="width:48px; height:48px; border-radius:50%; background:var(--green); display:flex; align-items:center; justify-content:center; font-size:24px; margin-bottom:12px;">🍃</div>
+          <div style="font-size:18px; font-weight:700; margin-bottom:4px;">Save on taxes automatically</div>
+          <div class="text-sm" style="color:var(--text); line-height:1.5; margin-bottom:12px;">
+            Advizmo sells investments at a loss to reduce your tax bill. You keep your portfolio strategy — we handle the tax optimization.
+          </div>
+          <div style="background:rgba(22,111,71,.1); border-radius:10px; padding:12px; margin-bottom:14px;">
+            <div class="text-sm text-green fw-700">Save up to $288/year</div>
+            <div class="text-xs text-gray mt-4">Based on your current portfolio</div>
+          </div>
+          <div class="expandable">
+            <div class="text-xs fw-700 mb-8">How it works</div>
+            <div class="step"><div class="step-num">1</div><div class="step-text">Monitors your portfolio daily</div></div>
+            <div class="step"><div class="step-num">2</div><div class="step-text">Finds investments that lost value</div></div>
+            <div class="step"><div class="step-num">3</div><div class="step-text">Sells to capture the tax loss</div></div>
+            <div class="step"><div class="step-num">4</div><div class="step-text">Reinvests in similar assets</div></div>
+          </div>
+          <button class="btn btn-green mt-12" style="width:100%; justify-content:center;">Enable tax harvesting →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- VARIANT 1: ACTIVATION CARD -->
+    <div class="variant-label" id="s2v1">Variant 1 — Activation Card (Primary)</div>
+    <div style="max-width:430px;">
+      <div class="phone-frame">
+        <div class="phone-top"><span>9:41</span><span>●●●</span></div>
+        <div class="phone-body">
+          <div class="surface-green">
+            <div style="width:48px; height:48px; border-radius:50%; background:var(--green); display:flex; align-items:center; justify-content:center; font-size:24px; margin-bottom:12px;">🍃</div>
+            <div style="font-size:18px; font-weight:700; margin-bottom:4px;">Save on taxes automatically</div>
+            <div class="text-sm" style="line-height:1.5; margin-bottom:12px;">
+              Advizmo sells investments at a loss to reduce your tax bill. You keep your portfolio strategy intact.
+            </div>
+            <div style="background:rgba(22,111,71,.1); border-radius:10px; padding:12px; margin-bottom:14px;">
+              <div class="text-sm text-green fw-700">Save up to $288/year</div>
+              <div class="text-xs text-gray mt-4">Based on your current portfolio holdings</div>
+            </div>
+            <div class="expandable">
+              <div class="text-xs fw-700 mb-8">How it works</div>
+              <div class="step"><div class="step-num">1</div><div class="step-text">Monitors your portfolio daily for tax-loss opportunities</div></div>
+              <div class="step"><div class="step-num">2</div><div class="step-text">Finds investments that have lost value since purchase</div></div>
+              <div class="step"><div class="step-num">3</div><div class="step-text">Sells to capture the tax loss before it recovers</div></div>
+              <div class="step"><div class="step-num">4</div><div class="step-text">Reinvests in similar (not identical) assets</div></div>
+            </div>
+            <button class="btn btn-green mt-12" style="width:100%; justify-content:center;">Enable tax harvesting →</button>
+            <div class="text-xs text-gray mt-8" style="text-align:center;">You can disable anytime in Settings</div>
+          </div>
+        </div>
+        <div class="phone-bottom-nav">
+          <span class="active">🏠<br>Home</span>
+          <span>📊<br>Invest</span>
+          <span>💰<br>Spend</span>
+          <span>📋<br>Plan</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- VARIANT 2: PROGRESS CARD -->
+    <div class="variant-label" id="s2v2">Variant 2 — Progress Card</div>
+    <div style="max-width:430px;">
+      <div class="card-shell">
+        <div class="flex items-center gap-12 mb-12">
+          <div class="surface-green" style="width:120px; height:120px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-direction:column; position:relative;">
+            <svg width="120" height="120" style="position:absolute; top:0; left:0;">
+              <circle cx="60" cy="60" r="52" stroke="#d0f5d8" stroke-width="8" fill="none"/>
+              <circle cx="60" cy="60" r="52" stroke="#166f47" stroke-width="8" fill="none" stroke-dasharray="326.73" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 60 60)"/>
+            </svg>
+            <div style="font-size:24px; font-weight:700; color:var(--green); z-index:1;">$288</div>
+            <div class="text-xs text-gray" style="z-index:1;">saved this year</div>
+          </div>
+          <div style="flex:1;">
+            <div class="fw-700 mb-8">Tax savings progress</div>
+            <div class="flex items-center gap-8 mb-8">
+              <div style="width:8px; height:8px; border-radius:50%; background:#e5e5ea;"></div>
+              <span class="text-xs">$0</span>
+            </div>
+            <div class="flex items-center gap-8 mb-8">
+              <div style="width:8px; height:8px; border-radius:50%; background:var(--green);"></div>
+              <span class="text-xs">$100</span>
+            </div>
+            <div class="flex items-center gap-8 mb-8">
+              <div style="width:8px; height:8px; border-radius:50%; background:var(--green);"></div>
+              <span class="text-xs">$200</span>
+            </div>
+            <div class="flex items-center gap-8">
+              <div style="width:8px; height:8px; border-radius:50%; background:var(--green);"></div>
+              <span class="text-xs fw-700">$288 ✓</span>
+            </div>
+          </div>
+        </div>
+        <div style="border-top:1px solid #e5e5ea; padding-top:12px;">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-xs text-gray">Last harvest</div>
+              <div class="text-sm fw-600">Nov 15, 2026</div>
+            </div>
+            <button class="btn btn-outline btn-sm">View history</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VARIANT 3: OPPORTUNITY CARD -->
+    <div class="variant-label" id="s2v3">Variant 3 — Opportunity Card</div>
+    <div style="max-width:430px;">
+      <div class="surface-green" style="border-radius:16px; border:2px solid var(--green);">
+        <div class="flex items-center gap-12 mb-12">
+          <div style="width:44px; height:44px; border-radius:12px; background:var(--green); display:flex; align-items:center; justify-content:center; font-size:20px;">🎯</div>
+          <div>
+            <div style="font-size:18px; font-weight:700;">Tax harvesting opportunity</div>
+            <div class="text-xs text-gray">Act before it's gone</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-16 mb-12">
+          <div>
+            <div class="text-xs text-gray">Available losses</div>
+            <div style="font-size:20px; font-weight:700; color:var(--green);">$1,200</div>
+          </div>
+          <div>
+            <div class="text-xs text-gray">Tax savings</div>
+            <div style="font-size:20px; font-weight:700; color:var(--green);">$288</div>
+          </div>
+        </div>
+        <div style="background:rgba(22,111,71,.1); border-radius:10px; padding:12px; margin-bottom:14px;">
+          <div class="text-xs fw-700 mb-8">Breakdown</div>
+          <div class="list-item" style="padding:4px 0; border:none;">
+            <div class="list-text"><div class="name text-sm">VTI (Total Stock Market)</div></div>
+            <span class="text-xs text-red">-$400</span>
+          </div>
+          <div class="list-item" style="padding:4px 0; border:none;">
+            <div class="list-text"><div class="name text-sm">BND (Total Bond Market)</div></div>
+            <span class="text-xs text-red">-$300</span>
+          </div>
+          <div class="list-item" style="padding:4px 0; border:none;">
+            <div class="list-text"><div class="name text-sm">SCHD (Dividend ETF)</div></div>
+            <span class="text-xs text-red">-$500</span>
+          </div>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-xs text-gray">⏰ Expires Dec 31, 2026</span>
+          <button class="btn btn-green">Harvest now →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- VARIANT 4: AI GUIDANCE -->
+    <div class="variant-label" id="s2v4">Variant 4 — AI Guidance</div>
+    <div style="max-width:430px;">
+      <div class="surface-dark" style="border-radius:16px;">
+        <div class="flex items-center gap-12 mb-12">
+          <div style="width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg, #166f47, #34c759); display:flex; align-items:center; justify-content:center; font-size:18px;">🤖</div>
+          <div>
+            <div style="font-size:14px; font-weight:600;">I found a tax harvesting opportunity</div>
+            <div class="text-xs" style="color:#999; margin-top:2px;">AI Tax Advisor • just now</div>
+          </div>
+        </div>
+        <div style="font-size:14px; line-height:1.5; color:#ccc; margin-bottom:12px;">
+          <strong style="color:#34c759;">$1,200</strong> in unrealized losses could save you <strong style="color:#34c759;">$288</strong> in taxes this year.
+        </div>
+        <div style="background:rgba(255,255,255,.08); border-radius:10px; padding:12px; margin-bottom:16px;">
+          <div class="text-xs" style="color:#999; margin-bottom:4px;">Analysis</div>
+          <div style="font-size:13px; color:#fff; line-height:1.5;">VTI, BND, and SCHD are all down from your purchase price. This is a one-time opportunity — losses may recover after year-end.</div>
+        </div>
+        <div style="background:rgba(52,199,89,.15); border-radius:10px; padding:10px; margin-bottom:16px; text-align:center;">
+          <div class="text-xs" style="color:#34c759; font-weight:600;">⏰ Expires Dec 31 — 5 months remaining</div>
+        </div>
+        <button class="btn btn-green" style="width:100%; justify-content:center;">Let's do it →</button>
+      </div>
+    </div>
+
+    <!-- VARIANT 5: COMPLETED STATE -->
+    <div class="variant-label" id="s2v5">Variant 5 — Completed State</div>
+    <div style="max-width:430px;">
+      <div class="card-shell">
+        <div class="surface-green">
+          <div style="text-align:center; padding:12px 0;">
+            <div style="width:56px; height:56px; border-radius:50%; background:var(--green); display:flex; align-items:center; justify-content:center; font-size:28px; margin:0 auto 12px;">✓</div>
+            <div style="font-size:18px; font-weight:700; margin-bottom:4px;">Tax harvesting completed</div>
+            <div class="text-sm" style="margin-bottom:8px;">You saved <strong class="text-green">$288</strong> in taxes this year</div>
+            <div class="text-xs text-gray">All available losses have been harvested</div>
+          </div>
+          <div style="background:rgba(22,111,71,.1); border-radius:10px; padding:12px; margin-top:8px;">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="text-xs text-gray">Status</div>
+                <div class="text-sm fw-600">Monitoring</div>
+              </div>
+              <div>
+                <div class="text-xs text-gray">Next check</div>
+                <div class="text-sm fw-600">Tomorrow</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- SECTION 2B: TAX HARVESTING SCENARIO STATES -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <h2 class="section-title" id="s2s">Tax Harvesting — Scenario States</h2>
+    <p class="section-sub">Different card states based on user's account and investment status.</p>
+
+    <div style="max-width:430px;">
+      <!-- State 1: No Investments -->
+      <div class="variant-label">State 1 — No Investments</div>
+      <div class="card-shell">
+        <div class="surface-blue" style="background:linear-gradient(135deg, #f2f2f7, #e5e5ea); border-radius:14px; padding:18px; text-align:center;">
+          <div style="width:48px; height:48px; border-radius:50%; background:#d1d1d6; display:flex; align-items:center; justify-content:center; font-size:24px; margin:0 auto 12px;">📊</div>
+          <div class="fw-700 mb-8">Start investing to unlock tax harvesting</div>
+          <div class="text-sm text-gray mb-12">Open an Advizmo account to begin reducing your taxes automatically.</div>
+          <button class="btn btn-blue">Start investing</button>
+        </div>
+      </div>
+
+      <!-- State 2: Account Funded -->
+      <div class="variant-label">State 2 — Account Funded, No Investments Yet</div>
+      <div class="card-shell">
+        <div class="surface-blue" style="border-radius:14px; padding:18px;">
+          <div class="flex items-center gap-12 mb-12">
+            <div style="width:44px; height:44px; border-radius:12px; background:var(--blue-bg); display:flex; align-items:center; justify-content:center; font-size:20px;">💰</div>
+            <div>
+              <div class="fw-700">Fund your account to enable tax harvesting</div>
+              <div class="text-xs text-gray">Once you invest, we'll start monitoring for opportunities</div>
+            </div>
+          </div>
+          <div style="background:var(--blue-bg); border-radius:10px; padding:12px; margin-bottom:12px;">
+            <div class="text-xs text-blue fw-600">💡 Tip: Tax harvesting works best with $10,000+ invested</div>
+          </div>
+          <button class="btn btn-blue">Add money →</button>
+        </div>
+      </div>
+
+      <!-- State 3: First Investment Made -->
+      <div class="variant-label">State 3 — First Investment Made</div>
+      <div class="card-shell">
+        <div class="surface-green">
+          <div class="flex items-center gap-12 mb-12">
+            <div style="width:44px; height:44px; border-radius:12px; background:var(--green-bg); display:flex; align-items:center; justify-content:center; font-size:20px;">🍃</div>
+            <div>
+              <div class="fw-700">Tax harvesting activated</div>
+              <div class="text-xs text-gray">We'll monitor your portfolio for tax-saving opportunities</div>
+            </div>
+          </div>
+          <div style="background:rgba(22,111,71,.1); border-radius:10px; padding:12px;">
+            <div class="text-xs text-green fw-600">✓ Active — checking daily for opportunities</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- State 4: Active, No Opportunities -->
+      <div class="variant-label">State 4 — Active, No Opportunities</div>
+      <div class="card-shell">
+        <div class="surface-green">
+          <div class="flex items-center gap-12 mb-12">
+            <div style="width:44px; height:44px; border-radius:12px; background:var(--green-bg); display:flex; align-items:center; justify-content:center; font-size:20px;">🔍</div>
+            <div>
+              <div class="fw-700">Monitoring for opportunities</div>
+              <div class="text-xs text-gray">No tax-loss harvesting opportunities right now</div>
+            </div>
+          </div>
+          <div style="background:rgba(22,111,71,.1); border-radius:10px; padding:12px;">
+            <div class="text-xs text-green fw-600">✓ We check daily • Last checked: Today at 9:00 AM</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- State 5: Opportunity Available -->
+      <div class="variant-label">State 5 — Opportunity Available</div>
+      <div class="card-shell">
+        <div class="surface-green" style="border:2px solid var(--green); border-radius:14px; padding:18px;">
+          <div class="flex items-center gap-12 mb-12">
+            <div style="width:44px; height:44px; border-radius:12px; background:var(--green); display:flex; align-items:center; justify-content:center; font-size:20px;">🎯</div>
+            <div>
+              <div class="fw-700">Tax harvesting opportunity</div>
+              <div class="text-xs text-gray">Don't miss this chance to save on taxes</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-16 mb-12">
+            <div>
+              <div class="text-xs text-gray">Losses</div>
+              <div style="font-size:18px; font-weight:700; color:var(--green);">$1,200</div>
+            </div>
+            <div>
+              <div class="text-xs text-gray">Tax savings</div>
+              <div style="font-size:18px; font-weight:700; color:var(--green);">$288</div>
+            </div>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-xs text-gray">⏰ Expires Dec 31</span>
+            <button class="btn btn-green btn-sm">Harvest now →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- State 6: Harvest Completed -->
+      <div class="variant-label">State 6 — Harvest Completed</div>
+      <div class="card-shell">
+        <div class="surface-green">
+          <div style="text-align:center;">
+            <div style="width:48px; height:48px; border-radius:50%; background:var(--green); display:flex; align-items:center; justify-content:center; font-size:24px; margin:0 auto 8px;">✓</div>
+            <div class="fw-700">Saved $288 in taxes</div>
+            <div class="text-xs text-gray mt-4">Your next opportunity will be monitored</div>
+          </div>
+          <div style="background:rgba(22,111,71,.1); border-radius:10px; padding:12px; margin-top:12px; text-align:center;">
+            <div class="text-xs text-green fw-600">✓ Active — monitoring daily</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- SECTION 3: FINAL PRODUCTION COMPONENTS -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <h2 class="section-title" id="final">Final Production Components</h2>
+    <p class="section-sub">Complete set of fixed components with all states: Default, Loading, Success, Error, Disabled.</p>
+
+    <!-- 1. Recurring Review Card — Full -->
+    <div class="variant-label">1. Recurring Review Card — Full</div>
+    <div style="max-width:430px;">
+      <!-- Default -->
+      <div class="card-shell mb-12">
+        <div class="text-xs text-gray mb-8">Default</div>
+        <div class="surface-amber">
+          <div style="font-size:18px; font-weight:700;">6 subscriptions changed</div>
+          <div class="text-sm fw-600 mt-4">Your monthly cost: $236.46 → $246.95</div>
+          <div class="text-sm text-red fw-700 mt-4">+$10.49/mo (+$125.88/yr)</div>
+          <div class="mt-12" style="border-top:1px solid rgba(0,0,0,.08); padding-top:10px;">
+            <div class="flex items-center gap-8">
+              <span class="pill pill-red">2 increased</span>
+              <span class="pill pill-green">1 decreased</span>
+              <span class="pill pill-blue">1 new</span>
+              <span class="pill pill-gray">1 cancelled</span>
+              <span class="pill pill-amber">1 paused</span>
+            </div>
+          </div>
+          <div class="mt-12 flex items-center gap-8">
+            <button class="btn btn-amber">Review all changes →</button>
+            <button class="btn-ghost">Accept all</button>
+          </div>
+          <div class="text-xs text-gray mt-8">⏱ 5 minutes to review</div>
+        </div>
+      </div>
+
+      <!-- Loading -->
+      <div class="card-shell mb-12">
+        <div class="text-xs text-gray mb-8">Loading</div>
+        <div class="surface-amber" style="opacity:0.6;">
+          <div style="height:20px; width:200px; background:rgba(0,0,0,.08); border-radius:4px; margin-bottom:8px;"></div>
+          <div style="height:14px; width:260px; background:rgba(0,0,0,.06); border-radius:4px; margin-bottom:4px;"></div>
+          <div style="height:14px; width:180px; background:rgba(0,0,0,.06); border-radius:4px; margin-bottom:16px;"></div>
+          <div style="display:flex; gap:8px;">
+            <div style="height:22px; width:80px; background:rgba(0,0,0,.06); border-radius:12px;"></div>
+            <div style="height:22px; width:80px; background:rgba(0,0,0,.06); border-radius:12px;"></div>
+          </div>
+          <div class="mt-12" style="height:12px; width:100px; background:rgba(0,0,0,.04); border-radius:4px;"></div>
+        </div>
+      </div>
+
+      <!-- Success -->
+      <div class="card-shell mb-12">
+        <div class="text-xs text-gray mb-8">Success</div>
+        <div class="surface-green">
+          <div style="text-align:center; padding:8px 0;">
+            <div style="width:40px; height:40px; border-radius:50%; background:var(--green); display:flex; align-items:center; justify-content:center; font-size:20px; margin:0 auto 8px;">✓</div>
+            <div class="fw-700">All changes reviewed</div>
+            <div class="text-xs text-gray mt-4">6 subscriptions updated • Net change: +$10.49/mo</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Error -->
+      <div class="card-shell mb-12">
+        <div class="text-xs text-gray mb-8">Error</div>
+        <div class="surface-red" style="border-radius:14px; padding:18px;">
+          <div class="flex items-center gap-8 mb-8">
+            <span style="font-size:18px;">⚠️</span>
+            <div class="fw-700">Couldn't load subscription data</div>
+          </div>
+          <div class="text-xs text-gray mb-12">We're having trouble fetching your latest subscription changes. Please try again.</div>
+          <button class="btn btn-outline btn-sm">Try again</button>
+        </div>
+      </div>
+
+      <!-- Disabled -->
+      <div class="card-shell">
+        <div class="text-xs text-gray mb-8">Disabled</div>
+        <div class="surface-amber" style="opacity:0.4; pointer-events:none;">
+          <div style="font-size:18px; font-weight:700;">No changes detected</div>
+          <div class="text-sm text-gray mt-4">All subscriptions are up to date</div>
+          <div class="mt-12">
+            <button class="btn btn-amber" style="opacity:0.5;" disabled>Review all changes →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Recurring Review Card — Compact -->
+    <div class="variant-label">2. Recurring Review Card — Compact</div>
+    <div style="max-width:430px;">
+      <!-- Default -->
+      <div class="card-shell mb-12">
+        <div class="text-xs text-gray mb-8">Default</div>
+        <div style="padding:12px; display:flex; align-items:center; gap:12px; background:linear-gradient(135deg, #fff5e6, #ffe8c8); border-radius:12px;">
+          <div style="width:36px; height:36px; border-radius:10px; background:#fff; display:flex; align-items:center; justify-content:center; font-size:16px;">📋</div>
+          <div style="flex:1;">
+            <div class="text-sm fw-600">6 subscriptions changed</div>
+            <div class="text-xs text-gray">+3 increased, -1 decreased</div>
+          </div>
+          <span class="pill pill-red text-xs">+$10.49/mo</span>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#8e8e93" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+      </div>
+
+      <!-- Loading -->
+      <div class="card-shell mb-12">
+        <div class="text-xs text-gray mb-8">Loading</div>
+        <div style="padding:12px; display:flex; align-items:center; gap:12px; background:#f2f2f7; border-radius:12px; opacity:0.6;">
+          <div style="width:36px; height:36px; border-radius:10px; background:#e5e5ea;"></div>
+          <div style="flex:1;">
+            <div style="height:12px; width:120px; background:#e5e5ea; border-radius:4px; margin-bottom:4px;"></div>
+            <div style="height:10px; width:80px; background:#e5e5ea; border-radius:4px;"></div>
+          </div>
+          <div style="height:20px; width:70px; background:#e5e5ea; border-radius:10px;"></div>
+        </div>
+      </div>
+
+      <!-- Success -->
+      <div class="card-shell mb-12">
+        <div class="text-xs text-gray mb-8">Success</div>
+        <div style="padding:12px; display:flex; align-items:center; gap:12px; background:var(--green-bg); border-radius:12px;">
+          <div style="width:36px; height:36px; border-radius:10px; background:var(--green); display:flex; align-items:center; justify-content:center; color:#fff; font-size:14px;">✓</div>
+          <div style="flex:1;">
+            <div class="text-sm fw-600">All reviewed</div>
+            <div class="text-xs text-gray">6 subscriptions updated</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Error -->
+      <div class="card-shell mb-12">
+        <div class="text-xs text-gray mb-8">Error</div>
+        <div style="padding:12px; display:flex; align-items:center; gap:12px; background:var(--red-bg); border-radius:12px;">
+          <div style="width:36px; height:36px; border-radius:10px; background:var(--red); display:flex; align-items:center; justify-content:center; color:#fff; font-size:14px;">!</div>
+          <div style="flex:1;">
+            <div class="text-sm fw-600">Load failed</div>
+            <div class="text-xs text-gray">Tap to retry</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Disabled -->
+      <div class="card-shell">
+        <div class="text-xs text-gray mb-8">Disabled</div>
+        <div style="padding:12px; display:flex; align-items:center; gap:12px; background:#f2f2f7; border-radius:12px; opacity:0.4;">
+          <div style="width:36px; height:36px; border-radius:10px; background:#e5e5ea; display:flex; align-items:center; justify-content:center; font-size:16px;">📋</div>
+          <div style="flex:1;">
+            <div class="text-sm fw-600">No changes</div>
+            <div class="text-xs text-gray">All up to date</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Tax Harvesting Card — Activation -->
+    <div class="variant-label">3. Tax Harvesting Card — Activation</div>
+    <div style="max-width:430px;">
+      <!-- Default -->
+      <div class="card-shell mb-12">
+        <div class="text-xs text-gray mb-8">Default</div>
+        <div class="surface-green">
+          <div style="width:40px; height:40px; border-radius:50%; background:var(--green); display:flex; align-items:center; justify-content:center; font-size:20px; margin-bottom:10px;">🍃</div>
+          <div class="fw-700" style="font-size:16px;">Save on taxes automatically</div>
+          <div class="text-sm mt-4">Advizmo sells investments at a loss to reduce your tax bill.</div>
+          <div style="background:rgba(22,111,71,.1); border-radius:10px; padding:10px; margin:12px 0;">
+            <div class="text-sm text-green fw-700">Save up to $288/year</div>
+          </div>
+          <button class="btn btn-green" style="width:100%; justify-content:center;">Enable tax harvesting →</button>
+        </div>
+      </div>
+
+      <!-- Loading -->
+      <div class="card-shell mb-12">
+        <div class="text-xs text-gray mb-8">Loading</div>
+        <div class="surface-green" style="opacity:0.6;">
+          <div style="height:40px; width:40px; border-radius:50%; background:rgba(0,0,0,.08); margin-bottom:10px;"></div>
+          <div style="height:16px; width:200px; background:rgba(0,0,0,.06); border-radius:4px; margin-bottom:8px;"></div>
+          <div style="height:12px; width:260px; background:rgba(0,0,0,.04); border-radius:4px; margin-bottom:12px;"></div>
+          <div style="height:36px; width:100%; background:rgba(0,0,0,.06); border-radius:10px;"></div>
+        </div>
+      </div>
+
+      <!-- Success -->
+      <div class="card-shell mb-12">
+        <div class="text-xs text-gray mb-8">Success</div>
+        <div class="surface-green">
+          <div style="text-align:center; padding:8px 0;">
+            <div style="width:40px; height:40px; border-radius:50%; background:var(--green); display:flex; align-items:center; justify-content:center; font-size:20px; margin:0 auto 8px;">✓</div>
+            <div class="fw-700">Tax harvesting enabled</div>
+            <div class="text-xs text-gray mt-4">We'll start monitoring your portfolio</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Error -->
+      <div class="card-shell mb-12">
+        <div class="text-xs text-gray mb-8">Error</div>
+        <div class="surface-red" style="border-radius:14px; padding:18px;">
+          <div class="flex items-center gap-8 mb-8">
+            <span style="font-size:18px;">⚠️</span>
+            <div class="fw-700">Couldn't enable tax harvesting</div>
+          </div>
+          <div class="text-xs text-gray mb-12">There was an issue activating this feature. Please try again.</div>
+          <button class="btn btn-outline btn-sm">Try again</button>
+        </div>
+      </div>
+
+      <!-- Disabled -->
+      <div class="card-shell">
+        <div class="text-xs text-gray mb-8">Disabled</div>
+        <div class="surface-green" style="opacity:0.4; pointer-events:none;">
+          <div style="width:40px; height:40px; border-radius:50%; background:rgba(0,0,0,.08); margin-bottom:10px;"></div>
+          <div class="fw-700" style="font-size:16px;">Save on taxes automatically</div>
+          <div class="text-sm mt-4">Requires an active investment account</div>
+          <button class="btn btn-green mt-12" style="opacity:0.5;" disabled>Enable tax harvesting →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Tax Harvesting Card — Opportunity -->
+    <div class="variant-label">4. Tax Harvesting Card — Opportunity</div>
+    <div style="max-width:430px;">
+      <!-- Default -->
+      <div class="card-shell mb-12">
+        <div class="text-xs text-gray mb-8">Default</div>
+        <div style="background:linear-gradient(135deg, #e8f8ec, #d0f5d8); border:2px solid var(--green); border-radius:14px; padding:18px;">
+          <div class="flex items-center gap-12 mb-12">
+            <div style="width:40px; height:40px; border-radius:10px; background:var(--green); display:flex; align-items:center; justify-content:center; font-size:18px;">🎯</div>
+            <div>
+              <div class="fw-700">Tax harvesting opportunity</div>
+              <div class="text-xs text-gray">Don't miss this chance</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-16 mb-12">
+            <div>
+              <div class="text-xs text-gray">Losses</div>
+              <div style="font-size:18px; font-weight:700; color:var(--green);">$1,200</div>
+            </div>
+            <div>
+              <div class="text-xs text-gray">Save</div>
+              <div style="font-size:18px; font-weight:700; color:var(--green);">$288</div>
+            </div>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-xs text-gray">⏰ Expires Dec 31</span>
+            <button class="btn btn-green btn-sm">Harvest now →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Loading -->
+      <div class="card-shell mb-12">
+        <div class="text-xs text-gray mb-8">Loading</div>
+        <div style="background:#e5e5ea; border-radius:14px; padding:18px; opacity:0.6;">
+          <div style="height:40px; width:40px; border-radius:10px; background:rgba(0,0,0,.06); margin-bottom:12px;"></div>
+          <div style="height:14px; width:160px; background:rgba(0,0,0,.06); border-radius:4px; margin-bottom:16px;"></div>
+          <div style="display:flex; gap:16px; margin-bottom:16px;">
+            <div style="height:40px; width:80px; background:rgba(0,0,0,.04); border-radius:8px;"></div>
+            <div style="height:40px; width:80px; background:rgba(0,0,0,.04); border-radius:8px;"></div>
+          </div>
+          <div style="height:32px; width:100%; background:rgba(0,0,0,.06); border-radius:8px;"></div>
+        </div>
+      </div>
+
+      <!-- Success -->
+      <div class="card-shell mb-12">
+        <div class="text-xs text-gray mb-8">Success</div>
+        <div class="surface-green">
+          <div style="text-align:center; padding:8px 0;">
+            <div style="width:40px; height:40px; border-radius:50%; background:var(--green); display:flex; align-items:center; justify-content:center; font-size:20px; margin:0 auto 8px;">✓</div>
+            <div class="fw-700">Harvest completed</div>
+            <div class="text-sm text-green mt-4">You saved $288 in taxes</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Error -->
+      <div class="card-shell mb-12">
+        <div class="text-xs text-gray mb-8">Error</div>
+        <div class="surface-red" style="border-radius:14px; padding:18px;">
+          <div class="flex items-center gap-8 mb-8">
+            <span style="font-size:18px;">⚠️</span>
+            <div class="fw-700">Harvest failed</div>
+          </div>
+          <div class="text-xs text-gray mb-12">Market conditions changed. The opportunity may have recovered.</div>
+          <button class="btn btn-outline btn-sm">Try again</button>
+        </div>
+      </div>
+
+      <!-- Disabled -->
+      <div class="card-shell">
+        <div class="text-xs text-gray mb-8">Disabled</div>
+        <div class="surface-green" style="opacity:0.4; pointer-events:none; border-radius:14px; padding:18px;">
+          <div class="fw-700 mb-8">No opportunities</div>
+          <div class="text-sm text-gray">Currently monitoring for tax-loss harvesting</div>
+          <button class="btn btn-green btn-sm mt-12" style="opacity:0.5;" disabled>Harvest now →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Tax Harvesting Card — Completed -->
+    <div class="variant-label">5. Tax Harvesting Card — Completed</div>
+    <div style="max-width:430px;">
+      <!-- Default -->
+      <div class="card-shell mb-12">
+        <div class="text-xs text-gray mb-8">Default</div>
+        <div class="surface-green">
+          <div style="text-align:center; padding:8px 0;">
+            <div style="width:48px; height:48px; border-radius:50%; background:var(--green); display:flex; align-items:center; justify-content:center; font-size:24px; margin:0 auto 10px;">✓</div>
+            <div class="fw-700" style="font-size:16px;">Tax harvesting completed</div>
+            <div class="text-sm mt-4">You saved <strong class="text-green">$288</strong> in taxes this year</div>
+            <div class="text-xs text-gray mt-8">All available losses have been harvested</div>
+          </div>
+          <div style="background:rgba(22,111,71,.1); border-radius:10px; padding:12px; margin-top:8px;">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="text-xs text-gray">Status</div>
+                <div class="text-sm fw-600">Monitoring</div>
+              </div>
+              <div>
+                <div class="text-xs text-gray">Next check</div>
+                <div class="text-sm fw-600">Tomorrow</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Loading -->
+      <div class="card-shell mb-12">
+        <div class="text-xs text-gray mb-8">Loading</div>
+        <div class="surface-green" style="opacity:0.6;">
+          <div style="text-align:center; padding:8px 0;">
+            <div style="height:48px; width:48px; border-radius:50%; background:rgba(0,0,0,.06); margin:0 auto 10px;"></div>
+            <div style="height:16px; width:200px; background:rgba(0,0,0,.06); border-radius:4px; margin:0 auto 8px;"></div>
+            <div style="height:12px; width:160px; background:rgba(0,0,0,.04); border-radius:4px; margin:0 auto;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Success (same as default) -->
+      <div class="card-shell mb-12">
+        <div class="text-xs text-gray mb-8">Success</div>
+        <div class="surface-green">
+          <div style="text-align:center; padding:8px 0;">
+            <div style="width:48px; height:48px; border-radius:50%; background:var(--green); display:flex; align-items:center; justify-content:center; font-size:24px; margin:0 auto 10px;">✓</div>
+            <div class="fw-700" style="font-size:16px;">Tax harvesting completed</div>
+            <div class="text-sm mt-4">You saved <strong class="text-green">$288</strong> in taxes this year</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Error -->
+      <div class="card-shell mb-12">
+        <div class="text-xs text-gray mb-8">Error</div>
+        <div class="surface-red" style="border-radius:14px; padding:18px;">
+          <div class="flex items-center gap-8 mb-8">
+            <span style="font-size:18px;">⚠️</span>
+            <div class="fw-700">Couldn't verify completion</div>
+          </div>
+          <div class="text-xs text-gray mb-12">We're checking if your harvest was processed. Please try again.</div>
+          <button class="btn btn-outline btn-sm">Try again</button>
+        </div>
+      </div>
+
+      <!-- Disabled -->
+      <div class="card-shell">
+        <div class="text-xs text-gray mb-8">Disabled</div>
+        <div class="surface-green" style="opacity:0.4; pointer-events:none;">
+          <div style="text-align:center; padding:8px 0;">
+            <div style="width:48px; height:48px; border-radius:50%; background:rgba(0,0,0,.06); display:flex; align-items:center; justify-content:center; font-size:24px; margin:0 auto 10px;">✓</div>
+            <div class="fw-700">Completed</div>
+            <div class="text-xs text-gray mt-4">$288 saved</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- DESIGN TOKENS REFERENCE -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <h2 class="section-title" id="tokens">Design Tokens Reference</h2>
+    <p class="section-sub">Core tokens used across these components.</p>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:12px; margin-bottom:24px;">
+      <div style="background:var(--blue); border-radius:10px; padding:14px; color:#fff;">
+        <div class="text-xs" style="opacity:0.8;">--blue</div>
+        <div class="fw-700">#0a84ff</div>
+      </div>
+      <div style="background:var(--green); border-radius:10px; padding:14px; color:#fff;">
+        <div class="text-xs" style="opacity:0.8;">--green</div>
+        <div class="fw-700">#166f47</div>
+      </div>
+      <div style="background:var(--amber); border-radius:10px; padding:14px; color:#fff;">
+        <div class="text-xs" style="opacity:0.8;">--amber</div>
+        <div class="fw-700">#c2790a</div>
+      </div>
+      <div style="background:var(--red); border-radius:10px; padding:14px; color:#fff;">
+        <div class="text-xs" style="opacity:0.8;">--red</div>
+        <div class="fw-700">#b91c1c</div>
+      </div>
+      <div style="background:var(--text); border-radius:10px; padding:14px; color:#fff;">
+        <div class="text-xs" style="opacity:0.8;">--text</div>
+        <div class="fw-700">#1c1c1e</div>
+      </div>
+      <div style="background:var(--text2); border-radius:10px; padding:14px; color:#fff;">
+        <div class="text-xs" style="opacity:0.8;">--text2</div>
+        <div class="fw-700">#8e8e93</div>
+      </div>
+      <div style="background:var(--bg); border-radius:10px; padding:14px; border:1px solid #d1d1d6;">
+        <div class="text-xs" style="color:var(--text2);">--bg</div>
+        <div class="fw-700">#f2f2f7</div>
+      </div>
+      <div style="background:var(--card); border-radius:10px; padding:14px; border:1px solid #d1d1d6;">
+        <div class="text-xs" style="color:var(--text2);">--card</div>
+        <div class="fw-700">#fff</div>
+      </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:12px;">
+      <div style="background:var(--green-bg); border-radius:10px; padding:14px;">
+        <div class="text-xs text-gray">--green-bg</div>
+        <div class="fw-700">#e8f8ec</div>
+      </div>
+      <div style="background:var(--amber-bg); border-radius:10px; padding:14px;">
+        <div class="text-xs text-gray">--amber-bg</div>
+        <div class="fw-700">#fff5e6</div>
+      </div>
+      <div style="background:var(--red-bg); border-radius:10px; padding:14px;">
+        <div class="text-xs text-gray">--red-bg</div>
+        <div class="fw-700">#ffe8e8</div>
+      </div>
+      <div style="background:var(--blue-bg); border-radius:10px; padding:14px;">
+        <div class="text-xs text-gray">--blue-bg</div>
+        <div class="fw-700">#e8f0ff</div>
+      </div>
+    </div>
+
+    <div style="margin-top:24px; padding:16px; background:#fff; border-radius:12px; border:1px solid #e5e5ea;">
+      <div class="fw-700 mb-8">Spacing & Typography</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:13px;">
+        <div><span class="text-gray">max-width:</span> 430px</div>
+        <div><span class="text-gray">font:</span> IBM Plex Sans + Inter</div>
+        <div><span class="text-gray">title size:</span> 18px, bold</div>
+        <div><span class="text-gray">body size:</span> 14px, regular</div>
+        <div><span class="text-gray">caption size:</span> 12px</div>
+        <div><span class="text-gray">badge size:</span> 11px, semibold</div>
+        <div><span class="text-gray">card radius:</span> 16px</div>
+        <div><span class="text-gray">button radius:</span> 10px</div>
+        <div><span class="text-gray">pill radius:</span> 20px</div>
+        <div><span class="text-gray">icon radius:</span> 10-12px</div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- INTERACTIVE BEHAVIORS -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <h2 class="section-title">Interactive Behaviors</h2>
+    <p class="section-sub">Touch feedback, transitions, and animation specs for each component.</p>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:24px;">
+      <!-- Recurring Card Behaviors -->
+      <div style="background:#fff; border-radius:12px; border:1px solid #e5e5ea; padding:16px;">
+        <div class="fw-700 mb-12">Recurring Card</div>
+        <div class="text-xs text-gray mb-8">Tap behavior</div>
+        <div style="font-size:13px; margin-bottom:12px;">
+          <div style="display:flex; gap:8px; align-items:center; margin-bottom:6px;">
+            <span class="pill pill-blue">State</span>
+            <span>Card tap → expand details</span>
+          </div>
+          <div style="display:flex; gap:8px; align-items:center; margin-bottom:6px;">
+            <span class="pill pill-blue">State</span>
+            <span>Swipe left → dismiss card</span>
+          </div>
+          <div style="display:flex; gap:8px; align-items:center; margin-bottom:6px;">
+            <span class="pill pill-green">Action</span>
+            <span>Accept → green checkmark, card shrinks</span>
+          </div>
+          <div style="display:flex; gap:8px; align-items:center; margin-bottom:6px;">
+            <span class="pill pill-red">Action</span>
+            <span>Reject → red highlight, card removes</span>
+          </div>
+          <div style="display:flex; gap:8px; align-items:center; margin-bottom:6px;">
+            <span class="pill pill-amber">Action</span>
+            <span>Accept all → batch animation, success toast</span>
+          </div>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <span class="pill pill-gray">Feedback</span>
+            <span>Haptic on accept/reject (light impact)</span>
+          </div>
+        </div>
+        <div class="text-xs text-gray mb-8">Transitions</div>
+        <div style="font-size:13px;">
+          <div style="margin-bottom:4px;">Expand: 300ms ease-out</div>
+          <div style="margin-bottom:4px;">Collapse: 250ms ease-in</div>
+          <div style="margin-bottom:4px;">Badge update: 200ms fade</div>
+          <div>Card removal: 350ms slide + fade</div>
+        </div>
+      </div>
+
+      <!-- Tax Card Behaviors -->
+      <div style="background:#fff; border-radius:12px; border:1px solid #e5e5ea; padding:16px;">
+        <div class="fw-700 mb-12">Tax Harvesting Card</div>
+        <div class="text-xs text-gray mb-8">Tap behavior</div>
+        <div style="font-size:13px; margin-bottom:12px;">
+          <div style="display:flex; gap:8px; align-items:center; margin-bottom:6px;">
+            <span class="pill pill-blue">State</span>
+            <span>Enable button → loading spinner → success</span>
+          </div>
+          <div style="display:flex; gap:8px; align-items:center; margin-bottom:6px;">
+            <span class="pill pill-blue">State</span>
+            <span>How it works → expand steps with stagger</span>
+          </div>
+          <div style="display:flex; gap:8px; align-items:center; margin-bottom:6px;">
+            <span class="pill pill-green">Action</span>
+            <span>Harvest → progress ring fills → celebration</span>
+          </div>
+          <div style="display:flex; gap:8px; align-items:center; margin-bottom:6px;">
+            <span class="pill pill-red">Action</span>
+            <span>Error → shake animation → retry state</span>
+          </div>
+          <div style="display:flex; gap:8px; align-items:center; margin-bottom:6px;">
+            <span class="pill pill-amber">Feedback</span>
+            <span>Opportunity pulse: subtle glow on green border</span>
+          </div>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <span class="pill pill-gray">Feedback</span>
+            <span>Success: confetti micro-animation on harvest</span>
+          </div>
+        </div>
+        <div class="text-xs text-gray mb-8">Transitions</div>
+        <div style="font-size:13px;">
+          <div style="margin-bottom:4px;">Enable: 400ms spring animation</div>
+          <div style="margin-bottom:4px;">Progress fill: 800ms ease-out</div>
+          <div style="margin-bottom:4px;">Steps reveal: 200ms staggered fade</div>
+          <div>Completion: 500ms scale + checkmark draw</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- ACCESSIBILITY -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <h2 class="section-title">Accessibility Notes</h2>
+    <p class="section-sub">WCAG 2.1 AA compliance requirements for each component.</p>
+
+    <div style="background:#fff; border-radius:12px; border:1px solid #e5e5ea; padding:16px; margin-bottom:24px;">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px;">
+        <div>
+          <div class="fw-700 mb-12">Color Contrast</div>
+          <div style="font-size:13px; margin-bottom:12px;">
+            <div class="flex items-center gap-8 mb-8">
+              <div style="width:24px; height:24px; border-radius:6px; background:var(--red);"></div>
+              <span>Red text on white: 5.74:1 ✓</span>
+            </div>
+            <div class="flex items-center gap-8 mb-8">
+              <div style="width:24px; height:24px; border-radius:6px; background:var(--green);"></div>
+              <span>Green text on white: 4.63:1 ✓</span>
+            </div>
+            <div class="flex items-center gap-8 mb-8">
+              <div style="width:24px; height:24px; border-radius:6px; background:var(--amber);"></div>
+              <span>Amber text on white: 4.12:1 ✓</span>
+            </div>
+            <div class="flex items-center gap-8">
+              <div style="width:24px; height:24px; border-radius:6px; background:var(--blue);"></div>
+              <span>Blue text on white: 4.56:1 ✓</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="fw-700 mb-12">Screen Reader</div>
+          <div style="font-size:13px; margin-bottom:8px;">
+            • All cards: role="article" with aria-label
+          </div>
+          <div style="font-size:13px; margin-bottom:8px;">
+            • Pills: aria-label describes state fully
+          </div>
+          <div style="font-size:13px; margin-bottom:8px;">
+            • Buttons: descriptive aria-label (not just "Review")
+          </div>
+          <div style="font-size:13px; margin-bottom:8px;">
+            • Progress: aria-valuenow, aria-valuemin, aria-valuemax
+          </div>
+          <div style="font-size:13px;">
+            • Timeline: aria-label="Change history, X items"
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- COMPONENT PROPERTIES -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <h2 class="section-title">Component Properties</h2>
+    <p class="section-sub">Prop definitions for implementing these components in code.</p>
+
+    <div style="background:#fff; border-radius:12px; border:1px solid #e5e5ea; padding:16px; margin-bottom:24px; overflow-x:auto;">
+      <div class="fw-700 mb-12">RecurringReviewCard</div>
+      <table style="width:100%; font-size:12px; border-collapse:collapse;">
+        <tr style="border-bottom:1px solid #e5e5ea; text-align:left;">
+          <th style="padding:8px 4px; font-weight:600; color:var(--text2);">Prop</th>
+          <th style="padding:8px 4px; font-weight:600; color:var(--text2);">Type</th>
+          <th style="padding:8px 4px; font-weight:600; color:var(--text2);">Default</th>
+          <th style="padding:8px 4px; font-weight:600; color:var(--text2);">Description</th>
+        </tr>
+        <tr style="border-bottom:1px solid #f2f2f7;">
+          <td style="padding:8px 4px; font-family:monospace; color:var(--blue);">variant</td>
+          <td style="padding:8px 4px;">'full' | 'compact' | 'ai' | 'timeline' | 'checklist'</td>
+          <td style="padding:8px 4px;">'full'</td>
+          <td style="padding:8px 4px;">Visual layout variant</td>
+        </tr>
+        <tr style="border-bottom:1px solid #f2f2f7;">
+          <td style="padding:8px 4px; font-family:monospace; color:var(--blue);">state</td>
+          <td style="padding:8px 4px;">'default' | 'loading' | 'success' | 'error' | 'disabled'</td>
+          <td style="padding:8px 4px;">'default'</td>
+          <td style="padding:8px 4px;">Current component state</td>
+        </tr>
+        <tr style="border-bottom:1px solid #f2f2f7;">
+          <td style="padding:8px 4px; font-family:monospace; color:var(--blue);">changes</td>
+          <td style="padding:8px 4px;">RecurringChange[]</td>
+          <td style="padding:8px 4px;">[]</td>
+          <td style="padding:8px 4px;">Array of subscription changes</td>
+        </tr>
+        <tr style="border-bottom:1px solid #f2f2f7;">
+          <td style="padding:8px 4px; font-family:monospace; color:var(--blue);">previousTotal</td>
+          <td style="padding:8px 4px;">number</td>
+          <td style="padding:8px 4px;">—</td>
+          <td style="padding:8px 4px;">Previous monthly total ($)</td>
+        </tr>
+        <tr style="border-bottom:1px solid #f2f2f7;">
+          <td style="padding:8px 4px; font-family:monospace; color:var(--blue);">currentTotal</td>
+          <td style="padding:8px 4px;">number</td>
+          <td style="padding:8px 4px;">—</td>
+          <td style="padding:8px 4px;">Current monthly total ($)</td>
+        </tr>
+        <tr style="border-bottom:1px solid #f2f2f7;">
+          <td style="padding:8px 4px; font-family:monospace; color:var(--blue);">reviewTimeMinutes</td>
+          <td style="padding:8px 4px;">number</td>
+          <td style="padding:8px 4px;">5</td>
+          <td style="padding:8px 4px;">Estimated review time</td>
+        </tr>
+        <tr style="border-bottom:1px solid #f2f2f7;">
+          <td style="padding:8px 4px; font-family:monospace; color:var(--blue);">onReview</td>
+          <td style="padding:8px 4px;">() => void</td>
+          <td style="padding:8px 4px;">—</td>
+          <td style="padding:8px 4px;">Review button handler</td>
+        </tr>
+        <tr style="border-bottom:1px solid #f2f2f7;">
+          <td style="padding:8px 4px; font-family:monospace; color:var(--blue);">onAcceptAll</td>
+          <td style="padding:8px 4px;">() => void</td>
+          <td style="padding:8px 4px;">—</td>
+          <td style="padding:8px 4px;">Accept all button handler</td>
+        </tr>
+        <tr>
+          <td style="padding:8px 4px; font-family:monospace; color:var(--blue);">onDismiss</td>
+          <td style="padding:8px 4px;">() => void</td>
+          <td style="padding:8px 4px;">—</td>
+          <td style="padding:8px 4px;">Dismiss swipe handler</td>
+        </tr>
+      </table>
+    </div>
+
+    <div style="background:#fff; border-radius:12px; border:1px solid #e5e5ea; padding:16px; margin-bottom:24px; overflow-x:auto;">
+      <div class="fw-700 mb-12">TaxHarvestingCard</div>
+      <table style="width:100%; font-size:12px; border-collapse:collapse;">
+        <tr style="border-bottom:1px solid #e5e5ea; text-align:left;">
+          <th style="padding:8px 4px; font-weight:600; color:var(--text2);">Prop</th>
+          <th style="padding:8px 4px; font-weight:600; color:var(--text2);">Type</th>
+          <th style="padding:8px 4px; font-weight:600; color:var(--text2);">Default</th>
+          <th style="padding:8px 4px; font-weight:600; color:var(--text2);">Description</th>
+        </tr>
+        <tr style="border-bottom:1px solid #f2f2f7;">
+          <td style="padding:8px 4px; font-family:monospace; color:var(--blue);">variant</td>
+          <td style="padding:8px 4px;">'activation' | 'progress' | 'opportunity' | 'ai' | 'completed'</td>
+          <td style="padding:8px 4px;">'activation'</td>
+          <td style="padding:8px 4px;">Visual layout variant</td>
+        </tr>
+        <tr style="border-bottom:1px solid #f2f2f7;">
+          <td style="padding:8px 4px; font-family:monospace; color:var(--blue);">state</td>
+          <td style="padding:8px 4px;">'default' | 'loading' | 'success' | 'error' | 'disabled'</td>
+          <td style="padding:8px 4px;">'default'</td>
+          <td style="padding:8px 4px;">Current component state</td>
+        </tr>
+        <tr style="border-bottom:1px solid #f2f2f7;">
+          <td style="padding:8px 4px; font-family:monospace; color:var(--blue);">isEnabled</td>
+          <td style="padding:8px 4px;">boolean</td>
+          <td style="padding:8px 4px;">false</td>
+          <td style="padding:8px 4px;">Whether tax harvesting is active</td>
+        </tr>
+        <tr style="border-bottom:1px solid #f2f2f7;">
+          <td style="padding:8px 4px; font-family:monospace; color:var(--blue);">estimatedSavings</td>
+          <td style="padding:8px 4px;">number</td>
+          <td style="padding:8px 4px;">0</td>
+          <td style="padding:8px 4px;">Estimated annual savings ($)</td>
+        </tr>
+        <tr style="border-bottom:1px solid #f2f2f7;">
+          <td style="padding:8px 4px; font-family:monospace; color:var(--blue);">opportunity</td>
+          <td style="padding:8px 4px;">TaxOpportunity | null</td>
+          <td style="padding:8px 4px;">null</td>
+          <td style="padding:8px 4px;">Active harvesting opportunity</td>
+        </tr>
+        <tr style="border-bottom:1px solid #f2f2f7;">
+          <td style="padding:8px 4px; font-family:monospace; color:var(--blue);">totalSaved</td>
+          <td style="padding:8px 4px;">number</td>
+          <td style="padding:8px 4px;">0</td>
+          <td style="padding:8px 4px;">Total taxes saved this year ($)</td>
+        </tr>
+        <tr style="border-bottom:1px solid #f2f2f7;">
+          <td style="padding:8px 4px; font-family:monospace; color:var(--blue);">lastHarvestDate</td>
+          <td style="padding:8px 4px;">Date | null</td>
+          <td style="padding:8px 4px;">null</td>
+          <td style="padding:8px 4px;">Date of last harvest</td>
+        </tr>
+        <tr style="border-bottom:1px solid #f2f2f7;">
+          <td style="padding:8px 4px; font-family:monospace; color:var(--blue);">expiresAt</td>
+          <td style="padding:8px 4px;">Date | null</td>
+          <td style="padding:8px 4px;">null</td>
+          <td style="padding:8px 4px;">Opportunity expiration date</td>
+        </tr>
+        <tr style="border-bottom:1px solid #f2f2f7;">
+          <td style="padding:8px 4px; font-family:monospace; color:var(--blue);">onEnable</td>
+          <td style="padding:8px 4px;">() => void</td>
+          <td style="padding:8px 4px;">—</td>
+          <td style="padding:8px 4px;">Enable button handler</td>
+        </tr>
+        <tr>
+          <td style="padding:8px 4px; font-family:monospace; color:var(--blue);">onHarvest</td>
+          <td style="padding:8px 4px;">() => void</td>
+          <td style="padding:8px 4px;">—</td>
+          <td style="padding:8px 4px;">Harvest button handler</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- ANIMATION KEYFRAMES -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <h2 class="section-title">Animation Keyframes</h2>
+    <p class="section-sub">CSS animation definitions for micro-interactions.</p>
+
+    <div style="background:#1c1c1e; border-radius:12px; padding:20px; margin-bottom:24px; font-family:monospace; font-size:12px; color:#a0a0a0; line-height:1.6; overflow-x:auto;">
+<pre style="margin:0; color:inherit;"><code>@keyframes cardPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(22, 111, 71, 0.2); }
+  50% { box-shadow: 0 0 0 8px rgba(22, 111, 71, 0); }
+}
+
+@keyframes successCheck {
+  0% { transform: scale(0) rotate(-45deg); opacity: 0; }
+  50% { transform: scale(1.2) rotate(0deg); }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(20px); opacity: 0; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes progressFill {
+  from { stroke-dashoffset: 326.73; }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200px 0; }
+  100% { background-position: 200px 0; }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-4px); }
+  40%, 80% { transform: translateX(4px); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { border-color: var(--green); }
+  50% { border-color: #34c759; }
+}</code></pre>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- USAGE GUIDELINES -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <h2 class="section-title">Usage Guidelines</h2>
+    <p class="section-sub">When to use each variant and component configuration.</p>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:24px;">
+      <div style="background:#fff; border-radius:12px; border:1px solid #e5e5ea; padding:16px;">
+        <div class="fw-700 mb-12">Recurring Card — When to Use</div>
+        <div style="font-size:13px; line-height:1.7;">
+          <div class="flex items-center gap-8 mb-8">
+            <span class="pill pill-green">Full</span>
+            <span>Dashboard home, primary notification</span>
+          </div>
+          <div class="flex items-center gap-8 mb-8">
+            <span class="pill pill-blue">Compact</span>
+            <span>Inline in feed, summary sections</span>
+          </div>
+          <div class="flex items-center gap-8 mb-8">
+            <span class="pill pill-amber">AI</span>
+            <span>When AI assistant surfaces the change</span>
+          </div>
+          <div class="flex items-center gap-8 mb-8">
+            <span class="pill pill-gray">Timeline</span>
+            <span>History view, detailed change log</span>
+          </div>
+          <div class="flex items-center gap-8">
+            <span class="pill pill-red">Checklist</span>
+            <span>Multi-item review flow, batch actions</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#fff; border-radius:12px; border:1px solid #e5e5ea; padding:16px;">
+        <div class="fw-700 mb-12">Tax Card — When to Use</div>
+        <div style="font-size:13px; line-height:1.7;">
+          <div class="flex items-center gap-8 mb-8">
+            <span class="pill pill-green">Activation</span>
+            <span>First-time enablement, onboarding</span>
+          </div>
+          <div class="flex items-center gap-8 mb-8">
+            <span class="pill pill-blue">Progress</span>
+            <span>Already enabled, show year-to-date</span>
+          </div>
+          <div class="flex items-center gap-8 mb-8">
+            <span class="pill pill-amber">Opportunity</span>
+            <span>Urgent: when losses available now</span>
+          </div>
+          <div class="flex items-center gap-8 mb-8">
+            <span class="pill pill-gray">AI</span>
+            <span>AI-initiated recommendation</span>
+          </div>
+          <div class="flex items-center gap-8">
+            <span class="pill pill-green">Completed</span>
+            <span>Post-harvest confirmation</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div style="padding:24px 0; text-align:center; border-top:1px solid #e5e5ea; margin-top:32px;">
+      <div class="text-xs text-gray">Advizmo Design System • v2.0 • July 2026</div>
+      <div class="text-xs text-gray" style="margin-top:4px;">Fixed Recurring Review & Tax Harvesting Card Components</div>
+    </div>
+
+  </div><!-- /content -->
+
+  <!-- Fixed bottom nav -->
+  <div class="bottom-nav-fixed">
+    <span class="active">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 2L2 8v10h6v-6h4v6h6V8z"/></svg>
+      Home
+    </span>
+    <span>
+      <svg viewBox="0 0 20 20" fill="currentColor"><path d="M3 3v14h14M7 13l3-6 3 4 2-2"/></svg>
+      Invest
+    </span>
+    <span>
+      <svg viewBox="0 0 20 20" fill="currentColor"><rect x="2" y="4" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M6 8h8M6 11h5"/></svg>
+      Spend
+    </span>
+    <span>
+      <svg viewBox="0 0 20 20" fill="currentColor"><path d="M4 4h12v12H4zM7 2v4M13 2v4M4 8h12"/></svg>
+      Plan
+    </span>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advizmo Design System — Fixed Dashboard System Cards</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #0a84ff;
+    --green: #166f47;
+    --green-bg: #e8f8ec;
+    --amber: #c2790a;
+    --amber-bg: #fff5e6;
+    --red: #b91c1c;
+    --red-bg: #ffe8e8;
+    --blue-bg: #e8f0ff;
+    --card: #ffffff;
+    --text: #1c1c1e;
+    --text2: #8e8e93;
+    --bg: #f2f2f7;
+    --sidebar: #1c1c1e;
+    --sidebar-hover: #2c2c2e;
+    --sidebar-active: #3a3a3c;
+    --border: #e5e5ea;
+    --green-light: #d1fae5;
+    --amber-light: #fef3c7;
+    --red-light: #fee2e2;
+    --blue-light: #dbeafe;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ─── SIDEBAR ─── */
+  .sidebar {
+    width: 260px;
+    min-height: 100vh;
+    background: var(--sidebar);
+    color: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    overflow-y: auto;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+  }
+  .sidebar-logo {
+    padding: 24px 20px 16px;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+  .sidebar-logo h2 {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -.3px;
+  }
+  .sidebar-logo span {
+    font-size: 11px;
+    color: rgba(255,255,255,.4);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .sidebar-section {
+    padding: 16px 0 4px;
+  }
+  .sidebar-section-title {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: rgba(255,255,255,.35);
+    padding: 0 20px 8px;
+    font-weight: 600;
+  }
+  .sidebar nav a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 20px;
+    color: rgba(255,255,255,.65);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all .15s;
+  }
+  .sidebar nav a:hover {
+    background: var(--sidebar-hover);
+    color: #fff;
+  }
+  .sidebar nav a.active {
+    background: var(--sidebar-active);
+    color: #fff;
+  }
+  .sidebar nav a .icon {
+    width: 18px;
+    text-align: center;
+    font-size: 14px;
+  }
+  .sidebar nav a .badge {
+    margin-left: auto;
+    background: var(--red);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 1px 6px;
+    border-radius: 10px;
+  }
+
+  /* ─── MAIN ─── */
+  .main {
+    margin-left: 260px;
+    flex: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ─── iOS STATUS BAR ─── */
+  .status-bar {
+    background: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 24px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+  }
+  .status-bar .time { font-weight: 700; }
+  .status-bar .icons { display: flex; gap: 6px; font-size: 13px; }
+
+  /* ─── HEADER ─── */
+  .header {
+    background: #fff;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .header h1 {
+    font-size: 20px;
+    font-weight: 700;
+    font-family: 'IBM Plex Sans', sans-serif;
+  }
+  .header-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .header-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  /* ─── CONTENT ─── */
+  .content {
+    flex: 1;
+    padding: 24px;
+    max-width: 480px;
+    margin: 0 auto;
+    width: 100%;
+    padding-bottom: 90px;
+  }
+
+  /* ─── SECTION LABELS ─── */
+  .section-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text2);
+    font-weight: 600;
+    margin: 32px 0 12px;
+  }
+  .section-label:first-child { margin-top: 0; }
+
+  .subsection {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 20px 0 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .subsection .tag {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+  }
+  .tag-before { background: #fee2e2; color: var(--red); }
+  .tag-after { background: #d1fae5; color: var(--green); }
+
+  /* ─── CARDS ─── */
+  .card {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 12px;
+    border: 1px solid var(--border);
+  }
+  .card-lg {
+    border-radius: 16px;
+    padding: 16px;
+  }
+
+  /* ─── KPI CARDS ─── */
+  .kpi-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .kpi-card .kpi-main { flex: 1; }
+  .kpi-label {
+    font-size: 12px;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .kpi-value {
+    font-size: 24px;
+    font-weight: 700;
+    font-family: 'IBM Plex Sans', sans-serif;
+    color: var(--text);
+    line-height: 1.2;
+  }
+  .kpi-change {
+    font-size: 14px;
+    font-weight: 500;
+    margin-top: 2px;
+  }
+  .kpi-change.green { color: var(--green); }
+  .kpi-change.red { color: var(--red); }
+  .kpi-sparkline {
+    width: 80px;
+    height: 32px;
+    margin-left: 12px;
+  }
+  .kpi-meta {
+    font-size: 11px;
+    color: var(--text2);
+    margin-top: 4px;
+  }
+  .kpi-chevron {
+    color: var(--text2);
+    font-size: 18px;
+    margin-left: 8px;
+  }
+  .kpi-context {
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.5;
+  }
+  .kpi-cta {
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--blue);
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  /* ─── ACCOUNT CARDS ─── */
+  .account-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-left: 4px solid transparent;
+  }
+  .account-card.warning { border-left-color: var(--amber); }
+  .account-card.error { border-left-color: var(--red); }
+  .account-card.disconnected { border-left-color: var(--border); }
+
+  .account-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .account-info { flex: 1; }
+  .account-name {
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .account-type {
+    font-size: 12px;
+    color: var(--text2);
+  }
+  .account-balance {
+    text-align: right;
+  }
+  .account-balance .amount {
+    font-size: 18px;
+    font-weight: 700;
+    font-family: 'IBM Plex Sans', sans-serif;
+  }
+  .account-balance .change {
+    font-size: 13px;
+  }
+  .account-balance .change.green { color: var(--green); }
+  .account-balance .change.red { color: var(--red); }
+  .account-balance .synced {
+    font-size: 11px;
+    color: var(--text2);
+  }
+  .account-chevron {
+    color: var(--text2);
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .badge-pill {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-top: 2px;
+  }
+  .badge-amber { background: var(--amber-bg); color: var(--amber); }
+  .badge-red { background: var(--red-bg); color: var(--red); }
+  .badge-green { background: var(--green-bg); color: var(--green); }
+  .cta-link {
+    font-size: 13px;
+    color: var(--blue);
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  /* ─── ALERT BANNERS ─── */
+  .alert-banner {
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    position: relative;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .alert-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .alert-content { flex: 1; }
+  .alert-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+  .alert-desc {
+    font-size: 13px;
+    line-height: 1.4;
+  }
+  .alert-cta {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .alert-cta.btn { background: var(--blue); color: #fff; }
+  .alert-dismiss {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    opacity: .5;
+  }
+  .alert-expandable {
+    font-size: 12px;
+    color: var(--blue);
+    margin-top: 6px;
+    cursor: pointer;
+    font-weight: 500;
+  }
+
+  .alert-critical { background: linear-gradient(135deg, #ffe8e8 0%, #ffd4d4 100%); }
+  .alert-critical .alert-icon { background: var(--red); color: #fff; }
+  .alert-critical .alert-title { color: var(--red); }
+
+  .alert-high { background: linear-gradient(135deg, #fff5e6 0%, #ffe8c8 100%); }
+  .alert-high .alert-icon { background: var(--amber); color: #fff; }
+  .alert-high .alert-title { color: var(--amber); }
+
+  .alert-medium { background: linear-gradient(135deg, #e8f0ff 0%, #d4e4ff 100%); }
+  .alert-medium .alert-icon { background: var(--blue); color: #fff; }
+  .alert-medium .alert-title { color: var(--blue); }
+
+  .alert-low { background: #fff; border: 1px solid var(--border); }
+  .alert-low .alert-icon { background: var(--bg); color: var(--text2); }
+  .alert-low .alert-title { color: var(--text); }
+
+  .alert-success { background: linear-gradient(135deg, #e8f8ec 0%, #d1fae5 100%); }
+  .alert-success .alert-icon { background: var(--green); color: #fff; }
+  .alert-success .alert-title { color: var(--green); }
+
+  /* ─── SYSTEM BANNERS ─── */
+  .system-banner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .system-banner .sb-icon { font-size: 16px; flex-shrink: 0; }
+  .system-banner .sb-text { flex: 1; }
+  .system-banner .sb-action {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--blue);
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .system-banner .sb-sub {
+    font-size: 12px;
+    color: var(--text2);
+    font-weight: 400;
+  }
+
+  .sb-offline { background: #e5e5ea; color: var(--text); }
+  .sb-syncing { background: var(--blue-bg); color: var(--blue); }
+  .sb-maintenance { background: var(--amber-bg); color: var(--amber); }
+  .sb-verification { background: var(--red-bg); color: var(--red); }
+  .sb-expired { background: var(--red-bg); color: var(--red); }
+  .sb-api-fail { background: var(--red-bg); color: var(--red); }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  .spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(10,132,255,.3);
+    border-top-color: var(--blue);
+    border-radius: 50%;
+    animation: spin .8s linear infinite;
+  }
+
+  /* ─── SETUP PROGRESS ─── */
+  .progress-card {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 12px;
+    border: 1px solid var(--border);
+  }
+  .progress-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .progress-sub {
+    font-size: 14px;
+    color: var(--text2);
+    margin-bottom: 10px;
+  }
+  .progress-bar {
+    height: 8px;
+    background: var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--green);
+    border-radius: 4px;
+    transition: width .3s;
+  }
+  .progress-time {
+    font-size: 12px;
+    color: var(--text2);
+  }
+
+  .step-card {
+    background: linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%);
+    border-radius: 16px;
+    padding: 20px;
+    color: #fff;
+    margin-bottom: 12px;
+  }
+  .step-label {
+    font-size: 12px;
+    color: rgba(255,255,255,.5);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .step-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .step-desc {
+    font-size: 14px;
+    color: rgba(255,255,255,.7);
+    margin-bottom: 14px;
+  }
+  .step-cta {
+    display: inline-block;
+    background: var(--blue);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+  }
+  .step-checks {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .step-check {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: rgba(255,255,255,.6);
+  }
+  .step-check.done { color: #4ade80; }
+
+  .checklist-card {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 12px;
+    border: 1px solid var(--border);
+  }
+  .checklist-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+  }
+  .checklist-item:last-child { border-bottom: none; }
+  .check-circle {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+  .check-circle.done { background: var(--green); color: #fff; }
+  .check-circle.pending { background: var(--border); color: var(--text2); }
+  .checklist-cta {
+    display: block;
+    width: 100%;
+    margin-top: 14px;
+    padding: 12px;
+    background: var(--blue);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  /* ─── EMPTY STATES ─── */
+  .empty-state {
+    text-align: center;
+    padding: 32px 20px;
+    background: var(--card);
+    border-radius: 16px;
+    margin-bottom: 12px;
+    border: 1px solid var(--border);
+  }
+  .empty-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    margin: 0 auto 16px;
+  }
+  .empty-icon.blue { background: var(--blue-bg); color: var(--blue); }
+  .empty-icon.green { background: var(--green-bg); color: var(--green); }
+  .empty-icon.amber { background: var(--amber-bg); color: var(--amber); }
+  .empty-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .empty-desc {
+    font-size: 14px;
+    color: var(--text2);
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+  .empty-cta {
+    display: inline-block;
+    padding: 10px 24px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .empty-cta.blue { background: var(--blue); color: #fff; }
+  .empty-cta.green { background: var(--green); color: #fff; }
+  .empty-time {
+    font-size: 12px;
+    color: var(--text2);
+    margin-top: 8px;
+  }
+
+  /* ─── TOASTS ─── */
+  .toast {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .toast-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .toast-msg { flex: 1; }
+  .toast-action {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--blue);
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  .toast-success { background: var(--green-bg); color: var(--green); }
+  .toast-success .toast-icon { background: var(--green); color: #fff; }
+  .toast-error { background: var(--red-bg); color: var(--red); }
+  .toast-error .toast-icon { background: var(--red); color: #fff; }
+  .toast-info { background: var(--blue-bg); color: var(--blue); }
+  .toast-info .toast-icon { background: var(--blue); color: #fff; }
+
+  @keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  .toast-animate { animation: slideUp .3s ease-out; }
+
+  /* ─── BOTTOM NAV ─── */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 260px;
+    right: 0;
+    background: rgba(255,255,255,.92);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-around;
+    padding: 8px 0 20px;
+    z-index: 50;
+  }
+  .bottom-nav a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    text-decoration: none;
+    color: var(--text2);
+    font-size: 10px;
+    font-weight: 500;
+  }
+  .bottom-nav a.active { color: var(--blue); }
+  .bottom-nav a .nav-icon { font-size: 22px; }
+
+  /* ─── SEPARATOR ─── */
+  .sep {
+    border: none;
+    border-top: 1px dashed var(--border);
+    margin: 28px 0;
+  }
+
+  /* ─── STATE ROWS ─── */
+  .state-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .state-chip {
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    text-align: center;
+  }
+  .state-default { background: var(--bg); color: var(--text); }
+  .state-loading { background: var(--blue-bg); color: var(--blue); }
+  .state-success { background: var(--green-bg); color: var(--green); }
+  .state-error { background: var(--red-bg); color: var(--red); }
+  .state-disabled { background: #f5f5f5; color: #c7c7cc; }
+
+  /* ─── SPARKLINE SVG ─── */
+  .sparkline-svg {
+    width: 80px;
+    height: 32px;
+  }
+  .sparkline-svg polyline {
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════ SIDEBAR ═══════════════════════════════ -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <h2>Advizmo</h2>
+    <span>Design System</span>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">Components</div>
+    <nav>
+      <a href="#kpi" class="active"><span class="icon">◆</span> KPI Cards</a>
+      <a href="#accounts"><span class="icon">🏦</span> Account Cards</a>
+      <a href="#alerts"><span class="icon">⚡</span> Alert Banners</a>
+      <a href="#system"><span class="icon">⚙️</span> System Banners</a>
+      <a href="#setup"><span class="icon">📋</span> Setup Progress</a>
+      <a href="#empty"><span class="icon">📭</span> Empty States</a>
+      <a href="#toasts"><span class="icon">💬</span> Toasts</a>
+    </nav>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">Reference</div>
+    <nav>
+      <a href="#library"><span class="icon">📦</span> Full Library</a>
+      <a href="#"><span class="icon">🎨</span> Tokens</a>
+      <a href="#"><span class="icon">📐</span> Layout</a>
+    </nav>
+  </div>
+</aside>
+
+<!-- ═══════════════════════════════ MAIN ═══════════════════════════════ -->
+<div class="main">
+
+  <!-- iOS Status Bar -->
+  <div class="status-bar">
+    <span class="time">9:41</span>
+    <span class="icons">
+      <span>●●●●○</span>
+      <span>WiFi</span>
+      <span>🔋</span>
+    </span>
+  </div>
+
+  <!-- Sticky Header -->
+  <div class="header">
+    <h1>Dashboard System Cards</h1>
+    <div class="header-actions">
+      <button class="header-btn">🔔</button>
+      <button class="header-btn">👤</button>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <!-- SECTION 1: KPI CARD                                         -->
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <div class="section-label" id="kpi">Section 1 — KPI Card</div>
+
+    <!-- BEFORE -->
+    <div class="subsection"><span class="tag tag-before">Before</span> Current KPI</div>
+    <div class="card card-lg">
+      <div class="kpi-label">Net Worth</div>
+      <div class="kpi-value">$284,520.00</div>
+      <div class="kpi-change green">+$2,340 this month</div>
+    </div>
+
+    <!-- AFTER: Variant 1 -->
+    <div class="subsection"><span class="tag tag-after">After</span> Standard KPI</div>
+    <div class="card card-lg" style="border-left: 3px solid var(--green);">
+      <div class="kpi-card">
+        <div class="kpi-main">
+          <div class="kpi-label">Net Worth</div>
+          <div class="kpi-value">$284,520.00</div>
+          <div class="kpi-change green">+$2,340 this month</div>
+          <div class="kpi-meta">Last synced 2 min ago</div>
+        </div>
+        <svg class="sparkline-svg" viewBox="0 0 80 32">
+          <polyline points="2,28 12,24 22,26 32,18 42,20 52,14 62,12 72,6 78,4" stroke="#166f47" fill="none" stroke-width="2"/>
+          <polyline points="2,28 12,24 22,26 32,18 42,20 52,14 62,12 72,6 78,4" stroke="#166f47" fill="url(#sparkGreen)" stroke-width="0" opacity=".15"/>
+          <defs><linearGradient id="sparkGreen" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#166f47" stop-opacity=".3"/><stop offset="100%" stop-color="#166f47" stop-opacity="0"/></linearGradient></defs>
+        </svg>
+        <span class="kpi-chevron">›</span>
+      </div>
+    </div>
+
+    <!-- AFTER: Variant 2 -->
+    <div class="subsection"><span class="tag tag-after">After</span> KPI with Context</div>
+    <div class="card card-lg" style="border-left: 3px solid var(--green);">
+      <div class="kpi-card">
+        <div class="kpi-main">
+          <div class="kpi-label">Net Worth</div>
+          <div class="kpi-value">$284,520.00</div>
+          <div class="kpi-change green">+$2,340 this month</div>
+        </div>
+        <svg class="sparkline-svg" viewBox="0 0 80 32">
+          <polyline points="2,28 12,24 22,26 32,18 42,20 52,14 62,12 72,6 78,4" stroke="#166f47" fill="none" stroke-width="2"/>
+        </svg>
+        <span class="kpi-chevron">›</span>
+      </div>
+      <div class="kpi-context">
+        Your net worth increased 0.8% this month. That's above the national average of 0.3%.
+      </div>
+    </div>
+
+    <!-- AFTER: Variant 3 -->
+    <div class="subsection"><span class="tag tag-after">After</span> KPI with Action</div>
+    <div class="card card-lg" style="border-left: 3px solid var(--green);">
+      <div class="kpi-card">
+        <div class="kpi-main">
+          <div class="kpi-label">Net Worth</div>
+          <div class="kpi-value">$284,520.00</div>
+          <div class="kpi-change green">+$2,340 this month</div>
+          <div class="kpi-meta">Last synced 2 min ago</div>
+        </div>
+        <svg class="sparkline-svg" viewBox="0 0 80 32">
+          <polyline points="2,28 12,24 22,26 32,18 42,20 52,14 62,12 72,6 78,4" stroke="#166f47" fill="none" stroke-width="2"/>
+        </svg>
+        <span class="kpi-chevron">›</span>
+      </div>
+      <div class="kpi-cta">See what's driving this change →</div>
+    </div>
+
+    <hr class="sep">
+
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <!-- SECTION 2: ACCOUNT CARD                                     -->
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <div class="section-label" id="accounts">Section 2 — Account Card</div>
+
+    <!-- BEFORE -->
+    <div class="subsection"><span class="tag tag-before">Before</span> Current Account Card</div>
+    <div class="card">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="account-icon" style="background:#117aca;">C</div>
+        <div>
+          <div class="account-name">Chase Checking</div>
+          <div style="font-size:18px; font-weight:700; font-family:'IBM Plex Sans',sans-serif; margin-top:2px;">$12,450.00</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AFTER: Variant 1 -->
+    <div class="subsection"><span class="tag tag-after">After</span> Healthy Account</div>
+    <div class="card account-card">
+      <div class="account-icon" style="background:#117aca;">C</div>
+      <div class="account-info">
+        <div class="account-name">Chase Checking</div>
+        <div class="account-type">Checking</div>
+      </div>
+      <div class="account-balance">
+        <div class="amount">$12,450.00</div>
+        <div class="change green">+$340 this month</div>
+        <div class="synced">Synced 2 min ago</div>
+      </div>
+      <span class="account-chevron">›</span>
+    </div>
+
+    <!-- AFTER: Variant 2 -->
+    <div class="subsection"><span class="tag tag-after">After</span> Low Balance (Warning)</div>
+    <div class="card account-card warning">
+      <div class="account-icon" style="background:#117aca;">C</div>
+      <div class="account-info">
+        <div class="account-name">Chase Checking</div>
+        <div class="account-type">Checking</div>
+      </div>
+      <div class="account-balance">
+        <div class="amount" style="color:var(--red);">$124.50</div>
+        <span class="badge-pill badge-amber">Low balance</span>
+      </div>
+      <span class="account-chevron">›</span>
+    </div>
+
+    <!-- AFTER: Variant 3 -->
+    <div class="subsection"><span class="tag tag-after">After</span> Connection Expired</div>
+    <div class="card account-card error">
+      <div class="account-icon" style="background:#d4d4d8;">C</div>
+      <div class="account-info">
+        <div class="account-name">Chase Checking</div>
+        <div class="account-type">Checking</div>
+      </div>
+      <div class="account-balance" style="opacity:.5;">
+        <div class="amount" style="color:var(--text2);">$12,450.00</div>
+        <div class="badge-pill badge-red">Connection expired</div>
+        <a class="cta-link" style="display:block; margin-top:4px; font-size:12px;">Reconnect →</a>
+      </div>
+    </div>
+
+    <!-- AFTER: Variant 4 -->
+    <div class="subsection"><span class="tag tag-after">After</span> Disconnected</div>
+    <div class="card account-card disconnected">
+      <div class="account-icon" style="background:#e5e5ea; color:var(--text2);">C</div>
+      <div class="account-info">
+        <div class="account-name">Chase Checking</div>
+        <div class="account-type">Checking</div>
+      </div>
+      <div class="account-balance">
+        <div class="badge-pill" style="background:#f5f5f5; color:var(--text2);">Account disconnected</div>
+        <a class="cta-link" style="display:block; margin-top:4px; font-size:12px;">Connect →</a>
+      </div>
+    </div>
+
+    <hr class="sep">
+
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <!-- SECTION 3: ALERT BANNER                                     -->
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <div class="section-label" id="alerts">Section 3 — Alert Banner</div>
+
+    <!-- BEFORE -->
+    <div class="subsection"><span class="tag tag-before">Before</span> Current Alert</div>
+    <div class="card" style="background:var(--amber-bg); border-color:var(--amber); display:flex; align-items:center; gap:10px; padding:14px 16px;">
+      <span style="font-size:18px;">⚠️</span>
+      <span style="font-size:14px; font-weight:600;">3 things to review</span>
+    </div>
+
+    <!-- AFTER: Critical -->
+    <div class="subsection"><span class="tag tag-after">After</span> Critical Alert (Red)</div>
+    <div class="alert-banner alert-critical">
+      <button class="alert-dismiss">✕</button>
+      <div class="alert-icon">!</div>
+      <div class="alert-content">
+        <div class="alert-title">Reconnect Chase Checking</div>
+        <div class="alert-desc">Your connection expired 3 days ago</div>
+        <button class="alert-cta btn">Reconnect →</button>
+        <div class="alert-expandable">Why this happened</div>
+      </div>
+    </div>
+
+    <!-- AFTER: High -->
+    <div class="subsection"><span class="tag tag-after">After</span> High Alert (Amber)</div>
+    <div class="alert-banner alert-high">
+      <div class="alert-icon">!</div>
+      <div class="alert-content">
+        <div class="alert-title">6 subscriptions changed</div>
+        <div class="alert-desc">Your monthly cost increased by $10.49</div>
+        <button class="alert-cta btn" style="background:var(--amber);">Review changes →</button>
+      </div>
+    </div>
+
+    <!-- AFTER: Medium -->
+    <div class="subsection"><span class="tag tag-after">After</span> Medium Alert (Blue)</div>
+    <div class="alert-banner alert-medium">
+      <div class="alert-icon">✦</div>
+      <div class="alert-content">
+        <div class="alert-title">Tax harvesting opportunity</div>
+        <div class="alert-desc">$1,200 in losses available</div>
+        <button class="alert-cta btn">See details →</button>
+      </div>
+    </div>
+
+    <!-- AFTER: Low -->
+    <div class="subsection"><span class="tag tag-after">After</span> Low Alert (Neutral)</div>
+    <div class="alert-banner alert-low">
+      <div class="alert-icon">🕐</div>
+      <div class="alert-content">
+        <div class="alert-title" style="color:var(--text);">Market holiday — US markets closed</div>
+        <div class="alert-desc" style="color:var(--text2);">No trades will execute today</div>
+      </div>
+    </div>
+
+    <!-- AFTER: Success -->
+    <div class="subsection"><span class="tag tag-after">After</span> Success Alert (Green)</div>
+    <div class="alert-banner alert-success">
+      <div class="alert-icon">✓</div>
+      <div class="alert-content">
+        <div class="alert-title">Savings account connected</div>
+        <div class="alert-desc">Your data is now syncing automatically</div>
+      </div>
+    </div>
+
+    <hr class="sep">
+
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <!-- SECTION 4: SYSTEM BANNER                                    -->
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <div class="section-label" id="system">Section 4 — System Banner</div>
+
+    <!-- BEFORE -->
+    <div class="subsection"><span class="tag tag-before">Before</span> Current System Banner</div>
+    <div class="card" style="background:#e5e5ea; padding:12px 16px; font-size:14px; font-weight:500;">
+      Your Chase connection expired
+    </div>
+
+    <!-- AFTER: Offline -->
+    <div class="subsection"><span class="tag tag-after">After</span> Offline Banner</div>
+    <div class="system-banner sb-offline">
+      <span class="sb-icon">📡</span>
+      <span class="sb-text">You're offline. Showing cached data.</span>
+      <a class="sb-action">Retry</a>
+    </div>
+
+    <!-- AFTER: Syncing -->
+    <div class="subsection"><span class="tag tag-after">After</span> Syncing Banner</div>
+    <div class="system-banner sb-syncing">
+      <span class="sb-icon"><span class="spinner"></span></span>
+      <span class="sb-text">Syncing your accounts...</span>
+    </div>
+
+    <!-- AFTER: Bank Maintenance -->
+    <div class="subsection"><span class="tag tag-after">After</span> Bank Maintenance Banner</div>
+    <div class="system-banner sb-maintenance">
+      <span class="sb-icon">🕐</span>
+      <span class="sb-text">
+        Chase is temporarily unavailable
+        <br><span class="sb-sub">Try again in 30 minutes</span>
+      </span>
+    </div>
+
+    <!-- AFTER: Verification Required -->
+    <div class="subsection"><span class="tag tag-after">After</span> Verification Required Banner</div>
+    <div class="system-banner sb-verification">
+      <span class="sb-icon">🛡️</span>
+      <span class="sb-text">Chase needs you to verify your identity</span>
+      <a class="sb-action" style="color:var(--red);">Verify now →</a>
+    </div>
+
+    <!-- AFTER: Connection Expired -->
+    <div class="subsection"><span class="tag tag-after">After</span> Connection Expired Banner</div>
+    <div class="system-banner sb-expired">
+      <span class="sb-icon">🔌</span>
+      <span class="sb-text">Your Chase connection has expired</span>
+      <a class="sb-action" style="color:var(--red);">Reconnect →</a>
+    </div>
+
+    <!-- AFTER: API Failure -->
+    <div class="subsection"><span class="tag tag-after">After</span> API Failure Banner</div>
+    <div class="system-banner sb-api-fail">
+      <span class="sb-icon">⚠️</span>
+      <span class="sb-text">Unable to reach Chase. Retrying...</span>
+    </div>
+
+    <hr class="sep">
+
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <!-- SECTION 5: SETUP PROGRESS                                   -->
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <div class="section-label" id="setup">Section 5 — Setup Progress</div>
+
+    <!-- BEFORE -->
+    <div class="subsection"><span class="tag tag-before">Before</span> Current Setup</div>
+    <div class="card" style="padding:16px; display:flex; align-items:center; gap:10px;">
+      <span style="font-size:20px;">⚠️</span>
+      <div>
+        <div style="font-size:15px; font-weight:700;">3 things to review</div>
+        <div style="font-size:13px; color:var(--text2); margin-top:2px;">Complete your financial setup</div>
+      </div>
+    </div>
+
+    <!-- AFTER: Variant 1 -->
+    <div class="subsection"><span class="tag tag-after">After</span> Progress Bar</div>
+    <div class="progress-card">
+      <div class="progress-title">Financial Setup</div>
+      <div class="progress-sub">7 of 10 completed</div>
+      <div class="progress-bar"><div class="fill" style="width:70%;"></div></div>
+      <div class="progress-time">3 minutes remaining</div>
+    </div>
+
+    <!-- AFTER: Variant 2 -->
+    <div class="subsection"><span class="tag tag-after">After</span> Step Indicator</div>
+    <div class="step-card">
+      <div class="step-label">Step 3 of 4</div>
+      <div class="step-title">Fund your account</div>
+      <div class="step-desc">Move money to start investing</div>
+      <button class="step-cta">Add money →</button>
+      <div class="step-checks">
+        <span class="step-check done">✓ Connect</span>
+        <span class="step-check done">✓ Verify</span>
+        <span class="step-check">○ Fund</span>
+        <span class="step-check">○ Invest</span>
+      </div>
+    </div>
+
+    <!-- AFTER: Variant 3 -->
+    <div class="subsection"><span class="tag tag-after">After</span> Checklist</div>
+    <div class="checklist-card">
+      <div class="progress-title">Financial Setup</div>
+      <div style="margin-top:12px;">
+        <div class="checklist-item"><span class="check-circle done">✓</span> Connect checking</div>
+        <div class="checklist-item"><span class="check-circle done">✓</span> Connect savings</div>
+        <div class="checklist-item"><span class="check-circle pending">○</span> Connect investments</div>
+        <div class="checklist-item"><span class="check-circle pending">○</span> Review recurring</div>
+        <div class="checklist-item"><span class="check-circle pending">○</span> Set targets</div>
+      </div>
+      <button class="checklist-cta">Continue setup →</button>
+    </div>
+
+    <hr class="sep">
+
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <!-- SECTION 6: EMPTY STATE                                      -->
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <div class="section-label" id="empty">Section 6 — Empty State</div>
+
+    <!-- BEFORE -->
+    <div class="subsection"><span class="tag tag-before">Before</span> Current Empty State</div>
+    <div class="empty-state" style="padding:24px;">
+      <div style="font-size:36px; margin-bottom:8px; opacity:.3;">📄</div>
+      <div style="font-size:15px; font-weight:600; color:var(--text2);">No data available</div>
+    </div>
+
+    <!-- AFTER: No Accounts -->
+    <div class="subsection"><span class="tag tag-after">After</span> No Accounts Empty</div>
+    <div class="empty-state">
+      <div class="empty-icon blue">🏦</div>
+      <div class="empty-title">Connect your first account</div>
+      <div class="empty-desc">See all your money in one place</div>
+      <button class="empty-cta blue">Connect account →</button>
+      <div class="empty-time">Start in 2 minutes</div>
+    </div>
+
+    <!-- AFTER: No Portfolio -->
+    <div class="subsection"><span class="tag tag-after">After</span> No Portfolio Empty</div>
+    <div class="empty-state">
+      <div class="empty-icon green">📊</div>
+      <div class="empty-title">Start investing with Advizmo</div>
+      <div class="empty-desc">Automated investing for your goals</div>
+      <button class="empty-cta green">Open account →</button>
+    </div>
+
+    <!-- AFTER: No Spending -->
+    <div class="subsection"><span class="tag tag-after">After</span> No Spending Empty</div>
+    <div class="empty-state">
+      <div class="empty-icon amber">🧾</div>
+      <div class="empty-title">Track your spending</div>
+      <div class="empty-desc">Link accounts to see where your money goes</div>
+      <button class="empty-cta blue">Connect accounts →</button>
+    </div>
+
+    <!-- AFTER: All Caught Up -->
+    <div class="subsection"><span class="tag tag-after">After</span> All Caught Up Empty</div>
+    <div class="empty-state">
+      <div class="empty-icon green">✓</div>
+      <div class="empty-title">You're all caught up!</div>
+      <div class="empty-desc">No pending recommendations</div>
+    </div>
+
+    <hr class="sep">
+
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <!-- SECTION 7: TOAST / SUCCESS CARD                             -->
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <div class="section-label" id="toasts">Section 7 — Toast / Success Card</div>
+
+    <!-- BEFORE -->
+    <div class="subsection"><span class="tag tag-before">Before</span> No success feedback</div>
+    <div class="card" style="padding:20px; text-align:center; opacity:.5;">
+      <div style="font-size:14px; color:var(--text2);">— No toast component exists —</div>
+    </div>
+
+    <!-- AFTER: Success Toast -->
+    <div class="subsection"><span class="tag tag-after">After</span> Success Toast</div>
+    <div class="toast toast-success toast-animate">
+      <div class="toast-icon">✓</div>
+      <div class="toast-msg">Savings account connected</div>
+    </div>
+
+    <!-- AFTER: Error Toast -->
+    <div class="subsection"><span class="tag tag-after">After</span> Error Toast</div>
+    <div class="toast toast-error toast-animate">
+      <div class="toast-icon">✕</div>
+      <div class="toast-msg">Connection failed. Try again.</div>
+      <button class="toast-action">Retry</button>
+    </div>
+
+    <!-- AFTER: Info Toast -->
+    <div class="subsection"><span class="tag tag-after">After</span> Info Toast</div>
+    <div class="toast toast-info toast-animate">
+      <div class="toast-icon">ℹ</div>
+      <div class="toast-msg">Syncing complete</div>
+    </div>
+
+    <hr class="sep">
+
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <!-- SECTION 8: COMPLETE FIXED COMPONENT LIBRARY                 -->
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <div class="section-label" id="library">Section 8 — Complete Fixed Component Library</div>
+    <p style="font-size:13px; color:var(--text2); margin-bottom:20px; line-height:1.5;">Production-ready component states for every variant. Each shows Default, Loading, Success, Error, and Disabled states.</p>
+
+    <!-- ── 8.1 KPI CARD STATES ── -->
+    <div class="subsection" style="font-size:14px;">1. KPI Card — 3 Variants</div>
+
+    <div class="card card-lg" style="border-left:3px solid var(--green);">
+      <div class="kpi-card">
+        <div class="kpi-main">
+          <div class="kpi-label">Net Worth</div>
+          <div class="kpi-value">$284,520.00</div>
+          <div class="kpi-change green">+$2,340 this month</div>
+          <div class="kpi-meta">Last synced 2 min ago</div>
+        </div>
+        <svg class="sparkline-svg" viewBox="0 0 80 32"><polyline points="2,28 12,24 22,26 32,18 42,20 52,14 62,12 72,6 78,4" stroke="#166f47" fill="none" stroke-width="2"/></svg>
+        <span class="kpi-chevron">›</span>
+      </div>
+    </div>
+
+    <div class="state-grid">
+      <div class="state-chip state-default">Default</div>
+      <div class="state-chip state-loading">Loading</div>
+      <div class="state-chip state-success">Success</div>
+      <div class="state-chip state-error">Error</div>
+      <div class="state-chip state-disabled" style="grid-column:span 2;">Disabled</div>
+    </div>
+
+    <!-- ── 8.2 ACCOUNT CARD STATES ── -->
+    <div class="subsection" style="font-size:14px;">2. Account Card — 4 States</div>
+
+    <div class="card account-card">
+      <div class="account-icon" style="background:#117aca;">C</div>
+      <div class="account-info"><div class="account-name">Chase Checking</div><div class="account-type">Checking</div></div>
+      <div class="account-balance"><div class="amount">$12,450.00</div><div class="change green">+$340 this month</div><div class="synced">Synced 2 min ago</div></div>
+      <span class="account-chevron">›</span>
+    </div>
+
+    <div class="card account-card warning">
+      <div class="account-icon" style="background:#117aca;">C</div>
+      <div class="account-info"><div class="account-name">Chase Checking</div><div class="account-type">Checking</div></div>
+      <div class="account-balance"><div class="amount" style="color:var(--red);">$124.50</div><span class="badge-pill badge-amber">Low balance</span></div>
+      <span class="account-chevron">›</span>
+    </div>
+
+    <div class="card account-card error">
+      <div class="account-icon" style="background:#d4d4d8;">C</div>
+      <div class="account-info"><div class="account-name">Chase Checking</div><div class="account-type">Checking</div></div>
+      <div class="account-balance" style="opacity:.5;"><div class="amount" style="color:var(--text2);">$12,450.00</div><div class="badge-pill badge-red">Connection expired</div><a class="cta-link" style="display:block; margin-top:4px; font-size:12px;">Reconnect →</a></div>
+    </div>
+
+    <div class="card account-card disconnected">
+      <div class="account-icon" style="background:#e5e5ea; color:var(--text2);">C</div>
+      <div class="account-info"><div class="account-name">Chase Checking</div><div class="account-type">Checking</div></div>
+      <div class="account-balance"><div class="badge-pill" style="background:#f5f5f5; color:var(--text2);">Account disconnected</div><a class="cta-link" style="display:block; margin-top:4px; font-size:12px;">Connect →</a></div>
+    </div>
+
+    <div class="state-grid">
+      <div class="state-chip state-default">Default</div>
+      <div class="state-chip state-loading">Syncing</div>
+      <div class="state-chip state-success">Connected</div>
+      <div class="state-chip state-error">Expired</div>
+      <div class="state-chip state-disabled" style="grid-column:span 2;">Disconnected</div>
+    </div>
+
+    <!-- ── 8.3 ALERT BANNER STATES ── -->
+    <div class="subsection" style="font-size:14px;">3. Alert Banner — 5 Priority Levels</div>
+
+    <div class="alert-banner alert-critical">
+      <div class="alert-icon">!</div>
+      <div class="alert-content">
+        <div class="alert-title">Reconnect Chase Checking</div>
+        <div class="alert-desc">Your connection expired 3 days ago</div>
+        <button class="alert-cta btn">Reconnect →</button>
+      </div>
+    </div>
+
+    <div class="alert-banner alert-high">
+      <div class="alert-icon">!</div>
+      <div class="alert-content">
+        <div class="alert-title">6 subscriptions changed</div>
+        <div class="alert-desc">Your monthly cost increased by $10.49</div>
+        <button class="alert-cta btn" style="background:var(--amber);">Review changes →</button>
+      </div>
+    </div>
+
+    <div class="alert-banner alert-medium">
+      <div class="alert-icon">✦</div>
+      <div class="alert-content">
+        <div class="alert-title">Tax harvesting opportunity</div>
+        <div class="alert-desc">$1,200 in losses available</div>
+        <button class="alert-cta btn">See details →</button>
+      </div>
+    </div>
+
+    <div class="alert-banner alert-low">
+      <div class="alert-icon">🕐</div>
+      <div class="alert-content">
+        <div class="alert-title" style="color:var(--text);">Market holiday — US markets closed</div>
+        <div class="alert-desc" style="color:var(--text2);">No trades will execute today</div>
+      </div>
+    </div>
+
+    <div class="alert-banner alert-success">
+      <div class="alert-icon">✓</div>
+      <div class="alert-content">
+        <div class="alert-title">Savings account connected</div>
+        <div class="alert-desc">Your data is now syncing automatically</div>
+      </div>
+    </div>
+
+    <div class="state-grid">
+      <div class="state-chip state-default">Dismissed</div>
+      <div class="state-chip state-loading">Loading</div>
+      <div class="state-chip state-success">Success</div>
+      <div class="state-chip state-error">Active</div>
+      <div class="state-chip state-disabled" style="grid-column:span 2;">Expired</div>
+    </div>
+
+    <!-- ── 8.4 SYSTEM BANNER STATES ── -->
+    <div class="subsection" style="font-size:14px;">4. System Banner — 6 Types</div>
+
+    <div class="system-banner sb-offline"><span class="sb-icon">📡</span><span class="sb-text">You're offline. Showing cached data.</span><a class="sb-action">Retry</a></div>
+    <div class="system-banner sb-syncing"><span class="sb-icon"><span class="spinner"></span></span><span class="sb-text">Syncing your accounts...</span></div>
+    <div class="system-banner sb-maintenance"><span class="sb-icon">🕐</span><span class="sb-text">Chase is temporarily unavailable<br><span class="sb-sub">Try again in 30 minutes</span></span></div>
+    <div class="system-banner sb-verification"><span class="sb-icon">🛡️</span><span class="sb-text">Chase needs you to verify your identity</span><a class="sb-action" style="color:var(--red);">Verify now →</a></div>
+    <div class="system-banner sb-expired"><span class="sb-icon">🔌</span><span class="sb-text">Your Chase connection has expired</span><a class="sb-action" style="color:var(--red);">Reconnect →</a></div>
+    <div class="system-banner sb-api-fail"><span class="sb-icon">⚠️</span><span class="sb-text">Unable to reach Chase. Retrying...</span></div>
+
+    <div class="state-grid">
+      <div class="state-chip state-default">Offline</div>
+      <div class="state-chip state-loading">Syncing</div>
+      <div class="state-chip state-success">Connected</div>
+      <div class="state-chip state-error">Failed</div>
+      <div class="state-chip state-disabled" style="grid-column:span 2;">Maintenance</div>
+    </div>
+
+    <!-- ── 8.5 SETUP PROGRESS STATES ── -->
+    <div class="subsection" style="font-size:14px;">5. Setup Progress — 3 Variants</div>
+
+    <div class="progress-card">
+      <div class="progress-title">Financial Setup</div>
+      <div class="progress-sub">7 of 10 completed</div>
+      <div class="progress-bar"><div class="fill" style="width:70%;"></div></div>
+      <div class="progress-time">3 minutes remaining</div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-label">Step 3 of 4</div>
+      <div class="step-title">Fund your account</div>
+      <div class="step-desc">Move money to start investing</div>
+      <button class="step-cta">Add money →</button>
+      <div class="step-checks">
+        <span class="step-check done">✓ Connect</span>
+        <span class="step-check done">✓ Verify</span>
+        <span class="step-check">○ Fund</span>
+        <span class="step-check">○ Invest</span>
+      </div>
+    </div>
+
+    <div class="checklist-card">
+      <div class="progress-title">Financial Setup</div>
+      <div style="margin-top:12px;">
+        <div class="checklist-item"><span class="check-circle done">✓</span> Connect checking</div>
+        <div class="checklist-item"><span class="check-circle done">✓</span> Connect savings</div>
+        <div class="checklist-item"><span class="check-circle pending">○</span> Connect investments</div>
+        <div class="checklist-item"><span class="check-circle pending">○</span> Review recurring</div>
+        <div class="checklist-item"><span class="check-circle pending">○</span> Set targets</div>
+      </div>
+      <button class="checklist-cta">Continue setup →</button>
+    </div>
+
+    <div class="state-grid">
+      <div class="state-chip state-default">Not started</div>
+      <div class="state-chip state-loading">In progress</div>
+      <div class="state-chip state-success">Complete</div>
+      <div class="state-chip state-error">Stuck</div>
+      <div class="state-chip state-disabled" style="grid-column:span 2;">Skipped</div>
+    </div>
+
+    <!-- ── 8.6 EMPTY STATE TYPES ── -->
+    <div class="subsection" style="font-size:14px;">6. Empty State — 4 Types</div>
+
+    <div class="empty-state">
+      <div class="empty-icon blue">🏦</div>
+      <div class="empty-title">Connect your first account</div>
+      <div class="empty-desc">See all your money in one place</div>
+      <button class="empty-cta blue">Connect account →</button>
+      <div class="empty-time">Start in 2 minutes</div>
+    </div>
+
+    <div class="empty-state">
+      <div class="empty-icon green">📊</div>
+      <div class="empty-title">Start investing with Advizmo</div>
+      <div class="empty-desc">Automated investing for your goals</div>
+      <button class="empty-cta green">Open account →</button>
+    </div>
+
+    <div class="empty-state">
+      <div class="empty-icon amber">🧾</div>
+      <div class="empty-title">Track your spending</div>
+      <div class="empty-desc">Link accounts to see where your money goes</div>
+      <button class="empty-cta blue">Connect accounts →</button>
+    </div>
+
+    <div class="empty-state">
+      <div class="empty-icon green">✓</div>
+      <div class="empty-title">You're all caught up!</div>
+      <div class="empty-desc">No pending recommendations</div>
+    </div>
+
+    <div class="state-grid">
+      <div class="state-chip state-default">No data</div>
+      <div class="state-chip state-loading">Loading</div>
+      <div class="state-chip state-success">Complete</div>
+      <div class="state-chip state-error">Error</div>
+      <div class="state-chip state-disabled" style="grid-column:span 2;">All caught up</div>
+    </div>
+
+    <!-- ── 8.7 TOAST TYPES ── -->
+    <div class="subsection" style="font-size:14px;">7. Toast — 3 Types</div>
+
+    <div class="toast toast-success toast-animate">
+      <div class="toast-icon">✓</div>
+      <div class="toast-msg">Savings account connected</div>
+    </div>
+
+    <div class="toast toast-error toast-animate">
+      <div class="toast-icon">✕</div>
+      <div class="toast-msg">Connection failed. Try again.</div>
+      <button class="toast-action">Retry</button>
+    </div>
+
+    <div class="toast toast-info toast-animate">
+      <div class="toast-icon">ℹ</div>
+      <div class="toast-msg">Syncing complete</div>
+    </div>
+
+    <div class="state-grid">
+      <div class="state-chip state-default">Visible</div>
+      <div class="state-chip state-loading">Appearing</div>
+      <div class="state-chip state-success">Success</div>
+      <div class="state-chip state-error">Error</div>
+      <div class="state-chip state-disabled" style="grid-column:span 2;">Dismissed</div>
+    </div>
+
+    <hr class="sep">
+
+    <!-- ── DESIGN TOKENS REFERENCE ── -->
+    <div class="subsection" style="font-size:14px;">Design Tokens Reference</div>
+    <div class="card card-lg" style="margin-bottom:24px;">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:12px;">
+        <div><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:var(--blue);vertical-align:middle;margin-right:4px;"></span>--blue: #0a84ff</div>
+        <div><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:var(--green);vertical-align:middle;margin-right:4px;"></span>--green: #166f47</div>
+        <div><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:var(--green-bg);vertical-align:middle;margin-right:4px;"></span>--green-bg: #e8f8ec</div>
+        <div><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:var(--amber);vertical-align:middle;margin-right:4px;"></span>--amber: #c2790a</div>
+        <div><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:var(--amber-bg);vertical-align:middle;margin-right:4px;"></span>--amber-bg: #fff5e6</div>
+        <div><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:var(--red);vertical-align:middle;margin-right:4px;"></span>--red: #b91c1c</div>
+        <div><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:var(--red-bg);vertical-align:middle;margin-right:4px;"></span>--red-bg: #ffe8e8</div>
+        <div><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:var(--blue-bg);vertical-align:middle;margin-right:4px;"></span>--blue-bg: #e8f0ff</div>
+        <div><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:var(--card);border:1px solid var(--border);vertical-align:middle;margin-right:4px;"></span>--card: #ffffff</div>
+        <div><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:var(--text);vertical-align:middle;margin-right:4px;"></span>--text: #1c1c1e</div>
+        <div><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:var(--text2);vertical-align:middle;margin-right:4px;"></span>--text2: #8e8e93</div>
+        <div><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:var(--bg);border:1px solid var(--border);vertical-align:middle;margin-right:4px;"></span>--bg: #f2f2f7</div>
+      </div>
+      <div style="margin-top:12px; font-size:11px; color:var(--text2);">
+        <strong>Fonts:</strong> IBM Plex Sans (values), Inter (UI) &nbsp;|&nbsp; <strong>Max-width:</strong> 430px &nbsp;|&nbsp; <strong>Radius:</strong> 12px / 16px cards
+      </div>
+    </div>
+
+  </div><!-- /content -->
+
+  <!-- Bottom Nav -->
+  <div class="bottom-nav">
+    <a href="#" class="active"><span class="nav-icon">🏠</span> Home</a>
+    <a href="#"><span class="nav-icon">📊</span> Portfolio</a>
+    <a href="#"><span class="nav-icon">💳</span> Accounts</a>
+    <a href="#"><span class="nav-icon">📈</span> Insights</a>
+    <a href="#"><span class="nav-icon">⚙️</span> Settings</a>
+  </div>
+
+</div><!-- /main -->
+
+</body>
+</html>
