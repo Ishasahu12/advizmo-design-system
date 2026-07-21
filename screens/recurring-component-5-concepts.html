@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recurring Cash Flow – 5 Concepts</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{background:#f2f2f7;font-family:'IBM Plex Sans','Inter',sans-serif;color:#1c1c1e;padding:40px 20px;display:flex;flex-direction:column;align-items:center;gap:60px}
+  h1{font-size:28px;font-weight:700;text-align:center;color:#1c1c1e}
+  h2{font-size:18px;font-weight:600;color:#1c1c1e;margin-bottom:4px}
+  p.sub{font-size:13px;color:#8e8e93;margin-bottom:16px}
+  .concept{width:100%;max-width:430px}
+  .concept-title{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:#007aff;margin-bottom:8px}
+  .concept-desc{font-size:14px;color:#3a3a3c;margin-bottom:12px;line-height:1.5}
+
+  /* Phone mockup */
+  .phone{width:430px;min-height:812px;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.12);position:relative;display:flex;flex-direction:column}
+
+  /* Status bar */
+  .status-bar{display:flex;justify-content:space-between;align-items:center;padding:12px 24px 0;height:48px;font-size:15px;font-weight:600;color:#1c1c1e}
+  .status-bar .right{display:flex;gap:6px;align-items:center}
+  .status-bar .right svg{width:16px;height:16px}
+
+  /* Bottom nav */
+  .bottom-nav{position:absolute;bottom:0;left:0;right:0;height:84px;background:#fff;border-top:1px solid #e5e5ea;display:flex;justify-content:space-around;align-items:flex-start;padding-top:10px}
+  .nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10px;color:#8e8e93}
+  .nav-item.active{color:#007aff}
+  .nav-item svg{width:22px;height:22px}
+
+  /* Content area */
+  .content{flex:1;padding:16px 20px 100px;overflow-y:auto}
+
+  /* Shared card styles */
+  .card{background:#fff;border-radius:14px;padding:16px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+
+  /* Row helpers */
+  .row{display:flex;align-items:center;justify-content:space-between}
+  .row-start{display:flex;align-items:center;gap:10px}
+
+  /* Icon circles */
+  .icon-circle{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;flex-shrink:0}
+
+  /* Badge */
+  .badge{background:#ff3b30;color:#fff;font-size:10px;font-weight:600;padding:2px 6px;border-radius:8px;margin-left:6px}
+
+  /* Amount */
+  .amount{font-size:15px;font-weight:600;color:#1c1c1e;white-space:nowrap}
+  .amount.green{color:#34c759}
+  .amount.red{color:#ff3b30}
+
+  /* Divider */
+  .divider{height:1px;background:#e5e5ea;margin:12px 0}
+
+  /* Section label */
+  .section-label{font-size:12px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+
+  /* Concept 1: Inline Dashboard */
+  .summary-row{display:flex;gap:8px;margin-bottom:12px}
+  .summary-box{flex:1;background:#f2f2f7;border-radius:12px;padding:12px 10px;text-align:center}
+  .summary-box .label{font-size:10px;font-weight:600;color:#8e8e93;text-transform:uppercase;margin-bottom:4px}
+  .summary-box .value{font-size:16px;font-weight:700}
+  .summary-box .value.green{color:#34c759}
+  .summary-box .value.red{color:#ff3b30}
+  .summary-box .value.blue{color:#007aff}
+
+  .expense-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f2f2f7}
+  .expense-item:last-child{border-bottom:none}
+  .expense-name{font-size:14px;font-weight:500;color:#1c1c1e;flex:1}
+
+  .add-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:12px;border:2px dashed #d1d1d6;border-radius:12px;background:none;font-size:14px;font-weight:600;color:#007aff;cursor:pointer;margin-top:8px}
+
+  /* Concept 2 */
+  .summary-card-compact{background:#f2f2f7;border-radius:14px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+  .compact-values{display:flex;gap:16px}
+  .compact-val{text-align:right}
+  .compact-val .lbl{font-size:10px;color:#8e8e93;text-transform:uppercase;font-weight:600}
+  .compact-val .num{font-size:14px;font-weight:700}
+  .review-link{font-size:13px;font-weight:600;color:#007aff;white-space:nowrap;margin-left:12px}
+  .tab-bar{display:flex;gap:0;margin-bottom:14px;background:#f2f2f7;border-radius:10px;padding:3px}
+  .tab{flex:1;text-align:center;padding:8px 0;font-size:12px;font-weight:600;border-radius:8px;color:#8e8e93}
+  .tab.active{background:#fff;color:#1c1c1e;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+  .expandable{border-bottom:1px solid #f2f2f7;padding:12px 0}
+  .expandable:last-child{border-bottom:none}
+  .expand-arrow{color:#c7c7cc;font-size:14px;margin-left:4px}
+
+  /* Concept 3: Cash Flow Story */
+  .flow-section{border-radius:14px;padding:16px;margin-bottom:0;position:relative}
+  .flow-section.income{background:#e8faf0}
+  .flow-section.expenses{background:#ffeaea}
+  .flow-section.net{background:#e8f0fa}
+  .flow-section .flow-title{font-size:13px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+  .flow-section.income .flow-title{color:#34c759}
+  .flow-section.expenses .flow-title{color:#ff3b30}
+  .flow-section.net .flow-title{color:#007aff}
+  .flow-item{display:flex;justify-content:space-between;padding:4px 0;font-size:13px;color:#3a3a3c}
+  .flow-total{font-size:15px;font-weight:700;margin-top:6px}
+  .flow-section.income .flow-total{color:#34c759}
+  .flow-section.expenses .flow-total{color:#ff3b30}
+  .flow-section.net .flow-total{color:#007aff}
+  .arrow-connector{display:flex;justify-content:center;padding:8px 0}
+  .arrow-connector svg{color:#c7c7cc}
+
+  /* Concept 4: Review Checklist */
+  .progress-wrap{margin-bottom:16px}
+  .progress-text{font-size:13px;font-weight:600;color:#3a3a3c;margin-bottom:6px}
+  .progress-bar{height:6px;background:#e5e5ea;border-radius:3px;overflow:hidden}
+  .progress-fill{height:100%;background:#007aff;border-radius:3px;width:63.6%}
+  .check-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f2f2f7}
+  .check-row:last-child{border-bottom:none}
+  .checkbox{width:22px;height:22px;border-radius:6px;border:2px solid #d1d1d6;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .checkbox.checked{background:#007aff;border-color:#007aff}
+  .checkbox.checked svg{display:block}
+  .checkbox svg{display:none;width:14px;height:14px;color:#fff}
+  .check-name{font-size:14px;font-weight:500;color:#1c1c1e;flex:1}
+
+  /* Concept 5: AI Advisor */
+  .hero-card{background:linear-gradient(135deg,#1c1c1e 0%,#3a3a3c 100%);border-radius:18px;padding:24px 20px;color:#fff;margin-bottom:16px;position:relative;overflow:hidden}
+  .hero-card::after{content:'';position:absolute;top:-40px;right:-40px;width:120px;height:120px;background:radial-gradient(circle,rgba(0,122,255,.3),transparent 70%);border-radius:50%}
+  .hero-icon{width:40px;height:40px;background:rgba(255,255,255,.15);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:20px}
+  .hero-card h3{font-size:18px;font-weight:700;margin-bottom:4px}
+  .hero-card .hero-sub{font-size:13px;color:rgba(255,255,255,.7);line-height:1.5}
+  .msg-bubble{background:#f2f2f7;border-radius:16px;padding:14px 16px;margin-bottom:10px;font-size:13px;line-height:1.6;color:#3a3a3c}
+  .msg-bubble strong{color:#1c1c1e}
+  .msg-bubble .highlight{color:#007aff;font-weight:600}
+  .msg-bubble .savings{color:#34c759;font-weight:600}
+
+  /* Recommendation */
+  .recommendation{width:100%;max-width:430px;background:#fff;border-radius:16px;padding:24px;box-shadow:0 4px 20px rgba(0,0,0,.08)}
+  .recommendation h2{font-size:18px;font-weight:700;margin-bottom:8px;color:#1c1c1e}
+  .recommendation p{font-size:14px;line-height:1.7;color:#3a3a3c;margin-bottom:8px}
+  .recommendation .tag{display:inline-block;background:#e8f5e9;color:#2e7d32;font-size:12px;font-weight:600;padding:4px 10px;border-radius:8px;margin-bottom:12px}
+  .recommendation ul{margin:8px 0 0 18px;font-size:13px;line-height:1.8;color:#3a3a3c}
+</style>
+</head>
+<body>
+
+<h1>Recurring Cash Flow Component<br>5 Concept Explorations</h1>
+<p class="sub" style="text-align:center;max-width:430px;">Design system exploration for recurring income &amp; expense tracking.</p>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- CONCEPT 1: Inline Dashboard                                     -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<div class="concept">
+  <div class="concept-title">Concept 1</div>
+  <h2>Inline Dashboard</h2>
+  <p class="concept-desc">Everything lives on one screen — a summary card at top, then a full list of recurring items below. Changed items are flagged with red badges.</p>
+
+  <div class="phone">
+    <div class="status-bar">
+      <span>9:41</span>
+      <div class="right">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 9l4-4 4 4"/><path d="M5 5v14"/><path d="M11 5h2m3 0h3M11 9h7m-7 4h10m-10 4h7"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><rect x="1" y="6" width="3" height="12" rx="1"/><rect x="6" y="4" width="3" height="14" rx="1"/><rect x="11" y="2" width="3" height="16" rx="1"/><rect x="16" y="0" width="3" height="18" rx="1"/></svg>
+        <svg viewBox="0 0 28 14" fill="currentColor"><rect x="0" y="0" width="24" height="14" rx="3" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="16" height="10" rx="1.5" fill="currentColor"/><rect x="25" y="4" width="3" height="6" rx="1"/></svg>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="section-label">Monthly Overview</div>
+
+      <!-- Summary card -->
+      <div class="card">
+        <div class="summary-row">
+          <div class="summary-box">
+            <div class="label">Income</div>
+            <div class="value green">$8,500</div>
+          </div>
+          <div class="summary-box">
+            <div class="label">Expenses</div>
+            <div class="value red">$2,405</div>
+          </div>
+          <div class="summary-box">
+            <div class="label">Net</div>
+            <div class="value blue">+$6,095</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Expenses list -->
+      <div class="section-label">Recurring Expenses</div>
+      <div class="card" style="padding:4px 16px;">
+        <div class="expense-item">
+          <div class="icon-circle" style="background:#5856d6;">R</div>
+          <div class="expense-name">Rent</div>
+          <span class="badge">Changed</span>
+          <div class="amount">$1,800</div>
+        </div>
+        <div class="expense-item">
+          <div class="icon-circle" style="background:#ff9500;">E</div>
+          <div class="expense-name">Electric</div>
+          <div class="amount">$142</div>
+        </div>
+        <div class="expense-item">
+          <div class="icon-circle" style="background:#34c759;">I</div>
+          <div class="expense-name">Internet</div>
+          <div class="amount">$79</div>
+        </div>
+        <div class="expense-item">
+          <div class="icon-circle" style="background:#007aff;">P</div>
+          <div class="expense-name">Phone</div>
+          <div class="amount">$85</div>
+        </div>
+        <div class="expense-item">
+          <div class="icon-circle" style="background:#af52de;">Ins</div>
+          <div class="expense-name">Insurance</div>
+          <span class="badge">Changed</span>
+          <div class="amount">$220</div>
+        </div>
+        <div class="expense-item">
+          <div class="icon-circle" style="background:#e50914;">N</div>
+          <div class="expense-name">Netflix</div>
+          <div class="amount">$17.99</div>
+        </div>
+        <div class="expense-item">
+          <div class="icon-circle" style="background:#1db954;">S</div>
+          <div class="expense-name">Spotify</div>
+          <div class="amount">$10.99</div>
+        </div>
+        <div class="expense-item">
+          <div class="icon-circle" style="background:#ff2d55;">G</div>
+          <div class="expense-name">Gym</div>
+          <div class="amount">$49.99</div>
+        </div>
+      </div>
+
+      <button class="add-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Recurring Item
+      </button>
+    </div>
+
+    <div class="bottom-nav">
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>
+        Home
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Search
+      </div>
+      <div class="nav-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="18" rx="3"/><path d="M2 9h20"/><path d="M9 3v18"/></svg>
+        Accounts
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Profile
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- CONCEPT 2: Summary → Dedicated Screen                           -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<div class="concept">
+  <div class="concept-title">Concept 2 ★ Recommended</div>
+  <h2>Summary → Dedicated Screen</h2>
+  <p class="concept-desc">A compact summary card acts as a gateway. Tapping "Review" opens a dedicated full-screen review with tabs and expandable detail rows.</p>
+
+  <div class="phone">
+    <div class="status-bar">
+      <span>9:41</span>
+      <div class="right">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 9l4-4 4 4"/><path d="M5 5v14"/><path d="M11 5h2m3 0h3M11 9h7m-7 4h10m-10 4h7"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><rect x="1" y="6" width="3" height="12" rx="1"/><rect x="6" y="4" width="3" height="14" rx="1"/><rect x="11" y="2" width="3" height="16" rx="1"/><rect x="16" y="0" width="3" height="18" rx="1"/></svg>
+        <svg viewBox="0 0 28 14" fill="currentColor"><rect x="0" y="0" width="24" height="14" rx="3" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="16" height="10" rx="1.5" fill="currentColor"/><rect x="25" y="4" width="3" height="6" rx="1"/></svg>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="section-label">Cash Flow Snapshot</div>
+
+      <!-- Compact summary card -->
+      <div class="card" style="padding:0;">
+        <div class="summary-card-compact">
+          <div class="compact-values">
+            <div class="compact-val">
+              <div class="lbl">Income</div>
+              <div class="num" style="color:#34c759;">$8,500</div>
+            </div>
+            <div class="compact-val">
+              <div class="lbl">Expenses</div>
+              <div class="num" style="color:#ff3b30;">$2,405</div>
+            </div>
+            <div class="compact-val">
+              <div class="lbl">Net</div>
+              <div class="num" style="color:#007aff;">+$6,095</div>
+            </div>
+          </div>
+          <span class="review-link">Review →</span>
+        </div>
+      </div>
+
+      <div style="height:16px"></div>
+
+      <!-- Dedicated review screen (shown inline for demo) -->
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#007aff" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+        <span style="font-size:17px;font-weight:700;color:#1c1c1e;">Review Cash Flow</span>
+      </div>
+
+      <div class="tab-bar">
+        <div class="tab active">All</div>
+        <div class="tab">Income</div>
+        <div class="tab">Expenses</div>
+        <div class="tab">Changed</div>
+      </div>
+
+      <div class="section-label">Fixed Expenses</div>
+      <div class="card" style="padding:4px 16px;">
+        <div class="expandable">
+          <div class="row">
+            <div class="row-start">
+              <div class="icon-circle" style="background:#5856d6;width:30px;height:30px;font-size:12px;">R</div>
+              <div>
+                <div style="font-size:14px;font-weight:600;">Rent</div>
+                <div style="font-size:11px;color:#8e8e93;">Monthly</div>
+              </div>
+              <span class="badge">Changed</span>
+            </div>
+            <div class="row-start">
+              <div class="amount">$1,800</div>
+              <span class="expand-arrow">›</span>
+            </div>
+          </div>
+        </div>
+        <div class="expandable">
+          <div class="row">
+            <div class="row-start">
+              <div class="icon-circle" style="background:#ff9500;width:30px;height:30px;font-size:12px;">E</div>
+              <div>
+                <div style="font-size:14px;font-weight:600;">Electric</div>
+                <div style="font-size:11px;color:#8e8e93;">Monthly</div>
+              </div>
+            </div>
+            <div class="row-start">
+              <div class="amount">$142</div>
+              <span class="expand-arrow">›</span>
+            </div>
+          </div>
+        </div>
+        <div class="expandable">
+          <div class="row">
+            <div class="row-start">
+              <div class="icon-circle" style="background:#007aff;width:30px;height:30px;font-size:12px;">P</div>
+              <div>
+                <div style="font-size:14px;font-weight:600;">Phone</div>
+                <div style="font-size:11px;color:#8e8e93;">Monthly</div>
+              </div>
+            </div>
+            <div class="row-start">
+              <div class="amount">$85</div>
+              <span class="expand-arrow">›</span>
+            </div>
+          </div>
+        </div>
+        <div class="expandable">
+          <div class="row">
+            <div class="row-start">
+              <div class="icon-circle" style="background:#af52de;width:30px;height:30px;font-size:10px;">Ins</div>
+              <div>
+                <div style="font-size:14px;font-weight:600;">Insurance</div>
+                <div style="font-size:11px;color:#8e8e93;">Monthly</div>
+              </div>
+              <span class="badge">Changed</span>
+            </div>
+            <div class="row-start">
+              <div class="amount">$220</div>
+              <span class="expand-arrow">›</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-label" style="margin-top:12px;">Subscriptions</div>
+      <div class="card" style="padding:4px 16px;">
+        <div class="expandable">
+          <div class="row">
+            <div class="row-start">
+              <div class="icon-circle" style="background:#e50914;width:30px;height:30px;font-size:12px;">N</div>
+              <div style="font-size:14px;font-weight:600;">Netflix</div>
+            </div>
+            <div class="amount">$17.99</div>
+          </div>
+        </div>
+        <div class="expandable">
+          <div class="row">
+            <div class="row-start">
+              <div class="icon-circle" style="background:#1db954;width:30px;height:30px;font-size:12px;">S</div>
+              <div style="font-size:14px;font-weight:600;">Spotify</div>
+            </div>
+            <div class="amount">$10.99</div>
+          </div>
+        </div>
+        <div class="expandable">
+          <div class="row">
+            <div class="row-start">
+              <div class="icon-circle" style="background:#ff2d55;width:30px;height:30px;font-size:12px;">G</div>
+              <div style="font-size:14px;font-weight:600;">Gym</div>
+            </div>
+            <div class="amount">$49.99</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-nav">
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>
+        Home
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Search
+      </div>
+      <div class="nav-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="18" rx="3"/><path d="M2 9h20"/><path d="M9 3v18"/></svg>
+        Accounts
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Profile
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- CONCEPT 3: Cash Flow Story                                      -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<div class="concept">
+  <div class="concept-title">Concept 3</div>
+  <h2>Cash Flow Story</h2>
+  <p class="concept-desc">A narrative vertical flow — Income feeds into Expenses, which feed into Net. Color-coded sections with arrow connectors tell the story visually.</p>
+
+  <div class="phone">
+    <div class="status-bar">
+      <span>9:41</span>
+      <div class="right">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 9l4-4 4 4"/><path d="M5 5v14"/><path d="M11 5h2m3 0h3M11 9h7m-7 4h10m-10 4h7"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><rect x="1" y="6" width="3" height="12" rx="1"/><rect x="6" y="4" width="3" height="14" rx="1"/><rect x="11" y="2" width="3" height="16" rx="1"/><rect x="16" y="0" width="3" height="18" rx="1"/></svg>
+        <svg viewBox="0 0 28 14" fill="currentColor"><rect x="0" y="0" width="24" height="14" rx="3" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="16" height="10" rx="1.5" fill="currentColor"/><rect x="25" y="4" width="3" height="6" rx="1"/></svg>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- Income Section -->
+      <div class="flow-section income">
+        <div class="flow-title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          Income
+        </div>
+        <div class="flow-item"><span>Salary</span><span style="font-weight:600;">$6,500</span></div>
+        <div class="flow-item"><span>Freelance</span><span style="font-weight:600;">$800</span></div>
+        <div class="flow-item"><span>Rental</span><span style="font-weight:600;">$1,200</span></div>
+        <div class="flow-total">$8,500 / mo</div>
+      </div>
+
+      <div class="arrow-connector">
+        <svg width="24" height="32" viewBox="0 0 24 32" fill="none" stroke="#c7c7cc" stroke-width="2"><line x1="12" y1="0" x2="12" y2="24"/><polyline points="6 18 12 24 18 18"/></svg>
+      </div>
+
+      <!-- Expenses Section -->
+      <div class="flow-section expenses">
+        <div class="flow-title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ff3b30" stroke-width="2.5"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg>
+          Expenses
+        </div>
+        <div class="flow-item"><span>Rent</span><span style="font-weight:600;">$1,800</span></div>
+        <div class="flow-item"><span>Insurance</span><span style="font-weight:600;">$220</span></div>
+        <div class="flow-item"><span>Electric</span><span style="font-weight:600;">$142</span></div>
+        <div class="flow-item"><span>Phone</span><span style="font-weight:600;">$85</span></div>
+        <div class="flow-item"><span>Internet</span><span style="font-weight:600;">$79</span></div>
+        <div class="flow-item"><span>Gym</span><span style="font-weight:600;">$49.99</span></div>
+        <div class="flow-item"><span>Netflix</span><span style="font-weight:600;">$17.99</span></div>
+        <div class="flow-item"><span>Spotify</span><span style="font-weight:600;">$10.99</span></div>
+        <div class="flow-total">−$2,405 / mo</div>
+      </div>
+
+      <div class="arrow-connector">
+        <svg width="24" height="32" viewBox="0 0 24 32" fill="none" stroke="#c7c7cc" stroke-width="2"><line x1="12" y1="0" x2="12" y2="24"/><polyline points="6 18 12 24 18 18"/></svg>
+      </div>
+
+      <!-- Net Section -->
+      <div class="flow-section net">
+        <div class="flow-title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#007aff" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          Net Cash Flow
+        </div>
+        <div style="text-align:center;padding:8px 0;">
+          <div style="font-size:32px;font-weight:700;color:#007aff;">+$6,095</div>
+          <div style="font-size:13px;color:#8e8e93;margin-top:4px;">per month</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-nav">
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>
+        Home
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Search
+      </div>
+      <div class="nav-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="18" rx="3"/><path d="M2 9h20"/><path d="M9 3v18"/></svg>
+        Accounts
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Profile
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- CONCEPT 4: Review Checklist                                     -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<div class="concept">
+  <div class="concept-title">Concept 4</div>
+  <h2>Review Checklist</h2>
+  <p class="concept-desc">A task-oriented approach — a progress bar shows how many items have been reviewed. Checkboxes let users confirm each recurring item one by one.</p>
+
+  <div class="phone">
+    <div class="status-bar">
+      <span>9:41</span>
+      <div class="right">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 9l4-4 4 4"/><path d="M5 5v14"/><path d="M11 5h2m3 0h3M11 9h7m-7 4h10m-10 4h7"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><rect x="1" y="6" width="3" height="12" rx="1"/><rect x="6" y="4" width="3" height="14" rx="1"/><rect x="11" y="2" width="3" height="16" rx="1"/><rect x="16" y="0" width="3" height="18" rx="1"/></svg>
+        <svg viewBox="0 0 28 14" fill="currentColor"><rect x="0" y="0" width="24" height="14" rx="3" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="16" height="10" rx="1.5" fill="currentColor"/><rect x="25" y="4" width="3" height="6" rx="1"/></svg>
+      </div>
+    </div>
+
+    <div class="content">
+      <div style="margin-bottom:16px;">
+        <div style="font-size:17px;font-weight:700;margin-bottom:2px;">Review Recurring Items</div>
+        <div style="font-size:13px;color:#8e8e93;">Confirm your recurring cash flow is accurate</div>
+      </div>
+
+      <!-- Progress -->
+      <div class="card">
+        <div class="progress-wrap">
+          <div class="progress-text">7 of 11 reviewed</div>
+          <div class="progress-bar"><div class="progress-fill"></div></div>
+        </div>
+      </div>
+
+      <!-- Income group -->
+      <div class="section-label">Income</div>
+      <div class="card" style="padding:4px 16px;">
+        <div class="check-row">
+          <div class="checkbox checked">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="check-name">Salary</div>
+          <div class="amount green">$6,500</div>
+        </div>
+        <div class="check-row">
+          <div class="checkbox checked">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="check-name">Freelance</div>
+          <div class="amount green">$800</div>
+        </div>
+        <div class="check-row">
+          <div class="checkbox checked">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="check-name">Rental</div>
+          <div class="amount green">$1,200</div>
+        </div>
+      </div>
+
+      <!-- Fixed Expenses group -->
+      <div class="section-label" style="margin-top:12px;">Fixed Expenses</div>
+      <div class="card" style="padding:4px 16px;">
+        <div class="check-row">
+          <div class="checkbox checked">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="check-name">Rent</div>
+          <span class="badge">Changed</span>
+          <div class="amount red">$1,800</div>
+        </div>
+        <div class="check-row">
+          <div class="checkbox checked">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="check-name">Electric</div>
+          <div class="amount">$142</div>
+        </div>
+        <div class="check-row">
+          <div class="checkbox checked">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="check-name">Phone</div>
+          <div class="amount">$85</div>
+        </div>
+        <div class="check-row">
+          <div class="checkbox">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="check-name">Internet</div>
+          <div class="amount">$79</div>
+        </div>
+        <div class="check-row">
+          <div class="checkbox">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="check-name">Insurance</div>
+          <span class="badge">Changed</span>
+          <div class="amount red">$220</div>
+        </div>
+      </div>
+
+      <!-- Subscriptions group -->
+      <div class="section-label" style="margin-top:12px;">Subscriptions</div>
+      <div class="card" style="padding:4px 16px;">
+        <div class="check-row">
+          <div class="checkbox checked">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="check-name">Netflix</div>
+          <div class="amount">$17.99</div>
+        </div>
+        <div class="check-row">
+          <div class="checkbox">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="check-name">Spotify</div>
+          <div class="amount">$10.99</div>
+        </div>
+        <div class="check-row">
+          <div class="checkbox">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="check-name">Gym</div>
+          <div class="amount">$49.99</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-nav">
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>
+        Home
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Search
+      </div>
+      <div class="nav-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="18" rx="3"/><path d="M2 9h20"/><path d="M9 3v18"/></svg>
+        Accounts
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Profile
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- CONCEPT 5: AI Advisor                                           -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<div class="concept">
+  <div class="concept-title">Concept 5</div>
+  <h2>AI Advisor</h2>
+  <p class="concept-desc">A conversational, AI-first experience. A dark hero card presents the analysis, then chat-style bubbles deliver personalized insights and recommendations.</p>
+
+  <div class="phone">
+    <div class="status-bar">
+      <span>9:41</span>
+      <div class="right">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 9l4-4 4 4"/><path d="M5 5v14"/><path d="M11 5h2m3 0h3M11 9h7m-7 4h10m-10 4h7"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><rect x="1" y="6" width="3" height="12" rx="1"/><rect x="6" y="4" width="3" height="14" rx="1"/><rect x="11" y="2" width="3" height="16" rx="1"/><rect x="16" y="0" width="3" height="18" rx="1"/></svg>
+        <svg viewBox="0 0 28 14" fill="currentColor"><rect x="0" y="0" width="24" height="14" rx="3" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="16" height="10" rx="1.5" fill="currentColor"/><rect x="25" y="4" width="3" height="6" rx="1"/></svg>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- Hero card -->
+      <div class="hero-card">
+        <div class="hero-icon">✨</div>
+        <h3>I've analyzed your cash flow</h3>
+        <div class="hero-sub">Here's what I found from your <strong>11 recurring items</strong> totaling <strong>$2,405/mo</strong> in expenses against <strong>$8,500/mo</strong> in income.</div>
+      </div>
+
+      <!-- Message bubbles -->
+      <div class="msg-bubble">
+        <strong>Health Check</strong><br>
+        Your net cash flow is <span class="savings">+$6,095/mo</span> — that's a <span class="savings">71.7%</span> savings rate. Well above the recommended 20%.
+      </div>
+
+      <div class="msg-bubble">
+        <strong>Changes Detected</strong><br>
+        Two items changed since last month:<br>
+        • <span class="highlight">Rent</span> increased from $1,650 → $1,800<br>
+        • <span class="highlight">Insurance</span> increased from $195 → $220<br>
+        Total increase: <span style="color:#ff3b30;font-weight:600;">+$175/mo</span>
+      </div>
+
+      <div class="msg-bubble">
+        <strong>Optimization Opportunity</strong><br>
+        Your subscriptions total <span class="highlight">$78.98/mo</span>. You have 3 streaming services. Consider if all are actively used — you could save up to <span class="savings">$28.98/mo</span>.
+      </div>
+
+      <div class="msg-bubble">
+        <strong>Income Diversification</strong><br>
+        Salary makes up <span class="highlight">76.5%</span> of your income. Your freelance and rental income provide good diversification. Freelance is up 12% from last quarter.
+      </div>
+
+      <div class="msg-bubble">
+        <strong>Projection</strong><br>
+        At your current rate, you'll save <span class="savings">$73,140</span> annually from recurring cash flow alone. This doesn't include variable expenses or one-time purchases.
+      </div>
+
+      <div class="msg-bubble" style="background:#e8f5e9;border:1px solid #c8e6c9;">
+        <strong style="color:#2e7d32;">Recommendation</strong><br>
+        <span style="color:#2e7d32;">Consider moving excess cash into a high-yield savings account earning 4.5% APY — that's an extra ~<strong>$3,291/yr</strong> in passive income.</span>
+      </div>
+    </div>
+
+    <div class="bottom-nav">
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>
+        Home
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Search
+      </div>
+      <div class="nav-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="18" rx="3"/><path d="M2 9h20"/><path d="M9 3v18"/></svg>
+        Accounts
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Profile
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- RECOMMENDATION                                                  -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<div class="recommendation">
+  <div class="tag">★ Recommended</div>
+  <h2>Why Concept 2: Summary → Dedicated Screen</h2>
+  <p>Concept 2 strikes the ideal balance between <strong>at-a-glance clarity</strong> and <strong>depth on demand</strong>. It follows the progressive disclosure principle — users get the numbers they need immediately, then tap to drill into details when they want them.</p>
+  <p>Key reasons this approach wins:</p>
+  <ul>
+    <li><strong>Information hierarchy</strong> — The compact summary card answers "how's my cash flow?" in under 2 seconds without overwhelming the user.</li>
+    <li><strong>Progressive disclosure</strong> — The dedicated review screen with tabs (All / Income / Expenses / Changed) lets users filter and focus on what matters to them.</li>
+    <li><strong>Expandable rows</strong> — Each item can reveal history, trend charts, or edit options without cluttering the main view.</li>
+    <li><strong>Scalability</strong> — Works whether a user has 5 recurring items or 50. The compact card stays the same; the review screen adapts.</li>
+    <li><strong>Changed items highlighted</strong> — Red badges on modified items draw attention without interrupting the flow.</li>
+    <li><strong>Familiar navigation pattern</strong> — The back arrow + tab bar is a proven mobile pattern that requires zero learning curve.</li>
+  </ul>
+  <p style="margin-top:12px;"><strong>When to use the others:</strong></p>
+  <ul>
+    <li><strong>Concept 1</strong> — Good for simple apps with &lt;8 recurring items where full visibility is preferred.</li>
+    <li><strong>Concept 3</strong> — Best for educational or onboarding contexts where you want to teach users about cash flow.</li>
+    <li><strong>Concept 4</strong> — Ideal for quarterly or annual review flows where completion tracking is the primary goal.</li>
+    <li><strong>Concept 5</strong> — Excellent as an AI-powered feature layer on top of Concept 2's structure for premium users.</li>
+  </ul>
+</div>
+
+<div style="height:60px;"></div>
+
+</body>
+</html>
