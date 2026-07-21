@@ -1,0 +1,2262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bottom Sheet Redesign — Advizmo Design System</title>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f2f2f7;
+            --card: #fff;
+            --text: #1c1c1e;
+            --text2: #8e8e93;
+            --border: rgba(0,0,0,.06);
+            --blue: #0a84ff;
+            --green: #166f47;
+            --green-bg: #e8f8ec;
+            --amber: #c2790a;
+            --amber-bg: #fff5e6;
+            --red: #b91c1c;
+            --red-bg: #ffe8e8;
+            --sidebar-bg: #1c1c1e;
+            --sidebar-text: #e5e5e7;
+            --sidebar-hover: rgba(255,255,255,0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 260px;
+            background: var(--sidebar-bg);
+            color: var(--sidebar-text);
+            padding: 32px 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar-logo {
+            padding: 0 24px;
+            margin-bottom: 32px;
+        }
+
+        .sidebar-logo h2 {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .sidebar-logo span {
+            font-size: 12px;
+            color: var(--text2);
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+        }
+
+        .sidebar-section {
+            margin-bottom: 8px;
+        }
+
+        .sidebar-section-title {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text2);
+            padding: 8px 24px;
+        }
+
+        .sidebar-item {
+            display: block;
+            padding: 10px 24px;
+            color: var(--sidebar-text);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.15s;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-item:hover {
+            background: var(--sidebar-hover);
+        }
+
+        .sidebar-item.active {
+            background: var(--sidebar-hover);
+            border-left-color: var(--blue);
+            color: #fff;
+        }
+
+        .sidebar-item .number {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.1);
+            text-align: center;
+            line-height: 20px;
+            font-size: 11px;
+            margin-right: 8px;
+        }
+
+        .sidebar-item.active .number {
+            background: var(--blue);
+            color: #fff;
+        }
+
+        /* MAIN CONTENT */
+        .main {
+            margin-left: 260px;
+            flex: 1;
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 80px;
+            scroll-margin-top: 40px;
+        }
+
+        .section-title {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .section-subtitle {
+            color: var(--text2);
+            font-size: 16px;
+            margin-bottom: 32px;
+        }
+
+        /* OVERVIEW GRID */
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .overview-card {
+            background: var(--card);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .overview-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+        .overview-card-preview {
+            height: 200px;
+            background: #e8e8ed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .overview-card-info {
+            padding: 16px;
+        }
+
+        .overview-card-info h3 {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .overview-card-info p {
+            font-size: 12px;
+            color: var(--text2);
+        }
+
+        .overview-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: var(--blue);
+            color: #fff;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+
+        /* PHONE MOCKUP */
+        .phone-container {
+            display: flex;
+            gap: 32px;
+            flex-wrap: wrap;
+        }
+
+        .phone-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .phone-label {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text2);
+        }
+
+        .phone {
+            width: 320px;
+            height: 640px;
+            background: #000;
+            border-radius: 40px;
+            padding: 12px;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: var(--bg);
+            border-radius: 30px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* STATUS BAR */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 24px 0;
+            height: 48px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .status-time {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .dynamic-island {
+            width: 120px;
+            height: 28px;
+            background: #000;
+            border-radius: 20px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 8px;
+        }
+
+        .status-icons {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .status-icons span {
+            font-size: 12px;
+        }
+
+        /* APP CONTENT */
+        .app-content {
+            padding: 8px 20px;
+            flex: 1;
+        }
+
+        .app-header {
+            margin-bottom: 16px;
+        }
+
+        .app-header h1 {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        /* BOTTOM NAV */
+        .bottom-nav {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 8px 0 20px;
+            background: var(--card);
+            border-top: 1px solid var(--border);
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            font-size: 10px;
+            color: var(--text2);
+        }
+
+        .nav-item.active {
+            color: var(--blue);
+        }
+
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        /* BOTTOM SHEET */
+        .bottom-sheet-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            top: 0;
+            background: rgba(0,0,0,0.4);
+            border-radius: 30px;
+            z-index: 20;
+        }
+
+        .bottom-sheet {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--card);
+            border-radius: 20px 20px 0 0;
+            padding: 12px 0 0;
+            z-index: 21;
+            max-height: 85%;
+            overflow-y: auto;
+        }
+
+        .drag-indicator {
+            width: 36px;
+            height: 5px;
+            background: #d1d1d6;
+            border-radius: 3px;
+            margin: 0 auto 16px;
+        }
+
+        .sheet-header {
+            padding: 0 20px 16px;
+        }
+
+        .sheet-header h2 {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .sheet-header p {
+            font-size: 13px;
+            color: var(--text2);
+            margin-top: 4px;
+        }
+
+        .sheet-body {
+            padding: 0 20px 20px;
+        }
+
+        /* CONCEPT 1: GROUPED LIST */
+        .grouped-list {
+            margin-bottom: 12px;
+        }
+
+        .grouped-list-title {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text2);
+            padding: 0 16px 6px;
+        }
+
+        .grouped-list-card {
+            background: #f9f9f9;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .list-row {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            gap: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .list-row:last-child {
+            border-bottom: none;
+        }
+
+        .list-row-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .list-row-icon.blue { background: rgba(10,132,255,0.12); color: var(--blue); }
+        .list-row-icon.green { background: var(--green-bg); color: var(--green); }
+        .list-row-icon.amber { background: var(--amber-bg); color: var(--amber); }
+        .list-row-icon.gray { background: #f0f0f0; color: var(--text2); }
+
+        .list-row-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .list-row-title {
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .list-row-desc {
+            font-size: 13px;
+            color: var(--text2);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .list-row-chevron {
+            color: #c7c7cc;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        /* CONCEPT 2: CATEGORY CARDS */
+        .category-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .category-card {
+            background: #f9f9f9;
+            border-radius: 14px;
+            padding: 16px;
+            cursor: pointer;
+            transition: transform 0.15s;
+        }
+
+        .category-card:hover {
+            transform: scale(1.02);
+        }
+
+        .category-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+
+        .category-icon.blue { background: rgba(10,132,255,0.12); color: var(--blue); }
+        .category-icon.green { background: var(--green-bg); color: var(--green); }
+        .category-icon.amber { background: var(--amber-bg); color: var(--amber); }
+        .category-icon.gray { background: #f0f0f0; color: var(--text2); }
+
+        .category-title {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .category-count {
+            font-size: 12px;
+            color: var(--text2);
+        }
+
+        .category-actions {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border);
+        }
+
+        .category-action-item {
+            font-size: 13px;
+            padding: 6px 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .category-action-item::before {
+            content: '';
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--text2);
+        }
+
+        /* CONCEPT 3: ACTION CARDS */
+        .action-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .action-card-primary {
+            background: #f0f7ff;
+            border: 2px solid var(--blue);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .action-card-primary .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: var(--blue);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .action-card-primary .card-content {
+            flex: 1;
+        }
+
+        .action-card-primary .card-title {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .action-card-primary .card-desc {
+            font-size: 13px;
+            color: var(--text2);
+            margin-top: 2px;
+        }
+
+        .action-card-primary .card-arrow {
+            color: var(--blue);
+            font-size: 18px;
+        }
+
+        .action-cards-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .action-card-secondary {
+            background: #f9f9f9;
+            border-radius: 14px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .action-card-secondary .card-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin: 0 auto 10px;
+        }
+
+        .action-card-secondary .card-icon.green { background: var(--green-bg); color: var(--green); }
+        .action-card-secondary .card-icon.amber { background: var(--amber-bg); color: var(--amber); }
+        .action-card-secondary .card-icon.red { background: var(--red-bg); color: var(--red); }
+        .action-card-secondary .card-icon.gray { background: #f0f0f0; color: var(--text2); }
+
+        .action-card-secondary .card-title {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        /* CONCEPT 4: PROGRESSIVE DISCLOSURE */
+        .progressive-primary {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .progressive-card {
+            background: #f9f9f9;
+            border-radius: 14px;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .progressive-card:hover {
+            background: #f0f0f0;
+        }
+
+        .progressive-card .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .progressive-card .card-icon.blue { background: rgba(10,132,255,0.12); color: var(--blue); }
+        .progressive-card .card-icon.gray { background: #f0f0f0; color: var(--text2); }
+        .progressive-card .card-icon.green { background: var(--green-bg); color: var(--green); }
+        .progressive-card .card-icon.amber { background: var(--amber-bg); color: var(--amber); }
+        .progressive-card .card-icon.red { background: var(--red-bg); color: var(--red); }
+
+        .progressive-card .card-content {
+            flex: 1;
+        }
+
+        .progressive-card .card-title {
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .progressive-card .card-desc {
+            font-size: 12px;
+            color: var(--text2);
+        }
+
+        .show-more-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--blue);
+            cursor: pointer;
+        }
+
+        .show-more-link::after {
+            content: '▾';
+        }
+
+        .collapsed-actions {
+            border-top: 1px solid var(--border);
+            padding-top: 12px;
+        }
+
+        /* CONCEPT 5: ASSISTANT */
+        .assistant-greeting {
+            background: linear-gradient(135deg, #f0f7ff 0%, #e8f4ff 100%);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .assistant-greeting h3 {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .assistant-suggestion {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 14px;
+            border-left: 3px solid var(--blue);
+        }
+
+        .assistant-suggestion p {
+            font-size: 13px;
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        .assistant-suggestion .cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 10px;
+            padding: 8px 14px;
+            background: var(--blue);
+            color: #fff;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .assistant-actions {
+            margin-top: 12px;
+        }
+
+        .assistant-actions-title {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text2);
+            margin-bottom: 8px;
+        }
+
+        .assistant-action-row {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            gap: 10px;
+        }
+
+        .assistant-action-row:last-child {
+            border-bottom: none;
+        }
+
+        .assistant-action-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .assistant-action-content {
+            flex: 1;
+        }
+
+        .assistant-action-title {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .assistant-action-why {
+            font-size: 11px;
+            color: var(--blue);
+            cursor: pointer;
+        }
+
+        .assistant-dismiss {
+            color: var(--text2);
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        /* COMPARISON TABLE */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .comparison-table th {
+            background: #f9f9f9;
+            padding: 14px 16px;
+            text-align: left;
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .comparison-table td {
+            padding: 12px 16px;
+            font-size: 13px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .rating {
+            display: inline-flex;
+            gap: 2px;
+        }
+
+        .rating-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #d1d1d6;
+        }
+
+        .rating-dot.filled {
+            background: var(--blue);
+        }
+
+        /* RECOMMENDATION */
+        .recommendation-card {
+            background: linear-gradient(135deg, #f0f7ff 0%, #e8f4ff 100%);
+            border: 2px solid var(--blue);
+            border-radius: 20px;
+            padding: 32px;
+        }
+
+        .recommendation-badge {
+            display: inline-block;
+            background: var(--blue);
+            color: #fff;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+        }
+
+        .recommendation-card h3 {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .recommendation-card p {
+            font-size: 14px;
+            color: var(--text);
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .use-cases {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .use-case {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid var(--border);
+        }
+
+        .use-case h4 {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .use-case p {
+            font-size: 12px;
+            color: var(--text2);
+            line-height: 1.5;
+            margin-bottom: 0;
+        }
+
+        .divider {
+            height: 1px;
+            background: var(--border);
+            margin: 60px 0;
+        }
+
+        /* MINI PHONE PREVIEW */
+        .mini-phone {
+            width: 100%;
+            height: 100%;
+            background: var(--bg);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mini-phone .status-bar {
+            height: 28px;
+            padding: 6px 12px 0;
+            font-size: 10px;
+        }
+
+        .mini-phone .dynamic-island {
+            width: 70px;
+            height: 16px;
+            top: 4px;
+        }
+
+        .mini-phone .status-time {
+            font-size: 10px;
+        }
+
+        .mini-phone .mini-content {
+            flex: 1;
+            padding: 4px 10px;
+        }
+
+        .mini-phone .mini-header {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .mini-phone .mini-block {
+            background: #e8e8ed;
+            border-radius: 6px;
+            height: 20px;
+            margin-bottom: 4px;
+        }
+
+        .mini-phone .mini-sheet {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--card);
+            border-radius: 10px 10px 0 0;
+            padding: 6px 10px 20px;
+        }
+
+        .mini-phone .mini-drag {
+            width: 24px;
+            height: 3px;
+            background: #d1d1d6;
+            border-radius: 2px;
+            margin: 0 auto 6px;
+        }
+
+        .mini-phone .mini-sheet-title {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 10px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .mini-phone .mini-row {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 0;
+        }
+
+        .mini-phone .mini-icon {
+            width: 14px;
+            height: 14px;
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+
+        .mini-phone .mini-text {
+            height: 6px;
+            background: #d1d1d6;
+            border-radius: 3px;
+            flex: 1;
+        }
+
+        .mini-phone .mini-chevron {
+            font-size: 6px;
+            color: #c7c7cc;
+        }
+
+        /* SCROLLBAR */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #c7c7cc;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <!-- SIDEBAR -->
+    <nav class="sidebar">
+        <div class="sidebar-logo">
+            <h2>Advizmo</h2>
+            <span>Design System</span>
+        </div>
+
+        <div class="sidebar-section">
+            <a href="#overview" class="sidebar-item active">
+                Overview
+            </a>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">Concepts</div>
+            <a href="#concept-1" class="sidebar-item">
+                <span class="number">1</span> Guided Action List
+            </a>
+            <a href="#concept-2" class="sidebar-item">
+                <span class="number">2</span> Financial Categories
+            </a>
+            <a href="#concept-3" class="sidebar-item">
+                <span class="number">3</span> Large Action Cards
+            </a>
+            <a href="#concept-4" class="sidebar-item">
+                <span class="number">4</span> Progressive Disclosure
+            </a>
+            <a href="#concept-5" class="sidebar-item">
+                <span class="number">5</span> Financial Assistant
+            </a>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">Analysis</div>
+            <a href="#comparison" class="sidebar-item">
+                Comparison Table
+            </a>
+            <a href="#recommendation" class="sidebar-item">
+                Recommendation
+            </a>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+        <!-- SECTION 1: OVERVIEW -->
+        <section id="overview" class="section">
+            <h1 class="section-title">Bottom Sheet Redesign</h1>
+            <p class="section-subtitle">5 UI concepts for the "Add accounts or income" Bottom Sheet — helping users build a more accurate financial picture.</p>
+
+            <div class="overview-grid">
+                <!-- Concept 1 Preview -->
+                <div class="overview-card" onclick="document.getElementById('concept-1').scrollIntoView({behavior:'smooth'})">
+                    <div class="overview-card-preview">
+                        <div class="mini-phone">
+                            <div class="status-bar">
+                                <span class="status-time">9:41</span>
+                                <div class="dynamic-island"></div>
+                                <div class="status-icons"><span>📶</span> <span>🔋</span></div>
+                            </div>
+                            <div class="mini-content">
+                                <div class="mini-header">Dashboard</div>
+                                <div class="mini-block"></div>
+                                <div class="mini-block" style="width:60%"></div>
+                            </div>
+                            <div class="mini-sheet">
+                                <div class="mini-drag"></div>
+                                <div class="mini-sheet-title">Add financial information</div>
+                                <div class="mini-row">
+                                    <div class="mini-icon" style="background:rgba(10,132,255,0.2)"></div>
+                                    <div class="mini-text"></div>
+                                    <span class="mini-chevron">›</span>
+                                </div>
+                                <div class="mini-row">
+                                    <div class="mini-icon" style="background:#e8f8ec"></div>
+                                    <div class="mini-text" style="width:70%"></div>
+                                    <span class="mini-chevron">›</span>
+                                </div>
+                                <div class="mini-row">
+                                    <div class="mini-icon" style="background:#fff5e6"></div>
+                                    <div class="mini-text" style="width:50%"></div>
+                                    <span class="mini-chevron">›</span>
+                                </div>
+                                <div class="mini-row">
+                                    <div class="mini-icon" style="background:#ffe8e8"></div>
+                                    <div class="mini-text" style="width:65%"></div>
+                                    <span class="mini-chevron">›</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="overview-card-info">
+                        <h3>Guided Action List</h3>
+                        <p>Apple Settings style grouped rows</p>
+                    </div>
+                </div>
+
+                <!-- Concept 2 Preview -->
+                <div class="overview-card" onclick="document.getElementById('concept-2').scrollIntoView({behavior:'smooth'})">
+                    <div class="overview-card-preview">
+                        <div class="mini-phone">
+                            <div class="status-bar">
+                                <span class="status-time">9:41</span>
+                                <div class="dynamic-island"></div>
+                                <div class="status-icons"><span>📶</span> <span>🔋</span></div>
+                            </div>
+                            <div class="mini-content">
+                                <div class="mini-header">Dashboard</div>
+                                <div class="mini-block"></div>
+                                <div class="mini-block" style="width:60%"></div>
+                            </div>
+                            <div class="mini-sheet">
+                                <div class="mini-drag"></div>
+                                <div class="mini-sheet-title">What would you like to add?</div>
+                                <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
+                                    <div style="background:#f0f7ff;border-radius:6px;padding:6px">
+                                        <div class="mini-icon" style="background:rgba(10,132,255,0.2);width:12px;height:12px;margin-bottom:3px"></div>
+                                        <div class="mini-text" style="width:60%"></div>
+                                    </div>
+                                    <div style="background:#e8f8ec;border-radius:6px;padding:6px">
+                                        <div class="mini-icon" style="background:rgba(22,111,71,0.2);width:12px;height:12px;margin-bottom:3px"></div>
+                                        <div class="mini-text" style="width:50%"></div>
+                                    </div>
+                                    <div style="background:#fff5e6;border-radius:6px;padding:6px">
+                                        <div class="mini-icon" style="background:rgba(194,121,10,0.2);width:12px;height:12px;margin-bottom:3px"></div>
+                                        <div class="mini-text" style="width:40%"></div>
+                                    </div>
+                                    <div style="background:#f0f0f0;border-radius:6px;padding:6px">
+                                        <div class="mini-icon" style="background:#d1d1d6;width:12px;height:12px;margin-bottom:3px"></div>
+                                        <div class="mini-text" style="width:55%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="overview-card-info">
+                        <h3>Financial Categories</h3>
+                        <p>Grouped into meaningful categories</p>
+                    </div>
+                </div>
+
+                <!-- Concept 3 Preview -->
+                <div class="overview-card" onclick="document.getElementById('concept-3').scrollIntoView({behavior:'smooth'})">
+                    <div class="overview-card-preview">
+                        <div class="mini-phone">
+                            <div class="status-bar">
+                                <span class="status-time">9:41</span>
+                                <div class="dynamic-island"></div>
+                                <div class="status-icons"><span>📶</span> <span>🔋</span></div>
+                            </div>
+                            <div class="mini-content">
+                                <div class="mini-header">Dashboard</div>
+                                <div class="mini-block"></div>
+                                <div class="mini-block" style="width:60%"></div>
+                            </div>
+                            <div class="mini-sheet">
+                                <div class="mini-drag"></div>
+                                <div class="mini-sheet-title">Add financial information</div>
+                                <div style="background:#f0f7ff;border:1px solid var(--blue);border-radius:6px;padding:6px;margin-bottom:4px;display:flex;align-items:center;gap:6px">
+                                    <div class="mini-icon" style="background:var(--blue);width:14px;height:14px"></div>
+                                    <div class="mini-text"></div>
+                                </div>
+                                <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
+                                    <div style="background:#f0f0f0;border-radius:6px;padding:6px">
+                                        <div class="mini-icon" style="background:#e8f8ec;width:12px;height:12px;margin-bottom:3px"></div>
+                                        <div class="mini-text" style="width:70%"></div>
+                                    </div>
+                                    <div style="background:#f0f0f0;border-radius:6px;padding:6px">
+                                        <div class="mini-icon" style="background:#fff5e6;width:12px;height:12px;margin-bottom:3px"></div>
+                                        <div class="mini-text" style="width:60%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="overview-card-info">
+                        <h3>Large Action Cards</h3>
+                        <p>Premium cards with hierarchy</p>
+                    </div>
+                </div>
+
+                <!-- Concept 4 Preview -->
+                <div class="overview-card" onclick="document.getElementById('concept-4').scrollIntoView({behavior:'smooth'})">
+                    <div class="overview-card-preview">
+                        <div class="mini-phone">
+                            <div class="status-bar">
+                                <span class="status-time">9:41</span>
+                                <div class="dynamic-island"></div>
+                                <div class="status-icons"><span>📶</span> <span>🔋</span></div>
+                            </div>
+                            <div class="mini-content">
+                                <div class="mini-header">Dashboard</div>
+                                <div class="mini-block"></div>
+                                <div class="mini-block" style="width:60%"></div>
+                            </div>
+                            <div class="mini-sheet">
+                                <div class="mini-drag"></div>
+                                <div class="mini-sheet-title">Add financial information</div>
+                                <div class="mini-row">
+                                    <div class="mini-icon" style="background:rgba(10,132,255,0.2)"></div>
+                                    <div class="mini-text"></div>
+                                </div>
+                                <div class="mini-row">
+                                    <div class="mini-icon" style="background:#f0f0f0"></div>
+                                    <div class="mini-text" style="width:70%"></div>
+                                </div>
+                                <div style="text-align:center;font-size:7px;color:var(--blue);padding:4px 0">Show more ▾</div>
+                                <div style="border-top:1px solid #e8e8ed;padding-top:4px">
+                                    <div class="mini-row">
+                                        <div class="mini-icon" style="background:#e8f8ec"></div>
+                                        <div class="mini-text" style="width:60%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="overview-card-info">
+                        <h3>Progressive Disclosure</h3>
+                        <p>Focus on highest-value actions</p>
+                    </div>
+                </div>
+
+                <!-- Concept 5 Preview -->
+                <div class="overview-card" onclick="document.getElementById('concept-5').scrollIntoView({behavior:'smooth'})">
+                    <div class="overview-card-preview">
+                        <div class="mini-phone">
+                            <div class="status-bar">
+                                <span class="status-time">9:41</span>
+                                <div class="dynamic-island"></div>
+                                <div class="status-icons"><span>📶</span> <span>🔋</span></div>
+                            </div>
+                            <div class="mini-content">
+                                <div class="mini-header">Dashboard</div>
+                                <div class="mini-block"></div>
+                                <div class="mini-block" style="width:60%"></div>
+                            </div>
+                            <div class="mini-sheet">
+                                <div class="mini-drag"></div>
+                                <div style="background:linear-gradient(135deg,#f0f7ff,#e8f4ff);border-radius:8px;padding:8px;margin-bottom:6px">
+                                    <div class="mini-text" style="width:80%;margin-bottom:4px"></div>
+                                    <div style="background:var(--card);border-radius:6px;padding:6px;border-left:2px solid var(--blue)">
+                                        <div class="mini-text" style="width:90%"></div>
+                                        <div style="background:var(--blue);width:40px;height:8px;border-radius:4px;margin-top:4px"></div>
+                                    </div>
+                                </div>
+                                <div class="mini-row">
+                                    <div class="mini-icon" style="background:rgba(10,132,255,0.2)"></div>
+                                    <div class="mini-text" style="width:50%"></div>
+                                </div>
+                                <div class="mini-row">
+                                    <div class="mini-icon" style="background:#e8f8ec"></div>
+                                    <div class="mini-text" style="width:65%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="overview-card-info">
+                        <h3>Financial Assistant</h3>
+                        <p>Conversational guided experience</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- SECTION 2: CONCEPT 1 — GUIDED ACTION LIST -->
+        <section id="concept-1" class="section">
+            <h1 class="section-title">Concept 1: Guided Action List</h1>
+            <p class="section-subtitle">Apple Settings meets Apple Wallet. Grouped rows with clear hierarchy.</p>
+
+            <div class="phone-container">
+                <div class="phone-wrapper">
+                    <div class="phone">
+                        <div class="phone-screen">
+                            <div class="status-bar">
+                                <span class="status-time">9:41</span>
+                                <div class="dynamic-island"></div>
+                                <div class="status-icons">
+                                    <span>📶</span>
+                                    <span>🔋</span>
+                                </div>
+                            </div>
+
+                            <div class="app-content">
+                                <div class="app-header">
+                                    <h1>Dashboard</h1>
+                                </div>
+                            </div>
+
+                            <div class="bottom-nav">
+                                <div class="nav-item active">
+                                    <div class="nav-icon">🏠</div>
+                                    Home
+                                </div>
+                                <div class="nav-item">
+                                    <div class="nav-icon">📊</div>
+                                    Insights
+                                </div>
+                                <div class="nav-item">
+                                    <div class="nav-icon">💳</div>
+                                    Accounts
+                                </div>
+                                <div class="nav-item">
+                                    <div class="nav-icon">⚙️</div>
+                                    Settings
+                                </div>
+                            </div>
+
+                            <!-- BOTTOM SHEET -->
+                            <div class="bottom-sheet-overlay"></div>
+                            <div class="bottom-sheet">
+                                <div class="drag-indicator"></div>
+                                <div class="sheet-header">
+                                    <h2>Add financial information</h2>
+                                    <p>Build a complete financial picture</p>
+                                </div>
+                                <div class="sheet-body">
+                                    <!-- Accounts Section -->
+                                    <div class="grouped-list">
+                                        <div class="grouped-list-title">Accounts</div>
+                                        <div class="grouped-list-card">
+                                            <div class="list-row">
+                                                <div class="list-row-icon blue">🏦</div>
+                                                <div class="list-row-content">
+                                                    <div class="list-row-title">Connect another account</div>
+                                                    <div class="list-row-desc">Link banks, credit cards, or investments</div>
+                                                </div>
+                                                <div class="list-row-chevron">›</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Cash Flow Section -->
+                                    <div class="grouped-list">
+                                        <div class="grouped-list-title">Cash Flow</div>
+                                        <div class="grouped-list-card">
+                                            <div class="list-row">
+                                                <div class="list-row-icon gray">📋</div>
+                                                <div class="list-row-content">
+                                                    <div class="list-row-title">Review recurring bills & income</div>
+                                                    <div class="list-row-desc">Verify detected transactions</div>
+                                                </div>
+                                                <div class="list-row-chevron">›</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Add Manually Section -->
+                                    <div class="grouped-list">
+                                        <div class="grouped-list-title">Add Manually</div>
+                                        <div class="grouped-list-card">
+                                            <div class="list-row">
+                                                <div class="list-row-icon green">💰</div>
+                                                <div class="list-row-content">
+                                                    <div class="list-row-title">Add recurring income</div>
+                                                    <div class="list-row-desc">Salary, freelance, or side income</div>
+                                                </div>
+                                                <div class="list-row-chevron">›</div>
+                                            </div>
+                                            <div class="list-row">
+                                                <div class="list-row-icon amber">📄</div>
+                                                <div class="list-row-content">
+                                                    <div class="list-row-title">Add recurring bill</div>
+                                                    <div class="list-row-desc">Rent, utilities, or subscriptions</div>
+                                                </div>
+                                                <div class="list-row-chevron">›</div>
+                                            </div>
+                                            <div class="list-row">
+                                                <div class="list-row-icon red">📅</div>
+                                                <div class="list-row-content">
+                                                    <div class="list-row-title">Add upcoming bill</div>
+                                                    <div class="list-row-desc">One-time or irregular expenses</div>
+                                                </div>
+                                                <div class="list-row-chevron">›</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="phone-label">Concept 1 — Guided Action List</div>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- SECTION 3: CONCEPT 2 — FINANCIAL CATEGORIES -->
+        <section id="concept-2" class="section">
+            <h1 class="section-title">Concept 2: Financial Categories</h1>
+            <p class="section-subtitle">Group actions into meaningful financial categories. Reduces cognitive load through grouping.</p>
+
+            <div class="phone-container">
+                <div class="phone-wrapper">
+                    <div class="phone">
+                        <div class="phone-screen">
+                            <div class="status-bar">
+                                <span class="status-time">9:41</span>
+                                <div class="dynamic-island"></div>
+                                <div class="status-icons">
+                                    <span>📶</span>
+                                    <span>🔋</span>
+                                </div>
+                            </div>
+
+                            <div class="app-content">
+                                <div class="app-header">
+                                    <h1>Dashboard</h1>
+                                </div>
+                            </div>
+
+                            <div class="bottom-nav">
+                                <div class="nav-item active">
+                                    <div class="nav-icon">🏠</div>
+                                    Home
+                                </div>
+                                <div class="nav-item">
+                                    <div class="nav-icon">📊</div>
+                                    Insights
+                                </div>
+                                <div class="nav-item">
+                                    <div class="nav-icon">💳</div>
+                                    Accounts
+                                </div>
+                                <div class="nav-item">
+                                    <div class="nav-icon">⚙️</div>
+                                    Settings
+                                </div>
+                            </div>
+
+                            <!-- BOTTOM SHEET -->
+                            <div class="bottom-sheet-overlay"></div>
+                            <div class="bottom-sheet">
+                                <div class="drag-indicator"></div>
+                                <div class="sheet-header">
+                                    <h2>What would you like to add?</h2>
+                                </div>
+                                <div class="sheet-body">
+                                    <div class="category-grid">
+                                        <!-- Accounts -->
+                                        <div class="category-card">
+                                            <div class="category-icon blue">🏦</div>
+                                            <div class="category-title">Accounts</div>
+                                            <div class="category-count">1 action</div>
+                                            <div class="category-actions">
+                                                <div class="category-action-item">Connect another account</div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Income -->
+                                        <div class="category-card">
+                                            <div class="category-icon green">💰</div>
+                                            <div class="category-title">Income</div>
+                                            <div class="category-count">1 action</div>
+                                            <div class="category-actions">
+                                                <div class="category-action-item">Add recurring income</div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Bills -->
+                                        <div class="category-card">
+                                            <div class="category-icon amber">📄</div>
+                                            <div class="category-title">Bills</div>
+                                            <div class="category-count">2 actions</div>
+                                            <div class="category-actions">
+                                                <div class="category-action-item">Add recurring bill</div>
+                                                <div class="category-action-item">Add upcoming bill</div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Review -->
+                                        <div class="category-card">
+                                            <div class="category-icon gray">✅</div>
+                                            <div class="category-title">Review</div>
+                                            <div class="category-count">1 action</div>
+                                            <div class="category-actions">
+                                                <div class="category-action-item">Review recurring bills & income</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="phone-label">Concept 2 — Financial Categories</div>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- SECTION 4: CONCEPT 3 — LARGE ACTION CARDS -->
+        <section id="concept-3" class="section">
+            <h1 class="section-title">Concept 3: Large Action Cards</h1>
+            <p class="section-subtitle">Compact premium cards with stronger hierarchy. Premium feel through generous spacing.</p>
+
+            <div class="phone-container">
+                <div class="phone-wrapper">
+                    <div class="phone">
+                        <div class="phone-screen">
+                            <div class="status-bar">
+                                <span class="status-time">9:41</span>
+                                <div class="dynamic-island"></div>
+                                <div class="status-icons">
+                                    <span>📶</span>
+                                    <span>🔋</span>
+                                </div>
+                            </div>
+
+                            <div class="app-content">
+                                <div class="app-header">
+                                    <h1>Dashboard</h1>
+                                </div>
+                            </div>
+
+                            <div class="bottom-nav">
+                                <div class="nav-item active">
+                                    <div class="nav-icon">🏠</div>
+                                    Home
+                                </div>
+                                <div class="nav-item">
+                                    <div class="nav-icon">📊</div>
+                                    Insights
+                                </div>
+                                <div class="nav-item">
+                                    <div class="nav-icon">💳</div>
+                                    Accounts
+                                </div>
+                                <div class="nav-item">
+                                    <div class="nav-icon">⚙️</div>
+                                    Settings
+                                </div>
+                            </div>
+
+                            <!-- BOTTOM SHEET -->
+                            <div class="bottom-sheet-overlay"></div>
+                            <div class="bottom-sheet">
+                                <div class="drag-indicator"></div>
+                                <div class="sheet-header">
+                                    <h2>Add financial information</h2>
+                                </div>
+                                <div class="sheet-body">
+                                    <div class="action-cards">
+                                        <!-- Primary Card -->
+                                        <div class="action-card-primary">
+                                            <div class="card-icon">🏦</div>
+                                            <div class="card-content">
+                                                <div class="card-title">Connect another account</div>
+                                                <div class="card-desc">Link banks, credit cards, or investments to see your full picture</div>
+                                            </div>
+                                            <div class="card-arrow">›</div>
+                                        </div>
+
+                                        <!-- Secondary Cards Row 1 -->
+                                        <div class="action-cards-row">
+                                            <div class="action-card-secondary">
+                                                <div class="card-icon green">💰</div>
+                                                <div class="card-title">Add recurring income</div>
+                                            </div>
+                                            <div class="action-card-secondary">
+                                                <div class="card-icon amber">📄</div>
+                                                <div class="card-title">Add recurring bill</div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Tertiary Cards Row 2 -->
+                                        <div class="action-cards-row">
+                                            <div class="action-card-secondary">
+                                                <div class="card-icon red">📅</div>
+                                                <div class="card-title">Add upcoming bill</div>
+                                            </div>
+                                            <div class="action-card-secondary">
+                                                <div class="card-icon gray">✅</div>
+                                                <div class="card-title">Review cash flow</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="phone-label">Concept 3 — Large Action Cards</div>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- SECTION 5: CONCEPT 4 — PROGRESSIVE DISCLOSURE -->
+        <section id="concept-4" class="section">
+            <h1 class="section-title">Concept 4: Progressive Disclosure</h1>
+            <p class="section-subtitle">Show only the most important actions first. Reduces decision fatigue. Focuses on highest-value actions.</p>
+
+            <div class="phone-container">
+                <div class="phone-wrapper">
+                    <div class="phone">
+                        <div class="phone-screen">
+                            <div class="status-bar">
+                                <span class="status-time">9:41</span>
+                                <div class="dynamic-island"></div>
+                                <div class="status-icons">
+                                    <span>📶</span>
+                                    <span>🔋</span>
+                                </div>
+                            </div>
+
+                            <div class="app-content">
+                                <div class="app-header">
+                                    <h1>Dashboard</h1>
+                                </div>
+                            </div>
+
+                            <div class="bottom-nav">
+                                <div class="nav-item active">
+                                    <div class="nav-icon">🏠</div>
+                                    Home
+                                </div>
+                                <div class="nav-item">
+                                    <div class="nav-icon">📊</div>
+                                    Insights
+                                </div>
+                                <div class="nav-item">
+                                    <div class="nav-icon">💳</div>
+                                    Accounts
+                                </div>
+                                <div class="nav-item">
+                                    <div class="nav-icon">⚙️</div>
+                                    Settings
+                                </div>
+                            </div>
+
+                            <!-- BOTTOM SHEET -->
+                            <div class="bottom-sheet-overlay"></div>
+                            <div class="bottom-sheet">
+                                <div class="drag-indicator"></div>
+                                <div class="sheet-header">
+                                    <h2>Add financial information</h2>
+                                </div>
+                                <div class="sheet-body">
+                                    <!-- Primary Actions -->
+                                    <div class="progressive-primary">
+                                        <div class="progressive-card">
+                                            <div class="card-icon blue">🏦</div>
+                                            <div class="card-content">
+                                                <div class="card-title">Connect another account</div>
+                                                <div class="card-desc">See your complete financial picture</div>
+                                            </div>
+                                            <div style="color:var(--blue);font-size:16px">›</div>
+                                        </div>
+                                        <div class="progressive-card">
+                                            <div class="card-icon gray">✅</div>
+                                            <div class="card-content">
+                                                <div class="card-title">Review cash flow</div>
+                                                <div class="card-desc">Verify detected bills & income</div>
+                                            </div>
+                                            <div style="color:var(--text2);font-size:16px">›</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="show-more-link">Show more options</div>
+
+                                    <!-- Secondary Actions (Expanded) -->
+                                    <div class="collapsed-actions">
+                                        <div class="progressive-card" style="margin-bottom:6px">
+                                            <div class="card-icon green">💰</div>
+                                            <div class="card-content">
+                                                <div class="card-title">Add recurring income</div>
+                                            </div>
+                                            <div style="color:var(--text2);font-size:16px">›</div>
+                                        </div>
+                                        <div class="progressive-card" style="margin-bottom:6px">
+                                            <div class="card-icon amber">📄</div>
+                                            <div class="card-content">
+                                                <div class="card-title">Add recurring bill</div>
+                                            </div>
+                                            <div style="color:var(--text2);font-size:16px">›</div>
+                                        </div>
+                                        <div class="progressive-card">
+                                            <div class="card-icon red">📅</div>
+                                            <div class="card-content">
+                                                <div class="card-title">Add upcoming bill</div>
+                                            </div>
+                                            <div style="color:var(--text2);font-size:16px">›</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="phone-label">Concept 4 — Progressive Disclosure</div>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- SECTION 6: CONCEPT 5 — FINANCIAL ASSISTANT -->
+        <section id="concept-5" class="section">
+            <h1 class="section-title">Concept 5: Financial Assistant</h1>
+            <p class="section-subtitle">Conversational, guided experience. Feels like an intelligent financial assistant rather than a simple list.</p>
+
+            <div class="phone-container">
+                <div class="phone-wrapper">
+                    <div class="phone">
+                        <div class="phone-screen">
+                            <div class="status-bar">
+                                <span class="status-time">9:41</span>
+                                <div class="dynamic-island"></div>
+                                <div class="status-icons">
+                                    <span>📶</span>
+                                    <span>🔋</span>
+                                </div>
+                            </div>
+
+                            <div class="app-content">
+                                <div class="app-header">
+                                    <h1>Dashboard</h1>
+                                </div>
+                            </div>
+
+                            <div class="bottom-nav">
+                                <div class="nav-item active">
+                                    <div class="nav-icon">🏠</div>
+                                    Home
+                                </div>
+                                <div class="nav-item">
+                                    <div class="nav-icon">📊</div>
+                                    Insights
+                                </div>
+                                <div class="nav-item">
+                                    <div class="nav-icon">💳</div>
+                                    Accounts
+                                </div>
+                                <div class="nav-item">
+                                    <div class="nav-icon">⚙️</div>
+                                    Settings
+                                </div>
+                            </div>
+
+                            <!-- BOTTOM SHEET -->
+                            <div class="bottom-sheet-overlay"></div>
+                            <div class="bottom-sheet">
+                                <div class="drag-indicator"></div>
+                                <div class="sheet-header">
+                                    <h2>Hi James, what would you like to add?</h2>
+                                </div>
+                                <div class="sheet-body">
+                                    <!-- AI Greeting & Suggestion -->
+                                    <div class="assistant-greeting">
+                                        <div class="assistant-suggestion">
+                                            <p>I noticed you haven't connected your savings account yet. This would help me calculate your emergency fund coverage.</p>
+                                            <div class="cta">🏦 Connect savings account</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Action List -->
+                                    <div class="assistant-actions">
+                                        <div class="assistant-actions-title">Other actions</div>
+
+                                        <div class="assistant-action-row">
+                                            <div class="assistant-action-icon" style="background:var(--green-bg);color:var(--green)">💰</div>
+                                            <div class="assistant-action-content">
+                                                <div class="assistant-action-title">Add recurring income</div>
+                                                <div class="assistant-action-why">Why this matters →</div>
+                                            </div>
+                                            <div class="assistant-dismiss">✕</div>
+                                        </div>
+
+                                        <div class="assistant-action-row">
+                                            <div class="assistant-action-icon" style="background:var(--amber-bg);color:var(--amber)">📄</div>
+                                            <div class="assistant-action-content">
+                                                <div class="assistant-action-title">Add recurring bill</div>
+                                                <div class="assistant-action-why">Why this matters →</div>
+                                            </div>
+                                            <div class="assistant-dismiss">✕</div>
+                                        </div>
+
+                                        <div class="assistant-action-row">
+                                            <div class="assistant-action-icon" style="background:var(--red-bg);color:var(--red)">📅</div>
+                                            <div class="assistant-action-content">
+                                                <div class="assistant-action-title">Add upcoming bill</div>
+                                                <div class="assistant-action-why">Why this matters →</div>
+                                            </div>
+                                            <div class="assistant-dismiss">✕</div>
+                                        </div>
+
+                                        <div class="assistant-action-row">
+                                            <div class="assistant-action-icon" style="background:#f0f0f0;color:var(--text2)">✅</div>
+                                            <div class="assistant-action-content">
+                                                <div class="assistant-action-title">Review recurring bills & income</div>
+                                                <div class="assistant-action-why">Why this matters →</div>
+                                            </div>
+                                            <div class="assistant-dismiss">✕</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="phone-label">Concept 5 — Financial Assistant</div>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- SECTION 7: COMPARISON TABLE -->
+        <section id="comparison" class="section">
+            <h1 class="section-title">Comparison Table</h1>
+            <p class="section-subtitle">Side-by-side comparison across key design criteria.</p>
+
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Criteria</th>
+                        <th>Concept 1: Guided List</th>
+                        <th>Concept 2: Categories</th>
+                        <th>Concept 3: Action Cards</th>
+                        <th>Concept 4: Progressive</th>
+                        <th>Concept 5: Assistant</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Scanability</strong></td>
+                        <td>
+                            <div class="rating">
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="rating">
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="rating">
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot"></div>
+                                <div class="rating-dot"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="rating">
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="rating">
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot"></div>
+                                <div class="rating-dot"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Decision Speed</strong></td>
+                        <td>
+                            <div class="rating">
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="rating">
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot"></div>
+                                <div class="rating-dot"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="rating">
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="rating">
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="rating">
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot"></div>
+                                <div class="rating-dot"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Premium Feel</strong></td>
+                        <td>
+                            <div class="rating">
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot"></div>
+                                <div class="rating-dot"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="rating">
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="rating">
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="rating">
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="rating">
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>iOS Native</strong></td>
+                        <td>
+                            <div class="rating">
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="rating">
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="rating">
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot"></div>
+                                <div class="rating-dot"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="rating">
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="rating">
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot"></div>
+                                <div class="rating-dot"></div>
+                                <div class="rating-dot"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Scalability</strong></td>
+                        <td>
+                            <div class="rating">
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="rating">
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="rating">
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot"></div>
+                                <div class="rating-dot"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="rating">
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="rating">
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cognitive Load</strong></td>
+                        <td>
+                            <div class="rating">
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="rating">
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="rating">
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot"></div>
+                                <div class="rating-dot"></div>
+                                <div class="rating-dot"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="rating">
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="rating">
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Personalization</strong></td>
+                        <td>
+                            <div class="rating">
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot"></div>
+                                <div class="rating-dot"></div>
+                                <div class="rating-dot"></div>
+                                <div class="rating-dot"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="rating">
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot"></div>
+                                <div class="rating-dot"></div>
+                                <div class="rating-dot"></div>
+                                <div class="rating-dot"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="rating">
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot"></div>
+                                <div class="rating-dot"></div>
+                                <div class="rating-dot"></div>
+                                <div class="rating-dot"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="rating">
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot"></div>
+                                <div class="rating-dot"></div>
+                                <div class="rating-dot"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="rating">
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                                <div class="rating-dot filled"></div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- SECTION 8: RECOMMENDATION -->
+        <section id="recommendation" class="section">
+            <h1 class="section-title">Recommendation</h1>
+            <p class="section-subtitle">Which concept to use and when.</p>
+
+            <div class="recommendation-card">
+                <div class="recommendation-badge">Recommended</div>
+                <h3>Concept 1: Guided Action List</h3>
+                <p>
+                    For the initial release, we recommend <strong>Concept 1 (Guided Action List)</strong> as the primary implementation. It offers the best balance of scanability, iOS-native feel, and familiarity for users who are accustomed to Apple Settings and Apple Wallet patterns.
+                </p>
+                <p>
+                    The grouped list pattern is deeply ingrained in iOS users' mental models. It requires zero learning curve, supports rapid scanning, and scales gracefully as new actions are added. The section headers ("Accounts", "Cash Flow", "Add Manually") provide natural grouping without requiring an extra navigation step.
+                </p>
+                <p>
+                    Concept 2 (Financial Categories) is an excellent alternative if the action set grows beyond 7-8 items, as the 2-column grid prevents the list from becoming too long. Concept 5 (Financial Assistant) should be considered for premium or onboarding flows where personalization and delight are worth the added complexity.
+                </p>
+            </div>
+
+            <div class="use-cases">
+                <div class="use-case">
+                    <h4>Concept 1: Guided List</h4>
+                    <p>Best for: Quick actions, power users, minimal cognitive load. Use when users need to find and complete actions fast.</p>
+                </div>
+                <div class="use-case">
+                    <h4>Concept 2: Categories</h4>
+                    <p>Best for: Larger action sets (7+), new users who need orientation. Use when grouping reduces overwhelm.</p>
+                </div>
+                <div class="use-case">
+                    <h4>Concept 3: Action Cards</h4>
+                    <p>Best for: Premium positioning, feature launches. Use when you want actions to feel like products, not settings.</p>
+                </div>
+                <div class="use-case">
+                    <h4>Concept 4: Progressive</h4>
+                    <p>Best for: Complex flows with mixed importance. Use when you need to focus attention on the 2-3 most critical actions.</p>
+                </div>
+                <div class="use-case">
+                    <h4>Concept 5: Assistant</h4>
+                    <p>Best for: Onboarding, premium tier, high personalization. Use when the app's AI capabilities are a differentiator.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Sidebar active state
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Scroll spy
+        const sections = document.querySelectorAll('.section');
+        const sidebarItems = document.querySelectorAll('.sidebar-item');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            sidebarItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('href') === '#' + current) {
+                    item.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

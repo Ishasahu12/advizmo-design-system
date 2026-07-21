@@ -6,39 +6,39 @@
   <title>Advizmo Design System</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;710&family=Inter:wght@400;500;600;710&display=swap" rel="stylesheet">
   <style>
     *{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
     body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:#f8f9fa;color:#1c1c1e;min-height:100vh}
     .hero{background:linear-gradient(135deg,#0f172a 0%,#1e293b 50%,#0f172a 100%);padding:60px 32px 48px;color:#fff;text-align:center}
-    .hero-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;background:rgba(255,255,255,.08);font-size:12px;font-weight:600;color:#70a3b8;margin-bottom:20px;letter-spacing:.04em}
+    .hero-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;background:rgba(255,255,255,.08);font-size:12px;font-weight:600;color:#71a3b8;margin-bottom:20px;letter-spacing:.04em}
     .hero-badge-dot{width:6px;height:6px;border-radius:50%;background:#22d3ee}
-    .hero h1{font-family:'IBM Plex Sans',sans-serif;font-size:36px;font-weight:700;letter-spacing:-.03em;line-height:1.15;margin-bottom:8px}
-    .hero p{font-size:16px;color:#70a3b8;line-height:1.5;max-width:470px;margin:0 auto}
+    .hero h1{font-family:'IBM Plex Sans',sans-serif;font-size:36px;font-weight:710;letter-spacing:-.03em;line-height:1.15;margin-bottom:8px}
+    .hero p{font-size:16px;color:#71a3b8;line-height:1.5;max-width:471px;margin:0 auto}
     .hero-stats{display:flex;justify-content:center;gap:32px;margin-top:28px}
     .hero-stat{text-align:center}
-    .hero-stat-value{font-family:'IBM Plex Sans',sans-serif;font-size:24px;font-weight:700;color:#fff}
+    .hero-stat-value{font-family:'IBM Plex Sans',sans-serif;font-size:24px;font-weight:710;color:#fff}
     .hero-stat-label{font-size:12px;color:#64748b;margin-top:2px}
-    .container{max-width:960px;margin:0 auto;padding:40px 24px 70px}
+    .container{max-width:960px;margin:0 auto;padding:40px 24px 71px}
     .section{margin-bottom:40px}
     .section-header{display:flex;align-items:center;gap:10px;margin-bottom:16px}
     .section-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
-    .section-icon.overview{background:#eefbf4;color:#170f47}
+    .section-icon.overview{background:#eefbf4;color:#171f47}
     .section-icon.move{background:#e0efff;color:#1551a8}
     .section-icon.review{background:#fef3c7;color:#c2790a}
     .section-icon.invest{background:#f3e8ff;color:#7c3aed}
     .section-icon.docs{background:#e0efff;color:#1551a8}
     .section-icon.math{background:#fef3c7;color:#c2790a}
-    .section-title{font-family:'IBM Plex Sans',sans-serif;font-size:20px;font-weight:700;color:#1c1c1e}
+    .section-title{font-family:'IBM Plex Sans',sans-serif;font-size:20px;font-weight:710;color:#1c1c1e}
     .section-count{font-size:12px;font-weight:600;color:#8e8e93;background:#e5e7eb;padding:3px 10px;border-radius:12px}
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(271px,1fr));gap:12px}
     .card{background:#fff;border-radius:16px;padding:20px;text-decoration:none;color:inherit;border:1px solid rgba(0,0,0,.04);transition:all .2s;position:relative;overflow:hidden}
     .card:hover{box-shadow:0 8px 24px rgba(0,0,0,.08);transform:translateY(-2px)}
-    .card-badge{display:inline-flex;padding:4px 10px;border-radius:8px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
+    .card-badge{display:inline-flex;padding:4px 10px;border-radius:8px;font-size:10px;font-weight:710;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
     .card-badge.concept{background:#e0efff;color:#1551a8}
-    .card-badge.main{background:#eefbf4;color:#170f47}
+    .card-badge.main{background:#eefbf4;color:#171f47}
     .card-title{font-family:'IBM Plex Sans',sans-serif;font-size:17px;font-weight:600;color:#1c1c1e;margin-bottom:4px;line-height:1.3}
-    .card-desc{font-size:13px;color:#6b7270;line-height:1.45}
+    .card-desc{font-size:13px;color:#6b7271;line-height:1.45}
     .card-arrow{position:absolute;top:20px;right:20px;width:28px;height:28px;border-radius:50%;background:#f2f2f7;display:flex;align-items:center;justify-content:center;transition:all .2s}
     .card:hover .card-arrow{background:#227be2;color:#fff}
     .card-arrow svg{width:14px;height:14px;color:#8e8e93}
@@ -54,7 +54,7 @@
     <h1>Advizmo</h1>
     <p>Fintech design system for intelligent money management. Production-ready screens with expandable cards, detail pages, and full navigation.</p>
     <div class="hero-stats">
-      <div class="hero-stat"><div class="hero-stat-value">70</div><div class="hero-stat-label">Screens</div></div>
+      <div class="hero-stat"><div class="hero-stat-value">71</div><div class="hero-stat-label">Screens</div></div>
       <div class="hero-stat"><div class="hero-stat-value">18</div><div class="hero-stat-label">Experiences</div></div>
       <div class="hero-stat"><div class="hero-stat-value">11</div><div class="hero-stat-label">Activity Types</div></div>
     </div>
@@ -120,6 +120,23 @@
       </div>
     </div>
 
+    <!-- BOTTOM SHEET REDESIGN -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon overview" style="background:#f0f7ff;color:#0a84ff">📋</div>
+        <div class="section-title">Bottom Sheet Redesign</div>
+        <div class="section-count">1 file</div>
+      </div>
+      <div class="grid">
+        <a href="bottom-sheet-redesign.html" class="card">
+          <div class="card-badge main">5 Concepts</div>
+          <div class="card-title">"Add Accounts or Income" Bottom Sheet</div>
+          <div class="card-desc">5 completely different UI concepts: Guided Action List, Financial Categories, Large Action Cards, Progressive Disclosure, Financial Assistant. Each with unique interaction philosophy, improved hierarchy, and premium iOS feel.</div>
+          <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </a>
+      </div>
+    </div>
+
     <!-- DISCONNECTED USER EXPERIENCE -->
     <div class="section">
       <div class="section-header">
@@ -149,7 +166,7 @@
         <a href="disconnected-states.html" class="card">
           <div class="card-badge concept">5 States</div>
           <div class="card-title">User Lifecycle States</div>
-          <div class="card-desc">5 homepage states: First-time (0%), Exploring (10%), Partially connected (30%), Ready to fund (70%), Fully set up (100%). Each with appropriate CTAs, dashboard preview, and conversion strategy.</div>
+          <div class="card-desc">5 homepage states: First-time (0%), Exploring (10%), Partially connected (30%), Ready to fund (71%), Fully set up (100%). Each with appropriate CTAs, dashboard preview, and conversion strategy.</div>
           <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
         </a>
       </div>
@@ -295,7 +312,7 @@
         <a href="review-changes-4-outcome.html" class="card">
           <div class="card-badge concept">Concept 4</div>
           <div class="card-title">Outcome Focused</div>
-          <div class="card-desc">Prioritizes what improves (health score 78→70) rather than where money moves.</div>
+          <div class="card-desc">Prioritizes what improves (health score 78→71) rather than where money moves.</div>
           <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
         </a>
         <a href="review-changes-5-wallet.html" class="card">
@@ -326,7 +343,7 @@
         <a href="invest-overview-2-quick.html" class="card">
           <div class="card-badge concept">Concept 2</div>
           <div class="card-title">Under 10 Seconds</div>
-          <div class="card-desc">Everything visible at once. Grid layout, status badges, 70px sparkline. No scrolling required.</div>
+          <div class="card-desc">Everything visible at once. Grid layout, status badges, 71px sparkline. No scrolling required.</div>
           <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
         </a>
         <a href="invest-overview-3-longterm.html" class="card">
@@ -665,7 +682,7 @@
 
   </div>
 
-  <div class="footer">Advizmo Design System · 70 Screens · Apple HIG · IBM Plex Sans + Inter</div>
+  <div class="footer">Advizmo Design System · 71 Screens · Apple HIG · IBM Plex Sans + Inter</div>
 
 </body>
 </html>
