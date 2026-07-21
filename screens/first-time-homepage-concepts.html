@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advizmo - First-Time Homepage Concepts</title>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f2f2f7;
+            --card: #fff;
+            --text: #1c1c1e;
+            --text2: #8e8e93;
+            --border: rgba(0,0,0,.06);
+            --blue: #0a84ff;
+            --green: #166f47;
+            --green-bg: #e8f8ec;
+            --amber: #c2790a;
+            --amber-bg: #fff5e6;
+            --red: #b91c1c;
+            --red-bg: #ffe8e8;
+            --sidebar-bg: #1c1c1e;
+            --sidebar-text: #e5e5ea;
+            --sidebar-active: #0a84ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #1a1a1a;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 260px;
+            background: var(--sidebar-bg);
+            color: var(--sidebar-text);
+            padding: 24px 16px;
+            flex-shrink: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            overflow-y: auto;
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 32px;
+            padding: 0 8px;
+        }
+
+        .sidebar-logo-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--blue);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar-logo-icon svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
+
+        .sidebar-logo-text {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-weight: 600;
+            font-size: 18px;
+            color: #fff;
+        }
+
+        .sidebar-section {
+            margin-bottom: 24px;
+        }
+
+        .sidebar-section-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #636366;
+            padding: 0 8px;
+            margin-bottom: 8px;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 8px;
+            border-radius: 8px;
+            color: var(--sidebar-text);
+            text-decoration: none;
+            font-size: 14px;
+            transition: background 0.15s;
+        }
+
+        .sidebar-item:hover {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .sidebar-item.active {
+            background: rgba(10, 132, 255, 0.15);
+            color: var(--sidebar-active);
+        }
+
+        .sidebar-item svg {
+            width: 18px;
+            height: 18px;
+            opacity: 0.7;
+        }
+
+        .sidebar-item.active svg {
+            opacity: 1;
+        }
+
+        /* Main Content */
+        .main {
+            margin-left: 260px;
+            flex: 1;
+            padding: 40px;
+        }
+
+        .page-header {
+            margin-bottom: 40px;
+        }
+
+        .page-header h1 {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .page-header p {
+            color: #8e8e93;
+            font-size: 15px;
+        }
+
+        .concepts-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 280px);
+            gap: 32px;
+            justify-content: start;
+        }
+
+        /* Phone Mockup */
+        .concept-card {
+            background: #2a2a2a;
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .concept-label {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .concept-sublabel {
+            font-size: 12px;
+            color: #8e8e93;
+            margin-bottom: 16px;
+        }
+
+        .phone {
+            width: 240px;
+            height: 504px;
+            background: var(--bg);
+            border-radius: 28px;
+            overflow: hidden;
+            position: relative;
+            margin: 0 auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        .phone-status-bar {
+            height: 44px;
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .phone-time {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-weight: 600;
+        }
+
+        .dynamic-island {
+            width: 80px;
+            height: 22px;
+            background: #000;
+            border-radius: 12px;
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .phone-icons {
+            display: flex;
+            gap: 4px;
+        }
+
+        .phone-icons svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .phone-content {
+            height: calc(100% - 44px);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 0 12px;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .nav-item svg {
+            width: 20px;
+            height: 20px;
+            color: var(--text2);
+        }
+
+        .nav-item.active svg {
+            color: var(--blue);
+        }
+
+        .nav-item span {
+            font-size: 9px;
+            color: var(--text2);
+        }
+
+        .nav-item.active span {
+            color: var(--blue);
+        }
+
+        /* ====================== */
+        /* CONCEPT 1: Hero-First  */
+        /* ====================== */
+        .hero-first .hero-section {
+            background: linear-gradient(135deg, #e8f4fd 0%, #f0f7ff 100%);
+            padding: 20px 16px 24px;
+            text-align: center;
+        }
+
+        .hero-first .hero-title {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1.3;
+            margin-bottom: 8px;
+        }
+
+        .hero-first .hero-subtitle {
+            font-size: 13px;
+            color: var(--text2);
+            margin-bottom: 16px;
+            line-height: 1.4;
+        }
+
+        .hero-first .hero-cta {
+            width: 100%;
+            padding: 12px 20px;
+            background: var(--blue);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .hero-first .social-proof {
+            padding: 16px;
+            background: var(--card);
+            margin: 0 12px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: -8px;
+        }
+
+        .hero-first .trust-text {
+            font-size: 12px;
+            color: var(--text2);
+            margin-bottom: 8px;
+        }
+
+        .hero-first .rating {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+
+        .hero-first .stars {
+            color: #ffb800;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        .hero-first .rating-text {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .hero-first .avatar-stack {
+            display: flex;
+            justify-content: center;
+            margin-top: 8px;
+        }
+
+        .hero-first .avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            margin-left: -8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .hero-first .avatar:nth-child(1) { background: #0a84ff; margin-left: 0; }
+        .hero-first .avatar:nth-child(2) { background: #34c759; }
+        .hero-first .avatar:nth-child(3) { background: #ff9500; }
+        .hero-first .avatar:nth-child(4) { background: #af52de; }
+
+        .hero-first .value-cards {
+            padding: 16px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .hero-first .value-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--card);
+            border-radius: 10px;
+            padding: 12px;
+        }
+
+        .hero-first .value-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .hero-first .value-icon.green { background: var(--green-bg); color: var(--green); }
+        .hero-first .value-icon.blue { background: #e8f4fd; color: var(--blue); }
+        .hero-first .value-icon.amber { background: var(--amber-bg); color: var(--amber); }
+
+        .hero-first .value-icon svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .hero-first .value-text {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        /* ========================= */
+        /* CONCEPT 2: Trust-Builder   */
+        /* ========================= */
+        .trust-builder .security-hero {
+            padding: 24px 16px;
+            text-align: center;
+        }
+
+        .trust-builder .shield-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--green-bg);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+        }
+
+        .trust-builder .shield-icon svg {
+            width: 28px;
+            height: 28px;
+            color: var(--green);
+        }
+
+        .trust-builder .security-title {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .trust-builder .security-subtitle {
+            font-size: 13px;
+            color: var(--text2);
+            line-height: 1.4;
+        }
+
+        .trust-builder .badges-row {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            padding: 12px;
+            flex-wrap: wrap;
+        }
+
+        .trust-builder .badge {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--card);
+            padding: 6px 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            font-size: 10px;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .trust-builder .badge svg {
+            width: 12px;
+            height: 12px;
+            color: var(--green);
+        }
+
+        .trust-builder .steps {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex: 1;
+        }
+
+        .trust-builder .step {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--card);
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+        .trust-builder .step.active {
+            border-color: var(--blue);
+            background: #f0f7ff;
+        }
+
+        .trust-builder .step-number {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 600;
+            flex-shrink: 0;
+            background: #e5e5ea;
+            color: var(--text2);
+        }
+
+        .trust-builder .step.active .step-number {
+            background: var(--blue);
+            color: #fff;
+        }
+
+        .trust-builder .step-text {
+            font-size: 12px;
+            color: var(--text2);
+        }
+
+        .trust-builder .step.active .step-text {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .trust-builder .cta-section {
+            padding: 12px 16px;
+        }
+
+        .trust-builder .cta-button {
+            width: 100%;
+            padding: 12px 20px;
+            background: var(--blue);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* ====================== */
+        /* CONCEPT 3: Benefit-Led */
+        /* ====================== */
+        .benefit-led .header-section {
+            padding: 16px;
+        }
+
+        .benefit-led .section-title {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 12px;
+        }
+
+        .benefit-led .comparison-card {
+            background: var(--card);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .benefit-led .compare-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 14px;
+        }
+
+        .benefit-led .compare-row:first-child {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .benefit-led .compare-label {
+            font-size: 11px;
+            color: var(--text2);
+        }
+
+        .benefit-led .compare-row .before {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--red);
+        }
+
+        .benefit-led .compare-row .after {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--green);
+        }
+
+        .benefit-led .benefits-grid {
+            padding: 12px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .benefit-led .benefit-item {
+            background: var(--card);
+            border-radius: 10px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .benefit-led .benefit-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .benefit-led .benefit-icon.blue { background: #e8f4fd; color: var(--blue); }
+        .benefit-led .benefit-icon.green { background: var(--green-bg); color: var(--green); }
+        .benefit-led .benefit-icon.amber { background: var(--amber-bg); color: var(--amber); }
+        .benefit-led .benefit-icon.purple { background: #f3e8fd; color: #af52de; }
+
+        .benefit-led .benefit-icon svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .benefit-led .benefit-text {
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--text);
+            line-height: 1.3;
+        }
+
+        .benefit-led .cta-section {
+            padding: 12px 16px;
+        }
+
+        .benefit-led .cta-button {
+            width: 100%;
+            padding: 12px 20px;
+            background: var(--blue);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* ====================== */
+        /* CONCEPT 4: Guided Tour */
+        /* ====================== */
+        .guided-tour .tour-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 16px;
+        }
+
+        .guided-tour .tour-cards {
+            flex: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .guided-tour .tour-card {
+            width: 100%;
+            background: var(--card);
+            border-radius: 16px;
+            padding: 24px 20px;
+            text-align: center;
+            position: absolute;
+            transition: all 0.3s;
+        }
+
+        .guided-tour .tour-card.active {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .guided-tour .tour-card:not(.active) {
+            transform: scale(0.9);
+            opacity: 0.3;
+        }
+
+        .guided-tour .tour-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            background: #e8f4fd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+        }
+
+        .guided-tour .tour-icon svg {
+            width: 28px;
+            height: 28px;
+            color: var(--blue);
+        }
+
+        .guided-tour .tour-card-title {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .guided-tour .tour-card-desc {
+            font-size: 13px;
+            color: var(--text2);
+            line-height: 1.4;
+        }
+
+        .guided-tour .dot-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 16px;
+        }
+
+        .guided-tour .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #d1d1d6;
+        }
+
+        .guided-tour .dot.active {
+            background: var(--blue);
+            width: 20px;
+            border-radius: 4px;
+        }
+
+        .guided-tour .skip-link {
+            text-align: center;
+            margin-top: 12px;
+            font-size: 12px;
+            color: var(--text2);
+        }
+
+        .guided-tour .progress-text {
+            text-align: center;
+            font-size: 11px;
+            color: var(--text2);
+            margin-bottom: 8px;
+        }
+
+        .guided-tour .cta-section {
+            padding: 0 16px 16px;
+        }
+
+        .guided-tour .cta-button {
+            width: 100%;
+            padding: 12px 20px;
+            background: var(--blue);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* ====================== */
+        /* CONCEPT 5: Minimalist   */
+        /* ====================== */
+        .minimalist .minimalist-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 32px 20px;
+            text-align: center;
+        }
+
+        .minimalist .logo-mark {
+            width: 64px;
+            height: 64px;
+            background: var(--blue);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .minimalist .logo-mark svg {
+            width: 36px;
+            height: 36px;
+            fill: white;
+        }
+
+        .minimalist .welcome-title {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .minimalist .welcome-subtitle {
+            font-size: 14px;
+            color: var(--text2);
+            margin-bottom: 24px;
+        }
+
+        .minimalist .cta-button {
+            width: 100%;
+            padding: 14px 20px;
+            background: var(--blue);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 16px;
+        }
+
+        .minimalist .learn-more {
+            font-size: 13px;
+            color: var(--blue);
+            text-decoration: none;
+        }
+
+        /* Recommendation Section */
+        .recommendation {
+            margin-top: 48px;
+            background: #2a2a2a;
+            border-radius: 16px;
+            padding: 32px;
+            border: 1px solid rgba(255,255,255,0.06);
+            max-width: 900px;
+        }
+
+        .recommendation h2 {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .recommendation h2 .trophy {
+            font-size: 24px;
+        }
+
+        .recommendation .winner-card {
+            background: linear-gradient(135deg, rgba(10,132,255,0.15) 0%, rgba(10,132,255,0.05) 100%);
+            border: 1px solid rgba(10,132,255,0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .recommendation .winner-title {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--blue);
+            margin-bottom: 12px;
+        }
+
+        .recommendation .reasons {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .recommendation .reasons li {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            font-size: 14px;
+            color: #e5e5ea;
+            line-height: 1.5;
+        }
+
+        .recommendation .reasons li .check {
+            color: var(--blue);
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .recommendation .ranking {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+
+        .recommendation .rank-item {
+            background: #1c1c1e;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .recommendation .rank-number {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .recommendation .rank-label {
+            font-size: 11px;
+            color: #8e8e93;
+        }
+
+        .recommendation .rank-item.first {
+            background: rgba(10,132,255,0.2);
+            border: 1px solid rgba(10,132,255,0.4);
+        }
+
+        .recommendation .rank-item.first .rank-number {
+            color: var(--blue);
+        }
+
+        .recommendation .next-steps {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .recommendation .next-steps h3 {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+
+        .recommendation .next-steps ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .recommendation .next-steps li {
+            font-size: 13px;
+            color: #8e8e93;
+            padding-left: 16px;
+            position: relative;
+        }
+
+        .recommendation .next-steps li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--blue);
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            </div>
+            <span class="sidebar-logo-text">Advizmo</span>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">Design System</div>
+            <a href="#" class="sidebar-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg>
+                Tokens
+            </a>
+            <a href="#" class="sidebar-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                Typography
+            </a>
+            <a href="#" class="sidebar-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                Components
+            </a>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">Screens</div>
+            <a href="#" class="sidebar-item active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+                First-Time Homepage
+            </a>
+            <a href="#" class="sidebar-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+                Dashboard
+            </a>
+            <a href="#" class="sidebar-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+                Profile
+            </a>
+            <a href="#" class="sidebar-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+                Settings
+            </a>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">Concepts</div>
+            <a href="#concept1" class="sidebar-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                Hero-First
+            </a>
+            <a href="#concept2" class="sidebar-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Trust-Builder
+            </a>
+            <a href="#concept3" class="sidebar-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                Benefit-Led
+            </a>
+            <a href="#concept4" class="sidebar-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                Guided Tour
+            </a>
+            <a href="#concept5" class="sidebar-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.24 12.24a6 6 0 00-8.49-8.49L5 10.5V19h8.5z"/></svg>
+                Minimalist
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="page-header">
+            <h1>First-Time Homepage Concepts</h1>
+            <p>5 homepage redesign concepts for new users who haven't connected any accounts yet</p>
+        </div>
+
+        <div class="concepts-grid">
+
+            <!-- ====================== -->
+            <!-- CONCEPT 1: Hero-First  -->
+            <!-- ====================== -->
+            <div class="concept-card" id="concept1">
+                <div class="concept-label">Concept 1: Hero-First</div>
+                <div class="concept-sublabel">Emotional hook + social proof</div>
+                <div class="phone hero-first">
+                    <div class="phone-status-bar">
+                        <span class="phone-time">9:41</span>
+                        <div class="dynamic-island"></div>
+                        <div class="phone-icons">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+                        </div>
+                    </div>
+                    <div class="phone-content">
+                        <div class="hero-section">
+                            <div class="hero-title">Your money deserves better</div>
+                            <div class="hero-subtitle">Let Advizmo put your idle cash to work</div>
+                            <button class="hero-cta">Connect your first account</button>
+                        </div>
+
+                        <div class="social-proof">
+                            <div class="trust-text">Trusted by 50,000+ users</div>
+                            <div class="rating">
+                                <span class="stars">★★★★★</span>
+                                <span class="rating-text">4.8/5</span>
+                            </div>
+                            <div class="avatar-stack">
+                                <div class="avatar">J</div>
+                                <div class="avatar">M</div>
+                                <div class="avatar">K</div>
+                                <div class="avatar">+</div>
+                            </div>
+                        </div>
+
+                        <div class="value-cards">
+                            <div class="value-card">
+                                <div class="value-icon green">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                                </div>
+                                <div class="value-text">Earn up to 5.0% APY on idle cash</div>
+                            </div>
+                            <div class="value-card">
+                                <div class="value-icon blue">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                                </div>
+                                <div class="value-text">Automated investing with smart algorithms</div>
+                            </div>
+                            <div class="value-card">
+                                <div class="value-icon amber">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 8l-8 8M8 8l8 8"/></svg>
+                                </div>
+                                <div class="value-text">No hidden fees, ever. Transparent pricing.</div>
+                            </div>
+                        </div>
+
+                        <div class="bottom-nav">
+                            <div class="nav-item active">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+                                <span>Home</span>
+                            </div>
+                            <div class="nav-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+                                <span>Accounts</span>
+                            </div>
+                            <div class="nav-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                                <span>Invest</span>
+                            </div>
+                            <div class="nav-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.24 12.24a6 6 0 00-8.49-8.49L5 10.5V19h8.5z"/></svg>
+                                <span>Profile</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================= -->
+            <!-- CONCEPT 2: Trust-Builder   -->
+            <!-- ========================= -->
+            <div class="concept-card" id="concept2">
+                <div class="concept-label">Concept 2: Trust-Builder</div>
+                <div class="concept-sublabel">Security-first messaging</div>
+                <div class="phone trust-builder">
+                    <div class="phone-status-bar">
+                        <span class="phone-time">9:41</span>
+                        <div class="dynamic-island"></div>
+                        <div class="phone-icons">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+                        </div>
+                    </div>
+                    <div class="phone-content">
+                        <div class="security-hero">
+                            <div class="shield-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                            </div>
+                            <div class="security-title">Your money is safe</div>
+                            <div class="security-subtitle">Bank-level encryption protects every transaction</div>
+                        </div>
+
+                        <div class="badges-row">
+                            <div class="badge">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                                FDIC Insured
+                            </div>
+                            <div class="badge">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                                256-bit encryption
+                            </div>
+                            <div class="badge">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                SOC 2 certified
+                            </div>
+                        </div>
+
+                        <div class="steps">
+                            <div class="step active">
+                                <div class="step-number">1</div>
+                                <div class="step-text">Connect account</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">2</div>
+                                <div class="step-text">Review cash flow</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">3</div>
+                                <div class="step-text">Set targets</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">4</div>
+                                <div class="step-text">Start investing</div>
+                            </div>
+                        </div>
+
+                        <div class="cta-section">
+                            <button class="cta-button">Connect your first account</button>
+                        </div>
+
+                        <div class="bottom-nav">
+                            <div class="nav-item active">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+                                <span>Home</span>
+                            </div>
+                            <div class="nav-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+                                <span>Accounts</span>
+                            </div>
+                            <div class="nav-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                                <span>Invest</span>
+                            </div>
+                            <div class="nav-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.24 12.24a6 6 0 00-8.49-8.49L5 10.5V19h8.5z"/></svg>
+                                <span>Profile</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ====================== -->
+            <!-- CONCEPT 3: Benefit-Led -->
+            <!-- ====================== -->
+            <div class="concept-card" id="concept3">
+                <div class="concept-label">Concept 3: Benefit-Led</div>
+                <div class="concept-sublabel">Value-driven conversion</div>
+                <div class="phone benefit-led">
+                    <div class="phone-status-bar">
+                        <span class="phone-time">9:41</span>
+                        <div class="dynamic-island"></div>
+                        <div class="phone-icons">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+                        </div>
+                    </div>
+                    <div class="phone-content">
+                        <div class="header-section">
+                            <div class="section-title">What you'll get</div>
+                            <div class="comparison-card">
+                                <div class="compare-row">
+                                    <span class="compare-label">Checking account</span>
+                                    <span class="before">$0.01/year</span>
+                                </div>
+                                <div class="compare-row">
+                                    <span class="compare-label">With Advizmo</span>
+                                    <span class="after">$500/year</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="benefits-grid">
+                            <div class="benefit-item">
+                                <div class="benefit-icon blue">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path d="M9 12l2 2 4-4"/></svg>
+                                </div>
+                                <div class="benefit-text">See all your money in one place</div>
+                            </div>
+                            <div class="benefit-item">
+                                <div class="benefit-icon green">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                                </div>
+                                <div class="benefit-text">Know exactly what you can invest</div>
+                            </div>
+                            <div class="benefit-item">
+                                <div class="benefit-icon amber">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                                </div>
+                                <div class="benefit-text">Automatically grow your wealth</div>
+                            </div>
+                            <div class="benefit-item">
+                                <div class="benefit-icon purple">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                                </div>
+                                <div class="benefit-text">Never miss a bill or opportunity</div>
+                            </div>
+                        </div>
+
+                        <div class="cta-section">
+                            <button class="cta-button">Get started</button>
+                        </div>
+
+                        <div class="bottom-nav">
+                            <div class="nav-item active">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+                                <span>Home</span>
+                            </div>
+                            <div class="nav-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+                                <span>Accounts</span>
+                            </div>
+                            <div class="nav-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                                <span>Invest</span>
+                            </div>
+                            <div class="nav-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.24 12.24a6 6 0 00-8.49-8.49L5 10.5V19h8.5z"/></svg>
+                                <span>Profile</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ====================== -->
+            <!-- CONCEPT 4: Guided Tour -->
+            <!-- ====================== -->
+            <div class="concept-card" id="concept4">
+                <div class="concept-label">Concept 4: Guided Tour</div>
+                <div class="concept-sublabel">Interactive onboarding</div>
+                <div class="phone guided-tour">
+                    <div class="phone-status-bar">
+                        <span class="phone-time">9:41</span>
+                        <div class="dynamic-island"></div>
+                        <div class="phone-icons">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+                        </div>
+                    </div>
+                    <div class="phone-content">
+                        <div class="tour-content">
+                            <div class="tour-cards">
+                                <div class="tour-card active">
+                                    <div class="tour-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+                                    </div>
+                                    <div class="tour-card-title">Connect</div>
+                                    <div class="tour-card-desc">Link your bank accounts in seconds with secure Plaid integration</div>
+                                </div>
+                            </div>
+                            <div class="dot-indicators">
+                                <div class="dot active"></div>
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                            </div>
+                            <div class="skip-link">Skip tour</div>
+                        </div>
+
+                        <div class="progress-text">Step 1 of 3</div>
+                        <div class="cta-section">
+                            <button class="cta-button">Start now</button>
+                        </div>
+
+                        <div class="bottom-nav">
+                            <div class="nav-item active">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+                                <span>Home</span>
+                            </div>
+                            <div class="nav-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+                                <span>Accounts</span>
+                            </div>
+                            <div class="nav-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                                <span>Invest</span>
+                            </div>
+                            <div class="nav-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.24 12.24a6 6 0 00-8.49-8.49L5 10.5V19h8.5z"/></svg>
+                                <span>Profile</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ====================== -->
+            <!-- CONCEPT 5: Minimalist   -->
+            <!-- ====================== -->
+            <div class="concept-card" id="concept5">
+                <div class="concept-label">Concept 5: Minimalist</div>
+                <div class="concept-sublabel">Zero-distraction focus</div>
+                <div class="phone minimalist">
+                    <div class="phone-status-bar">
+                        <span class="phone-time">9:41</span>
+                        <div class="dynamic-island"></div>
+                        <div class="phone-icons">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+                        </div>
+                    </div>
+                    <div class="phone-content">
+                        <div class="minimalist-content">
+                            <div class="logo-mark">
+                                <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                            </div>
+                            <div class="welcome-title">Welcome</div>
+                            <div class="welcome-subtitle">Start growing your money today</div>
+                            <button class="cta-button">Connect your first account</button>
+                            <a href="#" class="learn-more">Learn more</a>
+                        </div>
+
+                        <div class="bottom-nav">
+                            <div class="nav-item active">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+                                <span>Home</span>
+                            </div>
+                            <div class="nav-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+                                <span>Accounts</span>
+                            </div>
+                            <div class="nav-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                                <span>Invest</span>
+                            </div>
+                            <div class="nav-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.24 12.24a6 6 0 00-8.49-8.49L5 10.5V19h8.5z"/></svg>
+                                <span>Profile</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Recommendation Section -->
+        <div class="recommendation">
+            <h2><span class="trophy">🏆</span> Recommendation</h2>
+            
+            <div class="winner-card">
+                <div class="winner-title">Winner: Concept 1 — Hero-First</div>
+                <ul class="reasons">
+                    <li>
+                        <span class="check">✓</span>
+                        <span>Emotional headline ("Your money deserves better") creates immediate engagement and personal connection</span>
+                    </li>
+                    <li>
+                        <span class="check">✓</span>
+                        <span>Social proof (50K users, 4.8/5 rating, avatar stack) builds trust through proven adoption</span>
+                    </li>
+                    <li>
+                        <span class="check">✓</span>
+                        <span>Three value proposition cards quickly communicate key benefits without overwhelming users</span>
+                    </li>
+                    <li>
+                        <span class="check">✓</span>
+                        <span>Balances emotional appeal with practical information — users feel excited AND informed</span>
+                    </li>
+                    <li>
+                        <span class="check">✓</span>
+                        <span>Follows Apple HIG with clear visual hierarchy, proper spacing, and familiar iOS patterns</span>
+                    </li>
+                    <li>
+                        <span class="check">✓</span>
+                        <span>Single clear CTA reduces decision fatigue while providing enough context to motivate action</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="ranking">
+                <div class="rank-item first">
+                    <div class="rank-number">#1</div>
+                    <div class="rank-label">Hero-First</div>
+                </div>
+                <div class="rank-item">
+                    <div class="rank-number">#2</div>
+                    <div class="rank-label">Trust-Builder</div>
+                </div>
+                <div class="rank-item">
+                    <div class="rank-number">#3</div>
+                    <div class="rank-label">Benefit-Led</div>
+                </div>
+                <div class="rank-item">
+                    <div class="rank-number">#4</div>
+                    <div class="rank-label">Guided Tour</div>
+                </div>
+                <div class="rank-item">
+                    <div class="rank-number">#5</div>
+                    <div class="rank-label">Minimalist</div>
+                </div>
+            </div>
+
+            <div class="next-steps">
+                <h3>Why the others rank where they do:</h3>
+                <ul>
+                    <li><strong>Trust-Builder (#2)</strong> — Strong for security-conscious users but may feel too cautious; reduces excitement</li>
+                    <li><strong>Benefit-Led (#3)</strong> — Great value clarity but the before/after comparison can feel salesy for a fintech app</li>
+                    <li><strong>Guided Tour (#4)</strong> — Good for complex products but adds friction; users want to see value before committing to a tour</li>
+                    <li><strong>Minimalist (#5)</strong> — Too sparse for a fintech app; lacks the trust signals and context needed for financial decisions</li>
+                </ul>
+            </div>
+
+            <div class="next-steps">
+                <h3>Recommended implementation:</h3>
+                <ul>
+                    <li>Start with Concept 1 (Hero-First) as the primary experience</li>
+                    <li>Integrate security badges from Concept 2 below the fold or in a secondary section</li>
+                    <li>Use the benefit comparison from Concept 3 as an expandable "See how it works" section</li>
+                    <li>Consider Concept 4's guided tour as an optional onboarding flow after first connection</li>
+                    <li>Run A/B tests measuring time-to-first-connection and 7-day retention across variants</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

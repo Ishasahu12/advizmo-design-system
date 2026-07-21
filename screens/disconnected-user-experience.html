@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advizmo - Disconnected User Experience Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f2f2f7;
+    --card: #ffffff;
+    --text: #1c1c1e;
+    --text2: #8e8e93;
+    --border: rgba(0,0,0,0.06);
+    --blue: #0a84ff;
+    --green: #166f47;
+    --green-bg: #e8f8ec;
+    --amber: #c2790a;
+    --amber-bg: #fff5e6;
+    --red: #b91c1c;
+    --red-bg: #ffe8e8;
+    --sidebar-bg: #1c1c1e;
+    --sidebar-text: #e5e5e7;
+    --sidebar-hover: #2c2c2e;
+    --sidebar-active: #0a84ff;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --radius-xs: 6px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+    --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+    --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    --font-heading: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--font-body); background: var(--bg); color: var(--text); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  .layout { display: flex; min-height: 100vh; }
+  .sidebar { width: 280px; min-width: 280px; background: var(--sidebar-bg); color: var(--sidebar-text); padding: 32px 0; position: fixed; top: 0; left: 0; bottom: 0; overflow-y: auto; z-index: 100; display: flex; flex-direction: column; }
+  .sidebar-brand { padding: 0 24px 32px; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 24px; }
+  .sidebar-brand h2 { font-family: var(--font-heading); font-size: 18px; font-weight: 700; color: #fff; letter-spacing: -0.3px; }
+  .sidebar-brand span { font-size: 12px; color: var(--text2); display: block; margin-top: 4px; }
+  .sidebar-section { padding: 0 16px; margin-bottom: 24px; }
+  .sidebar-section-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text2); padding: 0 8px; margin-bottom: 8px; }
+  .sidebar-nav { list-style: none; }
+  .sidebar-nav li a { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: var(--radius-sm); color: var(--sidebar-text); text-decoration: none; font-size: 13.5px; font-weight: 500; transition: all var(--transition); margin-bottom: 2px; }
+  .sidebar-nav li a:hover { background: var(--sidebar-hover); color: #fff; }
+  .sidebar-nav li a.active { background: rgba(10,132,255,0.15); color: var(--sidebar-active); }
+  .sidebar-nav li a .nav-icon { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+  .sidebar-nav li a .nav-badge { margin-left: auto; font-size: 11px; padding: 2px 7px; border-radius: 10px; background: rgba(255,255,255,0.08); color: var(--text2); }
+  .sidebar-footer { margin-top: auto; padding: 24px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 11px; color: var(--text2); }
+  .main-content { margin-left: 280px; flex: 1; min-width: 0; }
+  .page-header { background: var(--card); border-bottom: 1px solid var(--border); padding: 32px 48px; position: sticky; top: 0; z-index: 50; }
+  .page-header h1 { font-family: var(--font-heading); font-size: 28px; font-weight: 700; color: var(--text); letter-spacing: -0.5px; }
+  .page-header p { font-size: 15px; color: var(--text2); margin-top: 6px; max-width: 600px; }
+  .content { padding: 40px 48px 80px; }
+  .section { margin-bottom: 64px; scroll-margin-top: 100px; }
+  .section-header { margin-bottom: 32px; }
+  .section-header h2 { font-family: var(--font-heading); font-size: 22px; font-weight: 700; color: var(--text); letter-spacing: -0.3px; }
+  .section-header p { font-size: 14px; color: var(--text2); margin-top: 6px; max-width: 560px; }
+  .tag { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .tag-blue { background: rgba(10,132,255,0.1); color: var(--blue); }
+  .tag-green { background: var(--green-bg); color: var(--green); }
+  .tag-amber { background: var(--amber-bg); color: var(--amber); }
+  .tag-red { background: var(--red-bg); color: var(--red); }
+  .card { background: var(--card); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); transition: box-shadow var(--transition), transform var(--transition); }
+  .card:hover { box-shadow: var(--shadow-md); }
+  .card-header { padding: 20px 24px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .card-header h3 { font-family: var(--font-heading); font-size: 16px; font-weight: 600; }
+  .card-body { padding: 24px; }
+  .journey-map { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-bottom: 32px; }
+  .journey-step { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 16px; text-align: center; position: relative; transition: all var(--transition); }
+  .journey-step:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  .journey-step::after { content: ''; position: absolute; top: 50%; right: -12px; width: 12px; height: 2px; background: var(--text2); opacity: 0.3; }
+  .journey-step:last-child::after { display: none; }
+  .journey-step .step-num { width: 32px; height: 32px; border-radius: 50%; background: var(--bg); display: inline-flex; align-items: center; justify-content: center; font-family: var(--font-heading); font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 12px; }
+  .journey-step.active .step-num { background: var(--blue); color: #fff; }
+  .journey-step h4 { font-family: var(--font-heading); font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .journey-step p { font-size: 11.5px; color: var(--text2); line-height: 1.4; }
+  .journey-step .completion { margin-top: 12px; font-family: var(--font-heading); font-size: 22px; font-weight: 700; color: var(--blue); }
+  .funnel { display: flex; flex-direction: column; gap: 4px; max-width: 700px; }
+  .funnel-row { display: flex; align-items: center; gap: 16px; padding: 12px 0; }
+  .funnel-bar-container { flex: 1; height: 36px; background: var(--bg); border-radius: var(--radius-xs); overflow: hidden; }
+  .funnel-bar { height: 100%; border-radius: var(--radius-xs); transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; padding-left: 12px; }
+  .funnel-bar span { font-family: var(--font-heading); font-size: 13px; font-weight: 600; color: #fff; }
+  .funnel-label { width: 200px; font-size: 13px; font-weight: 500; color: var(--text); text-align: right; flex-shrink: 0; }
+  .funnel-percent { width: 50px; font-family: var(--font-heading); font-size: 14px; font-weight: 700; color: var(--text); flex-shrink: 0; }
+  .funnel-drop { font-size: 11px; color: var(--text2); margin-left: 16px; display: flex; align-items: center; gap: 4px; }
+  .funnel-drop .arrow { color: var(--red); font-weight: 700; }
+  .phone-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; }
+  .phone-wrapper { display: flex; flex-direction: column; align-items: center; }
+  .concept-label { font-family: var(--font-heading); font-size: 14px; font-weight: 600; margin-bottom: 8px; text-align: center; }
+  .concept-desc { font-size: 12px; color: var(--text2); text-align: center; margin-bottom: 16px; max-width: 260px; }
+  .phone { width: 280px; height: 580px; background: var(--bg); border-radius: 36px; border: 3px solid #1c1c1e; overflow: hidden; box-shadow: var(--shadow-lg); position: relative; flex-shrink: 0; transition: transform var(--transition), box-shadow var(--transition); }
+  .phone:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.18); }
+  .phone-inner { width: 100%; height: 100%; overflow-y: auto; overflow-x: hidden; background: var(--bg); -ms-overflow-style: none; scrollbar-width: none; }
+  .phone-inner::-webkit-scrollbar { display: none; }
+  .ios-status-bar { display: flex; justify-content: space-between; align-items: center; padding: 12px 24px 0; height: 54px; position: sticky; top: 0; background: var(--bg); z-index: 10; }
+  .ios-time { font-family: var(--font-heading); font-size: 15px; font-weight: 600; color: var(--text); }
+  .dynamic-island { width: 120px; height: 28px; background: #1c1c1e; border-radius: 20px; position: absolute; top: 8px; left: 50%; transform: translateX(-50%); }
+  .ios-icons { display: flex; align-items: center; gap: 5px; }
+  .ios-icons svg { width: 16px; height: 16px; fill: var(--text); }
+  .ios-signal { font-size: 12px; font-weight: 600; }
+  .screen-content { padding: 16px 20px 24px; }
+  .screen-greeting { font-family: var(--font-heading); font-size: 10px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+  .screen-title { font-family: var(--font-heading); font-size: 20px; font-weight: 700; color: var(--text); letter-spacing: -0.3px; line-height: 1.2; }
+  .screen-subtitle { font-size: 12.5px; color: var(--text2); margin-top: 6px; line-height: 1.4; }
+  .hero-card { background: linear-gradient(135deg, #0a84ff 0%, #0066cc 100%); border-radius: 14px; padding: 20px; color: #fff; margin-top: 16px; }
+  .hero-card h3 { font-family: var(--font-heading); font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+  .hero-card p { font-size: 12px; opacity: 0.85; line-height: 1.4; margin-bottom: 14px; }
+  .hero-btn { display: inline-flex; align-items: center; gap: 6px; background: #fff; color: var(--blue); font-size: 12.5px; font-weight: 600; padding: 10px 18px; border-radius: 10px; border: none; cursor: pointer; transition: all var(--transition); }
+  .hero-btn:hover { transform: scale(1.02); box-shadow: var(--shadow-md); }
+  .trust-card { background: var(--green-bg); border: 1px solid rgba(22,111,71,0.15); border-radius: 14px; padding: 18px; margin-top: 16px; }
+  .trust-card h3 { font-family: var(--font-heading); font-size: 14px; font-weight: 700; color: var(--green); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+  .trust-card ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .trust-card li { font-size: 11.5px; color: var(--green); display: flex; align-items: center; gap: 6px; }
+  .benefit-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px; margin-top: 16px; }
+  .benefit-row { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; }
+  .benefit-row + .benefit-row { border-top: 1px solid var(--border); }
+  .benefit-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .benefit-icon.blue { background: rgba(10,132,255,0.1); }
+  .benefit-icon.green { background: var(--green-bg); }
+  .benefit-icon.amber { background: var(--amber-bg); }
+  .benefit-text h4 { font-family: var(--font-heading); font-size: 12.5px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+  .benefit-text p { font-size: 11px; color: var(--text2); line-height: 1.3; }
+  .action-section { margin-top: 16px; }
+  .action-list { background: var(--card); border-radius: 12px; border: 1px solid var(--border); overflow: hidden; }
+  .action-item { display: flex; align-items: center; gap: 12px; padding: 13px 16px; transition: background var(--transition); cursor: pointer; }
+  .action-item:hover { background: var(--bg); }
+  .action-item + .action-item { border-top: 1px solid var(--border); }
+  .action-item.primary { background: rgba(10,132,255,0.04); }
+  .action-icon { width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+  .action-icon.blue { background: rgba(10,132,255,0.12); }
+  .action-icon.amber { background: var(--amber-bg); }
+  .action-icon.gray { background: var(--bg); }
+  .action-text { flex: 1; min-width: 0; }
+  .action-text h4 { font-family: var(--font-heading); font-size: 12.5px; font-weight: 600; color: var(--text); }
+  .action-text p { font-size: 10.5px; color: var(--text2); margin-top: 1px; line-height: 1.3; }
+  .action-chevron { color: var(--text2); font-size: 14px; flex-shrink: 0; }
+  .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .grid-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px; transition: all var(--transition); cursor: pointer; }
+  .grid-card:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+  .grid-card.primary { grid-column: 1 / -1; background: rgba(10,132,255,0.04); border-color: rgba(10,132,255,0.12); }
+  .grid-card .gc-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; margin-bottom: 8px; }
+  .grid-card .gc-title { font-family: var(--font-heading); font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+  .grid-card .gc-desc { font-size: 10.5px; color: var(--text2); line-height: 1.3; }
+  .priority-stack { display: flex; flex-direction: column; gap: 8px; }
+  .priority-primary { background: linear-gradient(135deg, var(--blue), #0066cc); border-radius: 14px; padding: 18px; color: #fff; }
+  .priority-primary h4 { font-family: var(--font-heading); font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .priority-primary p { font-size: 11.5px; opacity: 0.85; margin-bottom: 12px; line-height: 1.4; }
+  .priority-primary .priority-btn { display: inline-flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.2); color: #fff; font-size: 11.5px; font-weight: 600; padding: 8px 14px; border-radius: 8px; border: none; cursor: pointer; }
+  .priority-secondary { background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .priority-secondary .action-item { padding: 11px 14px; }
+  .progress-mini { height: 3px; background: rgba(255,255,255,0.2); border-radius: 2px; margin-top: 12px; overflow: hidden; }
+  .progress-mini-fill { height: 100%; background: #fff; border-radius: 2px; transition: width 0.8s ease; }
+  .contextual-card { background: var(--amber-bg); border: 1px solid rgba(194,121,10,0.15); border-radius: 12px; padding: 14px; margin-bottom: 8px; }
+  .contextual-card .cc-header { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+  .contextual-card .cc-badge { font-size: 10px; font-weight: 600; color: var(--amber); text-transform: uppercase; letter-spacing: 0.5px; }
+  .contextual-card .cc-dismiss { margin-left: auto; font-size: 10px; color: var(--text2); cursor: pointer; }
+  .contextual-card h4 { font-family: var(--font-heading); font-size: 12.5px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+  .contextual-card p { font-size: 10.5px; color: var(--text2); line-height: 1.3; margin-bottom: 10px; }
+  .contextual-btn { display: inline-flex; align-items: center; gap: 4px; background: var(--amber); color: #fff; font-size: 11px; font-weight: 600; padding: 7px 12px; border-radius: 7px; border: none; cursor: pointer; }
+  .guided-flow { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px; }
+  .guided-progress { display: flex; gap: 4px; margin-bottom: 16px; }
+  .guided-progress .gp-dot { flex: 1; height: 4px; border-radius: 2px; background: var(--bg); transition: background var(--transition); }
+  .guided-progress .gp-dot.active { background: var(--blue); }
+  .guided-progress .gp-dot.done { background: var(--green); }
+  .guided-step { text-align: center; padding: 8px 0; }
+  .guided-step .step-icon-large { width: 56px; height: 56px; border-radius: 16px; background: rgba(10,132,255,0.08); display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 14px; }
+  .guided-step h4 { font-family: var(--font-heading); font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .guided-step p { font-size: 11.5px; color: var(--text2); margin-bottom: 14px; line-height: 1.4; }
+  .guided-step .step-counter { font-size: 10px; color: var(--text2); margin-bottom: 4px; }
+  .guided-btn { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; background: var(--blue); color: #fff; font-size: 12.5px; font-weight: 600; padding: 12px; border-radius: 10px; border: none; cursor: pointer; transition: all var(--transition); }
+  .guided-btn:hover { background: #0070e0; }
+  .guided-link { display: block; text-align: center; font-size: 11px; color: var(--text2); margin-top: 10px; cursor: pointer; }
+  .welcome-empty { text-align: center; padding: 30px 20px; }
+  .welcome-empty .we-icon { width: 64px; height: 64px; border-radius: 20px; background: rgba(10,132,255,0.08); display: flex; align-items: center; justify-content: center; font-size: 32px; margin: 0 auto 16px; }
+  .welcome-empty h3 { font-family: var(--font-heading); font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  .welcome-empty p { font-size: 12px; color: var(--text2); line-height: 1.4; max-width: 220px; margin: 0 auto 16px; }
+  .welcome-btn { display: inline-flex; align-items: center; gap: 6px; background: var(--blue); color: #fff; font-size: 13px; font-weight: 600; padding: 12px 24px; border-radius: 10px; border: none; cursor: pointer; transition: all var(--transition); }
+  .welcome-btn:hover { background: #0070e0; transform: scale(1.02); }
+  .account-preview { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-top: 8px; display: flex; align-items: center; gap: 10px; opacity: 0.5; transition: all var(--transition); }
+  .account-preview.active { opacity: 1; }
+  .account-preview .ap-icon { width: 36px; height: 36px; border-radius: 8px; background: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+  .account-preview .ap-info { flex: 1; }
+  .account-preview .ap-name { font-family: var(--font-heading); font-size: 12px; font-weight: 600; color: var(--text); }
+  .account-preview .ap-type { font-size: 10.5px; color: var(--text2); }
+  .account-preview .ap-status { font-size: 10px; padding: 3px 8px; border-radius: 6px; font-weight: 600; }
+  .ap-status.connected { background: var(--green-bg); color: var(--green); }
+  .ap-status.disconnected { background: var(--bg); color: var(--text2); }
+  .dash-preview { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-top: 12px; }
+  .dash-preview-header { padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+  .dash-preview-header span { font-family: var(--font-heading); font-size: 11px; font-weight: 600; color: var(--text); }
+  .dash-preview-body { padding: 14px; }
+  .dash-balance { font-family: var(--font-heading); font-size: 24px; font-weight: 700; color: var(--text); letter-spacing: -0.5px; }
+  .dash-change { font-size: 11px; color: var(--green); font-weight: 500; margin-top: 2px; }
+  .dash-chart { height: 60px; margin-top: 12px; display: flex; align-items: flex-end; gap: 3px; }
+  .dash-chart .bar { flex: 1; border-radius: 3px 3px 0 0; transition: height 0.6s ease; }
+  .section-divider { height: 1px; background: var(--border); margin: 48px 0; }
+  .state-indicator { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; margin-bottom: 16px; }
+  .state-indicator .dot { width: 7px; height: 7px; border-radius: 50%; }
+  .state-indicator.disconnected { background: var(--red-bg); color: var(--red); }
+  .state-indicator.disconnected .dot { background: var(--red); }
+  .state-indicator.partial { background: var(--amber-bg); color: var(--amber); }
+  .state-indicator.partial .dot { background: var(--amber); }
+  .state-indicator.connected { background: var(--green-bg); color: var(--green); }
+  .state-indicator.connected .dot { background: var(--green); }
+  .edu-cards { display: flex; gap: 8px; margin-top: 12px; overflow-x: auto; padding-bottom: 4px; -ms-overflow-style: none; scrollbar-width: none; }
+  .edu-cards::-webkit-scrollbar { display: none; }
+  .edu-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px; min-width: 140px; flex-shrink: 0; }
+  .edu-card .ec-icon { font-size: 20px; margin-bottom: 6px; }
+  .edu-card h4 { font-family: var(--font-heading); font-size: 11px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+  .edu-card p { font-size: 10px; color: var(--text2); line-height: 1.3; }
+  .invest-cards { display: flex; gap: 8px; margin-top: 12px; }
+  .invest-card { flex: 1; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px; text-align: center; }
+  .invest-card .ic-icon { width: 36px; height: 36px; border-radius: 10px; background: rgba(10,132,255,0.08); display: flex; align-items: center; justify-content: center; font-size: 18px; margin: 0 auto 8px; }
+  .invest-card h4 { font-family: var(--font-heading); font-size: 11px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+  .invest-card p { font-size: 9.5px; color: var(--text2); }
+  .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px; }
+  .feature-item { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; text-align: center; transition: all var(--transition); }
+  .feature-item:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+  .feature-item .fi-icon { font-size: 24px; margin-bottom: 8px; }
+  .feature-item h4 { font-family: var(--font-heading); font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .feature-item p { font-size: 10.5px; color: var(--text2); line-height: 1.3; }
+  .comparison-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 12px; }
+  .comparison-table th { background: var(--bg); font-family: var(--font-heading); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text2); padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+  .comparison-table th:first-child { border-radius: 8px 0 0 0; }
+  .comparison-table th:last-child { border-radius: 0 8px 0 0; }
+  .comparison-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--text); }
+  .comparison-table tr:last-child td { border-bottom: none; }
+  .comparison-table td:first-child { font-weight: 600; font-family: var(--font-heading); }
+  .check { color: var(--green); font-weight: 700; }
+  .writing-guide { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .writing-example { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+  .writing-example .we-bad { font-size: 12px; color: var(--red); margin-bottom: 8px; padding: 8px 10px; background: var(--red-bg); border-radius: 6px; line-height: 1.4; }
+  .writing-example .we-good { font-size: 12px; color: var(--green); padding: 8px 10px; background: var(--green-bg); border-radius: 6px; line-height: 1.4; }
+  .writing-example .we-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .writing-example .we-label.bad { color: var(--red); }
+  .writing-example .we-label.good { color: var(--green); }
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  .animate-in { animation: fadeInUp 0.5s ease forwards; }
+  @media (max-width: 1200px) { .phone-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 900px) { .sidebar { display: none; } .main-content { margin-left: 0; } .page-header { padding: 24px; } .content { padding: 24px; } .journey-map { grid-template-columns: repeat(3, 1fr); } .phone-grid { grid-template-columns: 1fr; } .writing-guide { grid-template-columns: 1fr; } .feature-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px) { .journey-map { grid-template-columns: repeat(2, 1fr); } .feature-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><h2>Advizmo Design System</h2><span>Disconnected User Experience</span></div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Sections</div>
+      <ul class="sidebar-nav">
+        <li><a href="#overview" class="active"><span class="nav-icon">&#128506;</span> Overview <span class="nav-badge">Journey</span></a></li>
+        <li><a href="#action-rows"><span class="nav-icon">&#9889;</span> Action Row Concepts <span class="nav-badge">5</span></a></li>
+        <li><a href="#homepage-concepts"><span class="nav-icon">&#127968;</span> Homepage Concepts <span class="nav-badge">5</span></a></li>
+        <li><a href="#lifecycle-states"><span class="nav-icon">&#128260;</span> Lifecycle States <span class="nav-badge">5</span></a></li>
+      </ul>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Reference</div>
+      <ul class="sidebar-nav">
+        <li><a href="#writing-guide"><span class="nav-icon">&#9997;&#65039;</span> Writing Style Guide</a></li>
+        <li><a href="#comparison"><span class="nav-icon">&#128202;</span> Concept Comparison</a></li>
+        <li><a href="#metrics"><span class="nav-icon">&#128200;</span> Key Metrics</a></li>
+      </ul>
+    </div>
+    <div class="sidebar-footer"><div>Advizmo iOS v2.0</div><div style="margin-top:4px;">Fintech Design System</div></div>
+  </nav>
+  <main class="main-content">
+    <div class="page-header">
+      <h1>Disconnected User Experience</h1>
+      <p>Redesigning the journey from disconnected to connected to funded to invested. Improving conversion, clarity, and confidence at every step.</p>
+    </div>
+    <div class="content">
+      <!-- SECTION 1: OVERVIEW -->
+      <section class="section" id="overview">
+        <div class="section-header"><h2>User Journey Overview</h2><p>Mapping the complete path from first-time visitor to active investor. Each state represents a critical conversion opportunity.</p></div>
+        <div class="journey-map animate-in">
+          <div class="journey-step active"><div class="step-num">1</div><h4>First-time</h4><p>No accounts linked. Exploring the app.</p><div class="completion">0%</div></div>
+          <div class="journey-step"><div class="step-num">2</div><h4>Browsing</h4><p>Viewing features. Building understanding.</p><div class="completion" style="color:var(--amber);">&mdash;</div></div>
+          <div class="journey-step"><div class="step-num">3</div><h4>Ready to Connect</h4><p>High intent. Prepared to link accounts.</p><div class="completion" style="color:var(--amber);">15%</div></div>
+          <div class="journey-step"><div class="step-num">4</div><h4>Partially Connected</h4><p>1-2 accounts linked. Some data flowing.</p><div class="completion">40%</div></div>
+          <div class="journey-step"><div class="step-num">5</div><h4>Ready to Fund</h4><p>All accounts connected. Ready for capital.</p><div class="completion">70%</div></div>
+          <div class="journey-step"><div class="step-num">6</div><h4>Ready to Invest</h4><p>Funded. Ready to grow idle cash.</p><div class="completion" style="color:var(--green);">100%</div></div>
+        </div>
+        <div class="card" style="margin-top:32px;">
+          <div class="card-header"><h3>Conversion Funnel</h3><span class="tag tag-blue">Key Metrics</span></div>
+          <div class="card-body"><div class="funnel">
+            <div class="funnel-row"><div class="funnel-label">Land on homepage</div><div class="funnel-bar-container"><div class="funnel-bar" style="width:100%;background:var(--blue);"><span>100%</span></div></div><div class="funnel-percent">100%</div></div>
+            <div class="funnel-row"><div class="funnel-label">Understand value proposition</div><div class="funnel-bar-container"><div class="funnel-bar" style="width:60%;background:var(--blue);"><span>60%</span></div></div><div class="funnel-percent">60%</div><div class="funnel-drop"><span class="arrow">&darr;</span> 40% drop</div></div>
+            <div class="funnel-row"><div class="funnel-label">Start connecting accounts</div><div class="funnel-bar-container"><div class="funnel-bar" style="width:40%;background:var(--amber);"><span>40%</span></div></div><div class="funnel-percent">40%</div><div class="funnel-drop"><span class="arrow">&darr;</span> 20% drop</div></div>
+            <div class="funnel-row"><div class="funnel-label">Complete connection</div><div class="funnel-bar-container"><div class="funnel-bar" style="width:25%;background:var(--amber);"><span>25%</span></div></div><div class="funnel-percent">25%</div><div class="funnel-drop"><span class="arrow">&darr;</span> 15% drop</div></div>
+            <div class="funnel-row"><div class="funnel-label">Fund account</div><div class="funnel-bar-container"><div class="funnel-bar" style="width:15%;background:var(--red);"></div></div><div class="funnel-percent">15%</div><div class="funnel-drop"><span class="arrow">&darr;</span> 10% drop</div></div>
+            <div class="funnel-row"><div class="funnel-label">Start investing</div><div class="funnel-bar-container"><div class="funnel-bar" style="width:10%;background:var(--red);"></div></div><div class="funnel-percent">10%</div><div class="funnel-drop"><span class="arrow">&darr;</span> 5% drop</div></div>
+          </div></div>
+        </div>
+        <div class="feature-grid" style="margin-top:24px;">
+          <div class="feature-item"><div class="fi-icon">&#127919;</div><h4>Biggest Drop-off</h4><p>Understanding to Connecting (40% loss). Value proposition is not landing.</p></div>
+          <div class="feature-item"><div class="fi-icon">&#9200;</div><h4>Critical Window</h4><p>First 30 seconds determine if user explores or bounces.</p></div>
+          <div class="feature-item"><div class="fi-icon">&#128176;</div><h4>Revenue Impact</h4><p>Every 1% improvement in fund conversion equals significant ARR growth.</p></div>
+        </div>
+      </section>
+      <div class="section-divider"></div>
+      <!-- SECTION 2: ACTION ROW CONCEPTS -->
+      <section class="section" id="action-rows">
+        <div class="section-header"><h2>Action Row Concepts</h2><p>Five different approaches for the action section. Each designed to reduce cognitive load while driving the primary action: connecting accounts.</p></div>
+        <div class="card" style="margin-bottom:32px;">
+          <div class="card-header"><h3>Action Items Data</h3><span class="tag tag-green">Shared Across Concepts</span></div>
+          <div class="card-body" style="padding:0;">
+            <table class="comparison-table">
+              <thead><tr><th>Action</th><th>Priority</th><th>Icon</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr><td>Connect another account</td><td><span class="tag tag-blue">Primary</span></td><td>&#127974;</td><td>Link your bank, credit card, or investment account</td></tr>
+                <tr><td>Review monthly bills and income</td><td><span class="tag tag-amber">Secondary</span></td><td>&#128203;</td><td>Verify your cash flow data is accurate</td></tr>
+                <tr><td>Add one-time bill</td><td><span class="tag tag-amber">Secondary</span></td><td>&#128221;</td><td>Record a bill not tracked from your accounts</td></tr>
+                <tr><td>Add recurring income</td><td><span class="tag tag-amber">Secondary</span></td><td>&#128181;</td><td>Track salary, freelance, or side income</td></tr>
+                <tr><td>Add recurring expense</td><td><span class="tag tag-amber">Secondary</span></td><td>&#128260;</td><td>Monitor subscriptions and regular payments</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="phone-grid">
+          <!-- Concept 1: Clean List -->
+          <div class="phone-wrapper">
+            <div class="concept-label">Concept 1: Clean List</div>
+            <div class="concept-desc">Simple vertical list with icons. Primary action highlighted in blue. Minimal, scannable.</div>
+            <div class="phone"><div class="phone-inner">
+              <div class="ios-status-bar"><span class="ios-time">9:41</span><div class="dynamic-island"></div><div class="ios-icons"><span class="ios-signal">&#9679;&#9679;&#9679;&#9679;&#9675;</span><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg></div></div>
+              <div class="screen-content">
+                <div class="screen-greeting">Dashboard</div><div class="screen-title">What else?</div><div class="screen-subtitle">Complete these to unlock smarter insights.</div>
+                <div class="action-section"><div class="action-list">
+                  <div class="action-item primary"><div class="action-icon blue">&#127974;</div><div class="action-text"><h4>Connect another account</h4><p>Get a complete financial picture</p></div><span class="action-chevron">&rsaquo;</span></div>
+                  <div class="action-item"><div class="action-icon gray">&#128203;</div><div class="action-text"><h4>Review monthly bills and income</h4><p>Verify your cash flow data</p></div><span class="action-chevron">&rsaquo;</span></div>
+                  <div class="action-item"><div class="action-icon gray">&#128221;</div><div class="action-text"><h4>Add one-time bill</h4><p>Track bills not on your accounts</p></div><span class="action-chevron">&rsaquo;</span></div>
+                  <div class="action-item"><div class="action-icon gray">&#128181;</div><div class="action-text"><h4>Add recurring income</h4><p>Track salary and side income</p></div><span class="action-chevron">&rsaquo;</span></div>
+                  <div class="action-item"><div class="action-icon gray">&#128260;</div><div class="action-text"><h4>Add recurring expense</h4><p>Monitor subscriptions</p></div><span class="action-chevron">&rsaquo;</span></div>
+                </div></div>
+              </div>
+            </div></div>
+          </div>
+          <!-- Concept 2: Card Grid -->
+          <div class="phone-wrapper">
+            <div class="concept-label">Concept 2: Card Grid</div>
+            <div class="concept-desc">2-column grid of small cards. Primary card spans full width. Visual hierarchy through size.</div>
+            <div class="phone"><div class="phone-inner">
+              <div class="ios-status-bar"><span class="ios-time">9:41</span><div class="dynamic-island"></div><div class="ios-icons"><span class="ios-signal">&#9679;&#9679;&#9679;&#9679;&#9675;</span><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg></div></div>
+              <div class="screen-content">
+                <div class="screen-greeting">Dashboard</div><div class="screen-title">What else?</div><div class="screen-subtitle">Fill in the gaps for better insights.</div>
+                <div class="action-section"><div class="card-grid">
+                  <div class="grid-card primary"><div class="gc-icon" style="background:rgba(10,132,255,0.1);">&#127974;</div><div class="gc-title">Connect another account</div><div class="gc-desc">Link your bank, credit card, or investment account to see your full picture.</div></div>
+                  <div class="grid-card"><div class="gc-icon" style="background:var(--bg);">&#128203;</div><div class="gc-title">Bills and income</div><div class="gc-desc">Review monthly cash flow</div></div>
+                  <div class="grid-card"><div class="gc-icon" style="background:var(--bg);">&#128221;</div><div class="gc-title">One-time bill</div><div class="gc-desc">Add an irregular expense</div></div>
+                  <div class="grid-card"><div class="gc-icon" style="background:var(--bg);">&#128181;</div><div class="gc-title">Recurring income</div><div class="gc-desc">Track salary or freelance</div></div>
+                  <div class="grid-card"><div class="gc-icon" style="background:var(--bg);">&#128260;</div><div class="gc-title">Recurring expense</div><div class="gc-desc">Monitor subscriptions</div></div>
+                </div></div>
+              </div>
+            </div></div>
+          </div>
+          <!-- Concept 3: Priority Stack -->
+          <div class="phone-wrapper">
+            <div class="concept-label">Concept 3: Priority Stack</div>
+            <div class="concept-desc">Primary action at top as large card. Secondary actions as compact rows below. Progress indicator.</div>
+            <div class="phone"><div class="phone-inner">
+              <div class="ios-status-bar"><span class="ios-time">9:41</span><div class="dynamic-island"></div><div class="ios-icons"><span class="ios-signal">&#9679;&#9679;&#9679;&#9679;&#9675;</span><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg></div></div>
+              <div class="screen-content">
+                <div class="screen-greeting">Dashboard</div><div class="screen-title">Complete your setup</div><div class="screen-subtitle">1 of 5 actions complete</div>
+                <div class="action-section"><div class="priority-stack">
+                  <div class="priority-primary"><h4>Connect another account</h4><p>The more accounts you connect, the smarter your cash management becomes.</p><button class="priority-btn">Connect Now &rarr;</button><div class="progress-mini"><div class="progress-mini-fill" style="width:20%;"></div></div></div>
+                  <div class="priority-secondary">
+                    <div class="action-item"><div class="action-icon amber">&#128203;</div><div class="action-text"><h4>Review bills and income</h4></div><span class="action-chevron">&rsaquo;</span></div>
+                    <div class="action-item"><div class="action-icon amber">&#128221;</div><div class="action-text"><h4>Add one-time bill</h4></div><span class="action-chevron">&rsaquo;</span></div>
+                    <div class="action-item"><div class="action-icon amber">&#128181;</div><div class="action-text"><h4>Add recurring income</h4></div><span class="action-chevron">&rsaquo;</span></div>
+                    <div class="action-item"><div class="action-icon amber">&#128260;</div><div class="action-text"><h4>Add recurring expense</h4></div><span class="action-chevron">&rsaquo;</span></div>
+                  </div>
+                </div></div>
+              </div>
+            </div></div>
+          </div>
+          <!-- Concept 4: Contextual Suggestions -->
+          <div class="phone-wrapper">
+            <div class="concept-label">Concept 4: Contextual Suggestions</div>
+            <div class="concept-desc">AI-powered recommendations based on user profile. Personalized priority order. Dismissible.</div>
+            <div class="phone"><div class="phone-inner">
+              <div class="ios-status-bar"><span class="ios-time">9:41</span><div class="dynamic-island"></div><div class="ios-icons"><span class="ios-signal">&#9679;&#9679;&#9679;&#9679;&#9675;</span><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg></div></div>
+              <div class="screen-content">
+                <div class="screen-greeting">Dashboard</div><div class="screen-title">Suggestions for you</div><div class="screen-subtitle">Based on your profile and activity</div>
+                <div class="action-section" style="margin-top:12px;">
+                  <div class="contextual-card"><div class="cc-header"><span class="cc-badge">&#10024; Recommended</span><span class="cc-dismiss">&#10005;</span></div><h4>Connect your checking account</h4><p>We noticed you have a savings account linked. Adding your checking gives you a complete cash flow view.</p><button class="contextual-btn">Connect &rarr;</button></div>
+                  <div class="contextual-card" style="background:var(--bg);border-color:var(--border);"><div class="cc-header"><span class="cc-badge" style="color:var(--text2);">&#128161; Suggested</span><span class="cc-dismiss">&#10005;</span></div><h4>Add your recurring income</h4><p>Tracking your salary helps us calculate your ideal investment amount.</p><button class="contextual-btn" style="background:var(--text);">Add Income &rarr;</button></div>
+                  <div class="contextual-card" style="background:var(--bg);border-color:var(--border);"><div class="cc-header"><span class="cc-badge" style="color:var(--text2);">&#128161; Suggested</span><span class="cc-dismiss">&#10005;</span></div><h4>Review your monthly bills</h4><p>Verify your subscriptions and bills to find investable surplus.</p><button class="contextual-btn" style="background:var(--text);">Review &rarr;</button></div>
+                </div>
+              </div>
+            </div></div>
+          </div>
+          <!-- Concept 5: Guided Flow -->
+          <div class="phone-wrapper">
+            <div class="concept-label">Concept 5: Guided Flow</div>
+            <div class="concept-desc">Step-by-step wizard. One action at a time. Progress bar. Reduces overwhelm completely.</div>
+            <div class="phone"><div class="phone-inner">
+              <div class="ios-status-bar"><span class="ios-time">9:41</span><div class="dynamic-island"></div><div class="ios-icons"><span class="ios-signal">&#9679;&#9679;&#9679;&#9679;&#9675;</span><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg></div></div>
+              <div class="screen-content">
+                <div class="screen-greeting">Setup</div><div class="screen-title">What would you like to do next?</div>
+                <div class="action-section"><div class="guided-flow">
+                  <div class="guided-progress"><div class="gp-dot done"></div><div class="gp-dot done"></div><div class="gp-dot active"></div><div class="gp-dot"></div><div class="gp-dot"></div></div>
+                  <div class="guided-step"><div class="step-counter">Step 3 of 5</div><div class="step-icon-large">&#127974;</div><h4>Connect another account</h4><p>Linking more accounts helps us understand your full financial picture and find investable surplus.</p><button class="guided-btn">Connect Account &rarr;</button><div class="guided-link">Skip for now</div></div>
+                </div></div>
+              </div>
+            </div></div>
+          </div>
+        </div>
+      </section>
+      <div class="section-divider"></div>
+      <!-- SECTION 3: FIRST-TIME HOMEPAGE CONCEPTS -->
+      <section class="section" id="homepage-concepts">
+        <div class="section-header"><h2>First-Time Homepage Concepts</h2><p>Five homepage redesigns for users who have never connected an account. The goal: build trust, communicate value, and drive the first connection.</p></div>
+        <div class="phone-grid">
+          <!-- Concept 1: Hero-First -->
+          <div class="phone-wrapper">
+            <div class="concept-label">Concept 1: Hero-First</div>
+            <div class="concept-desc">Large hero with value prop. Single CTA. Social proof below. Minimal distractions.</div>
+            <div class="phone"><div class="phone-inner">
+              <div class="ios-status-bar"><span class="ios-time">9:41</span><div class="dynamic-island"></div><div class="ios-icons"><span class="ios-signal">&#9679;&#9679;&#9679;&#9679;&#9675;</span><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg></div></div>
+              <div class="screen-content">
+                <div class="screen-greeting">Welcome</div><div class="screen-title">Your money should work harder</div><div class="screen-subtitle">Advizmo finds the cash you are not investing and puts it to work automatically.</div>
+                <div class="hero-card"><h3>Stop leaving money idle</h3><p>The average user has $4,200 sitting in checking earning nothing. Let us help you invest it.</p><button class="hero-btn">Connect your first account &rarr;</button></div>
+                <div style="margin-top:20px;"><div style="font-family:var(--font-heading);font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Trusted by 50,000+ users</div><div style="display:flex;gap:8px;"><div style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center;"><div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:var(--green);">$2.4M</div><div style="font-size:10px;color:var(--text2);">Invested this month</div></div><div style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center;"><div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:var(--blue);">4.8&#9733;</div><div style="font-size:10px;color:var(--text2);">App Store rating</div></div></div></div>
+                <div style="margin-top:16px;padding:14px;background:var(--card);border:1px solid var(--border);border-radius:10px;"><div style="font-size:12px;color:var(--text);font-style:italic;line-height:1.4;">"I did not realize how much cash was sitting idle. Advizmo helped me invest $3,200 in the first week."</div><div style="font-size:10px;color:var(--text2);margin-top:6px;">&mdash; Sarah K., verified user</div></div>
+              </div>
+            </div></div>
+          </div>
+          <!-- Concept 2: Trust-Builder -->
+          <div class="phone-wrapper">
+            <div class="concept-label">Concept 2: Trust-Builder</div>
+            <div class="concept-desc">Security-first messaging. "Your money is safe" prominent. Bank-level encryption badges.</div>
+            <div class="phone"><div class="phone-inner">
+              <div class="ios-status-bar"><span class="ios-time">9:41</span><div class="dynamic-island"></div><div class="ios-icons"><span class="ios-signal">&#9679;&#9679;&#9679;&#9679;&#9675;</span><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg></div></div>
+              <div class="screen-content">
+                <div class="screen-greeting">Welcome</div><div class="screen-title">Your money is safe here</div><div class="screen-subtitle">Bank-level security protects every dollar you connect.</div>
+                <div class="trust-card"><h3>&#128274; Security first</h3><ul><li>256-bit AES encryption</li><li>SOC 2 Type II certified</li><li>FDIC insured up to $250K</li><li>Read-only access &mdash; we cannot move money</li><li>Biometric login required</li></ul></div>
+                <div style="margin-top:16px;"><div style="font-family:var(--font-heading);font-size:13px;font-weight:600;color:var(--text);margin-bottom:10px;">How it works</div><div style="display:flex;flex-direction:column;gap:8px;">
+                  <div style="display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;"><div style="width:28px;height:28px;border-radius:50%;background:rgba(10,132,255,0.1);display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-size:12px;font-weight:700;color:var(--blue);flex-shrink:0;">1</div><div><div style="font-family:var(--font-heading);font-size:12px;font-weight:600;">Connect your accounts</div><div style="font-size:10.5px;color:var(--text2);">Secure read-only link via Plaid</div></div></div>
+                  <div style="display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;"><div style="width:28px;height:28px;border-radius:50%;background:rgba(10,132,255,0.1);display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-size:12px;font-weight:700;color:var(--blue);flex-shrink:0;">2</div><div><div style="font-family:var(--font-heading);font-size:12px;font-weight:600;">We analyze your cash flow</div><div style="font-size:10.5px;color:var(--text2);">AI identifies investable surplus</div></div></div>
+                  <div style="display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;"><div style="width:28px;height:28px;border-radius:50%;background:rgba(10,132,255,0.1);display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-size:12px;font-weight:700;color:var(--blue);flex-shrink:0;">3</div><div><div style="font-family:var(--font-heading);font-size:12px;font-weight:600;">Start earning on idle cash</div><div style="font-size:10.5px;color:var(--text2);">Automated investing, zero effort</div></div></div>
+                </div></div>
+                <button class="welcome-btn" style="width:100%;justify-content:center;margin-top:16px;">Connect Your First Account &rarr;</button>
+              </div>
+            </div></div>
+          </div>
+          <!-- Concept 3: Benefit-Led -->
+          <div class="phone-wrapper">
+            <div class="concept-label">Concept 3: Benefit-Led</div>
+            <div class="concept-desc">"What you'll get" section. Visual benefits. Before/after comparison. Clear value prop.</div>
+            <div class="phone"><div class="phone-inner">
+              <div class="ios-status-bar"><span class="ios-time">9:41</span><div class="dynamic-island"></div><div class="ios-icons"><span class="ios-signal">&#9679;&#9679;&#9679;&#9679;&#9675;</span><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg></div></div>
+              <div class="screen-content">
+                <div class="screen-greeting">Welcome</div><div class="screen-title">See what is possible</div><div class="screen-subtitle">Here is what happens when you connect your accounts.</div>
+                <div class="benefit-card">
+                  <div class="benefit-row"><div class="benefit-icon blue">&#128202;</div><div class="benefit-text"><h4>See your real net worth</h4><p>All accounts in one view. No more guessing.</p></div></div>
+                  <div class="benefit-row"><div class="benefit-icon green">&#128176;</div><div class="benefit-text"><h4>Find hidden investable cash</h4><p>AI spots money you did not know was idle.</p></div></div>
+                  <div class="benefit-row"><div class="benefit-icon amber">&#9889;</div><div class="benefit-text"><h4>Automate your investing</h4><p>Set it and forget it. We handle the rest.</p></div></div>
+                </div>
+                <div style="margin-top:16px;"><div style="font-family:var(--font-heading);font-size:13px;font-weight:600;color:var(--text);margin-bottom:10px;">Before vs After</div><div style="display:flex;gap:8px;"><div style="flex:1;background:var(--red-bg);border:1px solid rgba(185,28,28,0.1);border-radius:10px;padding:12px;text-align:center;"><div style="font-size:11px;font-weight:600;color:var(--red);margin-bottom:6px;">WITHOUT ADVIZMO</div><div style="font-family:var(--font-heading);font-size:16px;font-weight:700;color:var(--text);">$0</div><div style="font-size:10px;color:var(--text2);">earned on idle cash</div></div><div style="flex:1;background:var(--green-bg);border:1px solid rgba(22,111,71,0.1);border-radius:10px;padding:12px;text-align:center;"><div style="font-size:11px;font-weight:600;color:var(--green);margin-bottom:6px;">WITH ADVIZMO</div><div style="font-family:var(--font-heading);font-size:16px;font-weight:700;color:var(--text);">$847</div><div style="font-size:10px;color:var(--text2);">earned last month</div></div></div></div>
+                <button class="welcome-btn" style="width:100%;justify-content:center;margin-top:16px;">Connect Your First Account &rarr;</button>
+              </div>
+            </div></div>
+          </div>
+          <!-- Concept 4: Guided Tour -->
+          <div class="phone-wrapper">
+            <div class="concept-label">Concept 4: Guided Tour</div>
+            <div class="concept-desc">Interactive onboarding. Swipeable cards. Progressive disclosure. Gamified progress.</div>
+            <div class="phone"><div class="phone-inner">
+              <div class="ios-status-bar"><span class="ios-time">9:41</span><div class="dynamic-island"></div><div class="ios-icons"><span class="ios-signal">&#9679;&#9679;&#9679;&#9679;&#9675;</span><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg></div></div>
+              <div class="screen-content">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;"><div class="screen-greeting" style="margin:0;">Onboarding</div><div style="font-size:11px;color:var(--blue);font-weight:500;">Skip</div></div>
+                <div class="guided-flow"><div class="guided-progress"><div class="gp-dot active"></div><div class="gp-dot"></div><div class="gp-dot"></div></div>
+                  <div class="guided-step"><div class="step-icon-large" style="background:rgba(10,132,255,0.08);">&#128241;</div><h4>Connect your bank</h4><p>Securely link your checking or savings account. We use read-only access &mdash; your money stays safe.</p><button class="guided-btn">Get Started &rarr;</button></div>
+                </div>
+                <div class="edu-cards" style="margin-top:20px;"><div class="edu-card"><div class="ec-icon">&#128202;</div><h4>Track Everything</h4><p>See all accounts in one dashboard</p></div><div class="edu-card"><div class="ec-icon">&#129302;</div><h4>AI Insights</h4><p>Smart recommendations for your cash</p></div><div class="edu-card"><div class="ec-icon">&#128184;</div><h4>Auto-Invest</h4><p>Put idle cash to work automatically</p></div></div>
+                <div style="margin-top:16px;text-align:center;"><div style="font-size:11px;color:var(--text2);">1 of 3 steps</div></div>
+              </div>
+            </div></div>
+          </div>
+          <!-- Concept 5: Minimalist -->
+          <div class="phone-wrapper">
+            <div class="concept-label">Concept 5: Minimalist</div>
+            <div class="concept-desc">Extreme simplicity. One section at a time. No overwhelming info. Clear next step always visible.</div>
+            <div class="phone"><div class="phone-inner">
+              <div class="ios-status-bar"><span class="ios-time">9:41</span><div class="dynamic-island"></div><div class="ios-icons"><span class="ios-signal">&#9679;&#9679;&#9679;&#9679;&#9675;</span><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg></div></div>
+              <div class="screen-content" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:500px;text-align:center;">
+                <div style="width:72px;height:72px;border-radius:22px;background:rgba(10,132,255,0.08);display:flex;align-items:center;justify-content:center;font-size:36px;margin-bottom:24px;">&#128176;</div>
+                <div class="screen-title" style="font-size:22px;letter-spacing:-0.5px;">Make your cash work</div>
+                <div class="screen-subtitle" style="max-width:200px;margin:8px auto 28px;">Connect one account. We will show you what is possible.</div>
+                <button class="welcome-btn" style="width:100%;max-width:240px;justify-content:center;">Connect Account &rarr;</button>
+                <div style="font-size:11px;color:var(--text2);margin-top:14px;">Takes 30 seconds</div>
+              </div>
+            </div></div>
+          </div>
+        </div>
+      </section>
+      <div class="section-divider"></div>
+      <!-- SECTION 4: USER LIFECYCLE STATES -->
+      <section class="section" id="lifecycle-states">
+        <div class="section-header"><h2>User Lifecycle States</h2><p>Five homepage states based on user progress. The interface adapts dynamically to guide users to the next logical step.</p></div>
+        <div class="phone-grid">
+          <!-- State 1: First-time (0% setup) -->
+          <div class="phone-wrapper">
+            <div class="concept-label">State 1: First-Time User</div>
+            <div class="concept-desc">0% setup. Empty dashboard. Welcome message. Educational content to build understanding.</div>
+            <div class="state-indicator disconnected"><span class="dot"></span> Not connected</div>
+            <div class="phone"><div class="phone-inner">
+              <div class="ios-status-bar"><span class="ios-time">9:41</span><div class="dynamic-island"></div><div class="ios-icons"><span class="ios-signal">&#9679;&#9679;&#9679;&#9679;&#9675;</span><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg></div></div>
+              <div class="screen-content">
+                <div class="screen-greeting">Welcome to Advizmo</div><div class="screen-title">Let us get started</div><div class="screen-subtitle">Connect your first account to see your financial picture.</div>
+                <div class="welcome-empty"><div class="we-icon">&#127974;</div><h3>No accounts yet</h3><p>Connect a bank, credit card, or investment account to begin.</p><button class="welcome-btn">Connect Your First Account &rarr;</button></div>
+                <div style="margin-top:16px;"><div style="font-family:var(--font-heading);font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Learn the basics</div><div class="edu-cards"><div class="edu-card"><div class="ec-icon">&#128214;</div><h4>What is idle cash?</h4><p>Money sitting in checking earning nothing</p></div><div class="edu-card"><div class="ec-icon">&#128200;</div><h4>Why invest it?</h4><p>Earn 4-5% vs 0.01% in checking</p></div><div class="edu-card"><div class="ec-icon">&#128274;</div><h4>Is it safe?</h4><p>Bank-level security, read-only access</p></div></div></div>
+              </div>
+            </div></div>
+          </div>
+          <!-- State 2: Exploring -->
+          <div class="phone-wrapper">
+            <div class="concept-label">State 2: Exploring</div>
+            <div class="concept-desc">Viewed but not started. Dashboard with preview data. "See what is possible." More prominent CTA.</div>
+            <div class="state-indicator disconnected"><span class="dot"></span> Not connected</div>
+            <div class="phone"><div class="phone-inner">
+              <div class="ios-status-bar"><span class="ios-time">9:41</span><div class="dynamic-island"></div><div class="ios-icons"><span class="ios-signal">&#9679;&#9679;&#9679;&#9679;&#9675;</span><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg></div></div>
+              <div class="screen-content">
+                <div class="screen-greeting">Dashboard</div><div class="screen-title">See what is possible</div><div class="screen-subtitle">This is what your dashboard could look like.</div>
+                <div class="dash-preview" style="opacity:0.7;"><div class="dash-preview-header"><span>Net Worth</span><span style="font-size:10px;color:var(--text2);">Preview</span></div><div class="dash-preview-body"><div class="dash-balance">$47,250</div><div class="dash-change">&uarr; 12.4% this month</div><div class="dash-chart"><div class="bar" style="height:30%;background:rgba(10,132,255,0.2);"></div><div class="bar" style="height:35%;background:rgba(10,132,255,0.25);"></div><div class="bar" style="height:28%;background:rgba(10,132,255,0.2);"></div><div class="bar" style="height:42%;background:rgba(10,132,255,0.3);"></div><div class="bar" style="height:38%;background:rgba(10,132,255,0.25);"></div><div class="bar" style="height:50%;background:rgba(10,132,255,0.35);"></div><div class="bar" style="height:45%;background:rgba(10,132,255,0.3);"></div><div class="bar" style="height:55%;background:rgba(10,132,255,0.4);"></div><div class="bar" style="height:48%;background:rgba(10,132,255,0.35);"></div><div class="bar" style="height:62%;background:rgba(10,132,255,0.5);"></div><div class="bar" style="height:58%;background:rgba(10,132,255,0.45);"></div><div class="bar" style="height:70%;background:var(--blue);"></div></div></div></div>
+                <div style="margin-top:12px;padding:14px;background:rgba(10,132,255,0.04);border:1px solid rgba(10,132,255,0.1);border-radius:12px;text-align:center;"><div style="font-family:var(--font-heading);font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px;">Connect to see your real data</div><div style="font-size:11px;color:var(--text2);margin-bottom:10px;">This preview shows what you are missing</div><button class="hero-btn" style="display:inline-flex;">Connect Account &rarr;</button></div>
+                <div style="margin-top:12px;"><div style="font-family:var(--font-heading);font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Success stories</div><div style="display:flex;flex-direction:column;gap:6px;"><div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 12px;"><div style="font-size:11px;color:var(--text);font-style:italic;">"Found $2,100 in idle cash I did not know about."</div><div style="font-size:9.5px;color:var(--text2);margin-top:4px;">&mdash; Mike T.</div></div><div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 12px;"><div style="font-size:11px;color:var(--text);font-style:italic;">"Set up took 2 minutes. Now earning 4.5% automatically."</div><div style="font-size:9.5px;color:var(--text2);margin-top:4px;">&mdash; Lisa R.</div></div></div></div>
+              </div>
+            </div></div>
+          </div>
+          <!-- State 3: Partially connected (30% setup) -->
+          <div class="phone-wrapper">
+            <div class="concept-label">State 3: Partially Connected</div>
+            <div class="concept-desc">30% setup. 1-2 accounts visible. "Almost there." Complete setup CTA. Preview of full dashboard.</div>
+            <div class="state-indicator partial"><span class="dot"></span> 30% complete</div>
+            <div class="phone"><div class="phone-inner">
+              <div class="ios-status-bar"><span class="ios-time">9:41</span><div class="dynamic-island"></div><div class="ios-icons"><span class="ios-signal">&#9679;&#9679;&#9679;&#9679;&#9675;</span><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg></div></div>
+              <div class="screen-content">
+                <div class="screen-greeting">Dashboard</div><div class="screen-title">Almost there</div><div class="screen-subtitle">Connect more accounts to unlock smarter insights.</div>
+                <div class="account-preview active" style="margin-top:12px;"><div class="ap-icon" style="background:var(--green-bg);">&#127974;</div><div class="ap-info"><div class="ap-name">Chase Checking</div><div class="ap-type">Checking &bull;&bull;4521</div></div><span class="ap-status connected">Connected</span></div>
+                <div class="account-preview"><div class="ap-icon">&#128179;</div><div class="ap-info"><div class="ap-name">Credit Card</div><div class="ap-type">Not connected</div></div><span class="ap-status disconnected">Add</span></div>
+                <div class="account-preview"><div class="ap-icon">&#128200;</div><div class="ap-info"><div class="ap-name">Investment Account</div><div class="ap-type">Not connected</div></div><span class="ap-status disconnected">Add</span></div>
+                <div style="margin-top:16px;"><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="font-size:11px;font-weight:600;color:var(--text);">Setup progress</span><span style="font-size:11px;font-weight:600;color:var(--blue);">30%</span></div><div style="height:6px;background:var(--bg);border-radius:3px;overflow:hidden;"><div style="height:100%;width:30%;background:var(--blue);border-radius:3px;transition:width 0.8s ease;"></div></div></div>
+                <button class="welcome-btn" style="width:100%;justify-content:center;margin-top:16px;">Complete Your Setup &rarr;</button>
+                <div style="margin-top:16px;padding:14px;background:var(--card);border:1px solid var(--border);border-radius:10px;"><div style="font-family:var(--font-heading);font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">What you will unlock</div><div style="display:flex;flex-direction:column;gap:6px;"><div style="display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text);"><span style="color:var(--text2);">&#9675;</span> Full net worth tracking</div><div style="display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text);"><span style="color:var(--text2);">&#9675;</span> Cash flow analysis</div><div style="display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text);"><span style="color:var(--text2);">&#9675;</span> Investable surplus detection</div><div style="display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text);"><span style="color:var(--text2);">&#9675;</span> Auto-invest recommendations</div></div></div>
+              </div>
+            </div></div>
+          </div>
+          <!-- State 4: Ready to fund (70% setup) -->
+          <div class="phone-wrapper">
+            <div class="concept-label">State 4: Ready to Fund</div>
+            <div class="concept-desc">70% setup. All accounts connected. "Your dashboard is ready." Fund account CTA. Investment preview.</div>
+            <div class="state-indicator partial"><span class="dot"></span> 70% complete</div>
+            <div class="phone"><div class="phone-inner">
+              <div class="ios-status-bar"><span class="ios-time">9:41</span><div class="dynamic-island"></div><div class="ios-icons"><span class="ios-signal">&#9679;&#9679;&#9679;&#9679;&#9675;</span><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg></div></div>
+              <div class="screen-content">
+                <div class="screen-greeting">Dashboard</div><div class="screen-title">Your dashboard is ready</div><div class="screen-subtitle">All accounts connected. Now fund your account to start investing.</div>
+                <div class="dash-preview" style="margin-top:12px;"><div class="dash-preview-header"><span>Net Worth</span><span style="font-size:10px;color:var(--green);font-weight:600;">Live</span></div><div class="dash-preview-body"><div class="dash-balance">$52,340</div><div class="dash-change">&uarr; 8.2% this month</div><div class="dash-chart"><div class="bar" style="height:40%;background:rgba(22,111,71,0.3);"></div><div class="bar" style="height:45%;background:rgba(22,111,71,0.35);"></div><div class="bar" style="height:38%;background:rgba(22,111,71,0.3);"></div><div class="bar" style="height:52%;background:rgba(22,111,71,0.4);"></div><div class="bar" style="height:48%;background:rgba(22,111,71,0.35);"></div><div class="bar" style="height:58%;background:rgba(22,111,71,0.45);"></div><div class="bar" style="height:55%;background:rgba(22,111,71,0.4);"></div><div class="bar" style="height:65%;background:rgba(22,111,71,0.5);"></div><div class="bar" style="height:60%;background:rgba(22,111,71,0.45);"></div><div class="bar" style="height:72%;background:rgba(22,111,71,0.55);"></div><div class="bar" style="height:68%;background:rgba(22,111,71,0.5);"></div><div class="bar" style="height:80%;background:var(--green);"></div></div></div></div>
+                <div style="margin-top:12px;padding:16px;background:linear-gradient(135deg,var(--green),#1a8a52);border-radius:12px;color:#fff;"><div style="font-size:11px;opacity:0.85;margin-bottom:4px;">Idle cash detected</div><div style="font-family:var(--font-heading);font-size:22px;font-weight:700;">$4,200</div><div style="font-size:11px;opacity:0.8;margin-top:4px;">Could earn $189/year instead of $0.04</div></div>
+                <button class="welcome-btn" style="width:100%;justify-content:center;margin-top:16px;background:var(--green);">Fund Your Account &rarr;</button>
+                <div style="margin-top:16px;"><div style="font-family:var(--font-heading);font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Investment options</div><div class="invest-cards"><div class="invest-card"><div class="ic-icon" style="background:var(--green-bg);">&#128200;</div><h4>Conservative</h4><p>4.2% APY</p></div><div class="invest-card"><div class="ic-icon" style="background:rgba(10,132,255,0.08);">&#9889;</div><h4>Balanced</h4><p>6.8% avg</p></div><div class="invest-card"><div class="ic-icon" style="background:var(--amber-bg);">&#128640;</div><h4>Growth</h4><p>9.1% avg</p></div></div></div>
+              </div>
+            </div></div>
+          </div>
+          <!-- State 5: Fully set up (100% setup) -->
+          <div class="phone-wrapper">
+            <div class="concept-label">State 5: Fully Set Up</div>
+            <div class="concept-desc">100% setup. Complete dashboard. "You're all set." Invest now CTA. Full feature access.</div>
+            <div class="state-indicator connected"><span class="dot"></span> 100% complete</div>
+            <div class="phone"><div class="phone-inner">
+              <div class="ios-status-bar"><span class="ios-time">9:41</span><div class="dynamic-island"></div><div class="ios-icons"><span class="ios-signal">&#9679;&#9679;&#9679;&#9679;&#9675;</span><svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg></div></div>
+              <div class="screen-content">
+                <div style="display:flex;align-items:center;justify-content:space-between;"><div><div class="screen-greeting">Good morning</div><div class="screen-title" style="font-size:18px;">You are all set!</div></div><div style="width:36px;height:36px;border-radius:50%;background:var(--green-bg);display:flex;align-items:center;justify-content:center;">&#9989;</div></div>
+                <div class="dash-preview" style="margin-top:14px;"><div class="dash-preview-header"><span>Total Net Worth</span><span style="font-size:10px;color:var(--green);font-weight:600;">&uarr; Live</span></div><div class="dash-preview-body"><div class="dash-balance">$68,420</div><div class="dash-change">&uarr; $2,340 this month (+3.5%)</div><div class="dash-chart"><div class="bar" style="height:35%;background:rgba(22,111,71,0.3);"></div><div class="bar" style="height:40%;background:rgba(22,111,71,0.35);"></div><div class="bar" style="height:38%;background:rgba(22,111,71,0.3);"></div><div class="bar" style="height:48%;background:rgba(22,111,71,0.4);"></div><div class="bar" style="height:45%;background:rgba(22,111,71,0.35);"></div><div class="bar" style="height:55%;background:rgba(22,111,71,0.45);"></div><div class="bar" style="height:52%;background:rgba(22,111,71,0.4);"></div><div class="bar" style="height:62%;background:rgba(22,111,71,0.5);"></div><div class="bar" style="height:58%;background:rgba(22,111,71,0.45);"></div><div class="bar" style="height:68%;background:rgba(22,111,71,0.55);"></div><div class="bar" style="height:65%;background:rgba(22,111,71,0.5);"></div><div class="bar" style="height:75%;background:var(--green);"></div></div></div></div>
+                <div style="margin-top:12px;"><div style="font-family:var(--font-heading);font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">Connected Accounts</div>
+                  <div class="account-preview active"><div class="ap-icon" style="background:var(--green-bg);">&#127974;</div><div class="ap-info"><div class="ap-name">Chase Checking</div><div class="ap-type">&bull;&bull;4521</div></div><div style="font-family:var(--font-heading);font-size:12px;font-weight:600;">$12,400</div></div>
+                  <div class="account-preview active"><div class="ap-icon" style="background:rgba(10,132,255,0.08);">&#128179;</div><div class="ap-info"><div class="ap-name">Amex Platinum</div><div class="ap-type">&bull;&bull;8903</div></div><div style="font-family:var(--font-heading);font-size:12px;font-weight:600;color:var(--red);">-$2,180</div></div>
+                  <div class="account-preview active"><div class="ap-icon" style="background:var(--amber-bg);">&#128200;</div><div class="ap-info"><div class="ap-name">Fidelity 401k</div><div class="ap-type">&bull;&bull;3456</div></div><div style="font-family:var(--font-heading);font-size:12px;font-weight:600;">$58,200</div></div>
+                </div>
+                <div style="margin-top:12px;padding:14px;background:linear-gradient(135deg,var(--green),#1a8a52);border-radius:12px;color:#fff;"><div style="display:flex;align-items:center;justify-content:space-between;"><div><div style="font-size:11px;opacity:0.85;">Investing actively</div><div style="font-family:var(--font-heading);font-size:18px;font-weight:700;margin-top:2px;">$4,200 working</div></div><div style="font-size:24px;">&#128176;</div></div><div style="font-size:10.5px;opacity:0.8;margin-top:6px;">Earning 4.8% APY on idle cash &bull; +$16.80 this month</div></div>
+              </div>
+            </div></div>
+          </div>
+        </div>
+      </section>
+      <div class="section-divider"></div>
+      <!-- WRITING STYLE GUIDE -->
+      <section class="section" id="writing-guide">
+        <div class="section-header"><h2>Writing Style Guide</h2><p>Benefit-driven UX writing. Answer: What can I do? Why does it matter? What happens next?</p></div>
+        <div class="writing-guide">
+          <div class="writing-example"><div class="we-label bad">Feature-centric (avoid)</div><div class="we-bad">"Connect your bank account using Plaid integration for read-only access"</div><div style="height:8px;"></div><div class="we-label good">Benefit-driven (use)</div><div class="we-good">"See your full financial picture in one place"</div></div>
+          <div class="writing-example"><div class="we-label bad">Feature-centric (avoid)</div><div class="we-bad">"Enable auto-investment with configurable thresholds"</div><div style="height:8px;"></div><div class="we-label good">Benefit-driven (use)</div><div class="we-good">"Put idle cash to work &mdash; no effort required"</div></div>
+          <div class="writing-example"><div class="we-label bad">Feature-centric (avoid)</div><div class="we-bad">"Sync transaction data for cash flow analysis"</div><div style="height:8px;"></div><div class="we-label good">Benefit-driven (use)</div><div class="we-good">"Know exactly where your money goes each month"</div></div>
+          <div class="writing-example"><div class="we-label bad">Feature-centric (avoid)</div><div class="we-bad">"Add recurring income entries for balance projections"</div><div style="height:8px;"></div><div class="we-label good">Benefit-driven (use)</div><div class="we-good">"Track your income to find more to invest"</div></div>
+          <div class="writing-example"><div class="we-label bad">Feature-centric (avoid)</div><div class="we-bad">"Bank-level 256-bit AES encryption with SOC 2 certification"</div><div style="height:8px;"></div><div class="we-label good">Benefit-driven (use)</div><div class="we-good">"Your money is protected by the same security banks use"</div></div>
+          <div class="writing-example"><div class="we-label bad">Feature-centric (avoid)</div><div class="we-bad">"Portfolio diversification across asset classes"</div><div style="height:8px;"></div><div class="we-label good">Benefit-driven (use)</div><div class="we-good">"Grow your money while keeping risk low"</div></div>
+        </div>
+        <div class="card" style="margin-top:24px;">
+          <div class="card-header"><h3>Writing Principles</h3><span class="tag tag-green">Apple HIG</span></div>
+          <div class="card-body"><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div style="display:flex;gap:10px;align-items:flex-start;"><div style="width:28px;height:28px;border-radius:7px;background:rgba(10,132,255,0.08);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">1</div><div><div style="font-family:var(--font-heading);font-size:12px;font-weight:600;">Lead with the benefit</div><div style="font-size:11px;color:var(--text2);">Tell users what they will gain, not how it works.</div></div></div>
+            <div style="display:flex;gap:10px;align-items:flex-start;"><div style="width:28px;height:28px;border-radius:7px;background:rgba(10,132,255,0.08);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">2</div><div><div style="font-family:var(--font-heading);font-size:12px;font-weight:600;">Use active voice</div><div style="font-size:11px;color:var(--text2);">"Connect your account" not "Your account can be connected."</div></div></div>
+            <div style="display:flex;gap:10px;align-items:flex-start;"><div style="width:28px;height:28px;border-radius:7px;background:rgba(10,132,255,0.08);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">3</div><div><div style="font-family:var(--font-heading);font-size:12px;font-weight:600;">Short sentences</div><div style="font-size:11px;color:var(--text2);">15 words or fewer. One idea per sentence.</div></div></div>
+            <div style="display:flex;gap:10px;align-items:flex-start;"><div style="width:28px;height:28px;border-radius:7px;background:rgba(10,132,255,0.08);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">4</div><div><div style="font-family:var(--font-heading);font-size:12px;font-weight:600;">Avoid banking jargon</div><div style="font-size:11px;color:var(--text2);">"Money" not "capital." "Save" not "accumulate."</div></div></div>
+            <div style="display:flex;gap:10px;align-items:flex-start;"><div style="width:28px;height:28px;border-radius:7px;background:rgba(10,132,255,0.08);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">5</div><div><div style="font-family:var(--font-heading);font-size:12px;font-weight:600;">Create urgency</div><div style="font-size:11px;color:var(--text2);">"Start earning today" not "You may want to consider investing."</div></div></div>
+            <div style="display:flex;gap:10px;align-items:flex-start;"><div style="width:28px;height:28px;border-radius:7px;background:rgba(10,132,255,0.08);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">6</div><div><div style="font-family:var(--font-heading);font-size:12px;font-weight:600;">Answer the next question</div><div style="font-size:11px;color:var(--text2);">After reading, users should know exactly what to do next.</div></div></div>
+          </div></div>
+        </div>
+      </section>
+      <div class="section-divider"></div>
+      <!-- CONCEPT COMPARISON -->
+      <section class="section" id="comparison">
+        <div class="section-header"><h2>Concept Comparison</h2><p>Side-by-side comparison of all action row and homepage concepts across key dimensions.</p></div>
+        <div class="card">
+          <div class="card-header"><h3>Action Row Concepts</h3></div>
+          <div class="card-body" style="padding:0;overflow-x:auto;">
+            <table class="comparison-table">
+              <thead><tr><th>Concept</th><th>Cognitive Load</th><th>Primary CTA Clarity</th><th>Scanability</th><th>Mobile</th><th>Best For</th></tr></thead>
+              <tbody>
+                <tr><td>Clean List</td><td><span class="tag tag-green">Low</span></td><td><span class="check">&#10003; High</span></td><td><span class="check">&#10003; Excellent</span></td><td><span class="check">&#10003;</span></td><td>Quick scanning, familiar pattern</td></tr>
+                <tr><td>Card Grid</td><td><span class="tag tag-amber">Medium</span></td><td><span class="check">&#10003; High</span></td><td><span class="check">&#10003; Good</span></td><td><span class="check">&#10003;</span></td><td>Visual hierarchy, discovery</td></tr>
+                <tr><td>Priority Stack</td><td><span class="tag tag-green">Low</span></td><td><span class="check">&#10003; Very High</span></td><td><span class="check">&#10003; Good</span></td><td><span class="check">&#10003;</span></td><td>Single focus, high conversion</td></tr>
+                <tr><td>Contextual</td><td><span class="tag tag-amber">Medium</span></td><td><span class="check">&#10003; High</span></td><td><span class="tag tag-amber">Medium</span></td><td><span class="check">&#10003;</span></td><td>Personalization, re-engagement</td></tr>
+                <tr><td>Guided Flow</td><td><span class="tag tag-green">Very Low</span></td><td><span class="check">&#10003; Very High</span></td><td><span class="tag tag-amber">Medium</span></td><td><span class="check">&#10003;</span></td><td>Onboarding, complex flows</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card" style="margin-top:24px;">
+          <div class="card-header"><h3>Homepage Concepts</h3></div>
+          <div class="card-body" style="padding:0;overflow-x:auto;">
+            <table class="comparison-table">
+              <thead><tr><th>Concept</th><th>Trust Building</th><th>Value Communication</th><th>CTA Prominence</th><th>Info Density</th><th>Best For</th></tr></thead>
+              <tbody>
+                <tr><td>Hero-First</td><td><span class="tag tag-amber">Medium</span></td><td><span class="check">&#10003; High</span></td><td><span class="check">&#10003; Very High</span></td><td><span class="tag tag-green">Low</span></td><td>Quick conversion, brand impact</td></tr>
+                <tr><td>Trust-Builder</td><td><span class="check">&#10003; Very High</span></td><td><span class="tag tag-amber">Medium</span></td><td><span class="check">&#10003; High</span></td><td><span class="tag tag-amber">Medium</span></td><td>Security-conscious users</td></tr>
+                <tr><td>Benefit-Led</td><td><span class="tag tag-amber">Medium</span></td><td><span class="check">&#10003; Very High</span></td><td><span class="check">&#10003; High</span></td><td><span class="check">&#10003; High</span></td><td>Value-driven decision makers</td></tr>
+                <tr><td>Guided Tour</td><td><span class="tag tag-amber">Medium</span></td><td><span class="check">&#10003; High</span></td><td><span class="check">&#10003; High</span></td><td><span class="tag tag-green">Low</span></td><td>First-time app users</td></tr>
+                <tr><td>Minimalist</td><td><span class="tag tag-amber">Medium</span></td><td><span class="tag tag-amber">Medium</span></td><td><span class="check">&#10003; Very High</span></td><td><span class="tag tag-green">Very Low</span></td><td>Zero overwhelm, maximum focus</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+      <div class="section-divider"></div>
+      <!-- KEY METRICS -->
+      <section class="section" id="metrics">
+        <div class="section-header"><h2>Key Metrics to Track</h2><p>Measure success at each stage of the disconnected-to-invested journey.</p></div>
+        <div class="feature-grid">
+          <div class="feature-item"><div class="fi-icon">&#128065;</div><h4>Time to First Value</h4><p>Seconds until user understands the app purpose. Target: less than 10s.</p></div>
+          <div class="feature-item"><div class="fi-icon">&#128279;</div><h4>Connection Start Rate</h4><p>% of users who tap Connect Account. Target: greater than 40%.</p></div>
+          <div class="feature-item"><div class="fi-icon">&#9989;</div><h4>Connection Completion</h4><p>% who finish connecting after starting. Target: greater than 65%.</p></div>
+          <div class="feature-item"><div class="fi-icon">&#9201;</div><h4>Time to First Investment</h4><p>Days from signup to first investment. Target: less than 3 days.</p></div>
+          <div class="feature-item"><div class="fi-icon">&#128202;</div><h4>Action Row Engagement</h4><p>% of users who interact with suggested actions. Target: greater than 25%.</p></div>
+          <div class="feature-item"><div class="fi-icon">&#128176;</div><h4>Average Idle Cash Invested</h4><p>$ amount invested per user. Target: greater than $3,000.</p></div>
+          <div class="feature-item"><div class="fi-icon">&#128260;</div><h4>7-Day Retention</h4><p>% of users who return within 7 days. Target: greater than 40%.</p></div>
+          <div class="feature-item"><div class="fi-icon">&#128200;</div><h4>Lifecycle Advancement</h4><p>% who move to next state within 48 hours. Target: greater than 30%.</p></div>
+          <div class="feature-item"><div class="fi-icon">&#11088;</div><h4>App Store Rating</h4><p>Post-onboarding rating. Target: greater than 4.7 stars.</p></div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var navLinks = document.querySelectorAll('.sidebar-nav a');
+  navLinks.forEach(function(link) {
+    link.addEventListener('click', function() {
+      navLinks.forEach(function(l) { l.classList.remove('active'); });
+      this.classList.add('active');
+    });
+  });
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        var id = entry.target.getAttribute('id');
+        navLinks.forEach(function(l) {
+          l.classList.toggle('active', l.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { rootMargin: '-100px 0px -70% 0px' });
+  document.querySelectorAll('.section[id]').forEach(function(s) { observer.observe(s); });
+});
+</script>
+</body>
+</html>

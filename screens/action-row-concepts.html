@@ -1,0 +1,1863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Action Row Concepts - Advizmo Design System</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f2f2f7;
+      --card: #fff;
+      --text: #1c1c1e;
+      --text2: #8e8e93;
+      --border: rgba(0,0,0,.06);
+      --blue: #0a84ff;
+      --green: #166f47;
+      --green-bg: #e8f8ec;
+      --amber: #c2790a;
+      --amber-bg: #fff5e6;
+      --red: #b91c1c;
+      --red-bg: #ffe8e8;
+      --sidebar-bg: #1c1c1e;
+      --sidebar-hover: #2c2c2e;
+      --sidebar-active: #0a84ff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 280px;
+      background: var(--sidebar-bg);
+      color: #fff;
+      padding: 32px 24px;
+      flex-shrink: 0;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 40px;
+    }
+
+    .sidebar-logo-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--blue);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .sidebar-logo-text {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-weight: 700;
+      font-size: 20px;
+    }
+
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .sidebar-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 8px;
+      color: #8e8e93;
+      text-decoration: none;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+
+    .sidebar-nav-item:hover {
+      background: var(--sidebar-hover);
+      color: #fff;
+    }
+
+    .sidebar-nav-item.active {
+      background: rgba(10,132,255,.15);
+      color: var(--blue);
+    }
+
+    .sidebar-nav-item svg {
+      width: 20px;
+      height: 20px;
+      opacity: 0.6;
+    }
+
+    .sidebar-nav-item.active svg {
+      opacity: 1;
+    }
+
+    .sidebar-section-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #636366;
+      margin-top: 32px;
+      margin-bottom: 12px;
+      padding-left: 16px;
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 48px;
+      overflow-y: auto;
+    }
+
+    .page-header {
+      margin-bottom: 48px;
+    }
+
+    .page-header h1 {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .page-header p {
+      font-size: 16px;
+      color: var(--text2);
+      max-width: 600px;
+    }
+
+    .concepts-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 48px;
+      justify-content: center;
+    }
+
+    .concept-card {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.08);
+      width: 100%;
+      max-width: 480px;
+    }
+
+    .concept-label {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--blue);
+      background: rgba(10,132,255,.1);
+      padding: 6px 12px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+    }
+
+    .concept-title {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .concept-description {
+      font-size: 14px;
+      color: var(--text2);
+      margin-bottom: 24px;
+    }
+
+    .phone-frame {
+      width: 320px;
+      height: 640px;
+      background: var(--bg);
+      border-radius: 36px;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(0,0,0,.15), inset 0 0 0 2px #d1d1d6;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .phone-notch {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 28px;
+      background: #1c1c1e;
+      border-radius: 0 0 16px 16px;
+      z-index: 100;
+    }
+
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 24px 0;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }
+
+    .status-bar-time {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .status-bar-icons {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .status-bar-icons svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .phone-content {
+      padding: 16px 20px;
+      height: calc(100% - 28px);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    .phone-bottom-nav {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0 28px;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      color: var(--text2);
+      text-decoration: none;
+    }
+
+    .nav-item.active {
+      color: var(--blue);
+    }
+
+    .nav-item svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    /* Concept 1: Clean List */
+    .c1-header {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .c1-subheader {
+      font-size: 13px;
+      color: var(--text2);
+      margin-bottom: 20px;
+    }
+
+    .c1-list {
+      background: var(--card);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .c1-list-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .c1-list-item:last-child {
+      border-bottom: none;
+    }
+
+    .c1-list-item:hover {
+      background: #f8f8fa;
+    }
+
+    .c1-list-item.primary .c1-label {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .c1-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .c1-icon.blue {
+      background: rgba(10,132,255,.12);
+      color: var(--blue);
+    }
+
+    .c1-icon.gray {
+      background: #f2f2f7;
+      color: var(--text2);
+    }
+
+    .c1-icon svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .c1-text {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .c1-label {
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .c1-chevron {
+      color: #c7c7cc;
+      flex-shrink: 0;
+    }
+
+    .c1-chevron svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .c1-dismiss {
+      text-align: center;
+      padding: 16px;
+      font-size: 14px;
+      color: var(--text2);
+      cursor: pointer;
+    }
+
+    .c1-dismiss:hover {
+      color: var(--blue);
+    }
+
+    /* Concept 2: Card Grid */
+    .c2-header {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .c2-primary-card {
+      background: var(--card);
+      border: 2px solid var(--blue);
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .c2-primary-card:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(10,132,255,.2);
+    }
+
+    .c2-card-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .c2-card-icon.blue {
+      background: var(--blue);
+      color: #fff;
+    }
+
+    .c2-card-icon.green {
+      background: var(--green-bg);
+      color: var(--green);
+    }
+
+    .c2-card-icon.amber {
+      background: var(--amber-bg);
+      color: var(--amber);
+    }
+
+    .c2-card-icon.red {
+      background: var(--red-bg);
+      color: var(--red);
+    }
+
+    .c2-card-icon svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .c2-card-text h4 {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .c2-card-text p {
+      font-size: 12px;
+      color: var(--text2);
+    }
+
+    .c2-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .c2-small-card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 14px;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06);
+    }
+
+    .c2-small-card:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0,0,0,.1);
+    }
+
+    .c2-small-card .c2-card-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+
+    .c2-small-card .c2-card-icon svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .c2-small-card h4 {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .c2-small-card p {
+      font-size: 11px;
+      color: var(--text2);
+      line-height: 1.4;
+    }
+
+    /* Concept 3: Priority Stack */
+    .c3-header {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .c3-progress-section {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+    }
+
+    .c3-progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .c3-progress-label {
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .c3-progress-value {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--blue);
+    }
+
+    .c3-progress-bar {
+      height: 6px;
+      background: #e5e5ea;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .c3-progress-fill {
+      height: 100%;
+      background: var(--blue);
+      border-radius: 3px;
+      transition: width 0.5s ease;
+    }
+
+    .c3-primary-action {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    }
+
+    .c3-action-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .c3-action-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: var(--blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .c3-action-icon svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .c3-action-info h4 {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .c3-action-info p {
+      font-size: 13px;
+      color: var(--text2);
+      line-height: 1.4;
+    }
+
+    .c3-action-btn {
+      width: 100%;
+      padding: 12px;
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+
+    .c3-action-btn:hover {
+      opacity: 0.9;
+    }
+
+    .c3-secondary-section {
+      margin-bottom: 16px;
+    }
+
+    .c3-secondary-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text2);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+      padding-left: 4px;
+    }
+
+    .c3-secondary-list {
+      background: var(--card);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .c3-secondary-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .c3-secondary-item:last-child {
+      border-bottom: none;
+    }
+
+    .c3-secondary-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: #f2f2f7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text2);
+      flex-shrink: 0;
+    }
+
+    .c3-secondary-icon svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .c3-secondary-label {
+      flex: 1;
+      font-size: 14px;
+    }
+
+    .c3-view-all {
+      text-align: center;
+      padding: 12px;
+      font-size: 13px;
+      color: var(--blue);
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .c3-view-all:hover {
+      text-decoration: underline;
+    }
+
+    /* Concept 4: Contextual Suggestions */
+    .c4-header {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .c4-ai-card {
+      background: linear-gradient(135deg, rgba(10,132,255,.08), rgba(10,132,255,.04));
+      border: 1px solid rgba(10,132,255,.2);
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    .c4-ai-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--blue);
+      background: rgba(10,132,255,.12);
+      padding: 4px 10px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+    }
+
+    .c4-ai-badge svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    .c4-ai-card h4 {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .c4-ai-card p {
+      font-size: 13px;
+      color: var(--text2);
+      line-height: 1.5;
+      margin-bottom: 14px;
+    }
+
+    .c4-ai-btn {
+      width: 100%;
+      padding: 12px;
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .c4-suggestions-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .c4-suggestion-item {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 14px 16px;
+      position: relative;
+    }
+
+    .c4-suggestion-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .c4-priority-badge {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .c4-priority-badge.high {
+      background: var(--red-bg);
+      color: var(--red);
+    }
+
+    .c4-priority-badge.medium {
+      background: var(--amber-bg);
+      color: var(--amber);
+    }
+
+    .c4-priority-badge.low {
+      background: #f2f2f7;
+      color: var(--text2);
+    }
+
+    .c4-suggestion-label {
+      font-size: 14px;
+      font-weight: 500;
+      flex: 1;
+    }
+
+    .c4-dismiss-btn {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #f2f2f7;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text2);
+      transition: background 0.15s;
+    }
+
+    .c4-dismiss-btn:hover {
+      background: #e5e5ea;
+    }
+
+    .c4-dismiss-btn svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    .c4-why-link {
+      font-size: 12px;
+      color: var(--blue);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .c4-why-link:hover {
+      text-decoration: underline;
+    }
+
+    .c4-why-content {
+      font-size: 12px;
+      color: var(--text2);
+      margin-top: 6px;
+      line-height: 1.4;
+      display: none;
+    }
+
+    .c4-why-content.show {
+      display: block;
+    }
+
+    /* Concept 5: Guided Flow */
+    .c5-header {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .c5-steps-indicator {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 24px;
+      padding: 0 8px;
+    }
+
+    .c5-step-dot {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 2;
+    }
+
+    .c5-step-dot.completed {
+      background: var(--green);
+      color: #fff;
+    }
+
+    .c5-step-dot.current {
+      background: var(--blue);
+      color: #fff;
+      box-shadow: 0 0 0 4px rgba(10,132,255,.2);
+    }
+
+    .c5-step-dot.upcoming {
+      background: #e5e5ea;
+      color: var(--text2);
+    }
+
+    .c5-step-line {
+      flex: 1;
+      height: 3px;
+      background: #e5e5ea;
+      position: relative;
+      z-index: 1;
+    }
+
+    .c5-step-line.completed {
+      background: var(--green);
+    }
+
+    .c5-current-card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.08);
+    }
+
+    .c5-card-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      background: var(--blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      margin-bottom: 16px;
+    }
+
+    .c5-card-icon svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .c5-card-step-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .c5-card-title {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 17px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .c5-card-desc {
+      font-size: 13px;
+      color: var(--text2);
+      line-height: 1.5;
+      margin-bottom: 18px;
+    }
+
+    .c5-card-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+
+    .c5-card-skip {
+      text-align: center;
+      font-size: 14px;
+      color: var(--text2);
+      cursor: pointer;
+    }
+
+    .c5-card-skip:hover {
+      color: var(--blue);
+    }
+
+    .c5-next-preview {
+      background: #f8f8fa;
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+
+    .c5-next-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text2);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+
+    .c5-next-items {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .c5-next-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: #aeaeb2;
+    }
+
+    .c5-next-item svg {
+      width: 14px;
+      height: 14px;
+      color: #c7c7cc;
+    }
+
+    /* Recommendation Section */
+    .recommendation-section {
+      margin-top: 64px;
+      padding: 40px;
+      background: var(--card);
+      border-radius: 20px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.08);
+      max-width: 960px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .recommendation-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .recommendation-badge {
+      width: 48px;
+      height: 48px;
+      background: var(--green-bg);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--green);
+    }
+
+    .recommendation-badge svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .recommendation-title {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .recommendation-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+
+    .recommendation-main h3 {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--green);
+    }
+
+    .recommendation-main p {
+      font-size: 15px;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .recommendation-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .recommendation-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .recommendation-list li svg {
+      width: 18px;
+      height: 18px;
+      color: var(--green);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .recommendation-comparison {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .comparison-card {
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .comparison-card.best {
+      border-color: var(--green);
+      background: var(--green-bg);
+    }
+
+    .comparison-card h4 {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .comparison-card.best h4 {
+      color: var(--green);
+    }
+
+    .comparison-card p {
+      font-size: 13px;
+      color: var(--text2);
+      line-height: 1.5;
+    }
+
+    .concept-tag {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: #e5e5ea;
+      color: var(--text2);
+    }
+
+    .concept-tag.winner {
+      background: var(--green);
+      color: #fff;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 48px 24px;
+      color: var(--text2);
+      font-size: 13px;
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .concepts-grid {
+        gap: 32px;
+      }
+      .concept-card {
+        max-width: 100%;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .sidebar {
+        display: none;
+      }
+      .main-content {
+        padding: 24px;
+      }
+      .recommendation-body {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .phone-frame {
+        width: 280px;
+        height: 560px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon">A</div>
+        <div class="sidebar-logo-text">Advizmo</div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="#" class="sidebar-nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          Dashboard
+        </a>
+        <a href="#" class="sidebar-nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8m-4-4v4"/></svg>
+          Accounts
+        </a>
+        <a href="#" class="sidebar-nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Transactions
+        </a>
+        <a href="#" class="sidebar-nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+          Insights
+        </a>
+      </nav>
+
+      <div class="sidebar-section-title">Design System</div>
+      <nav class="sidebar-nav">
+        <a href="#" class="sidebar-nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m11-7h-6m-6 0H1m15.36-5.36l-4.24 4.24m-2.83-2.83L5.64 5.64m12.73 12.73l-4.24-4.24m-2.83 2.83l-4.24 4.24"/></svg>
+          Tokens
+        </a>
+        <a href="#" class="sidebar-nav-item active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+          Components
+        </a>
+        <a href="#" class="sidebar-nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M2 9h20"/></svg>
+          Screens
+        </a>
+        <a href="#" class="sidebar-nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+          Documentation
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="page-header">
+        <h1>Action Row Concepts</h1>
+        <p>Five different approaches for the "Is something missing?" section that appears when users have incomplete setup on the homepage.</p>
+      </div>
+
+      <div class="concepts-grid">
+        <!-- Concept 1: Clean List -->
+        <div class="concept-card">
+          <div class="concept-label">Concept 1</div>
+          <div class="concept-title">Clean List</div>
+          <div class="concept-description">iOS-style list with icons, labels, and chevrons. Minimal, familiar, scannable.</div>
+
+          <div class="phone-frame">
+            <div class="phone-notch"></div>
+            <div class="status-bar">
+              <span class="status-bar-time">9:41</span>
+              <div class="status-bar-icons">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+              </div>
+            </div>
+            <div class="phone-content">
+              <div class="c1-header">What else?</div>
+              <div class="c1-subheader">Complete your profile for better recommendations</div>
+
+              <div class="c1-list">
+                <div class="c1-list-item primary">
+                  <div class="c1-icon blue">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+                  </div>
+                  <div class="c1-text">
+                    <div class="c1-label">Connect another account</div>
+                  </div>
+                  <div class="c1-chevron">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"/></svg>
+                  </div>
+                </div>
+                <div class="c1-list-item">
+                  <div class="c1-icon gray">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>
+                  </div>
+                  <div class="c1-text">
+                    <div class="c1-label">Review monthly bills & income</div>
+                  </div>
+                  <div class="c1-chevron">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"/></svg>
+                  </div>
+                </div>
+                <div class="c1-list-item">
+                  <div class="c1-icon gray">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  </div>
+                  <div class="c1-text">
+                    <div class="c1-label">Add one-time bill</div>
+                  </div>
+                  <div class="c1-chevron">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"/></svg>
+                  </div>
+                </div>
+                <div class="c1-list-item">
+                  <div class="c1-icon gray">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                  </div>
+                  <div class="c1-text">
+                    <div class="c1-label">Add recurring income</div>
+                  </div>
+                  <div class="c1-chevron">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"/></svg>
+                  </div>
+                </div>
+                <div class="c1-list-item">
+                  <div class="c1-icon gray">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                  </div>
+                  <div class="c1-text">
+                    <div class="c1-label">Add recurring expense</div>
+                  </div>
+                  <div class="c1-chevron">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"/></svg>
+                  </div>
+                </div>
+              </div>
+
+              <div class="c1-dismiss">Maybe later</div>
+            </div>
+            <div class="phone-bottom-nav">
+              <a href="#" class="nav-item active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                Home
+              </a>
+              <a href="#" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+                Accounts
+              </a>
+              <a href="#" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                Money
+              </a>
+              <a href="#" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+                Insights
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Concept 2: Card Grid -->
+        <div class="concept-card">
+          <div class="concept-label">Concept 2</div>
+          <div class="concept-title">Card Grid</div>
+          <div class="concept-description">Grid layout with cards for each action. Visual hierarchy through size and color.</div>
+
+          <div class="phone-frame">
+            <div class="phone-notch"></div>
+            <div class="status-bar">
+              <span class="status-bar-time">9:41</span>
+              <div class="status-bar-icons">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+              </div>
+            </div>
+            <div class="phone-content">
+              <div class="c2-header">What else?</div>
+
+              <div class="c2-primary-card">
+                <div class="c2-card-icon blue">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+                </div>
+                <div class="c2-card-text">
+                  <h4>Connect another account</h4>
+                  <p>Link your bank for better insights</p>
+                </div>
+              </div>
+
+              <div class="c2-grid">
+                <div class="c2-small-card">
+                  <div class="c2-card-icon green">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+                  </div>
+                  <h4>Review bills</h4>
+                  <p>Check your monthly bills & income</p>
+                </div>
+                <div class="c2-small-card">
+                  <div class="c2-card-icon amber">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg>
+                  </div>
+                  <h4>One-time bill</h4>
+                  <p>Add a single payment</p>
+                </div>
+                <div class="c2-small-card">
+                  <div class="c2-card-icon green">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                  </div>
+                  <h4>Recurring income</h4>
+                  <p>Set up salary or income</p>
+                </div>
+                <div class="c2-small-card">
+                  <div class="c2-card-icon red">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/></svg>
+                  </div>
+                  <h4>Recurring expense</h4>
+                  <p>Add subscriptions & bills</p>
+                </div>
+              </div>
+            </div>
+            <div class="phone-bottom-nav">
+              <a href="#" class="nav-item active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                Home
+              </a>
+              <a href="#" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+                Accounts
+              </a>
+              <a href="#" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                Money
+              </a>
+              <a href="#" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+                Insights
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Concept 3: Priority Stack -->
+        <div class="concept-card">
+          <div class="concept-label">Concept 3</div>
+          <div class="concept-title">Priority Stack</div>
+          <div class="concept-description">Progress tracking with prioritized actions. Primary action gets visual emphasis.</div>
+
+          <div class="phone-frame">
+            <div class="phone-notch"></div>
+            <div class="status-bar">
+              <span class="status-bar-time">9:41</span>
+              <div class="status-bar-icons">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+              </div>
+            </div>
+            <div class="phone-content">
+              <div class="c3-header">What else?</div>
+
+              <div class="c3-progress-section">
+                <div class="c3-progress-header">
+                  <span class="c3-progress-label">Profile completion</span>
+                  <span class="c3-progress-value">60%</span>
+                </div>
+                <div class="c3-progress-bar">
+                  <div class="c3-progress-fill" style="width: 60%"></div>
+                </div>
+              </div>
+
+              <div class="c3-primary-action">
+                <div class="c3-action-top">
+                  <div class="c3-action-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+                  </div>
+                  <div class="c3-action-info">
+                    <h4>Connect your bank account</h4>
+                    <p>Link your checking or savings to get personalized recommendations.</p>
+                  </div>
+                </div>
+                <button class="c3-action-btn">Connect Account</button>
+              </div>
+
+              <div class="c3-secondary-section">
+                <div class="c3-secondary-title">Other actions</div>
+                <div class="c3-secondary-list">
+                  <div class="c3-secondary-item">
+                    <div class="c3-secondary-icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+                    </div>
+                    <span class="c3-secondary-label">Review monthly bills</span>
+                  </div>
+                  <div class="c3-secondary-item">
+                    <div class="c3-secondary-icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/></svg>
+                    </div>
+                    <span class="c3-secondary-label">Add one-time bill</span>
+                  </div>
+                  <div class="c3-secondary-item">
+                    <div class="c3-secondary-icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    </div>
+                    <span class="c3-secondary-label">Add recurring income</span>
+                  </div>
+                </div>
+                <div class="c3-view-all">+ 1 more action</div>
+              </div>
+            </div>
+            <div class="phone-bottom-nav">
+              <a href="#" class="nav-item active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                Home
+              </a>
+              <a href="#" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+                Accounts
+              </a>
+              <a href="#" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                Money
+              </a>
+              <a href="#" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+                Insights
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Concept 4: Contextual Suggestions -->
+        <div class="concept-card">
+          <div class="concept-label">Concept 4</div>
+          <div class="concept-title">Contextual Suggestions</div>
+          <div class="concept-description">AI-driven recommendations with priority levels and dismissible items.</div>
+
+          <div class="phone-frame">
+            <div class="phone-notch"></div>
+            <div class="status-bar">
+              <span class="status-bar-time">9:41</span>
+              <div class="status-bar-icons">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+              </div>
+            </div>
+            <div class="phone-content">
+              <div class="c4-header">Based on your profile</div>
+
+              <div class="c4-ai-card">
+                <div class="c4-ai-badge">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+                  AI Recommended
+                </div>
+                <h4>We recommend connecting your checking account first</h4>
+                <p>This will help us calculate your safe-to-invest amount and provide more accurate budget recommendations.</p>
+                <button class="c4-ai-btn">Connect Checking Account</button>
+              </div>
+
+              <div class="c4-suggestions-list">
+                <div class="c4-suggestion-item">
+                  <div class="c4-suggestion-header">
+                    <span class="c4-priority-badge high">High</span>
+                    <span class="c4-suggestion-label">Add recurring income</span>
+                    <button class="c4-dismiss-btn">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                  </div>
+                  <span class="c4-why-link" onclick="this.nextElementSibling.classList.toggle('show')">
+                    Why this matters
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,9 12,15 18,9"/></svg>
+                  </span>
+                  <div class="c4-why-content">
+                    Income data helps us understand your cash flow and recommend appropriate savings rates.
+                  </div>
+                </div>
+
+                <div class="c4-suggestion-item">
+                  <div class="c4-suggestion-header">
+                    <span class="c4-priority-badge medium">Medium</span>
+                    <span class="c4-suggestion-label">Review monthly bills</span>
+                    <button class="c4-dismiss-btn">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                  </div>
+                  <span class="c4-why-link" onclick="this.nextElementSibling.classList.toggle('show')">
+                    Why this matters
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,9 12,15 18,9"/></svg>
+                  </span>
+                  <div class="c4-why-content">
+                    Accurate bill tracking ensures we don't overestimate your available funds.
+                  </div>
+                </div>
+
+                <div class="c4-suggestion-item">
+                  <div class="c4-suggestion-header">
+                    <span class="c4-priority-badge low">Low</span>
+                    <span class="c4-suggestion-label">Add recurring expense</span>
+                    <button class="c4-dismiss-btn">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                  </div>
+                  <span class="c4-why-link" onclick="this.nextElementSibling.classList.toggle('show')">
+                    Why this matters
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,9 12,15 18,9"/></svg>
+                  </span>
+                  <div class="c4-why-content">
+                    Subscriptions and recurring bills help paint a complete picture of your financial obligations.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="phone-bottom-nav">
+              <a href="#" class="nav-item active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                Home
+              </a>
+              <a href="#" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+                Accounts
+              </a>
+              <a href="#" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                Money
+              </a>
+              <a href="#" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+                Insights
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Concept 5: Guided Flow -->
+        <div class="concept-card">
+          <div class="concept-label">Concept 5</div>
+          <div class="concept-title">Guided Flow</div>
+          <div class="concept-description">Step-by-step wizard that guides users through completion one item at a time.</div>
+
+          <div class="phone-frame">
+            <div class="phone-notch"></div>
+            <div class="status-bar">
+              <span class="status-bar-time">9:41</span>
+              <div class="status-bar-icons">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+              </div>
+            </div>
+            <div class="phone-content">
+              <div class="c5-header">Let's complete your setup</div>
+
+              <div class="c5-steps-indicator">
+                <div class="c5-step-dot completed">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20,6 9,17 4,12"/></svg>
+                </div>
+                <div class="c5-step-line completed"></div>
+                <div class="c5-step-dot completed">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20,6 9,17 4,12"/></svg>
+                </div>
+                <div class="c5-step-line"></div>
+                <div class="c5-step-dot current">3</div>
+                <div class="c5-step-line"></div>
+                <div class="c5-step-dot upcoming">4</div>
+                <div class="c5-step-line"></div>
+                <div class="c5-step-dot upcoming">5</div>
+              </div>
+
+              <div class="c5-current-card">
+                <div class="c5-card-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+                </div>
+                <div class="c5-card-step-label">Step 3 of 5</div>
+                <div class="c5-card-title">Connect your bank account</div>
+                <div class="c5-card-desc">Link your checking or savings account so we can analyze your transactions and provide personalized recommendations.</div>
+                <button class="c5-card-btn">Connect Account</button>
+                <div class="c5-card-skip">Skip for now</div>
+              </div>
+
+              <div class="c5-next-preview">
+                <div class="c5-next-title">What's next</div>
+                <div class="c5-next-items">
+                  <div class="c5-next-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/></svg>
+                    Add one-time bill
+                  </div>
+                  <div class="c5-next-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    Add recurring income
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="phone-bottom-nav">
+              <a href="#" class="nav-item active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                Home
+              </a>
+              <a href="#" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+                Accounts
+              </a>
+              <a href="#" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                Money
+              </a>
+              <a href="#" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+                Insights
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recommendation Section -->
+      <div class="recommendation-section">
+        <div class="recommendation-header">
+          <div class="recommendation-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
+          </div>
+          <div class="recommendation-title">Recommendation</div>
+        </div>
+
+        <div class="recommendation-body">
+          <div class="recommendation-main">
+            <h3>Concept 3: Priority Stack</h3>
+            <p>For a fintech app like Advizmo, <strong>Concept 3 (Priority Stack)</strong> is the recommended approach. It balances visual hierarchy, user motivation, and Apple HIG compliance while driving the most important action.</p>
+
+            <ul class="recommendation-list">
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20,6 9,17 4,12"/></svg>
+                <span><strong>Progress psychology:</strong> The 60% completion bar motivates users to close the gap, leveraging the Zeigarnik effect for incomplete tasks.</span>
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20,6 9,17 4,12"/></svg>
+                <span><strong>Clear primary action:</strong> The large card with CTA button makes the #1 priority unmistakable, reducing decision fatigue.</span>
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20,6 9,17 4,12"/></svg>
+                <span><strong>Scannable secondary items:</strong> Compact list format allows users to see other options without overwhelming them.</span>
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20,6 9,17 4,12"/></svg>
+                <span><strong>iOS native patterns:</strong> Follows Apple HIG with card-based layouts and standard navigation patterns.</span>
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20,6 9,17 4,12"/></svg>
+                <span><strong>Conversion focused:</strong> Directs attention to the highest-value action (account connection) which unlocks better recommendations.</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="recommendation-comparison">
+            <div class="comparison-card best">
+              <h4>
+                <span class="concept-tag winner">Winner</span>
+                Concept 3: Priority Stack
+              </h4>
+              <p>Best balance of motivation, clarity, and conversion. Progress bar drives completion while clear hierarchy guides users to the most impactful action first.</p>
+            </div>
+
+            <div class="comparison-card">
+              <h4>
+                <span class="concept-tag">Runner-up</span>
+                Concept 5: Guided Flow
+              </h4>
+              <p>Excellent for users who prefer step-by-step guidance. However, the sequential nature may feel restrictive for users who want to choose their own path.</p>
+            </div>
+
+            <div class="comparison-card">
+              <h4>
+                <span class="concept-tag">Honorable</span>
+                Concept 4: Contextual
+              </h4>
+              <p>Strong AI-driven approach that explains "why" each action matters. Best for power users who want transparency, but adds cognitive load for casual users.</p>
+            </div>
+
+            <div class="comparison-card">
+              <h4>
+                <span class="concept-tag">Alternative</span>
+                Concept 1: Clean List
+              </h4>
+              <p>Simplest approach with lowest cognitive load. Good fallback option when you want to present all options equally without bias toward any single action.</p>
+            </div>
+
+            <div class="comparison-card">
+              <h4>
+                <span class="concept-tag">Visual</span>
+                Concept 2: Card Grid
+              </h4>
+              <p>Most visually engaging with color-coded cards. Works well for discovery but may分散分散用户注意力 from the primary action.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        Advizmo Design System &middot; Action Row Concepts &middot; July 2026
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Expandable "Why this matters" sections
+    document.querySelectorAll('.c4-why-link').forEach(link => {
+      link.addEventListener('click', function() {
+        const content = this.nextElementSibling;
+        const arrow = this.querySelector('svg');
+        content.classList.toggle('show');
+        if (content.classList.contains('show')) {
+          arrow.style.transform = 'rotate(180deg)';
+        } else {
+          arrow.style.transform = 'rotate(0deg)';
+        }
+      });
+    });
+
+    // Dismiss buttons for Concept 4
+    document.querySelectorAll('.c4-dismiss-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const item = this.closest('.c4-suggestion-item');
+        item.style.opacity = '0';
+        item.style.transform = 'translateX(20px)';
+        item.style.transition = 'all 0.3s ease';
+        setTimeout(() => {
+          item.style.height = item.offsetHeight + 'px';
+          requestAnimationFrame(() => {
+            item.style.height = '0';
+            item.style.padding = '0';
+            item.style.margin = '0';
+            item.style.overflow = 'hidden';
+          });
+        }, 300);
+        setTimeout(() => {
+          item.remove();
+        }, 600);
+      });
+    });
+
+    // Button hover effects
+    document.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('mouseenter', function() {
+        this.style.transform = 'scale(1.02)';
+        this.style.transition = 'transform 0.15s ease';
+      });
+      btn.addEventListener('mouseleave', function() {
+        this.style.transform = 'scale(1)';
+      });
+    });
+
+    // List item hover effects for Concept 1
+    document.querySelectorAll('.c1-list-item').forEach(item => {
+      item.addEventListener('mouseenter', function() {
+        this.style.background = '#f8f8fa';
+      });
+      item.addEventListener('mouseleave', function() {
+        this.style.background = '';
+      });
+    });
+
+    // Card hover effects for Concept 2
+    document.querySelectorAll('.c2-small-card').forEach(card => {
+      card.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-2px)';
+        this.style.boxShadow = '0 6px 16px rgba(0,0,0,.1)';
+      });
+      card.addEventListener('mouseleave', function() {
+        this.style.transform = '';
+        this.style.boxShadow = '';
+      });
+    });
+
+    // Progress bar animation for Concept 3
+    const progressFill = document.querySelector('.c3-progress-fill');
+    if (progressFill) {
+      progressFill.style.width = '0%';
+      setTimeout(() => {
+        progressFill.style.width = '60%';
+      }, 500);
+    }
+
+    // Step indicator animation for Concept 5
+    const stepDots = document.querySelectorAll('.c5-step-dot');
+    stepDots.forEach((dot, index) => {
+      dot.style.opacity = '0';
+      dot.style.transform = 'scale(0.5)';
+      setTimeout(() => {
+        dot.style.transition = 'all 0.3s ease';
+        dot.style.opacity = '1';
+        dot.style.transform = 'scale(1)';
+      }, 200 + (index * 100));
+    });
+
+    // Smooth scroll for navigation
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', function(e) {
+        e.preventDefault();
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advizmo - Disconnected States | User Lifecycle</title>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f2f2f7;
+            --card: #fff;
+            --text: #1c1c1e;
+            --text2: #8e8e93;
+            --border: rgba(0,0,0,.06);
+            --blue: #0a84ff;
+            --green: #166f47;
+            --green-bg: #e8f8ec;
+            --amber: #c2790a;
+            --amber-bg: #fff5e6;
+            --red: #b91c1c;
+            --red-bg: #ffe8e8;
+            --sidebar-bg: #1c1c1e;
+            --sidebar-text: #e5e5e5;
+            --sidebar-active: #0a84ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0f0f0f;
+            color: #fff;
+            line-height: 1.5;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--sidebar-bg);
+            padding: 32px 24px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            border-right: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 40px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .sidebar-logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--blue), #0055d4);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            color: #fff;
+        }
+
+        .sidebar-logo-text {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-weight: 600;
+            font-size: 20px;
+            color: #fff;
+        }
+
+        .sidebar-section {
+            margin-bottom: 32px;
+        }
+
+        .sidebar-section-title {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text2);
+            margin-bottom: 12px;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            color: var(--sidebar-text);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            margin-bottom: 4px;
+        }
+
+        .sidebar-link:hover {
+            background: rgba(255,255,255,0.06);
+            color: #fff;
+        }
+
+        .sidebar-link.active {
+            background: rgba(10,132,255,0.15);
+            color: var(--blue);
+        }
+
+        .sidebar-link-icon {
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+        }
+
+        .sidebar-link.active .sidebar-link-icon {
+            opacity: 1;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 48px;
+            min-height: 100vh;
+        }
+
+        .page-header {
+            margin-bottom: 48px;
+            max-width: 800px;
+        }
+
+        .page-header h1 {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+
+        .page-header p {
+            font-size: 16px;
+            color: var(--text2);
+            line-height: 1.6;
+        }
+
+        .page-header .breadcrumb {
+            font-size: 13px;
+            color: var(--text2);
+            margin-bottom: 16px;
+        }
+
+        .page-header .breadcrumb a {
+            color: var(--blue);
+            text-decoration: none;
+        }
+
+        /* States Container */
+        .states-container {
+            display: flex;
+            flex-direction: column;
+            gap: 80px;
+        }
+
+        /* State Section */
+        .state-section {
+            display: flex;
+            gap: 64px;
+            align-items: flex-start;
+        }
+
+        .state-info {
+            flex: 1;
+            max-width: 480px;
+            position: sticky;
+            top: 48px;
+        }
+
+        .state-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+        }
+
+        .state-badge.setup {
+            background: var(--red-bg);
+            color: var(--red);
+        }
+
+        .state-badge.exploring {
+            background: var(--amber-bg);
+            color: var(--amber);
+        }
+
+        .state-badge.partial {
+            background: var(--amber-bg);
+            color: var(--amber);
+        }
+
+        .state-badge.ready {
+            background: var(--green-bg);
+            color: var(--green);
+        }
+
+        .state-badge.complete {
+            background: rgba(10,132,255,0.12);
+            color: var(--blue);
+        }
+
+        .state-info h2 {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .state-info .setup-pct {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 14px;
+            color: var(--text2);
+            margin-bottom: 20px;
+        }
+
+        .state-info .description {
+            font-size: 15px;
+            color: var(--text2);
+            line-height: 1.7;
+            margin-bottom: 24px;
+        }
+
+        .conversion-tips {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .conversion-tips h4 {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--blue);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .conversion-tips ul {
+            list-style: none;
+        }
+
+        .conversion-tips li {
+            font-size: 13px;
+            color: var(--text2);
+            padding: 6px 0;
+            padding-left: 16px;
+            position: relative;
+            line-height: 1.5;
+        }
+
+        .conversion-tips li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 12px;
+            width: 6px;
+            height: 6px;
+            background: var(--blue);
+            border-radius: 50%;
+        }
+
+        /* Phone Mockup */
+        .phone-mockup {
+            width: 375px;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .phone-frame {
+            width: 375px;
+            height: 812px;
+            background: #000;
+            border-radius: 50px;
+            padding: 12px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.1);
+        }
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: var(--bg);
+            border-radius: 40px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            height: 54px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            padding: 0 28px 8px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .status-bar-time {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .dynamic-island {
+            width: 126px;
+            height: 36px;
+            background: #000;
+            border-radius: 20px;
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .status-bar-icons {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .status-bar-icons svg {
+            width: 16px;
+            height: 16px;
+            fill: var(--text);
+        }
+
+        /* Scrollable Content */
+        .screen-content {
+            height: calc(100% - 54px - 84px);
+            overflow-y: auto;
+            padding: 0 20px 20px;
+        }
+
+        .screen-content::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 24px 0 20px;
+        }
+
+        .hero h1 {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 6px;
+            line-height: 1.2;
+        }
+
+        .hero .subtitle {
+            font-size: 16px;
+            color: var(--text2);
+        }
+
+        /* CTA Button */
+        .cta-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--blue);
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 16px 0;
+            transition: transform 0.2s, opacity 0.2s;
+        }
+
+        .cta-btn:hover {
+            transform: scale(1.02);
+            opacity: 0.95;
+        }
+
+        .cta-btn.secondary {
+            background: rgba(10,132,255,0.12);
+            color: var(--blue);
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text2);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card-action {
+            font-size: 13px;
+            color: var(--blue);
+            font-weight: 500;
+        }
+
+        /* Empty State */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 32px 20px;
+        }
+
+        .empty-state-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .empty-state-icon svg {
+            width: 24px;
+            height: 24px;
+            stroke: var(--text2);
+        }
+
+        .empty-state h3 {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+            color: var(--text2);
+            line-height: 1.5;
+        }
+
+        /* Steps */
+        .steps {
+            margin-top: 8px;
+        }
+
+        .step {
+            display: flex;
+            gap: 16px;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .step:last-child {
+            border-bottom: none;
+        }
+
+        .step-number {
+            width: 36px;
+            height: 36px;
+            background: rgba(10,132,255,0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .step-number span {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--blue);
+        }
+
+        .step-content h4 {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .step-content p {
+            font-size: 13px;
+            color: var(--text2);
+            line-height: 1.4;
+        }
+
+        /* Section Title */
+        .section-title {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text);
+            margin: 24px 0 12px;
+        }
+
+        /* KPI Card */
+        .kpi-card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .kpi-label {
+            font-size: 13px;
+            color: var(--text2);
+            margin-bottom: 8px;
+        }
+
+        .kpi-value {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .kpi-change {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 8px;
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+
+        .kpi-change.positive {
+            background: var(--green-bg);
+            color: var(--green);
+        }
+
+        .kpi-change.negative {
+            background: var(--red-bg);
+            color: var(--red);
+        }
+
+        /* Skeleton */
+        .skeleton {
+            background: linear-gradient(90deg, #e5e5ea 25%, #f0f0f5 50%, #e5e5ea 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 8px;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .skeleton-line {
+            height: 14px;
+            margin-bottom: 10px;
+        }
+
+        .skeleton-line.short {
+            width: 60%;
+        }
+
+        .skeleton-line.medium {
+            width: 80%;
+        }
+
+        .skeleton-block {
+            height: 80px;
+        }
+
+        /* Skeleton Overlay */
+        .skeleton-wrapper {
+            position: relative;
+        }
+
+        .skeleton-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(242,242,247,0.7);
+            backdrop-filter: blur(2px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 16px;
+        }
+
+        .skeleton-overlay p {
+            font-size: 14px;
+            color: var(--text2);
+            font-weight: 500;
+        }
+
+        /* Social Proof */
+        .social-proof {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .avatars {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid var(--card);
+            margin-left: -8px;
+        }
+
+        .avatar:first-child {
+            margin-left: 0;
+        }
+
+        .avatar:nth-child(1) { background: #FF6B6B; }
+        .avatar:nth-child(2) { background: #4ECDC4; }
+        .avatar:nth-child(3) { background: #45B7D1; }
+        .avatar:nth-child(4) { background: #96CEB4; }
+        .avatar:nth-child(5) { background: #DDA0DD; }
+
+        .social-proof p {
+            font-size: 14px;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .social-proof .rating {
+            font-size: 13px;
+            color: var(--text2);
+            margin-top: 4px;
+        }
+
+        .rating-stars {
+            color: #FFD700;
+            font-size: 12px;
+        }
+
+        /* Account Card */
+        .account-card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px;
+            background: var(--card);
+            border-radius: 12px;
+            margin-bottom: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .account-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .account-icon.chase {
+            background: #1a6fc4;
+            color: #fff;
+        }
+
+        .account-icon.bank {
+            background: #166f47;
+            color: #fff;
+        }
+
+        .account-icon.add {
+            background: rgba(10,132,255,0.1);
+            color: var(--blue);
+        }
+
+        .account-details {
+            flex: 1;
+        }
+
+        .account-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .account-type {
+            font-size: 13px;
+            color: var(--text2);
+        }
+
+        .account-balance {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text);
+            text-align: right;
+        }
+
+        .account-status {
+            font-size: 12px;
+            color: var(--text2);
+            text-align: right;
+        }
+
+        .connected-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--green);
+        }
+
+        .connected-badge svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            margin: 16px 0;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .progress-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .progress-pct {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--blue);
+        }
+
+        .progress-track {
+            height: 8px;
+            background: #e5e5ea;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--blue), #40a0ff);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        /* Funding Section */
+        .funding-card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .funding-card h3 {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .funding-card p {
+            font-size: 14px;
+            color: var(--text2);
+            margin-bottom: 16px;
+        }
+
+        .funding-amount {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .funding-min {
+            font-size: 13px;
+            color: var(--text2);
+        }
+
+        /* Investment Option */
+        .investment-option {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px;
+            background: var(--card);
+            border-radius: 12px;
+            margin-bottom: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .investment-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .investment-icon.auto {
+            background: rgba(10,132,255,0.1);
+            color: var(--blue);
+        }
+
+        .investment-icon.custom {
+            background: rgba(139,92,246,0.1);
+            color: #8b5cf6;
+        }
+
+        .investment-details {
+            flex: 1;
+        }
+
+        .investment-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .investment-desc {
+            font-size: 13px;
+            color: var(--text2);
+        }
+
+        .investment-apy {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--green);
+        }
+
+        /* Earnings */
+        .earnings-card {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .earnings-card .label {
+            font-size: 13px;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 8px;
+        }
+
+        .earnings-card .value {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .earnings-card .change {
+            font-size: 14px;
+            color: #34d399;
+            font-weight: 600;
+        }
+
+        /* Next Steps */
+        .next-steps {
+            margin-top: 16px;
+        }
+
+        .next-step {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            background: var(--card);
+            border-radius: 12px;
+            margin-bottom: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .next-step-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(10,132,255,0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .next-step-icon svg {
+            width: 18px;
+            height: 18px;
+            stroke: var(--blue);
+        }
+
+        .next-step-text {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .next-step-arrow {
+            margin-left: auto;
+            color: var(--text2);
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 84px;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+            padding-top: 10px;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            text-decoration: none;
+        }
+
+        .nav-item svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .nav-item span {
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+        .nav-item.active svg {
+            fill: var(--blue);
+            stroke: var(--blue);
+        }
+
+        .nav-item.active span {
+            color: var(--blue);
+        }
+
+        .nav-item:not(.active) svg {
+            fill: none;
+            stroke: var(--text2);
+        }
+
+        .nav-item:not(.active) span {
+            color: var(--text2);
+        }
+
+        /* Home Indicator */
+        .home-indicator {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 134px;
+            height: 5px;
+            background: var(--text);
+            border-radius: 100px;
+            opacity: 0.2;
+        }
+
+        /* Conversion Strategy Section */
+        .strategy-section {
+            margin-top: 80px;
+            padding-top: 64px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .strategy-section h2 {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+
+        .strategy-section > p {
+            font-size: 16px;
+            color: var(--text2);
+            margin-bottom: 40px;
+            max-width: 640px;
+            line-height: 1.6;
+        }
+
+        .progression-flow {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 48px;
+            overflow-x: auto;
+            padding-bottom: 16px;
+        }
+
+        .progression-step {
+            min-width: 200px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            position: relative;
+        }
+
+        .progression-step::after {
+            content: '→';
+            position: absolute;
+            right: -16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 20px;
+            color: var(--text2);
+        }
+
+        .progression-step:last-child::after {
+            display: none;
+        }
+
+        .progression-step .step-pct {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--blue);
+            margin-bottom: 8px;
+        }
+
+        .progression-step h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .progression-step p {
+            font-size: 12px;
+            color: var(--text2);
+            line-height: 1.4;
+        }
+
+        .strategy-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .strategy-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .strategy-card h3 {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .strategy-card p {
+            font-size: 14px;
+            color: var(--text2);
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .strategy-card ul {
+            list-style: none;
+        }
+
+        .strategy-card li {
+            font-size: 13px;
+            color: var(--text2);
+            padding: 6px 0;
+            padding-left: 16px;
+            position: relative;
+        }
+
+        .strategy-card li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--green);
+            font-weight: 600;
+        }
+
+        .metric-tag {
+            display: inline-flex;
+            padding: 4px 10px;
+            background: rgba(10,132,255,0.12);
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--blue);
+            margin-bottom: 12px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1400px) {
+            .state-section {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .state-info {
+                position: static;
+                max-width: 100%;
+                text-align: center;
+            }
+
+            .conversion-tips {
+                text-align: left;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 24px;
+            }
+
+            .strategy-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <div class="sidebar-logo-icon">A</div>
+                <div class="sidebar-logo-text">Advizmo</div>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">Getting Started</div>
+                <a href="#" class="sidebar-link active">
+                    <svg class="sidebar-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h18"/></svg>
+                    Disconnected States
+                </a>
+                <a href="#" class="sidebar-link">
+                    <svg class="sidebar-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                    Onboarding Flow
+                </a>
+                <a href="#" class="sidebar-link">
+                    <svg class="sidebar-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                    Empty States
+                </a>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">Core Screens</div>
+                <a href="#" class="sidebar-link">
+                    <svg class="sidebar-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    Dashboard
+                </a>
+                <a href="#" class="sidebar-link">
+                    <svg class="sidebar-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                    Accounts
+                </a>
+                <a href="#" class="sidebar-link">
+                    <svg class="sidebar-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    Investments
+                </a>
+                <a href="#" class="sidebar-link">
+                    <svg class="sidebar-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                    Performance
+                </a>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">Components</div>
+                <a href="#" class="sidebar-link">
+                    <svg class="sidebar-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                    Cards
+                </a>
+                <a href="#" class="sidebar-link">
+                    <svg class="sidebar-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                    Forms
+                </a>
+                <a href="#" class="sidebar-link">
+                    <svg class="sidebar-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    Settings
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <div class="breadcrumb">
+                    <a href="#">Advizmo</a> / <a href="#">Screens</a> / Disconnected States
+                </div>
+                <h1>User Lifecycle States</h1>
+                <p>Five distinct stages of the disconnected and incomplete setup experience. Each state represents a different point in the user's journey from first download to fully invested.</p>
+            </div>
+
+            <div class="states-container">
+                <!-- STATE 1: First-time user (0% setup) -->
+                <div class="state-section">
+                    <div class="state-info">
+                        <div class="state-badge setup">State 1</div>
+                        <h2>First-Time User</h2>
+                        <div class="setup-pct">0% Setup Complete</div>
+                        <p class="description">The very first impression. A clean, welcoming experience that immediately communicates value and makes the next step obvious. No overwhelming features—just a clear path forward.</p>
+                        <div class="conversion-tips">
+                            <h4>Conversion Strategy</h4>
+                            <ul>
+                                <li>Lead with benefit-driven headline, not features</li>
+                                <li>Single, prominent CTA eliminates decision fatigue</li>
+                                <li>3-step process builds confidence without overwhelming</li>
+                                <li>Progressive disclosure: show only what's needed now</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="phone-mockup">
+                        <div class="phone-frame">
+                            <div class="phone-screen">
+                                <div class="status-bar">
+                                    <span class="status-bar-time">9:41</span>
+                                    <div class="dynamic-island"></div>
+                                    <div class="status-bar-icons">
+                                        <svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+                                        <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+                                    </div>
+                                </div>
+
+                                <div class="screen-content">
+                                    <div class="hero">
+                                        <h1>Welcome to Advizmo</h1>
+                                        <p class="subtitle">Your money could be working harder</p>
+                                    </div>
+
+                                    <button class="cta-btn">Connect your first account</button>
+
+                                    <div class="card">
+                                        <div class="empty-state">
+                                            <div class="empty-state-icon">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                                    <rect x="2" y="5" width="20" height="14" rx="2"/>
+                                                    <line x1="2" y1="10" x2="22" y2="10"/>
+                                                </svg>
+                                            </div>
+                                            <h3>No accounts connected</h3>
+                                            <p>Connect a checking or savings account to get started</p>
+                                        </div>
+                                    </div>
+
+                                    <h3 class="section-title">How Advizmo works</h3>
+                                    <div class="card">
+                                        <div class="steps">
+                                            <div class="step">
+                                                <div class="step-number">
+                                                    <span>1</span>
+                                                </div>
+                                                <div class="step-content">
+                                                    <h4>Connect your accounts</h4>
+                                                    <p>Securely link your bank accounts in under 2 minutes</p>
+                                                </div>
+                                            </div>
+                                            <div class="step">
+                                                <div class="step-number">
+                                                    <span>2</span>
+                                                </div>
+                                                <div class="step-content">
+                                                    <h4>We analyze your cash flow</h4>
+                                                    <p>Understand where your money goes each month</p>
+                                                </div>
+                                            </div>
+                                            <div class="step">
+                                                <div class="step-number">
+                                                    <span>3</span>
+                                                </div>
+                                                <div class="step-content">
+                                                    <h4>We invest your idle cash</h4>
+                                                    <p>Put excess funds to work earning 4.5% APY</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bottom-nav">
+                                    <a href="#" class="nav-item active">
+                                        <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                                        <span>Home</span>
+                                    </a>
+                                    <a href="#" class="nav-item">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                                        <span>Accounts</span>
+                                    </a>
+                                    <a href="#" class="nav-item">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                                        <span>Invest</span>
+                                    </a>
+                                    <a href="#" class="nav-item">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                        <span>Profile</span>
+                                    </a>
+                                </div>
+                                <div class="home-indicator"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STATE 2: Exploring (10% engagement) -->
+                <div class="state-section">
+                    <div class="state-info">
+                        <div class="state-badge exploring">State 2</div>
+                        <h2>Exploring</h2>
+                        <div class="setup-pct">10% Engagement</div>
+                        <p class="description">The user has explored the app but hasn't taken action yet. Social proof and preview elements create desire while reducing perceived risk. The goal: convert curiosity into commitment.</p>
+                        <div class="conversion-tips">
+                            <h4>Conversion Strategy</h4>
+                            <ul>
+                                <li>Social proof (50k+ users) builds trust and FOMO</li>
+                                <li>Skeleton UI teases value without giving it away</li>
+                                <li>"Preview" language suggests immediate gratification</li>
+                                <li>Avatar stack creates sense of community</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="phone-mockup">
+                        <div class="phone-frame">
+                            <div class="phone-screen">
+                                <div class="status-bar">
+                                    <span class="status-bar-time">9:41</span>
+                                    <div class="dynamic-island"></div>
+                                    <div class="status-bar-icons">
+                                        <svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+                                        <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+                                    </div>
+                                </div>
+
+                                <div class="screen-content">
+                                    <div class="hero">
+                                        <h1>See what's possible</h1>
+                                        <p class="subtitle">Preview your financial dashboard</p>
+                                    </div>
+
+                                    <div class="card skeleton-wrapper">
+                                        <div class="card-header">
+                                            <span class="card-title">Net Worth</span>
+                                            <span class="card-action">--</span>
+                                        </div>
+                                        <div class="skeleton skeleton-line medium" style="height: 32px; margin-bottom: 12px;"></div>
+                                        <div class="skeleton skeleton-line short" style="height: 12px;"></div>
+                                        <div class="skeleton-overlay">
+                                            <p>Connect accounts to see real data</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="card skeleton-wrapper">
+                                        <div class="card-header">
+                                            <span class="card-title">Accounts</span>
+                                        </div>
+                                        <div style="display: flex; gap: 10px; margin-bottom: 8px;">
+                                            <div class="skeleton" style="width: 44px; height: 44px; border-radius: 12px;"></div>
+                                            <div style="flex: 1;">
+                                                <div class="skeleton skeleton-line medium" style="height: 14px;"></div>
+                                                <div class="skeleton skeleton-line short" style="height: 10px;"></div>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; gap: 10px;">
+                                            <div class="skeleton" style="width: 44px; height: 44px; border-radius: 12px;"></div>
+                                            <div style="flex: 1;">
+                                                <div class="skeleton skeleton-line medium" style="height: 14px;"></div>
+                                                <div class="skeleton skeleton-line short" style="height: 10px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="social-proof">
+                                        <div class="avatars">
+                                            <div class="avatar"></div>
+                                            <div class="avatar"></div>
+                                            <div class="avatar"></div>
+                                            <div class="avatar"></div>
+                                            <div class="avatar"></div>
+                                        </div>
+                                        <p>Join 50,000+ users growing their wealth</p>
+                                        <p class="rating">
+                                            <span class="rating-stars">★★★★★</span> 4.9/5 rating
+                                        </p>
+                                    </div>
+
+                                    <button class="cta-btn">Connect your first account</button>
+                                </div>
+
+                                <div class="bottom-nav">
+                                    <a href="#" class="nav-item active">
+                                        <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                                        <span>Home</span>
+                                    </a>
+                                    <a href="#" class="nav-item">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                                        <span>Accounts</span>
+                                    </a>
+                                    <a href="#" class="nav-item">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                                        <span>Invest</span>
+                                    </a>
+                                    <a href="#" class="nav-item">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                        <span>Profile</span>
+                                    </a>
+                                </div>
+                                <div class="home-indicator"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STATE 3: Partially connected (30% setup) -->
+                <div class="state-section">
+                    <div class="state-info">
+                        <div class="state-badge partial">State 3</div>
+                        <h2>Partially Connected</h2>
+                        <div class="setup-pct">30% Setup Complete</div>
+                        <p class="description">The user has started but hasn't finished. They've connected 1-2 accounts. The design leverages the endowment effect—they've invested effort, so they're motivated to complete. Show partial value to create desire for the full picture.</p>
+                        <div class="conversion-tips">
+                            <h4>Conversion Strategy</h4>
+                            <ul>
+                                <li>Progress bar creates completion motivation (Zeigarnik effect)</li>
+                                <li>Show partial data to prove value exists</li>
+                                <li>"Almost there" framing is encouraging, not nagging</li>
+                                <li>Connected account visual confirms they're making progress</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="phone-mockup">
+                        <div class="phone-frame">
+                            <div class="phone-screen">
+                                <div class="status-bar">
+                                    <span class="status-bar-time">9:41</span>
+                                    <div class="dynamic-island"></div>
+                                    <div class="status-bar-icons">
+                                        <svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+                                        <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+                                    </div>
+                                </div>
+
+                                <div class="screen-content">
+                                    <div class="hero">
+                                        <h1>You're almost there</h1>
+                                        <p class="subtitle">Connect more accounts for better insights</p>
+                                    </div>
+
+                                    <div class="progress-bar">
+                                        <div class="progress-header">
+                                            <span class="progress-label">Setup Progress</span>
+                                            <span class="progress-pct">30%</span>
+                                        </div>
+                                        <div class="progress-track">
+                                            <div class="progress-fill" style="width: 30%;"></div>
+                                        </div>
+                                    </div>
+
+                                    <h3 class="section-title">Connected Accounts</h3>
+                                    <div class="account-card">
+                                        <div class="account-icon chase">C</div>
+                                        <div class="account-details">
+                                            <div class="account-name">Chase Checking</div>
+                                            <div class="account-type">Checking Account</div>
+                                        </div>
+                                        <div>
+                                            <div class="account-balance">$8,420</div>
+                                            <div class="connected-badge">
+                                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                                                Connected
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="account-card" style="border: 2px dashed rgba(10,132,255,0.3); background: rgba(10,132,255,0.04);">
+                                        <div class="account-icon add">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                        </div>
+                                        <div class="account-details">
+                                            <div class="account-name" style="color: var(--blue);">Add more accounts</div>
+                                            <div class="account-type">Savings, Credit, or Investment</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="card" style="margin-top: 16px;">
+                                        <div class="card-header">
+                                            <span class="card-title">Net Worth</span>
+                                        </div>
+                                        <div class="kpi-value">$8,420</div>
+                                        <p style="font-size: 14px; color: var(--text2); margin-top: 12px;">Connect more accounts to see your full financial picture</p>
+                                    </div>
+
+                                    <button class="cta-btn">Complete your setup</button>
+                                </div>
+
+                                <div class="bottom-nav">
+                                    <a href="#" class="nav-item active">
+                                        <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                                        <span>Home</span>
+                                    </a>
+                                    <a href="#" class="nav-item">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                                        <span>Accounts</span>
+                                    </a>
+                                    <a href="#" class="nav-item">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                                        <span>Invest</span>
+                                    </a>
+                                    <a href="#" class="nav-item">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                        <span>Profile</span>
+                                    </a>
+                                </div>
+                                <div class="home-indicator"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STATE 4: Ready to fund (70% setup) -->
+                <div class="state-section">
+                    <div class="state-info">
+                        <div class="state-badge ready">State 4</div>
+                        <h2>Ready to Fund</h2>
+                        <div class="setup-pct">70% Setup Complete</div>
+                        <p class="description">All accounts are connected. The user can see their full financial picture. Now the goal shifts from connection to activation—getting them to fund and invest. Show the value of their idle cash to create urgency.</p>
+                        <div class="conversion-tips">
+                            <h4>Conversion Strategy</h4>
+                            <ul>
+                                <li>"Safe to invest" amount creates specific, actionable goal</li>
+                                <li>APY preview shows concrete return potential</li>
+                                <li>Minimum amount ($100) reduces perceived barrier</li>
+                                <li>Multiple investment options cater to different risk appetites</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="phone-mockup">
+                        <div class="phone-frame">
+                            <div class="phone-screen">
+                                <div class="status-bar">
+                                    <span class="status-bar-time">9:41</span>
+                                    <div class="dynamic-island"></div>
+                                    <div class="status-bar-icons">
+                                        <svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+                                        <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+                                    </div>
+                                </div>
+
+                                <div class="screen-content">
+                                    <div class="hero">
+                                        <h1>Your dashboard is ready</h1>
+                                        <p class="subtitle">Fund your account to start growing</p>
+                                    </div>
+
+                                    <div class="progress-bar">
+                                        <div class="progress-header">
+                                            <span class="progress-label">Setup Progress</span>
+                                            <span class="progress-pct">70%</span>
+                                        </div>
+                                        <div class="progress-track">
+                                            <div class="progress-fill" style="width: 70%;"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="kpi-card">
+                                        <div class="kpi-label">Net Worth</div>
+                                        <div class="kpi-value">$24,580</div>
+                                        <div class="kpi-change positive">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M7 14l5-5 5 5z"/></svg>
+                                            +2.4% this month
+                                        </div>
+                                    </div>
+
+                                    <h3 class="section-title">Connected Accounts</h3>
+                                    <div class="account-card">
+                                        <div class="account-icon chase">C</div>
+                                        <div class="account-details">
+                                            <div class="account-name">Chase Checking</div>
+                                            <div class="account-type">Checking Account</div>
+                                        </div>
+                                        <div>
+                                            <div class="account-balance">$8,420</div>
+                                            <div class="connected-badge">
+                                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                                                Connected
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="account-card">
+                                        <div class="account-icon bank">S</div>
+                                        <div class="account-details">
+                                            <div class="account-name">Savings Account</div>
+                                            <div class="account-type">High-Yield Savings</div>
+                                        </div>
+                                        <div>
+                                            <div class="account-balance">$12,160</div>
+                                            <div class="connected-badge">
+                                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                                                Connected
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="card" style="background: var(--green-bg); border-color: rgba(22,111,71,0.2);">
+                                        <div style="display: flex; align-items: center; gap: 12px;">
+                                            <div style="width: 40px; height: 40px; background: var(--green); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
+                                            </div>
+                                            <div>
+                                                <div style="font-size: 13px; color: var(--text2);">Safe to invest</div>
+                                                <div style="font-family: 'IBM Plex Sans', sans-serif; font-size: 20px; font-weight: 700; color: var(--green);">$4,200</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="funding-card">
+                                        <h3>Add funds to start investing</h3>
+                                        <p>Transfer money to begin earning 4.5% APY</p>
+                                        <div class="funding-amount">$4,200</div>
+                                        <div class="funding-min">Minimum: $100</div>
+                                    </div>
+
+                                    <h3 class="section-title">Choose your strategy</h3>
+                                    <div class="investment-option">
+                                        <div class="investment-icon auto">
+                                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m-7-7H1m22 0h-4m-2.5-6.5L14 7m-4 10l-2.5 2.5M18.5 17.5L16 15M8 7L5.5 4.5"/></svg>
+                                        </div>
+                                        <div class="investment-details">
+                                            <div class="investment-name">Auto Invest</div>
+                                            <div class="investment-desc">Hands-off, optimized returns</div>
+                                        </div>
+                                        <div class="investment-apy">4.5% APY</div>
+                                    </div>
+                                    <div class="investment-option">
+                                        <div class="investment-icon custom">
+                                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
+                                        </div>
+                                        <div class="investment-details">
+                                            <div class="investment-name">Custom Portfolio</div>
+                                            <div class="investment-desc">Build your own strategy</div>
+                                        </div>
+                                        <div class="investment-apy">Varies</div>
+                                    </div>
+
+                                    <button class="cta-btn">Fund your account</button>
+                                </div>
+
+                                <div class="bottom-nav">
+                                    <a href="#" class="nav-item active">
+                                        <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                                        <span>Home</span>
+                                    </a>
+                                    <a href="#" class="nav-item">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                                        <span>Accounts</span>
+                                    </a>
+                                    <a href="#" class="nav-item">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                                        <span>Invest</span>
+                                    </a>
+                                    <a href="#" class="nav-item">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                        <span>Profile</span>
+                                    </a>
+                                </div>
+                                <div class="home-indicator"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STATE 5: Fully set up (100%) -->
+                <div class="state-section">
+                    <div class="state-info">
+                        <div class="state-badge complete">State 5</div>
+                        <h2>Fully Set Up</h2>
+                        <div class="setup-pct">100% Complete</div>
+                        <p class="description">The user is fully activated—accounts connected, funded, and invested. Now the goal is retention and engagement. Show them the value they're getting and guide them toward deeper engagement.</p>
+                        <div class="conversion-tips">
+                            <h4>Retention Strategy</h4>
+                            <ul>
+                                <li>Daily earnings create positive reinforcement loop</li>
+                                <li>Progress metrics validate their decision to invest</li>
+                                <li>Next steps encourage portfolio optimization</li>
+                                <li>"Your money is working" messaging reinforces value</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="phone-mockup">
+                        <div class="phone-frame">
+                            <div class="phone-screen">
+                                <div class="status-bar">
+                                    <span class="status-bar-time">9:41</span>
+                                    <div class="dynamic-island"></div>
+                                    <div class="status-bar-icons">
+                                        <svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+                                        <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+                                    </div>
+                                </div>
+
+                                <div class="screen-content">
+                                    <div class="hero">
+                                        <h1>You're all set</h1>
+                                        <p class="subtitle">Your money is now working for you</p>
+                                    </div>
+
+                                    <div class="earnings-card">
+                                        <div class="label">Invested</div>
+                                        <div class="value">$4,200</div>
+                                        <div class="change">+ $0.58 earned today</div>
+                                    </div>
+
+                                    <div class="kpi-card">
+                                        <div class="kpi-label">Net Worth</div>
+                                        <div class="kpi-value">$24,580</div>
+                                        <div class="kpi-change positive">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M7 14l5-5 5 5z"/></svg>
+                                            +3.2% this month
+                                        </div>
+                                    </div>
+
+                                    <h3 class="section-title">Connected Accounts</h3>
+                                    <div class="account-card">
+                                        <div class="account-icon chase">C</div>
+                                        <div class="account-details">
+                                            <div class="account-name">Chase Checking</div>
+                                            <div class="account-type">Checking Account</div>
+                                        </div>
+                                        <div>
+                                            <div class="account-balance">$4,220</div>
+                                            <div class="connected-badge">
+                                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                                                Connected
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="account-card">
+                                        <div class="account-icon bank">S</div>
+                                        <div class="account-details">
+                                            <div class="account-name">Savings Account</div>
+                                            <div class="account-type">High-Yield Savings</div>
+                                        </div>
+                                        <div>
+                                            <div class="account-balance">$12,160</div>
+                                            <div class="connected-badge">
+                                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                                                Connected
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <h3 class="section-title">Investment Summary</h3>
+                                    <div class="card">
+                                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border);">
+                                            <span style="font-size: 14px; color: var(--text2);">Auto Invest</span>
+                                            <span style="font-family: 'IBM Plex Sans', sans-serif; font-size: 14px; font-weight: 600; color: var(--text);">$4,200</span>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border);">
+                                            <span style="font-size: 14px; color: var(--text2);">APY</span>
+                                            <span style="font-family: 'IBM Plex Sans', sans-serif; font-size: 14px; font-weight: 600; color: var(--green);">4.5%</span>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border);">
+                                            <span style="font-size: 14px; color: var(--text2);">Today's earnings</span>
+                                            <span style="font-family: 'IBM Plex Sans', sans-serif; font-size: 14px; font-weight: 600; color: var(--green);">+$0.58</span>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0;">
+                                            <span style="font-size: 14px; color: var(--text2);">Total earnings</span>
+                                            <span style="font-family: 'IBM Plex Sans', sans-serif; font-size: 14px; font-weight: 600; color: var(--green);">+$12.45</span>
+                                        </div>
+                                    </div>
+
+                                    <h3 class="section-title">Next Steps</h3>
+                                    <div class="next-steps">
+                                        <div class="next-step">
+                                            <div class="next-step-icon">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
+                                            </div>
+                                            <span class="next-step-text">Review your portfolio</span>
+                                            <span class="next-step-arrow">›</span>
+                                        </div>
+                                        <div class="next-step">
+                                            <div class="next-step-icon">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m-7-7H1m22 0h-4m-2.5-6.5L14 7m-4 10l-2.5 2.5M18.5 17.5L16 15M8 7L5.5 4.5"/></svg>
+                                            </div>
+                                            <span class="next-step-text">Adjust your targets</span>
+                                            <span class="next-step-arrow">›</span>
+                                        </div>
+                                        <div class="next-step">
+                                            <div class="next-step-icon">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                                            </div>
+                                            <span class="next-step-text">Set up auto-invest</span>
+                                            <span class="next-step-arrow">›</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bottom-nav">
+                                    <a href="#" class="nav-item active">
+                                        <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                                        <span>Home</span>
+                                    </a>
+                                    <a href="#" class="nav-item">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                                        <span>Accounts</span>
+                                    </a>
+                                    <a href="#" class="nav-item">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                                        <span>Invest</span>
+                                    </a>
+                                    <a href="#" class="nav-item">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                        <span>Profile</span>
+                                    </a>
+                                </div>
+                                <div class="home-indicator"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conversion Strategy Section -->
+            <div class="strategy-section">
+                <h2>Progression & Conversion Strategy</h2>
+                <p>Each state is designed to maximize conversion through psychological principles and progressive value demonstration. The journey from first download to fully invested follows a carefully orchestrated path.</p>
+
+                <div class="progression-flow">
+                    <div class="progression-step">
+                        <div class="step-pct">0%</div>
+                        <h4>First Touch</h4>
+                        <p>Welcome, education, single CTA</p>
+                    </div>
+                    <div class="progression-step">
+                        <div class="step-pct">10%</div>
+                        <h4>Exploring</h4>
+                        <p>Social proof, preview, FOMO</p>
+                    </div>
+                    <div class="progression-step">
+                        <div class="step-pct">30%</div>
+                        <h4>Partial</h4>
+                        <p>Progress bar, partial value, momentum</p>
+                    </div>
+                    <div class="progression-step">
+                        <div class="step-pct">70%</div>
+                        <h4>Ready</h4>
+                        <p>Full picture, funding CTA, options</p>
+                    </div>
+                    <div class="progression-step">
+                        <div class="step-pct">100%</div>
+                        <h4>Activated</h4>
+                        <p>Earnings, retention, deeper engagement</p>
+                    </div>
+                </div>
+
+                <div class="strategy-grid">
+                    <div class="strategy-card">
+                        <div class="metric-tag">Psychology</div>
+                        <h3>Progressive Commitment</h3>
+                        <p>Each state builds on the previous one, leveraging the endowment effect and sunk cost fallacy to drive completion.</p>
+                        <ul>
+                            <li>Start with smallest possible action</li>
+                            <li>Show progress to create momentum</li>
+                            <li>Use completion bias to drive finishing</li>
+                            <li>Reward each step with visible value</li>
+                        </ul>
+                    </div>
+
+                    <div class="strategy-card">
+                        <div class="metric-tag">Messaging</div>
+                        <h3>Benefit-Driven Copy</h3>
+                        <p>Every headline focuses on what the user gains, not what they need to do. Language is encouraging, not demanding.</p>
+                        <ul>
+                            <li>"Your money could be working harder"</li>
+                            <li>"See what's possible"</li>
+                            <li>"You're almost there"</li>
+                            <li>"Your money is now working for you"</li>
+                        </ul>
+                    </div>
+
+                    <div class="strategy-card">
+                        <div class="metric-tag">Visual</div>
+                        <h3>Value Teasing</h3>
+                        <p>Skeleton UI and partial data create desire for the full experience. Users see glimpses of what they're missing.</p>
+                        <ul>
+                            <li>Skeleton loaders hint at dashboard value</li>
+                            <li>Partial data shows what's possible</li>
+                            <li>Grayed elements create "unlock" motivation</li>
+                            <li>Progress bars visualize completion</li>
+                        </ul>
+                    </div>
+
+                    <div class="strategy-card">
+                        <div class="metric-tag">Retention</div>
+                        <h3>Engagement Loops</h3>
+                        <p>Once activated, daily earnings and progress metrics create positive reinforcement that drives continued engagement.</p>
+                        <ul>
+                            <li>Daily earnings notification</li>
+                            <li>Progress toward goals</li>
+                            <li>Portfolio optimization suggestions</li>
+                            <li>Milestone celebrations</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
