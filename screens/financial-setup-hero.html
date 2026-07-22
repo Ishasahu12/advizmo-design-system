@@ -27,7 +27,7 @@ body{font-family:var(--font-body);background:#0d0d0d;color:var(--text);display:f
 .phone-col{display:flex;flex-direction:column;align-items:center}
 .phone-label{font-size:11px;font-weight:600;color:rgba(255,255,255,.5);margin-bottom:10px;text-transform:uppercase;letter-spacing:.8px}
 .phone{width:393px;background:var(--bg);border-radius:44px;padding:12px;box-shadow:0 20px 60px rgba(0,0,0,.5);position:relative;overflow:hidden}
-.phone-screen{background:var(--bg);border-radius:34px;overflow:hidden;position:relative;min-height:680px}
+.phone-screen{background:var(--bg);border-radius:34px;overflow:hidden;position:relative;min-height:852px}
 .status-bar{display:flex;justify-content:space-between;align-items:center;padding:10px 24px 6px;font-size:12px;font-weight:600;color:var(--text);position:relative;z-index:2}
 .status-bar .time{font-size:14px;font-weight:700}
 .dynamic-island{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:85px;height:22px;background:#000;border-radius:18px;z-index:3}
@@ -38,324 +38,593 @@ body{font-family:var(--font-body);background:#0d0d0d;color:var(--text);display:f
 .nav-item.active{color:var(--blue)}
 .nav-item svg{width:20px;height:20px}
 .screen-content{padding:0 14px 90px}
-.hero-illustration{height:120px;border-radius:16px;margin-bottom:12px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
-.hero-title{font-family:var(--font-heading);font-size:18px;font-weight:700;color:var(--text);margin-bottom:4px}
-.hero-subtitle{font-size:12px;color:var(--text2);margin-bottom:10px}
-.progress-bar{height:4px;background:var(--border);border-radius:2px;margin-bottom:12px;overflow:hidden}
-.progress-fill{height:100%;background:var(--blue);border-radius:2px;transition:width .3s}
-.step{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
-.step:last-child{border-bottom:none}
-.step-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
-.step-num.done{background:var(--green);color:#fff}
-.step-num.active{background:var(--blue);color:#fff}
-.step-num.locked{background:var(--border);color:var(--text2)}
-.step-text{flex:1}
-.step-title{font-size:14px;font-weight:600;color:var(--text)}
-.step-title.locked{color:var(--text2)}
-.step-desc{font-size:11px;color:var(--text2);margin-top:2px;line-height:1.4}
-.step-badge{font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;white-space:nowrap}
-.step-badge.done{background:var(--green-bg);color:var(--green)}
-.step-badge.active{background:rgba(10,132,255,.1);color:var(--blue)}
-.cta{display:block;width:100%;padding:12px;border:none;border-radius:10px;font-family:var(--font-body);font-size:13px;font-weight:600;text-align:center;cursor:pointer;margin-top:10px}
-.cta.blue{background:var(--blue);color:#fff}
-.progress-ring{width:80px;height:80px;position:relative}
-.progress-ring svg{transform:rotate(-90deg)}
-.progress-ring .value{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--font-heading);font-size:18px;font-weight:700;color:var(--blue)}
-.illustration-1{background:linear-gradient(135deg,#e8f0ff,#d4e4ff)}
-.illustration-2{background:linear-gradient(135deg,#e8f8ec,#d4f0e0)}
-.illustration-3{background:linear-gradient(135deg,#fff5e6,#ffe8cc)}
-.illustration-4{background:linear-gradient(135deg,#ffe8e8,#ffd4d4)}
-.illustration-5{background:linear-gradient(135deg,#f0f7ff,#e0eeff)}
-.illustration-6{background:linear-gradient(135deg,#e8f8ec,#d0f0dc)}
-.illustration-7{background:linear-gradient(135deg,#fff5e6,#ffe8d0)}
-.illustration-8{background:linear-gradient(135deg,#e8f0ff,#d8e8ff)}
+
+/* Hero Card System */
+.hero-card{position:relative;border-radius:24px;overflow:hidden;margin-bottom:16px}
+.hero-card-inner{position:relative;z-index:2;padding:20px}
+
+/* Illustration containers */
+.hero-illust{position:relative;width:100%;display:flex;align-items:center;justify-content:center;overflow:hidden}
+
+/* Ambient shapes */
+.ambient{position:absolute;border-radius:50%;filter:blur(40px);opacity:.5;pointer-events:none}
+
+/* Step indicators */
+.step-row{display:flex;align-items:center;gap:10px;padding:8px 0}
+.step-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.step-dot.done{background:var(--green);color:#fff}
+.step-dot.active{background:var(--blue);color:#fff;box-shadow:0 0 0 4px rgba(10,132,255,.2)}
+.step-dot.locked{background:rgba(0,0,0,.06);color:var(--text2)}
+.step-label{font-size:13px;font-weight:500;color:var(--text)}
+.step-label.locked{color:var(--text2)}
+.step-check{margin-left:auto;font-size:11px;font-weight:600;padding:2px 8px;border-radius:6px}
+.step-check.done{background:var(--green-bg);color:var(--green)}
+.step-check.active{background:rgba(10,132,255,.1);color:var(--blue)}
+
+/* Premium CTA */
+.premium-cta{display:block;width:100%;padding:14px;border:none;border-radius:14px;font-family:var(--font-body);font-size:15px;font-weight:600;text-align:center;cursor:pointer;position:relative;overflow:hidden}
+
+/* Glass effect */
+.glass{background:rgba(255,255,255,.72);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border:1px solid rgba(255,255,255,.5)}
+
+/* Progress bar */
+.progress-track{height:4px;background:rgba(0,0,0,.06);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;border-radius:2px;transition:width .3s}
+
+/* Floating elements */
+.float-el{position:absolute;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.08)}
+
+/* Illustration 1: Split Layout */
+.illust-split{height:180px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;margin:0 20px;position:relative;overflow:hidden}
+.illust-split .card-float{position:absolute;width:120px;height:70px;background:rgba(255,255,255,.18);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.3);border-radius:12px;top:20px;right:16px;display:flex;flex-direction:column;justify-content:center;padding:10px}
+.illust-split .card-float .label{font-size:8px;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.5px}
+.illust-split .card-float .amount{font-family:var(--font-heading);font-size:18px;font-weight:700;color:#fff;margin-top:2px}
+.illust-split .graph-float{position:absolute;bottom:16px;left:16px;right:16px;height:60px;display:flex;align-items:flex-end;gap:4px}
+.illust-split .graph-bar{flex:1;background:rgba(255,255,255,.25);border-radius:4px 4px 0 0;transition:height .3s}
+.illust-split .graph-bar:nth-child(1){height:30%}
+.illust-split .graph-bar:nth-child(2){height:50%}
+.illust-split .graph-bar:nth-child(3){height:40%}
+.illust-split .graph-bar:nth-child(4){height:70%}
+.illust-split .graph-bar:nth-child(5){height:60%}
+.illust-split .graph-bar:nth-child(6){height:85%}
+.illust-split .graph-bar:nth-child(7){height:75%}
+.illust-split .graph-bar:nth-child(8){height:95%}
+.illust-split .logo-float{position:absolute;top:16px;left:16px;width:36px;height:36px;background:rgba(255,255,255,.2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;font-family:var(--font-heading)}
+
+/* Illustration 2: Dashboard Embed */
+.illust-dashboard{height:160px;background:linear-gradient(160deg,#0f172a 0%,#1e293b 100%);border-radius:20px;margin:0 20px;position:relative;overflow:hidden;padding:16px}
+.illust-dashboard .dash-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.illust-dashboard .dash-title{font-size:11px;font-weight:600;color:rgba(255,255,255,.9)}
+.illust-dashboard .dash-badge{font-size:8px;padding:3px 8px;background:rgba(16,185,129,.2);color:#34d399;border-radius:6px;font-weight:600}
+.illust-dashboard .dash-cards{display:flex;gap:8px}
+.illust-dashboard .dash-card{flex:1;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:10px}
+.illust-dashboard .dash-card .dc-label{font-size:8px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.3px}
+.illust-dashboard .dash-card .dc-value{font-family:var(--font-heading);font-size:14px;font-weight:700;color:#fff;margin-top:2px}
+.illust-dashboard .dash-card .dc-change{font-size:8px;color:#34d399;margin-top:2px}
+.illust-dashboard .dash-graph{margin-top:10px;height:40px;display:flex;align-items:flex-end;gap:3px}
+.illust-dashboard .dash-graph .bar{flex:1;background:linear-gradient(180deg,rgba(99,102,241,.6),rgba(99,102,241,.2));border-radius:3px 3px 0 0}
+
+/* Illustration 3: Glass Overlap */
+.illust-glass{height:200px;background:linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 50%,#bae6fd 100%);border-radius:20px;margin:0 20px;position:relative;overflow:hidden}
+.illust-glass .glass-card{position:absolute;width:140px;background:rgba(255,255,255,.6);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.8);border-radius:16px;padding:14px;top:20px;left:20px;box-shadow:0 8px 32px rgba(0,0,0,.06)}
+.illust-glass .glass-card .gc-icon{width:28px;height:28px;background:var(--blue);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;margin-bottom:8px}
+.illust-glass .glass-card .gc-title{font-size:10px;font-weight:600;color:var(--text)}
+.illust-glass .glass-card .gc-amount{font-family:var(--font-heading);font-size:16px;font-weight:700;color:var(--text);margin-top:2px}
+.illust-glass .glass-card-2{position:absolute;width:120px;background:rgba(255,255,255,.5);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.6);border-radius:14px;padding:12px;bottom:20px;right:20px;box-shadow:0 6px 24px rgba(0,0,0,.05)}
+.illust-glass .glass-card-2 .gc2-row{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.illust-glass .glass-card-2 .gc2-dot{width:8px;height:8px;border-radius:50%}
+.illust-glass .glass-card-2 .gc2-label{font-size:9px;color:var(--text2)}
+.illust-glass .glass-card-2 .gc2-val{font-size:10px;font-weight:600;color:var(--text);margin-left:auto}
+.illust-glass .orbit{position:absolute;width:60px;height:60px;border:2px dashed rgba(10,132,255,.2);border-radius:50%;top:50%;right:40px;transform:translateY(-50%)}
+.illust-glass .orbit-dot{position:absolute;width:12px;height:12px;background:var(--blue);border-radius:50%;top:-6px;left:50%;transform:translateX(-50%);box-shadow:0 0 12px rgba(10,132,255,.4)}
+
+/* Illustration 4: Card Stack */
+.illust-stack{height:180px;background:linear-gradient(135deg,#fef3c7 0%,#fde68a 100%);border-radius:20px;margin:0 20px;position:relative;overflow:hidden}
+.illust-stack .stack-card{position:absolute;border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,.1)}
+.illust-stack .stack-card-1{width:160px;height:100px;background:linear-gradient(135deg,#1e293b,#334155);bottom:30px;left:50%;transform:translateX(-50%) rotate(-3deg);z-index:1;padding:14px}
+.illust-stack .stack-card-2{width:160px;height:100px;background:linear-gradient(135deg,#0ea5e9,#2563eb);bottom:40px;left:50%;transform:translateX(-50%) rotate(2deg);z-index:2;padding:14px}
+.illust-stack .stack-card-3{width:160px;height:100px;background:linear-gradient(135deg,#8b5cf6,#6366f1);bottom:50px;left:50%;transform:translateX(-50%) rotate(-1deg);z-index:3;padding:14px}
+.illust-stack .stack-card .sc-label{font-size:8px;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.5px}
+.illust-stack .stack-card .sc-name{font-size:12px;font-weight:600;color:#fff;margin-top:2px}
+.illust-stack .stack-card .sc-amount{font-family:var(--font-heading);font-size:16px;font-weight:700;color:#fff;margin-top:4px}
+
+/* Illustration 5: Background Layered */
+.illust-bg{height:220px;background:linear-gradient(160deg,#0f172a 0%,#1e293b 60%,#334155 100%);border-radius:20px;margin:0 20px;position:relative;overflow:hidden}
+.illust-bg .bg-orb-1{position:absolute;width:120px;height:120px;background:radial-gradient(circle,rgba(99,102,241,.3),transparent);border-radius:50%;top:-20px;right:-20px}
+.illust-bg .bg-orb-2{position:absolute;width:80px;height:80px;background:radial-gradient(circle,rgba(16,185,129,.25),transparent);border-radius:50%;bottom:20px;left:-10px}
+.illust-bg .bg-card{position:absolute;bottom:20px;left:20px;right:20px;background:rgba(255,255,255,.08);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:14px}
+.illust-bg .bg-card .bc-row{display:flex;justify-content:space-between;align-items:center}
+.illust-bg .bg-card .bc-label{font-size:10px;color:rgba(255,255,255,.6)}
+.illust-bg .bg-card .bc-value{font-family:var(--font-heading);font-size:18px;font-weight:700;color:#fff}
+.illust-bg .bg-card .bc-bar{height:4px;background:rgba(255,255,255,.1);border-radius:2px;margin-top:10px;overflow:hidden}
+.illust-bg .bg-card .bc-fill{height:100%;background:linear-gradient(90deg,#6366f1,#8b5cf6);border-radius:2px;width:40%}
+.illust-bg .bg-mini{position:absolute;top:20px;left:20px;display:flex;gap:6px}
+.illust-bg .bg-mini-item{width:32px;height:32px;background:rgba(255,255,255,.1);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px}
+
+/* Illustration 6: Circular Focus */
+.illust-circular{height:200px;background:linear-gradient(135deg,#ecfdf5 0%,#d1fae5 100%);border-radius:20px;margin:0 20px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.illust-circular .ring-outer{width:140px;height:140px;border-radius:50%;border:3px solid rgba(22,111,71,.15);display:flex;align-items:center;justify-content:center;position:relative}
+.illust-circular .ring-mid{width:110px;height:110px;border-radius:50%;border:3px solid rgba(22,111,71,.25);display:flex;align-items:center;justify-content:center}
+.illust-circular .ring-inner{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--green),#059669);display:flex;align-items:center;justify-content:center;flex-direction:column;box-shadow:0 8px 32px rgba(22,111,71,.2)}
+.illust-circular .ring-inner .ri-pct{font-family:var(--font-heading);font-size:20px;font-weight:700;color:#fff}
+.illust-circular .ring-inner .ri-label{font-size:8px;color:rgba(255,255,255,.8);text-transform:uppercase;letter-spacing:.5px}
+.illust-circular .orbit-item{position:absolute;width:28px;height:28px;background:#fff;border-radius:8px;box-shadow:0 2px 12px rgba(0,0,0,.08);display:flex;align-items:center;justify-content:center;font-size:12px}
+.illust-circular .orbit-item:nth-child(5){top:10px;left:50%;transform:translateX(-50%)}
+.illust-circular .orbit-item:nth-child(6){bottom:10px;left:50%;transform:translateX(-50%)}
+.illust-circular .orbit-item:nth-child(7){left:10px;top:50%;transform:translateY(-50%)}
+.illust-circular .orbit-item:nth-child(8){right:10px;top:50%;transform:translateY(-50%)}
+
+/* Illustration 7: AI Assistant */
+.illust-ai{height:200px;background:linear-gradient(160deg,#0f172a 0%,#1e1b4b 100%);border-radius:20px;margin:0 20px;position:relative;overflow:hidden}
+.illust-ai .ai-glow{position:absolute;width:100px;height:100px;background:radial-gradient(circle,rgba(99,102,241,.4),transparent);border-radius:50%;top:30px;left:50%;transform:translateX(-50%)}
+.illust-ai .ai-brain{position:absolute;top:30px;left:50%;transform:translateX(-50%);width:48px;height:48px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 4px 20px rgba(99,102,241,.4)}
+.illust-ai .ai-lines{position:absolute;top:44px;left:50%;transform:translateX(-50%);width:80px;height:20px}
+.illust-ai .ai-line{position:absolute;height:2px;background:linear-gradient(90deg,transparent,rgba(99,102,241,.5),transparent);border-radius:1px}
+.illust-ai .ai-line:nth-child(1){width:60px;top:0;left:10px}
+.illust-ai .ai-line:nth-child(2){width:40px;top:6px;left:20px}
+.illust-ai .ai-line:nth-child(3){width:50px;top:12px;left:15px}
+.illust-ai .ai-cards{position:absolute;bottom:16px;left:16px;right:16px;display:flex;gap:8px}
+.illust-ai .ai-card{flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:8px;text-align:center}
+.illust-ai .ai-card .aic-icon{font-size:16px;margin-bottom:4px}
+.illust-ai .ai-card .aic-text{font-size:8px;color:rgba(255,255,255,.6)}
+
+/* Illustration 8: Roadmap */
+.illust-road{height:180px;background:linear-gradient(135deg,#fef2f2 0%,#fee2e2 100%);border-radius:20px;margin:0 20px;position:relative;overflow:hidden}
+.illust-road .road-line{position:absolute;top:50%;left:20px;right:20px;height:3px;background:rgba(0,0,0,.08);border-radius:2px;transform:translateY(-50%)}
+.illust-road .road-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--blue));border-radius:2px;width:35%}
+.illust-road .road-dot{position:absolute;width:20px;height:20px;border-radius:50%;top:50%;transform:translateY(-50%);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700}
+.illust-road .road-dot:nth-child(2){left:16px;background:var(--green);color:#fff}
+.illust-road .road-dot:nth-child(3){left:calc(16px + 33% - 10px);background:var(--blue);color:#fff;box-shadow:0 0 0 4px rgba(10,132,255,.2)}
+.illust-road .road-dot:nth-child(4){left:calc(16px + 66% - 10px);background:rgba(0,0,0,.06);color:var(--text2)}
+.illust-road .road-dot:nth-child(5){right:16px;background:rgba(0,0,0,.06);color:var(--text2)}
+.illust-road .road-label{position:absolute;font-size:8px;font-weight:600;text-align:center;width:50px}
+.illust-road .road-label:nth-child(6){left:6px;top:calc(50% + 16px);color:var(--green)}
+.illust-road .road-label:nth-child(7){left:calc(16px + 33% - 25px);top:calc(50% + 16px);color:var(--blue)}
+.illust-road .road-label:nth-child(8){left:calc(16px + 66% - 25px);top:calc(50% + 16px);color:var(--text2)}
+.illust-road .road-label:nth-child(9){right:6px;top:calc(50% + 16px);color:var(--text2)}
+.illust-road .road-icon{position:absolute;font-size:20px;top:calc(50% - 42px)}
+.illust-road .road-icon:nth-child(10){left:calc(16px + 16%);opacity:.6}
+.illust-road .road-icon:nth-child(11){right:calc(16px + 16%);opacity:.3}
 </style>
 </head>
 <body>
 <nav class="sidebar">
 <div class="sidebar-logo"><h1>Financial Setup Hero</h1><p>Advizmo Design System</p></div>
-<a href="#c1" class="active">1. Dashboard</a>
-<a href="#c2">2. Timeline</a>
-<a href="#c3">3. Progress Board</a>
-<a href="#c4">4. Roadmap</a>
-<a href="#c5">5. Modular</a>
-<a href="#c6">6. Guided</a>
-<a href="#c7">7. Status Board</a>
-<a href="#c8">8. AI Assistant</a>
+<a href="#c1" class="active">1. Split Layout</a>
+<a href="#c2">2. Dashboard Embed</a>
+<a href="#c3">3. Glass Overlap</a>
+<a href="#c4">4. Card Stack</a>
+<a href="#c5">5. Dark Ambient</a>
+<a href="#c6">6. Circular Focus</a>
+<a href="#c7">7. AI Assistant</a>
+<a href="#c8">8. Roadmap</a>
+<a href="index.html" style="margin-top:24px;border-top:1px solid rgba(255,255,255,.08);padding-top:16px">← Back to Index</a>
 </nav>
+
 <div class="main">
 <h2>Financial Setup Hero</h2>
-<p class="section-subtitle">8 premium hero concepts for the homepage setup experience. Each with unique layout, illustration, and interaction pattern.</p>
-<!-- CONCEPT 1: FINANCIAL SETUP DASHBOARD -->
+<p class="section-subtitle">8 premium hero card concepts. Each is a large, focal hero card (220–340px) occupying 40–50% of the first viewport, with illustration, all 5 setup steps, progress, and a single CTA.</p>
+
+<!-- ============================================ -->
+<!-- CONCEPT 1: SPLIT LAYOUT -->
+<!-- ============================================ -->
 <section id="c1">
 <div class="section-label">Concept 1</div>
-<h3>Financial Setup Dashboard</h3>
+<h3>Split Layout</h3>
+<p class="section-subtitle">Illustration on top with floating glass cards. Content below. Large CTA at bottom.</p>
 <div class="phone-container">
 <div class="phone-col">
-<div class="phone-label">Dashboard Style</div>
+<div class="phone-label">Default</div>
 <div class="phone">
 <div class="phone-screen">
 <div class="status-bar"><span class="time">9:41</span><div class="dynamic-island"></div><div class="status-icons"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3a4.237 4.237 0 00-6 0zm-4-4l2 2a7.074 7.074 0 0110 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></div></div>
-<div class="screen-content">
-<div class="hero-illustration illustration-1">
-<div style="text-align:center"><div style="font-size:32px;margin-bottom:4px">🏦</div><div style="font-size:11px;color:var(--blue);font-weight:600">Financial Goals</div></div>
+<div class="screen-content" style="padding-top:8px">
+<!-- Hero Card -->
+<div class="hero-card" style="background:#fff;box-shadow:0 4px 24px rgba(0,0,0,.06)">
+<!-- Illustration -->
+<div class="illust-split">
+<div class="ambient" style="width:80px;height:80px;background:rgba(255,255,255,.2);top:-20px;right:20px"></div>
+<div class="ambient" style="width:60px;height:60px;background:rgba(255,255,255,.15);bottom:10px;left:30px"></div>
+<div class="logo-float">A</div>
+<div class="card-float">
+<div class="label">Safe to invest</div>
+<div class="amount">$4,200</div>
 </div>
-<div class="hero-title">Setting up your financial system</div>
-<div class="hero-subtitle">Step 2 of 5 — Set your money goals</div>
-<div class="progress-bar"><div class="progress-fill" style="width:40%"></div></div>
-<div class="step"><div class="step-num done">✓</div><div class="step-text"><div class="step-title">Connect Accounts</div><div class="step-desc">Checking and savings connected</div></div><span class="step-badge done">Done</span></div>
-<div class="step" style="background:rgba(10,132,255,.04);border-radius:10px;padding:12px;margin:4px 0"><div class="step-num active">2</div><div class="step-text"><div class="step-title">Set Money Goals</div><div class="step-desc">Configure checking, emergency fund, savings, and investment targets</div><button class="cta blue">Set your goals</button></div></div>
-<div class="step"><div class="step-num locked">3</div><div class="step-text"><div class="step-title locked">Review Monthly Money</div><div class="step-desc">Review recurring income and expenses</div></div></div>
-<div class="step"><div class="step-num locked">4</div><div class="step-text"><div class="step-title locked">Open Auto Invest</div><div class="step-desc">Create your investment account</div></div></div>
-<div class="step"><div class="step-num locked">5</div><div class="step-text"><div class="step-title locked">Start Investing</div><div class="step-desc">Make your first investment</div></div></div>
+<div class="graph-float">
+<div class="graph-bar"></div><div class="graph-bar"></div><div class="graph-bar"></div><div class="graph-bar"></div><div class="graph-bar"></div><div class="graph-bar"></div><div class="graph-bar"></div><div class="graph-bar"></div>
+</div>
+</div>
+<!-- Content -->
+<div class="hero-card-inner">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
+<div>
+<div style="font-family:var(--font-heading);font-size:17px;font-weight:700;color:var(--text)">Complete your setup</div>
+<div style="font-size:12px;color:var(--text2);margin-top:2px">2 of 5 steps done</div>
+</div>
+<div style="text-align:right">
+<div style="font-family:var(--font-heading);font-size:22px;font-weight:700;color:var(--blue)">40%</div>
+<div style="font-size:9px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px">Complete</div>
+</div>
+</div>
+<div class="progress-track" style="margin-bottom:12px"><div class="progress-fill" style="width:40%;background:var(--blue)"></div></div>
+
+<!-- 5 Steps -->
+<div class="step-row"><div class="step-dot done">✓</div><div class="step-label">Connect accounts</div><div class="step-check done">Done</div></div>
+<div class="step-row"><div class="step-dot done">✓</div><div class="step-label">Link bank</div><div class="step-check done">Done</div></div>
+<div class="step-row"><div class="step-dot active">3</div><div class="step-label" style="font-weight:600">Set money goals</div><div class="step-check active">Current</div></div>
+<div class="step-row"><div class="step-dot locked">4</div><div class="step-label locked">Review monthly flow</div></div>
+<div class="step-row"><div class="step-dot locked">5</div><div class="step-label locked">Start investing</div></div>
+
+<button class="premium-cta" style="background:var(--blue);color:#fff;margin-top:12px">Set money goals</button>
+</div>
+</div>
 </div>
 <div class="bottom-nav"><div class="nav-item active"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>Home</div><div class="nav-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>Activity</div><div class="nav-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>Invest</div><div class="nav-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>Profile</div></div>
-</div></div></div>
+</div></div>
+</div>
 </section>
 <hr class="divider">
-<!-- CONCEPT 2: JOURNEY TIMELINE -->
+
+<!-- ============================================ -->
+<!-- CONCEPT 2: DASHBOARD EMBED -->
+<!-- ============================================ -->
 <section id="c2">
 <div class="section-label">Concept 2</div>
-<h3>Journey Timeline</h3>
+<h3>Dashboard Embed</h3>
+<p class="section-subtitle">Illustration embedded inside a dark financial dashboard card. Steps below inside the hero.</p>
 <div class="phone-container">
 <div class="phone-col">
-<div class="phone-label">Timeline Style</div>
+<div class="phone-label">Default</div>
 <div class="phone">
 <div class="phone-screen">
 <div class="status-bar"><span class="time">9:41</span><div class="dynamic-island"></div><div class="status-icons"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3a4.237 4.237 0 00-6 0zm-4-4l2 2a7.074 7.074 0 0110 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></div></div>
-<div class="screen-content">
-<div class="hero-illustration illustration-2">
-<div style="text-align:center"><div style="font-size:32px;margin-bottom:4px">🗺️</div><div style="font-size:11px;color:var(--green);font-weight:600">Financial Journey</div></div>
+<div class="screen-content" style="padding-top:8px">
+<div class="hero-card" style="background:linear-gradient(160deg,#0f172a,#1e293b);box-shadow:0 8px 40px rgba(0,0,0,.3)">
+<div class="hero-card-inner" style="padding:16px">
+<!-- Dashboard Illustration -->
+<div class="illust-dashboard" style="margin:0;border-radius:14px">
+<div class="dash-header"><div class="dash-title">Your Financial Overview</div><div class="dash-badge">Live</div></div>
+<div class="dash-cards">
+<div class="dash-card"><div class="dc-label">Checking</div><div class="dc-value">$8,420</div><div class="dc-change">+2.1%</div></div>
+<div class="dash-card"><div class="dc-label">Savings</div><div class="dc-value">$12,850</div><div class="dc-change">+5.3%</div></div>
+<div class="dash-card"><div class="dc-label">Invest</div><div class="dc-value">$4,200</div><div class="dc-change">Ready</div></div>
 </div>
-<div class="hero-title">Your financial journey</div>
-<div class="hero-subtitle">2 of 5 steps complete</div>
-<div style="display:flex;align-items:center;gap:4px;margin-bottom:16px">
-<div style="width:24px;height:24px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:700">✓</div>
-<div style="flex:1;height:3px;background:var(--green);border-radius:2px"></div>
-<div style="width:24px;height:24px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:700">2</div>
-<div style="flex:1;height:3px;background:var(--border);border-radius:2px"></div>
-<div style="width:24px;height:24px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--text2);font-weight:700">3</div>
-<div style="flex:1;height:3px;background:var(--border);border-radius:2px"></div>
-<div style="width:24px;height:24px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--text2);font-weight:700">4</div>
-<div style="flex:1;height:3px;background:var(--border);border-radius:2px"></div>
-<div style="width:24px;height:24px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--text2);font-weight:700">5</div>
+<div class="dash-graph">
+<div class="bar" style="height:40%"></div><div class="bar" style="height:55%"></div><div class="bar" style="height:45%"></div><div class="bar" style="height:70%"></div><div class="bar" style="height:60%"></div><div class="bar" style="height:80%"></div><div class="bar" style="height:75%"></div><div class="bar" style="height:90%"></div>
 </div>
-<div style="background:rgba(10,132,255,.04);border:1.5px solid var(--blue);border-radius:12px;padding:14px;margin-bottom:10px">
-<div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px">Set Money Goals</div>
-<div style="font-size:12px;color:var(--text2);margin-bottom:8px">Configure your financial targets</div>
-<button class="cta blue">Configure goals</button>
 </div>
-<div style="font-size:11px;color:var(--text2);padding:8px 0;border-bottom:1px solid var(--border)">✓ Connect Accounts</div>
-<div style="font-size:11px;color:var(--text2);padding:8px 0;border-bottom:1px solid var(--border)">○ Review Monthly Money</div>
-<div style="font-size:11px;color:var(--text2);padding:8px 0;border-bottom:1px solid var(--border)">○ Open Auto Invest</div>
-<div style="font-size:11px;color:var(--text2);padding:8px 0">○ Start Investing</div>
+<!-- Steps below -->
+<div style="margin-top:14px">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+<div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:#fff">Setup progress</div>
+<div style="font-size:11px;color:rgba(255,255,255,.5)">2 / 5</div>
+</div>
+<div class="progress-track" style="background:rgba(255,255,255,.1);margin-bottom:12px"><div class="progress-fill" style="width:40%;background:linear-gradient(90deg,#3b82f6,#6366f1)"></div></div>
+
+<div class="step-row"><div class="step-dot done">✓</div><div class="step-label" style="color:rgba(255,255,255,.9)">Connect accounts</div><div class="step-check done">Done</div></div>
+<div class="step-row"><div class="step-dot done">✓</div><div class="step-label" style="color:rgba(255,255,255,.9)">Link bank</div><div class="step-check done">Done</div></div>
+<div class="step-row"><div class="step-dot active">3</div><div class="step-label" style="color:#fff;font-weight:600">Set money goals</div><div class="step-check active">Current</div></div>
+<div class="step-row"><div class="step-dot locked">4</div><div class="step-label" style="color:rgba(255,255,255,.35)">Review monthly flow</div></div>
+<div class="step-row"><div class="step-dot locked">5</div><div class="step-label" style="color:rgba(255,255,255,.35)">Start investing</div></div>
+
+<button class="premium-cta" style="background:linear-gradient(135deg,#3b82f6,#6366f1);color:#fff;margin-top:10px">Set money goals</button>
+</div>
+</div>
+</div>
 </div>
 <div class="bottom-nav"><div class="nav-item active"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>Home</div><div class="nav-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>Activity</div><div class="nav-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>Invest</div><div class="nav-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>Profile</div></div>
-</div></div></div>
+</div></div>
+</div>
 </section>
 <hr class="divider">
-<!-- CONCEPT 3: PROGRESS BOARD -->
+
+<!-- ============================================ -->
+<!-- CONCEPT 3: GLASS OVERLAP -->
+<!-- ============================================ -->
 <section id="c3">
 <div class="section-label">Concept 3</div>
-<h3>Progress Board</h3>
+<h3>Glass Overlap</h3>
+<p class="section-subtitle">Illustration with overlapping glass cards. Journey floats over illustration. Premium depth.</p>
 <div class="phone-container">
 <div class="phone-col">
-<div class="phone-label">Board Style</div>
+<div class="phone-label">Default</div>
 <div class="phone">
 <div class="phone-screen">
 <div class="status-bar"><span class="time">9:41</span><div class="dynamic-island"></div><div class="status-icons"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3a4.237 4.237 0 00-6 0zm-4-4l2 2a7.074 7.074 0 0110 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></div></div>
-<div class="screen-content">
-<div style="text-align:center;margin-bottom:12px">
-<div class="progress-ring">
-<svg width="80" height="80"><circle cx="40" cy="40" r="36" fill="none" stroke="var(--border)" stroke-width="6"/><circle cx="40" cy="40" r="36" fill="none" stroke="var(--blue)" stroke-width="6" stroke-dasharray="226" stroke-dashoffset="136" stroke-linecap="round"/></svg>
-<div class="value">40%</div>
+<div class="screen-content" style="padding-top:8px">
+<div class="hero-card" style="background:linear-gradient(160deg,#f0f9ff,#e0f2fe);box-shadow:0 4px 24px rgba(0,0,0,.06)">
+<!-- Glass Illustration -->
+<div class="illust-glass" style="margin:0;border-radius:0;border-bottom-left-radius:24px;border-bottom-right-radius:24px">
+<div class="glass-card">
+<div class="gc-icon">🏦</div>
+<div class="gc-title">Emergency Fund</div>
+<div class="gc-amount">$8,500</div>
 </div>
-<div style="font-size:11px;color:var(--text2);margin-top:4px">Financial setup</div>
+<div class="orbit"><div class="orbit-dot"></div></div>
+<div class="glass-card-2">
+<div class="gc2-row"><div class="gc2-dot" style="background:var(--green)"></div><div class="gc2-label">Checking</div><div class="gc2-val">$8,420</div></div>
+<div class="gc2-row"><div class="gc2-dot" style="background:var(--blue)"></div><div class="gc2-label">Savings</div><div class="gc2-val">$12,850</div></div>
+<div class="gc2-row"><div class="gc2-dot" style="background:#8b5cf6"></div><div class="gc2-label">Invest</div><div class="gc2-val">$4,200</div></div>
 </div>
-<div class="hero-title" style="text-align:center">Your financial setup</div>
-<div class="hero-subtitle" style="text-align:center;margin-bottom:16px">40% complete</div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
-<div style="background:var(--green-bg);border-radius:10px;padding:12px;text-align:center"><div style="font-size:18px;margin-bottom:4px">✓</div><div style="font-size:12px;font-weight:600;color:var(--green)">Accounts</div></div>
-<div style="background:rgba(10,132,255,.08);border:1.5px solid var(--blue);border-radius:10px;padding:12px;text-align:center"><div style="font-size:18px;margin-bottom:4px">🎯</div><div style="font-size:12px;font-weight:600;color:var(--blue)">Goals</div><button class="cta blue" style="font-size:11px;padding:8px;margin-top:6px">Set goals</button></div>
-<div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center"><div style="font-size:18px;margin-bottom:4px;opacity:.4">📋</div><div style="font-size:12px;font-weight:600;color:var(--text2)">Review</div></div>
-<div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center"><div style="font-size:18px;margin-bottom:4px;opacity:.4">📈</div><div style="font-size:12px;font-weight:600;color:var(--text2)">Auto Invest</div></div>
-<div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center;grid-column:span 2"><div style="font-size:18px;margin-bottom:4px;opacity:.4">💰</div><div style="font-size:12px;font-weight:600;color:var(--text2)">Start Investing</div></div>
+</div>
+<!-- Content -->
+<div class="hero-card-inner">
+<div style="font-family:var(--font-heading);font-size:17px;font-weight:700;color:var(--text);margin-bottom:2px">Complete your setup</div>
+<div style="font-size:12px;color:var(--text2);margin-bottom:10px">2 of 5 steps done</div>
+<div class="progress-track" style="margin-bottom:12px"><div class="progress-fill" style="width:40%;background:linear-gradient(90deg,#0ea5e9,#6366f1)"></div></div>
+
+<div class="step-row"><div class="step-dot done">✓</div><div class="step-label">Connect accounts</div><div class="step-check done">Done</div></div>
+<div class="step-row"><div class="step-dot done">✓</div><div class="step-label">Link bank</div><div class="step-check done">Done</div></div>
+<div class="step-row"><div class="step-dot active">3</div><div class="step-label" style="font-weight:600">Set money goals</div><div class="step-check active">Current</div></div>
+<div class="step-row"><div class="step-dot locked">4</div><div class="step-label locked">Review monthly flow</div></div>
+<div class="step-row"><div class="step-dot locked">5</div><div class="step-label locked">Start investing</div></div>
+
+<button class="premium-cta" style="background:linear-gradient(135deg,#0ea5e9,#6366f1);color:#fff;margin-top:10px">Set money goals</button>
+</div>
 </div>
 </div>
 <div class="bottom-nav"><div class="nav-item active"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>Home</div><div class="nav-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>Activity</div><div class="nav-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>Invest</div><div class="nav-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>Profile</div></div>
-</div></div></div>
+</div></div>
+</div>
 </section>
 <hr class="divider">
-<!-- CONCEPT 4: FINANCIAL ROADMAP -->
+
+<!-- ============================================ -->
+<!-- CONCEPT 4: CARD STACK -->
+<!-- ============================================ -->
 <section id="c4">
 <div class="section-label">Concept 4</div>
-<h3>Financial Roadmap</h3>
+<h3>Card Stack</h3>
+<p class="section-subtitle">Illustration floating above stacked financial cards. Journey below with premium depth.</p>
 <div class="phone-container">
 <div class="phone-col">
-<div class="phone-label">Roadmap Style</div>
+<div class="phone-label">Default</div>
 <div class="phone">
 <div class="phone-screen">
 <div class="status-bar"><span class="time">9:41</span><div class="dynamic-island"></div><div class="status-icons"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3a4.237 4.237 0 00-6 0zm-4-4l2 2a7.074 7.074 0 0110 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></div></div>
-<div class="screen-content">
-<div class="hero-illustration illustration-4">
-<div style="text-align:center"><div style="font-size:32px;margin-bottom:4px">🗺️</div><div style="font-size:11px;color:var(--red);font-weight:600">Setup Roadmap</div></div>
+<div class="screen-content" style="padding-top:8px">
+<div class="hero-card" style="background:linear-gradient(180deg,#fef3c7,#fff);box-shadow:0 4px 24px rgba(0,0,0,.06)">
+<!-- Stacked Cards Illustration -->
+<div class="illust-stack" style="margin:0;border-radius:0">
+<div class="ambient" style="width:80px;height:80px;background:rgba(251,191,36,.3);top:10px;right:20px"></div>
+<div class="stack-card stack-card-1"><div class="sc-label">Checking</div><div class="sc-name">Chase ****4821</div><div class="sc-amount">$8,420</div></div>
+<div class="stack-card stack-card-2"><div class="sc-label">Savings</div><div class="sc-name">Marcus ****7293</div><div class="sc-amount">$12,850</div></div>
+<div class="stack-card stack-card-3"><div class="sc-label">Invest</div><div class="sc-name">Advizmo ****1056</div><div class="sc-amount">$4,200</div></div>
 </div>
-<div class="hero-title">Setup roadmap</div>
-<div class="hero-subtitle">Step 2 of 5</div>
-<div style="display:flex;align-items:center;justify-content:space-between;margin:16px 0;padding:0 10px">
-<div style="text-align:center"><div style="width:32px;height:32px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;margin:0 auto">✓</div><div style="font-size:9px;color:var(--green);margin-top:4px">Done</div></div>
-<div style="flex:1;height:3px;background:linear-gradient(90deg,var(--green),var(--blue));margin:0 4px;border-radius:2px"></div>
-<div style="text-align:center"><div style="width:32px;height:32px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;margin:0 auto;box-shadow:0 0 0 4px rgba(10,132,255,.2)">2</div><div style="font-size:9px;color:var(--blue);margin-top:4px;font-weight:600">Current</div></div>
-<div style="flex:1;height:3px;background:var(--border);margin:0 4px;border-radius:2px"></div>
-<div style="text-align:center"><div style="width:32px;height:32px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;color:var(--text2);font-size:12px;font-weight:700;margin:0 auto">3</div><div style="font-size:9px;color:var(--text2);margin-top:4px">Review</div></div>
-<div style="flex:1;height:3px;background:var(--border);margin:0 4px;border-radius:2px"></div>
-<div style="text-align:center"><div style="width:32px;height:32px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;color:var(--text2);font-size:12px;font-weight:700;margin:0 auto">4</div><div style="font-size:9px;color:var(--text2);margin-top:4px">Invest</div></div>
-<div style="flex:1;height:3px;background:var(--border);margin:0 4px;border-radius:2px"></div>
-<div style="text-align:center"><div style="width:32px;height:32px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;color:var(--text2);font-size:12px;font-weight:700;margin:0 auto">5</div><div style="font-size:9px;color:var(--text2);margin-top:4px">Start</div></div>
+<!-- Content -->
+<div class="hero-card-inner">
+<div style="font-family:var(--font-heading);font-size:17px;font-weight:700;color:var(--text);margin-bottom:2px">Your accounts are linked</div>
+<div style="font-size:12px;color:var(--text2);margin-bottom:10px">Now set your financial goals</div>
+<div class="progress-track" style="margin-bottom:12px"><div class="progress-fill" style="width:40%;background:linear-gradient(90deg,#f59e0b,#ef4444)"></div></div>
+
+<div class="step-row"><div class="step-dot done">✓</div><div class="step-label">Connect accounts</div><div class="step-check done">Done</div></div>
+<div class="step-row"><div class="step-dot done">✓</div><div class="step-label">Link bank</div><div class="step-check done">Done</div></div>
+<div class="step-row"><div class="step-dot active">3</div><div class="step-label" style="font-weight:600">Set money goals</div><div class="step-check active">Current</div></div>
+<div class="step-row"><div class="step-dot locked">4</div><div class="step-label locked">Review monthly flow</div></div>
+<div class="step-row"><div class="step-dot locked">5</div><div class="step-label locked">Start investing</div></div>
+
+<button class="premium-cta" style="background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff;margin-top:10px">Set money goals</button>
 </div>
-<div style="background:rgba(10,132,255,.04);border:1.5px solid var(--blue);border-radius:12px;padding:14px">
-<div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px">Set Money Goals</div>
-<div style="font-size:12px;color:var(--text2);margin-bottom:8px">Configure your financial targets</div>
-<button class="cta blue">Set goals</button>
 </div>
 </div>
 <div class="bottom-nav"><div class="nav-item active"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>Home</div><div class="nav-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>Activity</div><div class="nav-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>Invest</div><div class="nav-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>Profile</div></div>
-</div></div></div>
+</div></div>
+</div>
 </section>
 <hr class="divider">
-<!-- CONCEPT 5: MODULAR DASHBOARD -->
+
+<!-- ============================================ -->
+<!-- CONCEPT 5: DARK AMBIENT -->
+<!-- ============================================ -->
 <section id="c5">
 <div class="section-label">Concept 5</div>
-<h3>Modular Dashboard</h3>
+<h3>Dark Ambient</h3>
+<p class="section-subtitle">Dark premium card with ambient orbs, glass overlay, and luminous progress. Full hero journey.</p>
 <div class="phone-container">
 <div class="phone-col">
-<div class="phone-label">Modular Style</div>
+<div class="phone-label">Default</div>
 <div class="phone">
 <div class="phone-screen">
 <div class="status-bar"><span class="time">9:41</span><div class="dynamic-island"></div><div class="status-icons"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3a4.237 4.237 0 00-6 0zm-4-4l2 2a7.074 7.074 0 0110 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></div></div>
-<div class="screen-content">
-<div class="hero-illustration illustration-5">
-<div style="text-align:center"><div style="font-size:32px;margin-bottom:4px">📊</div><div style="font-size:11px;color:var(--blue);font-weight:600">Financial Modules</div></div>
+<div class="screen-content" style="padding-top:8px">
+<div class="hero-card" style="background:linear-gradient(160deg,#0f172a 0%,#1e1b4b 100%);box-shadow:0 12px 48px rgba(0,0,0,.4)">
+<!-- Dark Ambient Illustration -->
+<div class="illust-bg" style="margin:0;border-radius:0;border-bottom-left-radius:24px;border-bottom-right-radius:24px">
+<div class="bg-orb-1"></div>
+<div class="bg-orb-2"></div>
+<div class="bg-mini">
+<div class="bg-mini-item">🏦</div>
+<div class="bg-mini-item">📊</div>
+<div class="bg-mini-item">💰</div>
 </div>
-<div class="hero-title">Your financial setup</div>
-<div class="hero-subtitle">3 steps remaining</div>
-<div style="display:flex;gap:8px;margin-bottom:10px">
-<div style="background:var(--green-bg);border-radius:8px;padding:10px;flex:1;text-align:center"><div style="font-size:14px">✓</div><div style="font-size:10px;font-weight:600;color:var(--green)">Accounts</div></div>
-<div style="background:rgba(10,132,255,.08);border:1.5px solid var(--blue);border-radius:8px;padding:10px;flex:2"><div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:4px">Set Money Goals</div><div style="font-size:10px;color:var(--text2);margin-bottom:6px">Configure your targets</div><button class="cta blue" style="font-size:11px;padding:8px">Configure</button></div>
+<div class="bg-card">
+<div class="bc-row"><div class="bc-label">Setup completion</div><div class="bc-value">40%</div></div>
+<div class="bc-bar"><div class="bc-fill"></div></div>
 </div>
-<div style="display:flex;gap:8px;margin-bottom:10px">
-<div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px;flex:1;text-align:center"><div style="font-size:14px;opacity:.4">📋</div><div style="font-size:10px;color:var(--text2)">Review</div></div>
-<div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px;flex:1;text-align:center"><div style="font-size:14px;opacity:.4">📈</div><div style="font-size:10px;color:var(--text2)">Auto Invest</div></div>
-<div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px;flex:1;text-align:center"><div style="font-size:14px;opacity:.4">💰</div><div style="font-size:10px;color:var(--text2)">Invest</div></div>
+</div>
+<!-- Content -->
+<div class="hero-card-inner">
+<div style="font-family:var(--font-heading);font-size:17px;font-weight:700;color:#fff;margin-bottom:2px">Complete your setup</div>
+<div style="font-size:12px;color:rgba(255,255,255,.5);margin-bottom:12px">2 of 5 steps done</div>
+<div class="progress-track" style="background:rgba(255,255,255,.08);margin-bottom:12px"><div class="progress-fill" style="width:40%;background:linear-gradient(90deg,#6366f1,#8b5cf6)"></div></div>
+
+<div class="step-row"><div class="step-dot done">✓</div><div class="step-label" style="color:rgba(255,255,255,.9)">Connect accounts</div><div class="step-check done">Done</div></div>
+<div class="step-row"><div class="step-dot done">✓</div><div class="step-label" style="color:rgba(255,255,255,.9)">Link bank</div><div class="step-check done">Done</div></div>
+<div class="step-row"><div class="step-dot active">3</div><div class="step-label" style="color:#fff;font-weight:600">Set money goals</div><div class="step-check active">Current</div></div>
+<div class="step-row"><div class="step-dot locked">4</div><div class="step-label" style="color:rgba(255,255,255,.3)">Review monthly flow</div></div>
+<div class="step-row"><div class="step-dot locked">5</div><div class="step-label" style="color:rgba(255,255,255,.3)">Start investing</div></div>
+
+<button class="premium-cta" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;margin-top:10px">Set money goals</button>
+</div>
 </div>
 </div>
 <div class="bottom-nav"><div class="nav-item active"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>Home</div><div class="nav-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>Activity</div><div class="nav-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>Invest</div><div class="nav-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>Profile</div></div>
-</div></div></div>
+</div></div>
+</div>
 </section>
 <hr class="divider">
-<!-- CONCEPT 6: GUIDED JOURNEY -->
+
+<!-- ============================================ -->
+<!-- CONCEPT 6: CIRCULAR FOCUS -->
+<!-- ============================================ -->
 <section id="c6">
 <div class="section-label">Concept 6</div>
-<h3>Guided Journey</h3>
+<h3>Circular Focus</h3>
+<p class="section-subtitle">Large circular progress as visual anchor. Orbiting icons. Journey below with connected milestones.</p>
 <div class="phone-container">
 <div class="phone-col">
-<div class="phone-label">Guided Style</div>
+<div class="phone-label">Default</div>
 <div class="phone">
 <div class="phone-screen">
 <div class="status-bar"><span class="time">9:41</span><div class="dynamic-island"></div><div class="status-icons"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3a4.237 4.237 0 00-6 0zm-4-4l2 2a7.074 7.074 0 0110 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></div></div>
-<div class="screen-content">
-<div class="hero-illustration illustration-6">
-<div style="text-align:center"><div style="font-size:32px;margin-bottom:4px">🧭</div><div style="font-size:11px;color:var(--green);font-weight:600">Guided Setup</div></div>
+<div class="screen-content" style="padding-top:8px">
+<div class="hero-card" style="background:#fff;box-shadow:0 4px 24px rgba(0,0,0,.06)">
+<!-- Circular Illustration -->
+<div class="illust-circular" style="margin:0;border-radius:0;border-bottom-left-radius:24px;border-bottom-right-radius:24px">
+<div class="ambient" style="width:100px;height:100px;background:rgba(22,111,71,.15);top:20px;left:20px"></div>
+<div class="ambient" style="width:60px;height:60px;background:rgba(16,185,129,.1);bottom:30px;right:30px"></div>
+<div class="ring-outer">
+<div class="ring-mid">
+<div class="ring-inner">
+<div class="ri-pct">40%</div>
+<div class="ri-label">Complete</div>
 </div>
-<div class="hero-title">Let's configure your goals</div>
-<div class="hero-subtitle">We'll guide you through each step</div>
-<div style="display:flex;gap:6px;margin-bottom:16px">
-<div style="width:28px;height:28px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700">✓</div>
-<div style="width:28px;height:28px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700">2</div>
-<div style="width:28px;height:28px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;color:var(--text2);font-size:10px;font-weight:700">3</div>
-<div style="width:28px;height:28px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;color:var(--text2);font-size:10px;font-weight:700">4</div>
-<div style="width:28px;height:28px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;color:var(--text2);font-size:10px;font-weight:700">5</div>
 </div>
-<div style="background:rgba(10,132,255,.04);border:1.5px solid var(--blue);border-radius:12px;padding:14px;margin-bottom:12px">
-<div style="font-size:16px;font-weight:700;color:var(--text);margin-bottom:4px">Set Money Goals</div>
-<div style="font-size:12px;color:var(--text2);margin-bottom:10px">Configure your checking, emergency fund, savings, and investment targets</div>
-<div style="font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">What you'll set</div>
-<div style="font-size:12px;color:var(--text);padding:4px 0;border-bottom:1px solid var(--border)">• Checking balance target</div>
-<div style="font-size:12px;color:var(--text);padding:4px 0;border-bottom:1px solid var(--border)">• Emergency fund goal</div>
-<div style="font-size:12px;color:var(--text);padding:4px 0;border-bottom:1px solid var(--border)">• Savings target</div>
-<div style="font-size:12px;color:var(--text);padding:4px 0">• Investment goal</div>
-<button class="cta blue">Start configuring</button>
+<div class="orbit-item">🏦</div>
+<div class="orbit-item">📊</div>
+<div class="orbit-item">🎯</div>
+<div class="orbit-item">💰</div>
 </div>
-<div style="font-size:11px;color:var(--text2);text-align:center">✓ Accounts connected</div>
+</div>
+<!-- Content -->
+<div class="hero-card-inner">
+<div style="font-family:var(--font-heading);font-size:17px;font-weight:700;color:var(--text);margin-bottom:2px">Setup progress</div>
+<div style="font-size:12px;color:var(--text2);margin-bottom:10px">2 of 5 steps completed</div>
+
+<!-- Connected milestone line -->
+<div style="position:relative;padding-left:20px;margin-bottom:12px">
+<div style="position:absolute;left:9px;top:8px;bottom:8px;width:2px;background:linear-gradient(180deg,var(--green),var(--blue),var(--border))"></div>
+<div class="step-row" style="position:relative"><div class="step-dot done" style="position:relative;z-index:1">✓</div><div class="step-label">Connect accounts</div><div class="step-check done">Done</div></div>
+<div class="step-row" style="position:relative"><div class="step-dot done" style="position:relative;z-index:1">✓</div><div class="step-label">Link bank</div><div class="step-check done">Done</div></div>
+<div class="step-row" style="position:relative"><div class="step-dot active" style="position:relative;z-index:1">3</div><div class="step-label" style="font-weight:600">Set money goals</div><div class="step-check active">Current</div></div>
+<div class="step-row" style="position:relative"><div class="step-dot locked" style="position:relative;z-index:1">4</div><div class="step-label locked">Review monthly flow</div></div>
+<div class="step-row" style="position:relative"><div class="step-dot locked" style="position:relative;z-index:1">5</div><div class="step-label locked">Start investing</div></div>
+</div>
+
+<button class="premium-cta" style="background:linear-gradient(135deg,#059669,#10b981);color:#fff;margin-top:4px">Set money goals</button>
+</div>
+</div>
 </div>
 <div class="bottom-nav"><div class="nav-item active"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>Home</div><div class="nav-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>Activity</div><div class="nav-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>Invest</div><div class="nav-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>Profile</div></div>
-</div></div></div>
+</div></div>
+</div>
 </section>
 <hr class="divider">
-<!-- CONCEPT 7: STATUS BOARD -->
+
+<!-- ============================================ -->
+<!-- CONCEPT 7: AI ASSISTANT -->
+<!-- ============================================ -->
 <section id="c7">
 <div class="section-label">Concept 7</div>
-<h3>Status Board</h3>
+<h3>AI Assistant</h3>
+<p class="section-subtitle">Advizmo AI visually building the user's financial system while setup progresses. Dark, premium, intelligent.</p>
 <div class="phone-container">
 <div class="phone-col">
-<div class="phone-label">Status Style</div>
+<div class="phone-label">Default</div>
 <div class="phone">
 <div class="phone-screen">
 <div class="status-bar"><span class="time">9:41</span><div class="dynamic-island"></div><div class="status-icons"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3a4.237 4.237 0 00-6 0zm-4-4l2 2a7.074 7.074 0 0110 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></div></div>
-<div class="screen-content">
-<div class="hero-illustration illustration-7">
-<div style="text-align:center"><div style="font-size:32px;margin-bottom:4px">📋</div><div style="font-size:11px;color:var(--amber);font-weight:600">Setup Status</div></div>
+<div class="screen-content" style="padding-top:8px">
+<div class="hero-card" style="background:linear-gradient(160deg,#0f172a 0%,#1e1b4b 100%);box-shadow:0 12px 48px rgba(0,0,0,.4)">
+<!-- AI Illustration -->
+<div class="illust-ai" style="margin:0;border-radius:0;border-bottom-left-radius:24px;border-bottom-right-radius:24px">
+<div class="ai-glow"></div>
+<div class="ai-brain">✨</div>
+<div class="ai-lines">
+<div class="ai-line"></div>
+<div class="ai-line"></div>
+<div class="ai-line"></div>
 </div>
-<div class="hero-title">Setup status</div>
-<div class="hero-subtitle">Step 2 of 5 — In progress</div>
-<div style="margin-bottom:16px">
-<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)"><span style="font-size:13px;color:var(--text)">Accounts</span><span style="font-size:10px;font-weight:600;padding:3px 8px;border-radius:4px;background:var(--green-bg);color:var(--green)">Connected</span></div>
-<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)"><span style="font-size:13px;color:var(--text);font-weight:600">Money Goals</span><span style="font-size:10px;font-weight:600;padding:3px 8px;border-radius:4px;background:rgba(10,132,255,.1);color:var(--blue)">Setting up</span></div>
-<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)"><span style="font-size:13px;color:var(--text2)">Monthly Money</span><span style="font-size:10px;font-weight:600;padding:3px 8px;border-radius:4px;background:var(--bg);color:var(--text2)">Pending</span></div>
-<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)"><span style="font-size:13px;color:var(--text2)">Auto Invest</span><span style="font-size:10px;font-weight:600;padding:3px 8px;border-radius:4px;background:var(--bg);color:var(--text2)">Pending</span></div>
-<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0"><span style="font-size:13px;color:var(--text2)">Start Investing</span><span style="font-size:10px;font-weight:600;padding:3px 8px;border-radius:4px;background:var(--bg);color:var(--text2)">Pending</span></div>
+<div class="ai-cards">
+<div class="ai-card"><div class="aic-icon">🏦</div><div class="aic-text">Accounts linked</div></div>
+<div class="ai-card"><div class="aic-icon">🎯</div><div class="aic-text">Goals setting</div></div>
+<div class="ai-card"><div class="aic-icon">📊</div><div class="aic-text">Analysis ready</div></div>
 </div>
-<div style="background:rgba(10,132,255,.04);border:1.5px solid var(--blue);border-radius:12px;padding:14px">
-<div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px">Set Money Goals</div>
-<div style="font-size:12px;color:var(--text2);margin-bottom:8px">Configure your financial targets</div>
-<button class="cta blue">Configure goals</button>
+</div>
+<!-- Content -->
+<div class="hero-card-inner">
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+<div style="width:28px;height:28px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px">✨</div>
+<div>
+<div style="font-family:var(--font-heading);font-size:17px;font-weight:700;color:#fff">Advizmo is setting up</div>
+</div>
+</div>
+<div style="font-size:12px;color:rgba(255,255,255,.5);margin-bottom:12px">I've connected your accounts. Now let's set your goals.</div>
+<div class="progress-track" style="background:rgba(255,255,255,.08);margin-bottom:12px"><div class="progress-fill" style="width:40%;background:linear-gradient(90deg,#6366f1,#a78bfa)"></div></div>
+
+<div class="step-row"><div class="step-dot done">✓</div><div class="step-label" style="color:rgba(255,255,255,.9)">Connect accounts</div><div class="step-check done">Done</div></div>
+<div class="step-row"><div class="step-dot done">✓</div><div class="step-label" style="color:rgba(255,255,255,.9)">Link bank</div><div class="step-check done">Done</div></div>
+<div class="step-row"><div class="step-dot active">3</div><div class="step-label" style="color:#fff;font-weight:600">Set money goals</div><div class="step-check active">Current</div></div>
+<div class="step-row"><div class="step-dot locked">4</div><div class="step-label" style="color:rgba(255,255,255,.3)">Review monthly flow</div></div>
+<div class="step-row"><div class="step-dot locked">5</div><div class="step-label" style="color:rgba(255,255,255,.3)">Start investing</div></div>
+
+<button class="premium-cta" style="background:linear-gradient(135deg,#6366f1,#a78bfa);color:#fff;margin-top:10px">Set money goals</button>
+</div>
 </div>
 </div>
 <div class="bottom-nav"><div class="nav-item active"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>Home</div><div class="nav-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>Activity</div><div class="nav-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>Invest</div><div class="nav-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>Profile</div></div>
-</div></div></div>
+</div></div>
+</div>
 </section>
 <hr class="divider">
-<!-- CONCEPT 8: AI SETUP ASSISTANT -->
+
+<!-- ============================================ -->
+<!-- CONCEPT 8: ROADMAP -->
+<!-- ============================================ -->
 <section id="c8">
 <div class="section-label">Concept 8</div>
-<h3>AI Setup Assistant</h3>
+<h3>Roadmap</h3>
+<p class="section-subtitle">Horizontal roadmap illustration with milestone markers. Journey as connected timeline below.</p>
 <div class="phone-container">
 <div class="phone-col">
-<div class="phone-label">AI Style</div>
+<div class="phone-label">Default</div>
 <div class="phone">
 <div class="phone-screen">
 <div class="status-bar"><span class="time">9:41</span><div class="dynamic-island"></div><div class="status-icons"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3a4.237 4.237 0 00-6 0zm-4-4l2 2a7.074 7.074 0 0110 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></div></div>
-<div class="screen-content">
-<div class="hero-illustration illustration-8">
-<div style="text-align:center"><div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--blue),#6366f1);display:flex;align-items:center;justify-content:center;margin:0 auto 6px"><span style="font-size:20px">✨</span></div><div style="font-size:11px;color:var(--blue);font-weight:600">AI Assistant</div></div>
+<div class="screen-content" style="padding-top:8px">
+<div class="hero-card" style="background:#fff;box-shadow:0 4px 24px rgba(0,0,0,.06)">
+<!-- Roadmap Illustration -->
+<div class="illust-road" style="margin:0;border-radius:0;border-bottom-left-radius:24px;border-bottom-right-radius:24px">
+<div class="ambient" style="width:80px;height:80px;background:rgba(10,132,255,.1);top:20px;left:30px"></div>
+<div class="ambient" style="width:60px;height:60px;background:rgba(22,111,71,.1);bottom:20px;right:40px"></div>
+<div class="road-line"><div class="road-fill"></div></div>
+<div class="road-dot"></div><div class="road-dot"></div><div class="road-dot"></div><div class="road-dot"></div>
+<div class="road-label">Connect</div><div class="road-label">Link bank</div><div class="road-label">Goals</div><div class="road-label">Invest</div>
+<div class="road-icon">🏦</div><div class="road-icon">📈</div>
 </div>
-<div class="hero-title">Advizmo is setting up your account</div>
-<div class="hero-subtitle">I'll guide you through each step</div>
-<div style="margin-bottom:16px">
-<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)"><div style="width:24px;height:24px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700">✓</div><div style="flex:1"><div style="font-size:13px;color:var(--text)">Accounts connected</div></div></div>
-<div style="display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--border);background:rgba(10,132,255,.04);margin:0 -14px;padding-left:14px;padding-right:14px;border-radius:8px"><div style="width:24px;height:24px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700">2</div><div style="flex:1"><div style="font-size:13px;color:var(--text);font-weight:600">Set your goals</div><div style="font-size:11px;color:var(--text2)">Configure financial targets</div></div></div>
-<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)"><div style="width:24px;height:24px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;color:var(--text2);font-size:10px;font-weight:700">3</div><div style="flex:1"><div style="font-size:13px;color:var(--text2)">Review monthly money</div></div></div>
-<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)"><div style="width:24px;height:24px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;color:var(--text2);font-size:10px;font-weight:700">4</div><div style="flex:1"><div style="font-size:13px;color:var(--text2)">Open Auto Invest</div></div></div>
-<div style="display:flex;align-items:center;gap:10px;padding:10px 0"><div style="width:24px;height:24px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;color:var(--text2);font-size:10px;font-weight:700">5</div><div style="flex:1"><div style="font-size:13px;color:var(--text2)">Start investing</div></div></div>
+<!-- Content -->
+<div class="hero-card-inner">
+<div style="font-family:var(--font-heading);font-size:17px;font-weight:700;color:var(--text);margin-bottom:2px">Your financial roadmap</div>
+<div style="font-size:12px;color:var(--text2);margin-bottom:10px">Step 3 of 5 — Setting goals</div>
+<div class="progress-track" style="margin-bottom:12px"><div class="progress-fill" style="width:40%;background:linear-gradient(90deg,var(--green),var(--blue))"></div></div>
+
+<!-- Connected timeline steps -->
+<div style="position:relative;padding-left:20px">
+<div style="position:absolute;left:9px;top:8px;bottom:8px;width:2px;background:linear-gradient(180deg,var(--green),var(--blue),var(--border))"></div>
+<div class="step-row" style="position:relative"><div class="step-dot done" style="position:relative;z-index:1">✓</div><div class="step-label">Connect accounts</div><div class="step-check done">Done</div></div>
+<div class="step-row" style="position:relative"><div class="step-dot done" style="position:relative;z-index:1">✓</div><div class="step-label">Link bank</div><div class="step-check done">Done</div></div>
+<div class="step-row" style="position:relative"><div class="step-dot active" style="position:relative;z-index:1">3</div><div class="step-label" style="font-weight:600">Set money goals</div><div class="step-check active">Current</div></div>
+<div class="step-row" style="position:relative"><div class="step-dot locked" style="position:relative;z-index:1">4</div><div class="step-label locked">Review monthly flow</div></div>
+<div class="step-row" style="position:relative"><div class="step-dot locked" style="position:relative;z-index:1">5</div><div class="step-label locked">Start investing</div></div>
 </div>
-<div style="background:linear-gradient(135deg,#1c1c1e,#2c2c2e);border-radius:12px;padding:14px;color:#fff">
-<div style="font-size:13px;font-weight:600;margin-bottom:4px">Let's set your goals</div>
-<div style="font-size:11px;color:rgba(255,255,255,.7);margin-bottom:8px">I'll help you configure targets that match your financial situation</div>
-<button class="cta blue" style="background:rgba(255,255,255,.15);backdrop-filter:blur(10px)">Begin setup</button>
+
+<button class="premium-cta" style="background:linear-gradient(135deg,var(--blue),#6366f1);color:#fff;margin-top:10px">Set money goals</button>
+</div>
 </div>
 </div>
 <div class="bottom-nav"><div class="nav-item active"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>Home</div><div class="nav-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>Activity</div><div class="nav-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>Invest</div><div class="nav-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>Profile</div></div>
-</div></div></div>
+</div></div>
+</div>
 </section>
 </div>
 </body>
