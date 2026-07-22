@@ -1,0 +1,2584 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advizmo - AI Discovery Section Concepts</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================
+   DESIGN SYSTEM TOKENS
+   ============================================ */
+:root {
+  --bg: #f2f2f7;
+  --card: #fff;
+  --text: #1c1c1e;
+  --text2: #8e8e93;
+  --border: rgba(0,0,0,.06);
+  --blue: #0a84ff;
+  --blue-light: rgba(10,132,255,.08);
+  --blue-border: rgba(10,132,255,.2);
+  --green: #166f47;
+  --green-bg: #e8f8ec;
+  --amber: #c2790a;
+  --amber-bg: #fff5e6;
+  --red: #b91c1c;
+  --red-bg: #ffe8e8;
+  --sidebar: #1a1a2e;
+  --sidebar-hover: rgba(10,132,255,.15);
+  --phone-width: 393px;
+  --phone-height: 852px;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+  --radius-phone: 48px;
+}
+
+/* ============================================
+   RESET & BASE
+   ============================================ */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+}
+.layout { display: flex; min-height: 100vh; }
+
+/* ============================================
+   SIDEBAR
+   ============================================ */
+.sidebar {
+  width: 320px;
+  background: var(--sidebar);
+  color: #e0e0e0;
+  padding: 40px 24px;
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  overflow-y: auto;
+  z-index: 10;
+  border-right: 1px solid rgba(255,255,255,.04);
+}
+.sidebar h1 {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 6px;
+}
+.sidebar .subtitle {
+  font-size: 13px;
+  color: var(--text2);
+  margin-bottom: 32px;
+  line-height: 1.5;
+}
+.sidebar .screen-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--blue);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+.sidebar nav { display: flex; flex-direction: column; gap: 4px; }
+.sidebar nav a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: rgba(255,255,255,.6);
+  font-size: 14px;
+  font-weight: 500;
+  transition: all .2s;
+}
+.sidebar nav a:hover,
+.sidebar nav a.active {
+  background: var(--sidebar-hover);
+  color: #fff;
+}
+.sidebar nav a .num {
+  width: 26px; height: 26px;
+  border-radius: 8px;
+  background: rgba(255,255,255,.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'IBM Plex Sans', sans-serif;
+}
+.sidebar nav a.active .num,
+.sidebar nav a:hover .num {
+  background: var(--blue);
+  color: #fff;
+}
+.sidebar .divider {
+  height: 1px;
+  background: rgba(255,255,255,.08);
+  margin: 24px 0;
+}
+.sidebar .info-block {
+  font-size: 12px;
+  line-height: 1.6;
+  color: rgba(255,255,255,.45);
+}
+.sidebar .info-block strong {
+  color: rgba(255,255,255,.7);
+}
+
+/* ============================================
+   MAIN CONTENT
+   ============================================ */
+.main {
+  margin-left: 320px;
+  flex: 1;
+  padding: 48px 40px;
+  background: #0f0f1a;
+  min-height: 100vh;
+}
+.main h2 {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 8px;
+}
+.main .concept-desc {
+  font-size: 14px;
+  color: rgba(255,255,255,.5);
+  margin-bottom: 36px;
+  max-width: 600px;
+  line-height: 1.6;
+}
+.states-row {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+  margin-bottom: 80px;
+  flex-wrap: wrap;
+}
+.state-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.state-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255,255,255,.35);
+  margin-bottom: 16px;
+}
+.scroll-hint {
+  text-align: center;
+  font-size: 11px;
+  color: rgba(255,255,255,.3);
+  margin-top: 8px;
+}
+
+/* ============================================
+   PHONE MOCKUP
+   ============================================ */
+.phone-frame {
+  width: var(--phone-width);
+  height: var(--phone-height);
+  background: var(--bg);
+  border-radius: var(--radius-phone);
+  overflow: hidden;
+  position: relative;
+  box-shadow:
+    0 0 0 10px #1c1c1e,
+    0 0 0 12px #2c2c2e,
+    0 25px 60px rgba(0,0,0,.5);
+  flex-shrink: 0;
+}
+.phone-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.dynamic-island {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 126px;
+  height: 37px;
+  background: #000;
+  border-radius: 20px;
+  z-index: 10;
+}
+
+/* ============================================
+   iOS STATUS BAR
+   ============================================ */
+.ios-status-bar {
+  height: 54px;
+  padding: 14px 28px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative;
+  z-index: 5;
+}
+.ios-status-bar .time {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+.ios-status-bar .icons {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+.ios-status-bar .icons svg {
+  width: 16px; height: 12px;
+  fill: var(--text);
+}
+
+/* ============================================
+   PHONE CONTENT AREA
+   ============================================ */
+.phone-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 20px 100px;
+  position: relative;
+}
+.phone-content::-webkit-scrollbar { display: none; }
+
+/* ============================================
+   BOTTOM NAV
+   ============================================ */
+.bottom-nav {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 83px;
+  background: rgba(242,242,247,.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  padding-top: 10px;
+  z-index: 5;
+}
+.bottom-nav .nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+.bottom-nav .nav-item svg {
+  width: 24px; height: 24px;
+  stroke: var(--text2);
+  fill: none;
+  stroke-width: 1.8;
+}
+.bottom-nav .nav-item.active svg { stroke: var(--blue); }
+.bottom-nav .nav-item span {
+  font-size: 10px;
+  color: var(--text2);
+}
+.bottom-nav .nav-item.active span {
+  color: var(--blue);
+  font-weight: 600;
+}
+
+/* ============================================
+   LOADING SECTION (shared)
+   ============================================ */
+.loading-section { margin-bottom: 20px; }
+.loading-section h3 {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.loading-section .subtitle {
+  font-size: 13px;
+  color: var(--text2);
+  margin-bottom: 12px;
+}
+.progress-bar-track {
+  height: 6px;
+  background: rgba(10,132,255,.12);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: var(--blue);
+  border-radius: 3px;
+  animation: progressPulse 2s ease-in-out infinite;
+}
+@keyframes progressPulse {
+  0% { width: 0%; }
+  50% { width: 70%; }
+  100% { width: 95%; }
+}
+.loading-section .time-note {
+  font-size: 11px;
+  color: var(--text2);
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+@keyframes sparkleFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); opacity: .6; }
+  50% { transform: translateY(-4px) rotate(10deg); opacity: 1; }
+}
+.sparkle-anim { animation: sparkleFloat 2s ease-in-out infinite; }
+
+@keyframes typingBounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: .4; }
+  30% { transform: translateY(-5px); opacity: 1; }
+}
+.typing-dots { display: flex; gap: 4px; align-items: center; padding: 4px 0; }
+.typing-dots span {
+  width: 6px; height: 6px;
+  background: var(--blue);
+  border-radius: 50%;
+  animation: typingBounce 1.2s ease-in-out infinite;
+}
+.typing-dots span:nth-child(2) { animation-delay: .15s; }
+.typing-dots span:nth-child(3) { animation-delay: .3s; }
+
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fadeSlideUp .4s ease-out; }
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(10,132,255,.15); }
+  50% { box-shadow: 0 0 0 8px rgba(10,132,255,0); }
+}
+.pulse-glow { animation: pulseGlow 2s ease-in-out infinite; }
+
+/* ============================================
+   AI AVATAR
+   ============================================ */
+.ai-avatar {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--blue), #5e5ce6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.ai-avatar svg { width: 22px; height: 22px; fill: #fff; }
+.ai-avatar.large {
+  width: 64px; height: 64px;
+  margin: 0 auto 16px;
+}
+.ai-avatar.large svg { width: 30px; height: 30px; }
+.ai-avatar.small {
+  width: 32px; height: 32px;
+}
+.ai-avatar.small svg { width: 16px; height: 16px; }
+.ai-avatar.tiny {
+  width: 28px; height: 28px;
+}
+.ai-avatar.tiny svg { width: 14px; height: 14px; }
+
+/* ============================================
+   CONCEPT 1 - AI CARD
+   ============================================ */
+.ai-card {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.ai-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.ai-card-header .ai-name {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+}
+.ai-card-header .ai-role {
+  font-size: 13px;
+  color: rgba(255,255,255,.55);
+  margin-top: 2px;
+}
+.ai-card p {
+  font-size: 13px;
+  color: rgba(255,255,255,.55);
+  line-height: 1.5;
+}
+
+/* ============================================
+   SUGGESTION CHIPS
+   ============================================ */
+.suggestion-chips {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  color: var(--text);
+  cursor: pointer;
+  transition: all .2s;
+}
+.chip:hover {
+  border-color: var(--blue);
+  background: rgba(10,132,255,.04);
+}
+.chip::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--blue);
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+/* ============================================
+   CHAT INPUT
+   ============================================ */
+.chat-input-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 6px 6px 6px 18px;
+  margin-bottom: 20px;
+}
+.chat-input-bar input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  color: var(--text);
+  background: transparent;
+}
+.chat-input-bar input::placeholder { color: var(--text2); }
+.chat-input-bar .send-btn {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--blue);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.chat-input-bar .send-btn svg {
+  width: 16px; height: 16px;
+  fill: #fff;
+  margin-left: 1px;
+}
+
+/* ============================================
+   CHAT BUBBLES
+   ============================================ */
+.chat-bubble {
+  max-width: 85%;
+  padding: 12px 16px;
+  border-radius: 18px;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+.chat-bubble.user {
+  background: var(--blue);
+  color: #fff;
+  margin-left: auto;
+  border-bottom-right-radius: 6px;
+}
+.chat-bubble.ai {
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-bottom-left-radius: 6px;
+}
+.chat-bubble.ai .ai-sender {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--blue);
+  margin-bottom: 4px;
+}
+
+/* ============================================
+   CONVERSATION AREA
+   ============================================ */
+.conversation-area { padding-top: 4px; }
+.section-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .8px;
+  color: var(--text2);
+  margin-bottom: 12px;
+}
+.inline-source {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  background: rgba(10,132,255,.08);
+  border-radius: 6px;
+  font-size: 11px;
+  color: var(--blue);
+  font-weight: 600;
+  margin-top: 8px;
+}
+.divider-line {
+  height: 1px;
+  background: var(--border);
+  margin: 16px 0;
+}
+.follow-up-chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+.follow-up-chips .chip {
+  font-size: 12px;
+  padding: 8px 14px;
+}
+
+/* ============================================
+   ASSISTANT RESPONSE (Concept 2)
+   ============================================ */
+.assistant-response {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.assistant-response .mini-avatar {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--blue), #5e5ce6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.assistant-response .mini-avatar svg {
+  width: 14px; height: 14px;
+  fill: #fff;
+}
+.assistant-response .response-body {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  border-top-left-radius: 4px;
+  padding: 12px 16px;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.6;
+  flex: 1;
+}
+
+/* ============================================
+   CATEGORY CHIPS (Concept 2)
+   ============================================ */
+.category-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.cat-chip {
+  padding: 7px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all .2s;
+}
+.cat-chip.blue { background: rgba(10,132,255,.1); color: var(--blue); }
+.cat-chip.green { background: var(--green-bg); color: var(--green); }
+.cat-chip.amber { background: var(--amber-bg); color: var(--amber); }
+.cat-chip.active-blue { background: var(--blue); color: #fff; }
+
+/* ============================================
+   PROMPT GRID (Concept 2)
+   ============================================ */
+.prompt-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.prompt-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  cursor: pointer;
+  transition: all .2s;
+}
+.prompt-card:hover {
+  border-color: var(--blue);
+  box-shadow: 0 2px 12px rgba(10,132,255,.08);
+}
+.prompt-card .prompt-icon {
+  width: 32px; height: 32px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+.prompt-card .prompt-text {
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+/* ============================================
+   CTA BUTTON
+   ============================================ */
+.cta-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 14px;
+  border-radius: var(--radius-md);
+  background: var(--blue);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: all .2s;
+}
+.cta-btn:hover { background: #0070e0; }
+.cta-btn svg { width: 18px; height: 18px; fill: #fff; }
+.cta-btn.secondary {
+  background: var(--bg);
+  color: var(--blue);
+  border: 1px solid var(--border);
+}
+.cta-btn.secondary:hover { background: rgba(10,132,255,.04); }
+
+/* ============================================
+   DISCOVER CARDS (Concept 3)
+   ============================================ */
+.card-stack {
+  position: relative;
+  height: 260px;
+  margin-bottom: 16px;
+  perspective: 800px;
+}
+.discover-card {
+  position: absolute;
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px 20px;
+  transition: all .3s ease;
+}
+.discover-card:nth-child(1) {
+  top: 0; left: 0;
+  z-index: 3;
+  box-shadow: 0 8px 30px rgba(0,0,0,.08);
+}
+.discover-card:nth-child(2) {
+  top: 14px; left: 10px;
+  z-index: 2;
+  opacity: .7;
+  transform: scale(.96);
+}
+.discover-card:nth-child(3) {
+  top: 28px; left: 20px;
+  z-index: 1;
+  opacity: .4;
+  transform: scale(.92);
+}
+.discover-card .card-icon {
+  width: 48px; height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  font-size: 22px;
+}
+.discover-card .card-title {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.discover-card .card-desc {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+.discover-card .card-action {
+  font-size: 13px;
+  color: var(--blue);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ============================================
+   DOT INDICATORS
+   ============================================ */
+.dot-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+.dot-indicators .dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: rgba(0,0,0,.12);
+  transition: all .2s;
+}
+.dot-indicators .dot.active {
+  background: var(--blue);
+  width: 20px;
+  border-radius: 4px;
+}
+
+/* ============================================
+   BUBBLE FIELD (Concept 4)
+   ============================================ */
+.bubble-field {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  padding: 10px 0;
+  margin-bottom: 20px;
+}
+.bubble {
+  padding: 12px 18px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  font-size: 13px;
+  color: var(--text);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,.04);
+  transition: all .2s;
+  line-height: 1.4;
+}
+.bubble:hover {
+  border-color: var(--blue);
+  box-shadow: 0 4px 16px rgba(10,132,255,.1);
+}
+.bubble.large {
+  font-size: 14px;
+  padding: 14px 22px;
+  font-weight: 500;
+}
+.bubble.medium { font-size: 13px; }
+.bubble.small {
+  font-size: 12px;
+  padding: 10px 14px;
+}
+.bubble.blue-tint {
+  background: rgba(10,132,255,.06);
+  border-color: rgba(10,132,255,.15);
+}
+.own-question {
+  text-align: center;
+  margin-top: 8px;
+}
+.own-question a {
+  font-size: 14px;
+  color: var(--blue);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* ============================================
+   EXPANDED BUBBLE (Concept 4)
+   ============================================ */
+.expanded-bubble {
+  background: rgba(10,132,255,.06);
+  border: 1px solid rgba(10,132,255,.15);
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
+  margin-bottom: 12px;
+  max-width: 90%;
+}
+.expanded-bubble .question {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+.expanded-bubble .answer {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.6;
+}
+
+/* ============================================
+   TOPIC LIST (Concept 5)
+   ============================================ */
+.topic-list { margin-bottom: 20px; }
+.topic-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all .2s;
+}
+.topic-item:hover { border-color: var(--blue); }
+.topic-item .topic-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.topic-item .topic-info { flex: 1; }
+.topic-item .topic-name {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+.topic-item .topic-count {
+  font-size: 12px;
+  color: var(--text2);
+}
+.topic-item .topic-chevron svg {
+  width: 16px; height: 16px;
+  stroke: var(--text2);
+  fill: none;
+  stroke-width: 2;
+}
+
+/* ============================================
+   FEATURED ARTICLE (Concept 5)
+   ============================================ */
+.featured-article {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+.featured-article .label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .8px;
+  color: var(--blue);
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.featured-article h4 {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.featured-article p {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+.featured-article .read-more {
+  font-size: 14px;
+  color: var(--blue);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* ============================================
+   DETAIL CARD (Concept 3 conversation)
+   ============================================ */
+.detail-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.detail-card .detail-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.detail-card .detail-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+.detail-card .detail-title {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+}
+.detail-card p {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+.detail-card ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 12px;
+}
+.detail-card ul li {
+  font-size: 13px;
+  color: var(--text);
+  padding: 6px 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  line-height: 1.4;
+}
+.detail-card ul li::before {
+  content: '';
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--blue);
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+/* ============================================
+   ARTICLE EXPANDED (Concept 5 conversation)
+   ============================================ */
+.article-expanded {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.article-expanded .ai-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 12px;
+  background: rgba(10,132,255,.06);
+  border-radius: 10px;
+  margin-top: 12px;
+}
+.article-expanded .ai-note svg {
+  width: 16px; height: 16px;
+  fill: var(--blue);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.article-expanded .ai-note p {
+  font-size: 12px;
+  color: var(--blue);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ============================================
+   CONCEPT-SPECIFIC SECTION
+   ============================================ */
+.concept-section { scroll-margin-top: 32px; }
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 1400px) {
+  .sidebar { width: 260px; padding: 32px 18px; }
+  .main { margin-left: 260px; padding: 36px 28px; }
+}
+@media (max-width: 900px) {
+  .sidebar { position: relative; width: 100%; height: auto; }
+  .layout { flex-direction: column; }
+  .main { margin-left: 0; }
+  .states-row { flex-direction: column; align-items: center; }
+}
+</style>
+</head>
+<body>
+<div class="layout">
+<!-- ============================================
+     SIDEBAR NAVIGATION
+     ============================================ -->
+<aside class="sidebar">
+  <div class="screen-label">Setting Up Screen</div>
+  <h1>AI Discovery Section</h1>
+  <p class="subtitle">5 distinct concepts for the AI onboarding experience while accounts are being analyzed (5-8 min).</p>
+  <div class="divider"></div>
+  <nav>
+    <a href="#concept1" class="active"><span class="num">1</span> Conversational AI Card</a>
+    <a href="#concept2"><span class="num">2</span> AI Assistant &amp; Prompts</a>
+    <a href="#concept3"><span class="num">3</span> Discover Cards</a>
+    <a href="#concept4"><span class="num">4</span> Interactive Question Chips</a>
+    <a href="#concept5"><span class="num">5</span> AI Knowledge Hub</a>
+  </nav>
+  <div class="divider"></div>
+  <div class="info-block">
+    <strong>Screen Size</strong><br>393 x 852 - iPhone 16<br><br>
+    <strong>Fonts</strong><br>IBM Plex Sans - headings/numbers<br>Inter - body/labels<br><br>
+    <strong>Design Tokens</strong><br>
+    Background: #f2f2f7<br>
+    Card: #ffffff<br>
+    Blue: #0a84ff<br>
+    Green: #166f47<br>
+    Amber: #c2790a<br><br>
+    <strong>States Shown</strong><br>Loading - Default - Conversation
+  </div>
+</aside>
+
+<!-- ============================================
+     MAIN CONTENT
+     ============================================ -->
+<main class="main">
+
+<!-- ============================================
+     CONCEPT 1 - CONVERSATIONAL AI CARD
+     ============================================ -->
+<section class="concept-section" id="concept1">
+  <h2>Concept 1 - Conversational AI Card</h2>
+  <p class="concept-desc">Chat-style interface with AI avatar and suggested questions. Users feel like they're starting a real conversation with their financial assistant while waiting.</p>
+  <div class="states-row">
+
+    <!-- STATE 1: Loading -->
+    <div class="state-group">
+      <div class="state-label">Loading State</div>
+      <div class="phone-frame"><div class="phone-inner">
+        <div class="dynamic-island"></div>
+        <div class="ios-status-bar">
+          <span class="time">9:41</span>
+          <div class="icons">
+            <svg viewBox="0 0 16 12"><rect x="0" y="4" width="3" height="8" rx="1"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="1"/><rect x="9" y="1" width="3" height="11" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1"/></svg>
+            <svg viewBox="0 0 16 12"><path d="M8 2C4.5 2 1.5 4 0 7c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5z"/></svg>
+            <svg viewBox="0 0 28 13"><rect x="0" y="0" width="24" height="12" rx="3" stroke="currentColor" stroke-width="1" fill="none"/><rect x="1.5" y="1.5" width="19" height="9" rx="1.5" fill="currentColor"/><rect x="25" y="3.5" width="2.5" height="5" rx="1" fill="currentColor" opacity=".4"/></svg>
+          </div>
+        </div>
+        <div class="phone-content">
+          <div class="loading-section">
+            <h3>Setting up your account</h3>
+            <div class="subtitle">Analyzing your financial data...</div>
+            <div class="progress-bar-track"><div class="progress-bar-fill"></div></div>
+            <div class="time-note">This typically takes 5-8 minutes</div>
+          </div>
+          <div class="ai-card">
+            <div class="ai-card-header">
+              <div class="ai-avatar">
+                <svg viewBox="0 0 24 24"><path d="M12 2l2.09 6.26L20.18 9l-5.09 3.74L16.18 19 12 15.77 7.82 19l1.09-6.26L3.82 9l6.09-.74z"/></svg>
+              </div>
+              <div>
+                <div class="ai-name">Hi, I'm Advizmo AI</div>
+                <div class="ai-role">Your financial assistant</div>
+              </div>
+            </div>
+            <p>While we set up your account, I can answer any financial questions you have.</p>
+          </div>
+          <div class="suggestion-chips">
+            <div class="chip">What is tax-loss harvesting?</div>
+            <div class="chip">How does Auto Invest work?</div>
+            <div class="chip">Where is my idle cash?</div>
+          </div>
+          <div class="chat-input-bar">
+            <input type="text" placeholder="Ask me anything..." readonly>
+            <button class="send-btn"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></button>
+          </div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></div>
+          <div class="nav-item active"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><span>Discover</span></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg><span>Invest</span></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Profile</span></div>
+        </div>
+      </div></div>
+      <div class="scroll-hint">Scrollable</div>
+    </div>
+
+    <!-- STATE 2: Default (with sparkle) -->
+    <div class="state-group">
+      <div class="state-label">Default State</div>
+      <div class="phone-frame"><div class="phone-inner">
+        <div class="dynamic-island"></div>
+        <div class="ios-status-bar">
+          <span class="time">9:41</span>
+          <div class="icons">
+            <svg viewBox="0 0 16 12"><rect x="0" y="4" width="3" height="8" rx="1"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="1"/><rect x="9" y="1" width="3" height="11" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1"/></svg>
+            <svg viewBox="0 0 16 12"><path d="M8 2C4.5 2 1.5 4 0 7c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5z"/></svg>
+            <svg viewBox="0 0 28 13"><rect x="0" y="0" width="24" height="12" rx="3" stroke="currentColor" stroke-width="1" fill="none"/><rect x="1.5" y="1.5" width="19" height="9" rx="1.5" fill="currentColor"/><rect x="25" y="3.5" width="2.5" height="5" rx="1" fill="currentColor" opacity=".4"/></svg>
+          </div>
+        </div>
+        <div class="phone-content">
+          <div class="loading-section">
+            <h3>Setting up your account</h3>
+            <div class="subtitle">Analyzing your financial data...</div>
+            <div class="progress-bar-track"><div class="progress-bar-fill"></div></div>
+            <div class="time-note">This typically takes 5-8 minutes</div>
+          </div>
+          <div class="ai-card">
+            <div class="ai-card-header">
+              <div class="ai-avatar sparkle-anim">
+                <svg viewBox="0 0 24 24"><path d="M12 2l2.09 6.26L20.18 9l-5.09 3.74L16.18 19 12 15.77 7.82 19l1.09-6.26L3.82 9l6.09-.74z"/></svg>
+              </div>
+              <div>
+                <div class="ai-name">Hi, I'm Advizmo AI</div>
+                <div class="ai-role">Your financial assistant</div>
+              </div>
+            </div>
+            <p>While we set up your account, I can answer any financial questions you have. Try one of these popular questions:</p>
+          </div>
+          <div class="section-label">Suggested Questions</div>
+          <div class="suggestion-chips">
+            <div class="chip" style="border-color:var(--blue-border);background:rgba(10,132,255,.03);">What is tax-loss harvesting?</div>
+            <div class="chip" style="border-color:var(--blue-border);background:rgba(10,132,255,.03);">How does Auto Invest work?</div>
+            <div class="chip" style="border-color:var(--blue-border);background:rgba(10,132,255,.03);">Where is my idle cash?</div>
+            <div class="chip" style="border-color:var(--blue-border);background:rgba(10,132,255,.03);">How much should I save?</div>
+          </div>
+          <div class="chat-input-bar">
+            <input type="text" placeholder="Ask me anything..." readonly>
+            <button class="send-btn"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></button>
+          </div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></div>
+          <div class="nav-item active"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><span>Discover</span></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg><span>Invest</span></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Profile</span></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- STATE 3: Conversation -->
+    <div class="state-group">
+      <div class="state-label">After Tapping a Question</div>
+      <div class="phone-frame"><div class="phone-inner">
+        <div class="dynamic-island"></div>
+        <div class="ios-status-bar">
+          <span class="time">9:42</span>
+          <div class="icons">
+            <svg viewBox="0 0 16 12"><rect x="0" y="4" width="3" height="8" rx="1"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="1"/><rect x="9" y="1" width="3" height="11" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1"/></svg>
+            <svg viewBox="0 0 16 12"><path d="M8 2C4.5 2 1.5 4 0 7c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5z"/></svg>
+            <svg viewBox="0 0 28 13"><rect x="0" y="0" width="24" height="12" rx="3" stroke="currentColor" stroke-width="1" fill="none"/><rect x="1.5" y="1.5" width="19" height="9" rx="1.5" fill="currentColor"/><rect x="25" y="3.5" width="2.5" height="5" rx="1" fill="currentColor" opacity=".4"/></svg>
+          </div>
+        </div>
+        <div class="phone-content">
+          <div class="loading-section">
+            <h3>Setting up your account</h3>
+            <div class="subtitle">Analyzing your financial data...</div>
+            <div class="progress-bar-track"><div class="progress-bar-fill"></div></div>
+            <div class="time-note">This typically takes 5-8 minutes</div>
+          </div>
+          <div class="conversation-area fade-up">
+            <div class="chat-bubble user">What is tax-loss harvesting?</div>
+            <div class="chat-bubble ai">
+              <div class="ai-sender">Advizmo AI</div>
+              Tax-loss harvesting is a strategy where you sell investments at a loss to offset gains on other investments, reducing your overall tax bill.
+            </div>
+            <div class="chat-bubble ai" style="margin-left:0;">
+              <div class="ai-sender">Advizmo AI</div>
+              Advizmo can automatically identify harvesting opportunities in your portfolio and execute trades to maximize your tax savings - all while maintaining your target asset allocation.
+            </div>
+            <div class="inline-source">
+              <svg style="width:10px;height:10px;fill:var(--blue)" viewBox="0 0 24 24"><path d="M12 2l2.09 6.26L20.18 9l-5.09 3.74L16.18 19 12 15.77 7.82 19l1.09-6.26L3.82 9l6.09-.74z"/></svg>
+              Based on your portfolio analysis
+            </div>
+            <div class="divider-line"></div>
+            <div class="section-label" style="margin-top:4px;">Follow-up questions</div>
+            <div class="follow-up-chips">
+              <div class="chip">How much can I save?</div>
+              <div class="chip">Is it automatic?</div>
+              <div class="chip">Show me an example</div>
+            </div>
+          </div>
+          <div style="height:16px;"></div>
+          <div class="chat-input-bar">
+            <input type="text" placeholder="Ask me anything..." readonly>
+            <button class="send-btn"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></button>
+          </div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></div>
+          <div class="nav-item active"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><span>Discover</span></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg><span>Invest</span></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Profile</span></div>
+        </div>
+      </div></div>
+    </div>
+
+  </div>
+</section>
+<!-- ============================================
+     CONCEPT 2 - AI ASSISTANT WITH SUGGESTED PROMPTS
+     ============================================ -->
+<section class="concept-section" id="concept2">
+  <h2>Concept 2 - AI Assistant &amp; Suggested Prompts</h2>
+  <p class="concept-desc">A guided AI concierge experience with categorized prompt cards. Users can filter by topic and discover what the AI can help with.</p>
+  <div class="states-row">
+
+    <!-- STATE 1: Loading -->
+    <div class="state-group">
+      <div class="state-label">Loading State</div>
+      <div class="phone-frame"><div class="phone-inner">
+        <div class="dynamic-island"></div>
+        <div class="ios-status-bar">
+          <span class="time">9:41</span>
+          <div class="icons">
+            <svg viewBox="0 0 16 12"><rect x="0" y="4" width="3" height="8" rx="1"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="1"/><rect x="9" y="1" width="3" height="11" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1"/></svg>
+            <svg viewBox="0 0 16 12"><path d="M8 2C4.5 2 1.5 4 0 7c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5z"/></svg>
+            <svg viewBox="0 0 28 13"><rect x="0" y="0" width="24" height="12" rx="3" stroke="currentColor" stroke-width="1" fill="none"/><rect x="1.5" y="1.5" width="19" height="9" rx="1.5" fill="currentColor"/><rect x="25" y="3.5" width="2.5" height="5" rx="1" fill="currentColor" opacity=".4"/></svg>
+          </div>
+        </div>
+        <div class="phone-content">
+          <div class="loading-section">
+            <h3>Setting up your account</h3>
+            <div class="subtitle">Analyzing your financial data...</div>
+            <div class="progress-bar-track"><div class="progress-bar-fill"></div></div>
+            <div class="time-note">This typically takes 5-8 minutes</div>
+          </div>
+          <div style="text-align:center;margin-bottom:20px;">
+            <div class="ai-avatar large">
+              <svg viewBox="0 0 24 24"><path d="M12 2l2.09 6.26L20.18 9l-5.09 3.74L16.18 19 12 15.77 7.82 19l1.09-6.26L3.82 9l6.09-.74z"/></svg>
+            </div>
+            <h3 style="font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:4px;">Your Financial Assistant</h3>
+            <p style="font-size:13px;color:var(--text2);">I can help while you wait</p>
+          </div>
+          <div class="category-chips">
+            <button class="cat-chip blue">Investing</button>
+            <button class="cat-chip green">Taxes</button>
+            <button class="cat-chip amber">Cash Flow</button>
+            <button class="cat-chip blue">Savings</button>
+          </div>
+          <div class="prompt-grid">
+            <div class="prompt-card"><div class="prompt-icon" style="background:var(--blue-light);">📊</div><div class="prompt-text">How does Auto Invest work?</div></div>
+            <div class="prompt-card"><div class="prompt-icon" style="background:var(--green-bg);">🧮</div><div class="prompt-text">What is tax-loss harvesting?</div></div>
+            <div class="prompt-card"><div class="prompt-icon" style="background:var(--amber-bg);">💰</div><div class="prompt-text">How much emergency savings?</div></div>
+            <div class="prompt-card"><div class="prompt-icon" style="background:var(--green-bg);">📋</div><div class="prompt-text">Can Advizmo lower my taxes?</div></div>
+          </div>
+          <button class="cta-btn"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>Start a conversation</button>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></div>
+          <div class="nav-item active"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><span>Discover</span></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg><span>Invest</span></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Profile</span></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- STATE 2: Default (with active filter) -->
+    <div class="state-group">
+      <div class="state-label">Default State</div>
+      <div class="phone-frame"><div class="phone-inner">
+        <div class="dynamic-island"></div>
+        <div class="ios-status-bar">
+          <span class="time">9:41</span>
+          <div class="icons">
+            <svg viewBox="0 0 16 12"><rect x="0" y="4" width="3" height="8" rx="1"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="1"/><rect x="9" y="1" width="3" height="11" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1"/></svg>
+            <svg viewBox="0 0 16 12"><path d="M8 2C4.5 2 1.5 4 0 7c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5z"/></svg>
+            <svg viewBox="0 0 28 13"><rect x="0" y="0" width="24" height="12" rx="3" stroke="currentColor" stroke-width="1" fill="none"/><rect x="1.5" y="1.5" width="19" height="9" rx="1.5" fill="currentColor"/><rect x="25" y="3.5" width="2.5" height="5" rx="1" fill="currentColor" opacity=".4"/></svg>
+          </div>
+        </div>
+        <div class="phone-content">
+          <div class="loading-section">
+            <h3>Setting up your account</h3>
+            <div class="subtitle">Analyzing your financial data...</div>
+            <div class="progress-bar-track"><div class="progress-bar-fill"></div></div>
+            <div class="time-note">This typically takes 5-8 minutes</div>
+          </div>
+          <div style="text-align:center;margin-bottom:20px;">
+            <div class="ai-avatar large sparkle-anim">
+              <svg viewBox="0 0 24 24"><path d="M12 2l2.09 6.26L20.18 9l-5.09 3.74L16.18 19 12 15.77 7.82 19l1.09-6.26L3.82 9l6.09-.74z"/></svg>
+            </div>
+            <h3 style="font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:4px;">Your Financial Assistant</h3>
+            <p style="font-size:13px;color:var(--text2);">I can help while you wait</p>
+          </div>
+          <div class="section-label">Filter by Topic</div>
+          <div class="category-chips">
+            <button class="cat-chip active-blue">Investing</button>
+            <button class="cat-chip green">Taxes</button>
+            <button class="cat-chip amber">Cash Flow</button>
+            <button class="cat-chip blue">Savings</button>
+          </div>
+          <div class="section-label">Investing Prompts</div>
+          <div class="prompt-grid">
+            <div class="prompt-card" style="border-color:var(--blue-border);"><div class="prompt-icon" style="background:var(--blue-light);">📊</div><div class="prompt-text">How does Auto Invest work?</div></div>
+            <div class="prompt-card"><div class="prompt-icon" style="background:var(--blue-light);">📈</div><div class="prompt-text">What's my portfolio allocation?</div></div>
+            <div class="prompt-card"><div class="prompt-icon" style="background:var(--blue-light);">🎯</div><div class="prompt-text">Am I on track for retirement?</div></div>
+            <div class="prompt-card"><div class="prompt-icon" style="background:var(--blue-light);">⚖️</div><div class="prompt-text">Should I rebalance?</div></div>
+          </div>
+          <button class="cta-btn"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>Start a conversation</button>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></div>
+          <div class="nav-item active"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><span>Discover</span></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg><span>Invest</span></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Profile</span></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- STATE 3: Conversation -->
+    <div class="state-group">
+      <div class="state-label">After Tapping a Prompt</div>
+      <div class="phone-frame"><div class="phone-inner">
+        <div class="dynamic-island"></div>
+        <div class="ios-status-bar">
+          <span class="time">9:42</span>
+          <div class="icons">
+            <svg viewBox="0 0 16 12"><rect x="0" y="4" width="3" height="8" rx="1"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="1"/><rect x="9" y="1" width="3" height="11" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1"/></svg>
+            <svg viewBox="0 0 16 12"><path d="M8 2C4.5 2 1.5 4 0 7c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5z"/></svg>
+            <svg viewBox="0 0 28 13"><rect x="0" y="0" width="24" height="12" rx="3" stroke="currentColor" stroke-width="1" fill="none"/><rect x="1.5" y="1.5" width="19" height="9" rx="1.5" fill="currentColor"/><rect x="25" y="3.5" width="2.5" height="5" rx="1" fill="currentColor" opacity=".4"/></svg>
+          </div>
+        </div>
+        <div class="phone-content">
+          <div class="loading-section">
+            <h3>Setting up your account</h3>
+            <div class="subtitle">Analyzing your financial data...</div>
+            <div class="progress-bar-track"><div class="progress-bar-fill"></div></div>
+            <div class="time-note">This typically takes 5-8 minutes</div>
+          </div>
+          <div class="conversation-area fade-up">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+              <div class="ai-avatar small">
+                <svg viewBox="0 0 24 24"><path d="M12 2l2.09 6.26L20.18 9l-5.09 3.74L16.18 19 12 15.77 7.82 19l1.09-6.26L3.82 9l6.09-.74z"/></svg>
+              </div>
+              <span style="font-size:13px;font-weight:600;color:var(--text);">Advizmo AI</span>
+              <span style="font-size:11px;color:var(--text2);">just now</span>
+            </div>
+            <div class="assistant-response">
+              <div class="mini-avatar"><svg viewBox="0 0 24 24"><path d="M12 2l2.09 6.26L20.18 9l-5.09 3.74L16.18 19 12 15.77 7.82 19l1.09-6.26L3.82 9l6.09-.74z"/></svg></div>
+              <div class="response-body"><strong style="font-size:13px;color:var(--text);">How does Auto Invest work?</strong><br><br>Auto Invest automatically allocates your money based on your goals and risk tolerance. Here's how it works:</div>
+            </div>
+            <div class="assistant-response">
+              <div class="mini-avatar"><svg viewBox="0 0 24 24"><path d="M12 2l2.09 6.26L20.18 9l-5.09 3.74L16.18 19 12 15.77 7.82 19l1.09-6.26L3.82 9l6.09-.74z"/></svg></div>
+              <div class="response-body">
+                <div style="display:flex;flex-direction:column;gap:10px;">
+                  <div style="display:flex;align-items:flex-start;gap:8px;"><span style="width:22px;height:22px;border-radius:50%;background:var(--blue-light);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--blue);font-weight:700;flex-shrink:0;">1</span><span style="font-size:13px;">You connect your bank account securely</span></div>
+                  <div style="display:flex;align-items:flex-start;gap:8px;"><span style="width:22px;height:22px;border-radius:50%;background:var(--blue-light);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--blue);font-weight:700;flex-shrink:0;">2</span><span style="font-size:13px;">We set up recurring or one-time investments</span></div>
+                  <div style="display:flex;align-items:flex-start;gap:8px;"><span style="width:22px;height:22px;border-radius:50%;background:var(--blue-light);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--blue);font-weight:700;flex-shrink:0;">3</span><span style="font-size:13px;">Money is invested according to your strategy</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="inline-source">
+              <svg style="width:10px;height:10px;fill:var(--blue)" viewBox="0 0 24 24"><path d="M12 2l2.09 6.26L20.18 9l-5.09 3.74L16.18 19 12 15.77 7.82 19l1.09-6.26L3.82 9l6.09-.74z"/></svg>
+              Personalized for your account
+            </div>
+            <div class="divider-line"></div>
+            <div class="follow-up-chips">
+              <div class="chip">What are the fees?</div>
+              <div class="chip">Can I pause it?</div>
+            </div>
+          </div>
+          <div style="height:16px;"></div>
+          <div class="chat-input-bar">
+            <input type="text" placeholder="Ask me anything..." readonly>
+            <button class="send-btn"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></button>
+          </div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></div>
+          <div class="nav-item active"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><span>Discover</span></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg><span>Invest</span></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Profile</span></div>
+        </div>
+      </div></div>
+    </div>
+
+  </div>
+</section>
+<!-- ============================================
+     CONCEPT 3 - DISCOVER CARDS
+     ============================================ -->
+<section class="concept-section" id="concept3">
+  <h2>Concept 3 - Discover Cards</h2>
+  <p class="concept-desc">Swipeable discovery cards showcasing AI capabilities. Visual, engaging, and tactile - users explore by swiping through cards.</p>
+  <div class="states-row">
+
+    <!-- STATE 1: Loading -->
+    <div class="state-group">
+      <div class="state-label">Loading State</div>
+      <div class="phone-frame"><div class="phone-inner">
+        <div class="dynamic-island"></div>
+        <div class="ios-status-bar">
+          <span class="time">9:41</span>
+          <div class="icons">
+            <svg viewBox="0 0 16 12"><rect x="0" y="4" width="3" height="8" rx="1"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="1"/><rect x="9" y="1" width="3" height="11" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1"/></svg>
+            <svg viewBox="0 0 16 12"><path d="M8 2C4.5 2 1.5 4 0 7c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5z"/></svg>
+            <svg viewBox="0 0 28 13"><rect x="0" y="0" width="24" height="12" rx="3" stroke="currentColor" stroke-width="1" fill="none"/><rect x="1.5" y="1.5" width="19" height="9" rx="1.5" fill="currentColor"/><rect x="25" y="3.5" width="2.5" height="5" rx="1" fill="currentColor" opacity=".4"/></svg>
+          </div>
+        </div>
+        <div class="phone-content">
+          <div class="loading-section">
+            <h3>Setting up your account</h3>
+            <div class="subtitle">Analyzing your financial data...</div>
+            <div class="progress-bar-track"><div class="progress-bar-fill"></div></div>
+            <div class="time-note">This typically takes 5-8 minutes</div>
+          </div>
+          <h3 style="font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:4px;">Discover what I can do</h3>
+          <p style="font-size:13px;color:var(--text2);margin-bottom:20px;">Swipe to explore</p>
+          <div class="card-stack">
+            <div class="discover-card">
+              <div class="card-icon" style="background:var(--blue-light);"><svg style="width:24px;height:24px;fill:var(--blue)" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 16l4-8 4 4 4-10"/></svg></div>
+              <div class="card-title">Investing</div>
+              <div class="card-desc">I can help you understand your portfolio and make smarter investment decisions.</div>
+              <div class="card-action">Ask about Auto Invest &rarr;</div>
+            </div>
+            <div class="discover-card">
+              <div class="card-icon" style="background:var(--green-bg);"><svg style="width:24px;height:24px;fill:var(--green)" viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M8 12h8M12 8v8" stroke="#fff" stroke-width="2" fill="none"/></svg></div>
+              <div class="card-title">Taxes</div>
+              <div class="card-desc">Learn about tax optimization strategies.</div>
+            </div>
+            <div class="discover-card">
+              <div class="card-icon" style="background:var(--amber-bg);"><svg style="width:24px;height:24px;fill:var(--amber)" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+              <div class="card-title">Cash Flow</div>
+              <div class="card-desc">Understand your money movement.</div>
+            </div>
+          </div>
+          <div class="dot-indicators"><div class="dot active"></div><div class="dot"></div><div class="dot"></div></div>
+          <button class="cta-btn"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>Ask a question</button>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></div>
+          <div class="nav-item active"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><span>Discover</span></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg><span>Invest</span></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Profile</span></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- STATE 2: Default (card 2 visible) -->
+    <div class="state-group">
+      <div class="state-label">Default State</div>
+      <div class="phone-frame"><div class="phone-inner">
+        <div class="dynamic-island"></div>
+        <div class="ios-status-bar">
+          <span class="time">9:41</span>
+          <div class="icons">
+            <svg viewBox="0 0 16 12"><rect x="0" y="4" width="3" height="8" rx="1"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="1"/><rect x="9" y="1" width="3" height="11" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1"/></svg>
+            <svg viewBox="0 0 16 12"><path d="M8 2C4.5 2 1.5 4 0 7c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5z"/></svg>
+            <svg viewBox="0 0 28 13"><rect x="0" y="0" width="24" height="12" rx="3" stroke="currentColor" stroke-width="1" fill="none"/><rect x="1.5" y="1.5" width="19" height="9" rx="1.5" fill="currentColor"/><rect x="25" y="3.5" width="2.5" height="5" rx="1" fill="currentColor" opacity=".4"/></svg>
+          </div>
+        </div>
+        <div class="phone-content">
+          <div class="loading-section">
+            <h3>Setting up your account</h3>
+            <div class="subtitle">Analyzing your financial data...</div>
+            <div class="progress-bar-track"><div class="progress-bar-fill"></div></div>
+            <div class="time-note">This typically takes 5-8 minutes</div>
+          </div>
+          <h3 style="font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:4px;">Discover what I can do</h3>
+          <p style="font-size:13px;color:var(--text2);margin-bottom:20px;">Swipe to explore</p>
+          <div class="card-stack" style="height:280px;">
+            <div class="discover-card" style="top:0;">
+              <div class="card-icon" style="background:var(--green-bg);"><svg style="width:24px;height:24px;fill:var(--green)" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20" stroke="#fff" stroke-width="1.5" fill="none"/></svg></div>
+              <div class="card-title">Taxes</div>
+              <div class="card-desc">I can find tax-saving opportunities in your portfolio and explain complex tax concepts in plain English.</div>
+              <div class="card-action">Learn about tax optimization &rarr;</div>
+            </div>
+            <div class="discover-card">
+              <div class="card-icon" style="background:var(--amber-bg);"><svg style="width:24px;height:24px;fill:var(--amber)" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+              <div class="card-title">Cash Flow</div>
+              <div class="card-desc">Understand your money movement.</div>
+            </div>
+            <div class="discover-card">
+              <div class="card-icon" style="background:var(--blue-light);"><svg style="width:24px;height:24px;fill:var(--blue)" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg></div>
+              <div class="card-title">Savings</div>
+              <div class="card-desc">Build your emergency fund.</div>
+            </div>
+          </div>
+          <div class="dot-indicators"><div class="dot"></div><div class="dot active"></div><div class="dot"></div></div>
+          <button class="cta-btn"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>Ask a question</button>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></div>
+          <div class="nav-item active"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><span>Discover</span></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg><span>Invest</span></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Profile</span></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- STATE 3: Conversation -->
+    <div class="state-group">
+      <div class="state-label">After Tapping a Card</div>
+      <div class="phone-frame"><div class="phone-inner">
+        <div class="dynamic-island"></div>
+        <div class="ios-status-bar">
+          <span class="time">9:42</span>
+          <div class="icons">
+            <svg viewBox="0 0 16 12"><rect x="0" y="4" width="3" height="8" rx="1"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="1"/><rect x="9" y="1" width="3" height="11" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1"/></svg>
+            <svg viewBox="0 0 16 12"><path d="M8 2C4.5 2 1.5 4 0 7c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5z"/></svg>
+            <svg viewBox="0 0 28 13"><rect x="0" y="0" width="24" height="12" rx="3" stroke="currentColor" stroke-width="1" fill="none"/><rect x="1.5" y="1.5" width="19" height="9" rx="1.5" fill="currentColor"/><rect x="25" y="3.5" width="2.5" height="5" rx="1" fill="currentColor" opacity=".4"/></svg>
+          </div>
+        </div>
+        <div class="phone-content">
+          <div class="loading-section">
+            <h3>Setting up your account</h3>
+            <div class="subtitle">Analyzing your financial data...</div>
+            <div class="progress-bar-track"><div class="progress-bar-fill"></div></div>
+            <div class="time-note">This typically takes 5-8 minutes</div>
+          </div>
+          <div class="conversation-area fade-up">
+            <div class="detail-card">
+              <div class="detail-header">
+                <div class="detail-icon" style="background:var(--blue-light);"><svg style="width:20px;height:20px;fill:var(--blue)" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 16l4-8 4 4 4-10"/></svg></div>
+                <div class="detail-title">Investing</div>
+              </div>
+              <p>Here's how I can help with your investment strategy:</p>
+              <ul>
+                <li>Analyze your current portfolio allocation</li>
+                <li>Suggest rebalancing based on your goals</li>
+                <li>Explain Auto Invest and how it works</li>
+                <li>Identify opportunities to reduce fees</li>
+              </ul>
+              <div class="inline-source">
+                <svg style="width:10px;height:10px;fill:var(--blue)" viewBox="0 0 24 24"><path d="M12 2l2.09 6.26L20.18 9l-5.09 3.74L16.18 19 12 15.77 7.82 19l1.09-6.26L3.82 9l6.09-.74z"/></svg>
+                Based on your connected accounts
+              </div>
+            </div>
+            <div class="chat-bubble ai">
+              <div class="ai-sender">Advizmo AI</div>
+              I'll analyze your portfolio once setup is complete. For now, would you like to learn about any specific investing concept?
+            </div>
+            <div class="divider-line"></div>
+            <div class="follow-up-chips">
+              <div class="chip">What is diversification?</div>
+              <div class="chip">Explain ETFs</div>
+              <div class="chip">Risk tolerance</div>
+            </div>
+            <div style="height:16px;"></div>
+            <button class="cta-btn"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>Ask a question</button>
+          </div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></div>
+          <div class="nav-item active"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><span>Discover</span></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg><span>Invest</span></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Profile</span></div>
+        </div>
+      </div></div>
+    </div>
+
+  </div>
+</section>
+<section class="concept-section" id="concept4">
+  <h2>Concept 4 - Interactive Question Chips</h2>
+  <p class="concept-desc">Bubble-style question chips scattered in a playful layout. Users tap a bubble to get an instant answer - conversational and inviting.</p>
+  <div class="states-row">
+    <div class="state-group">
+      <div class="state-label">Loading State</div>
+      <div class="phone-frame"><div class="phone-inner">
+        <div class="dynamic-island"></div>
+        <div class="ios-status-bar"><span class="time">9:41</span><div class="icons"><svg viewBox="0 0 16 12"><rect x="0" y="4" width="3" height="8" rx="1"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="1"/><rect x="9" y="1" width="3" height="11" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1"/></svg><svg viewBox="0 0 16 12"><path d="M8 2C4.5 2 1.5 4 0 7c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5z"/></svg><svg viewBox="0 0 28 13"><rect x="0" y="0" width="24" height="12" rx="3" stroke="currentColor" stroke-width="1" fill="none"/><rect x="1.5" y="1.5" width="19" height="9" rx="1.5" fill="currentColor"/><rect x="25" y="3.5" width="2.5" height="5" rx="1" fill="currentColor" opacity=".4"/></svg></div></div>
+        <div class="phone-content">
+          <div class="loading-section"><h3>Setting up your account</h3><div class="subtitle">Analyzing your financial data...</div><div class="progress-bar-track"><div class="progress-bar-fill"></div></div><div class="time-note">This typically takes 5-8 minutes</div></div>
+          <h3 style="font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:4px;text-align:center;">What would you like to know?</h3>
+          <p style="font-size:13px;color:var(--text2);margin-bottom:20px;text-align:center;">Tap a question to learn more</p>
+          <div class="bubble-field">
+            <div class="bubble large blue-tint">Where is my idle cash?</div>
+            <div class="bubble medium">How does Auto Invest work?</div>
+            <div class="bubble medium">What is tax-loss harvesting?</div>
+            <div class="bubble small">How much should I save?</div>
+            <div class="bubble small blue-tint">Can you lower my taxes?</div>
+            <div class="bubble medium">What happens next?</div>
+          </div>
+          <div class="own-question"><a href="#">Or ask your own question</a></div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></div>
+          <div class="nav-item active"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><span>Discover</span></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg><span>Invest</span></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Profile</span></div>
+        </div>
+      </div></div>
+    </div>
+    <div class="state-group">
+      <div class="state-label">Default State</div>
+      <div class="phone-frame"><div class="phone-inner">
+        <div class="dynamic-island"></div>
+        <div class="ios-status-bar"><span class="time">9:41</span><div class="icons"><svg viewBox="0 0 16 12"><rect x="0" y="4" width="3" height="8" rx="1"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="1"/><rect x="9" y="1" width="3" height="11" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1"/></svg><svg viewBox="0 0 16 12"><path d="M8 2C4.5 2 1.5 4 0 7c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5z"/></svg><svg viewBox="0 0 28 13"><rect x="0" y="0" width="24" height="12" rx="3" stroke="currentColor" stroke-width="1" fill="none"/><rect x="1.5" y="1.5" width="19" height="9" rx="1.5" fill="currentColor"/><rect x="25" y="3.5" width="2.5" height="5" rx="1" fill="currentColor" opacity=".4"/></svg></div></div>
+        <div class="phone-content">
+          <div class="loading-section"><h3>Setting up your account</h3><div class="subtitle">Analyzing your financial data...</div><div class="progress-bar-track"><div class="progress-bar-fill"></div></div><div class="time-note">This typically takes 5-8 minutes</div></div>
+          <h3 style="font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:4px;text-align:center;">What would you like to know?</h3>
+          <p style="font-size:13px;color:var(--text2);margin-bottom:20px;text-align:center;">Tap a question to learn more</p>
+          <div class="bubble-field" style="gap:12px;">
+            <div class="bubble large blue-tint" style="box-shadow:0 4px 16px rgba(10,132,255,.12);">Where is my idle cash?</div>
+            <div class="bubble medium" style="box-shadow:0 3px 12px rgba(0,0,0,.06);">How does Auto Invest work?</div>
+            <div class="bubble medium" style="box-shadow:0 3px 12px rgba(0,0,0,.06);">What is tax-loss harvesting?</div>
+            <div class="bubble small" style="box-shadow:0 2px 8px rgba(0,0,0,.05);">How much should I save?</div>
+            <div class="bubble small blue-tint" style="box-shadow:0 3px 12px rgba(10,132,255,.08);">Can you lower my taxes?</div>
+            <div class="bubble medium" style="box-shadow:0 3px 12px rgba(0,0,0,.06);">What happens next?</div>
+            <div class="bubble small">Do I have enough for retirement?</div>
+            <div class="bubble small blue-tint">What fees am I paying?</div>
+          </div>
+          <div class="own-question"><a href="#">Or ask your own question</a></div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></div>
+          <div class="nav-item active"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><span>Discover</span></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg><span>Invest</span></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Profile</span></div>
+        </div>
+      </div></div>
+    </div>
+    <div class="state-group">
+      <div class="state-label">After Tapping a Bubble</div>
+      <div class="phone-frame"><div class="phone-inner">
+        <div class="dynamic-island"></div>
+        <div class="ios-status-bar"><span class="time">9:42</span><div class="icons"><svg viewBox="0 0 16 12"><rect x="0" y="4" width="3" height="8" rx="1"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="1"/><rect x="9" y="1" width="3" height="11" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1"/></svg><svg viewBox="0 0 16 12"><path d="M8 2C4.5 2 1.5 4 0 7c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5z"/></svg><svg viewBox="0 0 28 13"><rect x="0" y="0" width="24" height="12" rx="3" stroke="currentColor" stroke-width="1" fill="none"/><rect x="1.5" y="1.5" width="19" height="9" rx="1.5" fill="currentColor"/><rect x="25" y="3.5" width="2.5" height="5" rx="1" fill="currentColor" opacity=".4"/></svg></div></div>
+        <div class="phone-content">
+          <div class="loading-section"><h3>Setting up your account</h3><div class="subtitle">Analyzing your financial data...</div><div class="progress-bar-track"><div class="progress-bar-fill"></div></div><div class="time-note">This typically takes 5-8 minutes</div></div>
+          <div class="conversation-area fade-up">
+            <div class="expanded-bubble">
+              <div class="question">Where is my idle cash?</div>
+              <div class="answer">Any uninvested cash in your account sits in a sweep account. Once setup is complete, I will show you exactly where your cash is held and the current yield.</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+              <div class="ai-avatar tiny"><svg viewBox="0 0 24 24"><path d="M12 2l2.09 6.26L20.18 9l-5.09 3.74L16.18 19 12 15.77 7.82 19l1.09-6.26L3.82 9l6.09-.74z"/></svg></div>
+              <span style="font-size:12px;color:var(--text2);">Advizmo AI</span>
+            </div>
+            <div class="chat-bubble ai" style="max-width:90%;border-bottom-left-radius:4px;">In most brokerage accounts, idle cash is swept into a money market fund. This means your cash earns interest while it waits to be invested.</div>
+            <div class="chat-bubble ai" style="max-width:90%;border-bottom-left-radius:4px;margin-top:4px;">For example, if you have $5,000 uninvested, it might earn 4-5% APY in a sweep account rather than sitting idle.</div>
+            <div class="inline-source"><svg style="width:10px;height:10px;fill:var(--blue)" viewBox="0 0 24 24"><path d="M12 2l2.09 6.26L20.18 9l-5.09 3.74L16.18 19 12 15.77 7.82 19l1.09-6.26L3.82 9l6.09-.74z"/></svg>General info - personalized data coming soon</div>
+            <div class="divider-line"></div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;">
+              <div class="bubble small blue-tint" style="padding:8px 14px;font-size:12px;">What's the yield?</div>
+              <div class="bubble small" style="padding:8px 14px;font-size:12px;">Can I set up auto-sweep?</div>
+              <div class="bubble small blue-tint" style="padding:8px 14px;font-size:12px;">Is it FDIC insured?</div>
+            </div>
+            <div class="own-question" style="margin-top:16px;"><a href="#">Or ask your own question</a></div>
+          </div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></div>
+          <div class="nav-item active"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><span>Discover</span></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg><span>Invest</span></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Profile</span></div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+</section>
+<section class="concept-section" id="concept5">
+  <h2>Concept 5 - AI Knowledge Hub</h2>
+  <p class="concept-desc">An organized knowledge base with topics and articles. Users browse curated content - structured, trustworthy, and educational.</p>
+  <div class="states-row">
+    <div class="state-group">
+      <div class="state-label">Loading State</div>
+      <div class="phone-frame"><div class="phone-inner">
+        <div class="dynamic-island"></div>
+        <div class="ios-status-bar"><span class="time">9:41</span><div class="icons"><svg viewBox="0 0 16 12"><rect x="0" y="4" width="3" height="8" rx="1"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="1"/><rect x="9" y="1" width="3" height="11" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1"/></svg><svg viewBox="0 0 16 12"><path d="M8 2C4.5 2 1.5 4 0 7c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5z"/></svg><svg viewBox="0 0 28 13"><rect x="0" y="0" width="24" height="12" rx="3" stroke="currentColor" stroke-width="1" fill="none"/><rect x="1.5" y="1.5" width="19" height="9" rx="1.5" fill="currentColor"/><rect x="25" y="3.5" width="2.5" height="5" rx="1" fill="currentColor" opacity=".4"/></svg></div></div>
+        <div class="phone-content">
+          <div class="loading-section"><h3>Setting up your account</h3><div class="subtitle">Analyzing your financial data...</div><div class="progress-bar-track"><div class="progress-bar-fill"></div></div><div class="time-note">This typically takes 5-8 minutes</div></div>
+          <h3 style="font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:4px;">Learn while you wait</h3>
+          <p style="font-size:13px;color:var(--text2);margin-bottom:20px;">Explore financial topics</p>
+          <div class="topic-list">
+            <div class="topic-item"><div class="topic-icon" style="background:var(--blue-light);"><svg style="width:20px;height:20px;fill:var(--blue)" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 16l4-8 4 4 4-10"/></svg></div><div class="topic-info"><div class="topic-name">Investing</div><div class="topic-count">5 articles</div></div><div class="topic-chevron"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+            <div class="topic-item"><div class="topic-icon" style="background:var(--green-bg);"><svg style="width:20px;height:20px;fill:var(--green)" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20" stroke="#fff" stroke-width="1.5" fill="none"/></svg></div><div class="topic-info"><div class="topic-name">Taxes</div><div class="topic-count">3 articles</div></div><div class="topic-chevron"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+            <div class="topic-item"><div class="topic-icon" style="background:var(--amber-bg);"><svg style="width:20px;height:20px;fill:var(--amber)" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div><div class="topic-info"><div class="topic-name">Cash Flow</div><div class="topic-count">4 articles</div></div><div class="topic-chevron"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+            <div class="topic-item"><div class="topic-icon" style="background:var(--blue-light);"><svg style="width:20px;height:20px;fill:var(--blue)" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg></div><div class="topic-info"><div class="topic-name">Savings</div><div class="topic-count">2 articles</div></div><div class="topic-chevron"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+          </div>
+          <div class="featured-article"><div class="label">Featured</div><h4>What is tax-loss harvesting?</h4><p>Learn how Advizmo can help you save on taxes by automatically identifying harvesting opportunities.</p><a href="#" class="read-more">Read more &rarr;</a></div>
+          <button class="cta-btn"><svg viewBox="0 0 24 24"><path d="M12 2l2.09 6.26L20.18 9l-5.09 3.74L16.18 19 12 15.77 7.82 19l1.09-6.26L3.82 9l6.09-.74z"/></svg>Ask the AI</button>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></div>
+          <div class="nav-item active"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><span>Discover</span></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg><span>Invest</span></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Profile</span></div>
+        </div>
+      </div></div>
+    </div>
+    <div class="state-group">
+      <div class="state-label">Default State</div>
+      <div class="phone-frame"><div class="phone-inner">
+        <div class="dynamic-island"></div>
+        <div class="ios-status-bar"><span class="time">9:41</span><div class="icons"><svg viewBox="0 0 16 12"><rect x="0" y="4" width="3" height="8" rx="1"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="1"/><rect x="9" y="1" width="3" height="11" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1"/></svg><svg viewBox="0 0 16 12"><path d="M8 2C4.5 2 1.5 4 0 7c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5z"/></svg><svg viewBox="0 0 28 13"><rect x="0" y="0" width="24" height="12" rx="3" stroke="currentColor" stroke-width="1" fill="none"/><rect x="1.5" y="1.5" width="19" height="9" rx="1.5" fill="currentColor"/><rect x="25" y="3.5" width="2.5" height="5" rx="1" fill="currentColor" opacity=".4"/></svg></div></div>
+        <div class="phone-content">
+          <div class="loading-section"><h3>Setting up your account</h3><div class="subtitle">Analyzing your financial data...</div><div class="progress-bar-track"><div class="progress-bar-fill"></div></div><div class="time-note">This typically takes 5-8 minutes</div></div>
+          <h3 style="font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:4px;">Learn while you wait</h3>
+          <p style="font-size:13px;color:var(--text2);margin-bottom:20px;">Explore financial topics</p>
+          <div class="topic-list">
+            <div class="topic-item" style="border-color:var(--blue-border);"><div class="topic-icon" style="background:var(--blue-light);"><svg style="width:20px;height:20px;fill:var(--blue)" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 16l4-8 4 4 4-10"/></svg></div><div class="topic-info"><div class="topic-name">Investing</div><div class="topic-count">5 articles</div></div><div class="topic-chevron"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+            <div class="topic-item"><div class="topic-icon" style="background:var(--green-bg);"><svg style="width:20px;height:20px;fill:var(--green)" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20" stroke="#fff" stroke-width="1.5" fill="none"/></svg></div><div class="topic-info"><div class="topic-name">Taxes</div><div class="topic-count">3 articles</div></div><div class="topic-chevron"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+            <div class="topic-item"><div class="topic-icon" style="background:var(--amber-bg);"><svg style="width:20px;height:20px;fill:var(--amber)" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div><div class="topic-info"><div class="topic-name">Cash Flow</div><div class="topic-count">4 articles</div></div><div class="topic-chevron"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+            <div class="topic-item"><div class="topic-icon" style="background:var(--blue-light);"><svg style="width:20px;height:20px;fill:var(--blue)" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg></div><div class="topic-info"><div class="topic-name">Savings</div><div class="topic-count">2 articles</div></div><div class="topic-chevron"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+          </div>
+          <div class="featured-article"><div class="label">Featured</div><h4>What is tax-loss harvesting?</h4><p>Learn how Advizmo can help you save on taxes by automatically identifying harvesting opportunities.</p><a href="#" class="read-more">Read more &rarr;</a></div>
+          <button class="cta-btn"><svg viewBox="0 0 24 24"><path d="M12 2l2.09 6.26L20.18 9l-5.09 3.74L16.18 19 12 15.77 7.82 19l1.09-6.26L3.82 9l6.09-.74z"/></svg>Ask the AI</button>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></div>
+          <div class="nav-item active"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><span>Discover</span></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg><span>Invest</span></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Profile</span></div>
+        </div>
+      </div></div>
+    </div>
+    <div class="state-group">
+      <div class="state-label">After Tapping a Topic</div>
+      <div class="phone-frame"><div class="phone-inner">
+        <div class="dynamic-island"></div>
+        <div class="ios-status-bar"><span class="time">9:42</span><div class="icons"><svg viewBox="0 0 16 12"><rect x="0" y="4" width="3" height="8" rx="1"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="1"/><rect x="9" y="1" width="3" height="11" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1"/></svg><svg viewBox="0 0 16 12"><path d="M8 2C4.5 2 1.5 4 0 7c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5z"/></svg><svg viewBox="0 0 28 13"><rect x="0" y="0" width="24" height="12" rx="3" stroke="currentColor" stroke-width="1" fill="none"/><rect x="1.5" y="1.5" width="19" height="9" rx="1.5" fill="currentColor"/><rect x="25" y="3.5" width="2.5" height="5" rx="1" fill="currentColor" opacity=".4"/></svg></div></div>
+        <div class="phone-content">
+          <div class="loading-section"><h3>Setting up your account</h3><div class="subtitle">Analyzing your financial data...</div><div class="progress-bar-track"><div class="progress-bar-fill"></div></div><div class="time-note">This typically takes 5-8 minutes</div></div>
+          <div class="conversation-area fade-up">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+              <div style="width:28px;height:28px;border-radius:8px;background:var(--bg);display:flex;align-items:center;justify-content:center;cursor:pointer;"><svg style="width:14px;height:14px;stroke:var(--text);fill:none;stroke-width:2;" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div>
+              <span style="font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:700;color:var(--text);">What is tax-loss harvesting?</span>
+            </div>
+            <div class="article-expanded" style="margin-bottom:0;">
+              <p>Tax-loss harvesting is the practice of selling securities at a loss to offset a capital gains tax liability. It is typically used to limit the recognition of short-term capital gains.</p>
+              <p>Here is how it works in practice:</p>
+              <ul style="list-style:none;padding:0;margin:0 0 12px;">
+                <li style="font-size:13px;color:var(--text);padding:6px 0;display:flex;align-items:flex-start;gap:8px;line-height:1.4;"><span style="width:5px;height:5px;border-radius:50%;background:var(--blue);margin-top:6px;flex-shrink:0;"></span>You sell an investment that has lost value</li>
+                <li style="font-size:13px;color:var(--text);padding:6px 0;display:flex;align-items:flex-start;gap:8px;line-height:1.4;"><span style="width:5px;height:5px;border-radius:50%;background:var(--blue);margin-top:6px;flex-shrink:0;"></span>The loss offsets gains from other investments</li>
+                <li style="font-size:13px;color:var(--text);padding:6px 0;display:flex;align-items:flex-start;gap:8px;line-height:1.4;"><span style="width:5px;height:5px;border-radius:50%;background:var(--blue);margin-top:6px;flex-shrink:0;"></span>You reinvest in a similar but not identical asset</li>
+              </ul>
+              <div class="ai-note">
+                <svg viewBox="0 0 24 24"><path d="M12 2l2.09 6.26L20.18 9l-5.09 3.74L16.18 19 12 15.77 7.82 19l1.09-6.26L3.82 9l6.09-.74z"/></svg>
+                <p><strong>AI Insight:</strong> Once your account is set up, I will scan your portfolio daily for harvesting opportunities and alert you when action could save you money.</p>
+              </div>
+            </div>
+            <div class="divider-line"></div>
+            <div class="section-label">Related articles</div>
+            <div class="follow-up-chips">
+              <div class="chip">Short-term vs long-term gains</div>
+              <div class="chip">Wash sale rules</div>
+              <div class="chip">How much can I save?</div>
+            </div>
+          </div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></div>
+          <div class="nav-item active"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><span>Discover</span></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg><span>Invest</span></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Profile</span></div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+</section>
+</main>
+</div>
+</body>
+</html>
+/* Additional Animations */
+@keyframes slideInFromBottom { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.slide-in { animation: slideInFromBottom .5s ease-out; }
+@keyframes scaleIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.scale-in { animation: scaleIn .3s ease-out; }
+@keyframes gentlePulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+.gentle-pulse { animation: gentlePulse 3s ease-in-out infinite; }
+
+/* Status Indicators */
+.status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); display: inline-block; margin-right: 6px; }
+.status-dot.processing { background: var(--amber); animation: gentlePulse 1.5s ease-in-out infinite; }
+.status-text { font-size: 12px; color: var(--text2); display: flex; align-items: center; margin-bottom: 8px; }
+
+/* AI Thinking */
+.ai-thinking { display: flex; align-items: center; gap: 8px; padding: 12px 16px; background: var(--card); border: 1px solid var(--border); border-radius: 18px; margin-bottom: 10px; max-width: 85%; }
+.ai-thinking .avatar { width: 24px; height: 24px; border-radius: 50%; background: linear-gradient(135deg, var(--blue), #5e5ce6); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.ai-thinking .avatar svg { width: 12px; height: 12px; fill: #fff; }
+
+/* Quick Actions */
+.quick-actions { display: flex; gap: 8px; margin-bottom: 16px; overflow-x: auto; padding-bottom: 4px; }
+.quick-actions::-webkit-scrollbar { display: none; }
+.quick-action-btn { display: flex; align-items: center; gap: 6px; padding: 8px 14px; background: var(--card); border: 1px solid var(--border); border-radius: 20px; font-size: 12px; color: var(--text); white-space: nowrap; cursor: pointer; transition: all .2s; }
+.quick-action-btn:hover { border-color: var(--blue); background: rgba(10,132,255,.04); }
+.quick-action-btn svg { width: 14px; height: 14px; fill: var(--blue); }
+
+/* Capability Badges */
+.capability-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+.capability-badge { display: inline-flex; align-items: center; gap: 4px; padding: 5px 10px; background: rgba(10,132,255,.06); border-radius: 6px; font-size: 11px; color: var(--blue); font-weight: 500; }
+.capability-badge svg { width: 10px; height: 10px; fill: var(--blue); }
+
+/* Progress Milestones */
+.milestones { display: flex; justify-content: space-between; margin: 12px 0; padding: 0 4px; }
+.milestone { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.milestone .dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(0,0,0,.08); transition: all .3s; }
+.milestone .dot.complete { background: var(--blue); }
+.milestone .dot.active { background: var(--blue); box-shadow: 0 0 0 4px rgba(10,132,255,.15); }
+.milestone .label { font-size: 9px; color: var(--text2); text-transform: uppercase; letter-spacing: .5px; }
+
+/* Trust Bar */
+.trust-bar { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 10px; background: rgba(10,132,255,.04); border-radius: 10px; margin-bottom: 16px; }
+.trust-item { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--text2); }
+.trust-item svg { width: 12px; height: 12px; fill: var(--green); }
+
+/* Account Analysis Status */
+.analysis-status { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-bottom: 16px; }
+.analysis-status .status-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.analysis-status .status-title { font-size: 13px; font-weight: 600; color: var(--text); }
+.analysis-status .status-badge { font-size: 11px; padding: 3px 8px; border-radius: 10px; background: rgba(10,132,255,.08); color: var(--blue); font-weight: 500; }
+.analysis-status .accounts-list { display: flex; flex-direction: column; gap: 8px; }
+.analysis-status .account-item { display: flex; align-items: center; gap: 10px; padding: 8px; background: var(--bg); border-radius: 8px; }
+.analysis-status .account-icon { width: 32px; height: 32px; border-radius: 8px; background: var(--card); display: flex; align-items: center; justify-content: center; font-size: 14px; }
+.analysis-status .account-info { flex: 1; }
+.analysis-status .account-name { font-size: 12px; font-weight: 600; color: var(--text); }
+.analysis-status .account-type { font-size: 11px; color: var(--text2); }
+.analysis-status .account-status { font-size: 10px; padding: 2px 6px; border-radius: 4px; }
+.analysis-status .account-status.connected { background: var(--green-bg); color: var(--green); }
+.analysis-status .account-status.analyzing { background: rgba(10,132,255,.08); color: var(--blue); }
+
+/* Personality Cards */
+.personality-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px; margin-bottom: 12px; display: flex; align-items: flex-start; gap: 12px; }
+.personality-card .emoji { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+.personality-card .info h4 { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+.personality-card .info p { font-size: 12px; color: var(--text2); line-height: 1.4; }
+
+/* Suggestion Carousel */
+.suggestion-carousel { display: flex; gap: 12px; overflow-x: auto; padding: 4px 0 12px; margin-bottom: 16px; }
+.suggestion-carousel::-webkit-scrollbar { display: none; }
+.suggestion-card { min-width: 160px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px; cursor: pointer; transition: all .2s; flex-shrink: 0; }
+.suggestion-card:hover { border-color: var(--blue); box-shadow: 0 2px 8px rgba(10,132,255,.1); }
+.suggestion-card .suggestion-icon { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; font-size: 14px; }
+.suggestion-card .suggestion-text { font-size: 12px; color: var(--text); font-weight: 500; line-height: 1.3; }
+
+/* Typing Indicator Row */
+.typing-row { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; padding: 10px 16px; }
+.typing-row .mini-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue); animation: typingBounce 1.2s ease-in-out infinite; }
+.typing-row .mini-dot:nth-child(2) { animation-delay: .15s; }
+.typing-row .mini-dot:nth-child(3) { animation-delay: .3s; }
+.typing-row .label { font-size: 12px; color: var(--text2); margin-left: 4px; }
+
+/* Card Hover Effects */
+.card-hover { transition: all .2s ease; }
+.card-hover:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,.08); }
+
+/* Gradient Text */
+.gradient-text { background: linear-gradient(135deg, var(--blue), #5e5ce6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+/* Scroll Snap */
+.scroll-snap { scroll-snap-type: x mandatory; }
+.scroll-snap > * { scroll-snap-align: start; }
+<!-- DESIGN SYSTEM REFERENCE -->
+<section class="concept-section" style="margin-top:60px;">
+<h2>Design System Reference</h2>
+<p class="concept-desc">Shared components, tokens, and patterns used across all AI Discovery Section concepts.</p>
+
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:60px;max-width:900px;">
+<div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:24px;">
+<h3 style="font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;color:#fff;margin-bottom:16px;">Color Tokens</h3>
+<div style="display:flex;flex-direction:column;gap:10px;">
+<div style="display:flex;align-items:center;gap:10px;"><div style="width:32px;height:32px;border-radius:8px;background:#f2f2f7;"></div><span style="font-size:13px;color:rgba(255,255,255,.6);">--bg: #f2f2f7</span></div>
+<div style="display:flex;align-items:center;gap:10px;"><div style="width:32px;height:32px;border-radius:8px;background:#fff;border:1px solid rgba(255,255,255,.1);"></div><span style="font-size:13px;color:rgba(255,255,255,.6);">--card: #ffffff</span></div>
+<div style="display:flex;align-items:center;gap:10px;"><div style="width:32px;height:32px;border-radius:8px;background:#1c1c1e;"></div><span style="font-size:13px;color:rgba(255,255,255,.6);">--text: #1c1c1e</span></div>
+<div style="display:flex;align-items:center;gap:10px;"><div style="width:32px;height:32px;border-radius:8px;background:#8e8e93;"></div><span style="font-size:13px;color:rgba(255,255,255,.6);">--text2: #8e8e93</span></div>
+<div style="display:flex;align-items:center;gap:10px;"><div style="width:32px;height:32px;border-radius:8px;background:#0a84ff;"></div><span style="font-size:13px;color:rgba(255,255,255,.6);">--blue: #0a84ff</span></div>
+<div style="display:flex;align-items:center;gap:10px;"><div style="width:32px;height:32px;border-radius:8px;background:#166f47;"></div><span style="font-size:13px;color:rgba(255,255,255,.6);">--green: #166f47</span></div>
+<div style="display:flex;align-items:center;gap:10px;"><div style="width:32px;height:32px;border-radius:8px;background:#c2790a;"></div><span style="font-size:13px;color:rgba(255,255,255,.6);">--amber: #c2790a</span></div>
+<div style="display:flex;align-items:center;gap:10px;"><div style="width:32px;height:32px;border-radius:8px;background:#b91c1c;"></div><span style="font-size:13px;color:rgba(255,255,255,.6);">--red: #b91c1c</span></div>
+</div>
+</div>
+<div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:24px;">
+<h3 style="font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;color:#fff;margin-bottom:16px;">Typography</h3>
+<div style="display:flex;flex-direction:column;gap:12px;">
+<div><span style="font-family:'IBM Plex Sans',sans-serif;font-size:22px;font-weight:700;color:#fff;">IBM Plex Sans</span><br><span style="font-size:12px;color:rgba(255,255,255,.4);">Headings, numbers, labels</span></div>
+<div><span style="font-family:'Inter',sans-serif;font-size:18px;font-weight:400;color:#fff;">Inter</span><br><span style="font-size:12px;color:rgba(255,255,255,.4);">Body text, UI elements</span></div>
+<div style="margin-top:8px;">
+<div style="font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700;color:#fff;margin-bottom:2px;">18px Bold</div>
+<div style="font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;color:#fff;margin-bottom:2px;">16px Bold</div>
+<div style="font-family:'Inter',sans-serif;font-size:14px;font-weight:400;color:#fff;margin-bottom:2px;">14px Regular</div>
+<div style="font-family:'Inter',sans-serif;font-size:13px;font-weight:400;color:rgba(255,255,255,.6);margin-bottom:2px;">13px Regular</div>
+<div style="font-family:'Inter',sans-serif;font-size:12px;font-weight:400;color:rgba(255,255,255,.4);margin-bottom:2px;">12px Regular</div>
+<div style="font-family:'Inter',sans-serif;font-size:11px;font-weight:400;color:rgba(255,255,255,.3);">11px Regular</div>
+</div>
+</div>
+</div>
+<div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:24px;">
+<h3 style="font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;color:#fff;margin-bottom:16px;">Spacing and Radius</h3>
+<div style="display:flex;flex-direction:column;gap:10px;">
+<div style="display:flex;align-items:center;gap:10px;"><div style="width:8px;height:8px;background:#0a84ff;"></div><span style="font-size:13px;color:rgba(255,255,255,.6);">4px (xxs)</span></div>
+<div style="display:flex;align-items:center;gap:10px;"><div style="width:12px;height:12px;background:#0a84ff;"></div><span style="font-size:13px;color:rgba(255,255,255,.6);">6px (xs)</span></div>
+<div style="display:flex;align-items:center;gap:10px;"><div style="width:16px;height:16px;background:#0a84ff;border-radius:4px;"></div><span style="font-size:13px;color:rgba(255,255,255,.6);">8px radius 4px</span></div>
+<div style="display:flex;align-items:center;gap:10px;"><div style="width:20px;height:20px;background:#0a84ff;border-radius:6px;"></div><span style="font-size:13px;color:rgba(255,255,255,.6);">10px radius 6px</span></div>
+<div style="display:flex;align-items:center;gap:10px;"><div style="width:28px;height:28px;background:#0a84ff;border-radius:10px;"></div><span style="font-size:13px;color:rgba(255,255,255,.6);">14px radius 10px</span></div>
+<div style="display:flex;align-items:center;gap:10px;"><div style="width:36px;height:36px;background:#0a84ff;border-radius:14px;"></div><span style="font-size:13px;color:rgba(255,255,255,.6);">18px radius 14px</span></div>
+</div>
+</div>
+</div>
+</section>
+<section class="concept-section" style="margin-top:40px;">
+<h2>Concept Comparison</h2>
+<p class="concept-desc">Side-by-side comparison of all 5 concepts to help choose the best approach.</p>
+<div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:32px;max-width:900px;margin-bottom:60px;">
+<table style="width:100%;border-collapse:collapse;font-size:13px;">
+<thead>
+<tr style="border-bottom:1px solid rgba(255,255,255,.08);">
+<th style="text-align:left;padding:12px 8px;color:rgba(255,255,255,.4);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.8px;">Concept</th>
+<th style="text-align:left;padding:12px 8px;color:rgba(255,255,255,.4);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.8px;">Approach</th>
+<th style="text-align:left;padding:12px 8px;color:rgba(255,255,255,.4);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.8px;">Best For</th>
+<th style="text-align:left;padding:12px 8px;color:rgba(255,255,255,.4);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.8px;">Complexity</th>
+</tr>
+</thead>
+<tbody>
+<tr style="border-bottom:1px solid rgba(255,255,255,.04);">
+<td style="padding:12px 8px;color:#fff;font-weight:600;">Concept 1</td>
+<td style="padding:12px 8px;color:rgba(255,255,255,.6);">Conversational AI Card</td>
+<td style="padding:12px 8px;color:rgba(255,255,255,.6);">Direct engagement, chat-first users</td>
+<td style="padding:12px 8px;color:rgba(255,255,255,.6);">Medium</td>
+</tr>
+<tr style="border-bottom:1px solid rgba(255,255,255,.04);">
+<td style="padding:12px 8px;color:#fff;font-weight:600;">Concept 2</td>
+<td style="padding:12px 8px;color:rgba(255,255,255,.6);">AI Assistant with Prompts</td>
+<td style="padding:12px 8px;color:rgba(255,255,255,.6);">Guided discovery, new users</td>
+<td style="padding:12px 8px;color:rgba(255,255,255,.6);">Medium</td>
+</tr>
+<tr style="border-bottom:1px solid rgba(255,255,255,.04);">
+<td style="padding:12px 8px;color:#fff;font-weight:600;">Concept 3</td>
+<td style="padding:12px 8px;color:rgba(255,255,255,.6);">Discover Cards</td>
+<td style="padding:12px 8px;color:rgba(255,255,255,.6);">Visual learners, engagement</td>
+<td style="padding:12px 8px;color:rgba(255,255,255,.6);">High</td>
+</tr>
+<tr style="border-bottom:1px solid rgba(255,255,255,.04);">
+<td style="padding:12px 8px;color:#fff;font-weight:600;">Concept 4</td>
+<td style="padding:12px 8px;color:rgba(255,255,255,.6);">Interactive Question Chips</td>
+<td style="padding:12px 8px;color:rgba(255,255,255,.6);">Playful engagement, quick answers</td>
+<td style="padding:12px 8px;color:rgba(255,255,255,.6);">Low</td>
+</tr>
+<tr>
+<td style="padding:12px 8px;color:#fff;font-weight:600;">Concept 5</td>
+<td style="padding:12px 8px;color:rgba(255,255,255,.6);">AI Knowledge Hub</td>
+<td style="padding:12px 8px;color:rgba(255,255,255,.6);">Education-first, structured learning</td>
+<td style="padding:12px 8px;color:rgba(255,255,255,.6);">Medium</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="concept-section" style="margin-top:40px;">
+<h2>Implementation Notes</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:900px;margin-bottom:60px;">
+<div style="background:rgba(10,132,255,.06);border:1px solid rgba(10,132,255,.12);border-radius:14px;padding:20px;">
+<h4 style="font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:700;color:#0a84ff;margin-bottom:8px;">Recommended Approach</h4>
+<p style="font-size:13px;color:rgba(255,255,255,.6);line-height:1.6;">Combine Concepts 1 and 4 for the optimal experience: Start with the AI Card (Concept 1) for the initial greeting, then show question bubbles (Concept 4) as the primary interaction method. This balances guided discovery with playful engagement.</p>
+</div>
+<div style="background:rgba(22,111,71,.06);border:1px solid rgba(22,111,71,.12);border-radius:14px;padding:20px;">
+<h4 style="font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:700;color:#166f47;margin-bottom:8px;">Accessibility</h4>
+<p style="font-size:13px;color:rgba(255,255,255,.6);line-height:1.6;">All interactive elements should have minimum 44x44pt touch targets. Use semantic HTML, proper ARIA labels, and ensure color contrast ratios meet WCAG 2.1 AA standards (4.5:1 for text).</p>
+</div>
+<div style="background:rgba(194,121,10,.06);border:1px solid rgba(194,121,10,.12);border-radius:14px;padding:20px;">
+<h4 style="font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:700;color:#c2790a;margin-bottom:8px;">Performance</h4>
+<p style="font-size:13px;color:rgba(255,255,255,.6);line-height:1.6;">Lazy-load AI responses. Use skeleton screens during loading. Cache common responses locally. Prefetch likely follow-up questions. Target less than 100ms perceived response time for pre-cached answers.</p>
+</div>
+<div style="background:rgba(185,28,28,.06);border:1px solid rgba(185,28,28,.12);border-radius:14px;padding:20px;">
+<h4 style="font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:700;color:#b91c1c;margin-bottom:8px;">Fallback Behavior</h4>
+<p style="font-size:13px;color:rgba(255,255,255,.6);line-height:1.6;">If AI service is unavailable, show cached financial education content. Never show a blank or error state during the 5-8 minute setup window. Always provide value.</p>
+</div>
+</div>
+</section>
+</main>
+</div>
+</body>
+</html>
+/* ============================================
+   ADDITIONAL COMPONENT STYLES
+   ============================================ */
+
+/* Skeleton Loading */
+.skeleton {
+  background: linear-gradient(90deg, rgba(0,0,0,.04) 25%, rgba(0,0,0,.08) 50%, rgba(0,0,0,.04) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.skeleton-text { height: 14px; margin-bottom: 8px; }
+.skeleton-text.short { width: 60%; }
+.skeleton-text.medium { width: 80%; }
+.skeleton-avatar { width: 44px; height: 44px; border-radius: 50%; }
+.skeleton-card { height: 120px; border-radius: 14px; }
+
+/* Notification Badge */
+.notification-badge {
+  position: absolute;
+  top: -4px; right: -4px;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--red);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--card);
+}
+
+/* Tooltip */
+.tooltip {
+  position: relative;
+}
+.tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 6px 10px;
+  background: var(--text);
+  color: #fff;
+  font-size: 11px;
+  border-radius: 6px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s;
+}
+.tooltip:hover::after {
+  opacity: 1;
+}
+
+/* Toggle Switch */
+.toggle-switch {
+  width: 51px; height: 31px;
+  background: #e9e9ea;
+  border-radius: 16px;
+  position: relative;
+  cursor: pointer;
+  transition: background .3s;
+}
+.toggle-switch.active {
+  background: var(--green);
+}
+.toggle-switch .knob {
+  width: 27px; height: 27px;
+  background: #fff;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px; left: 2px;
+  box-shadow: 0 2px 4px rgba(0,0,0,.15);
+  transition: transform .3s;
+}
+.toggle-switch.active .knob {
+  transform: translateX(20px);
+}
+
+/* Tab Bar */
+.tab-bar {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+.tab-bar .tab {
+  flex: 1;
+  padding: 10px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text2);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all .2s;
+}
+.tab-bar .tab.active {
+  color: var(--blue);
+  border-bottom-color: var(--blue);
+}
+
+/* Avatar Group */
+.avatar-group {
+  display: flex;
+}
+.avatar-group .avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--card);
+  margin-left: -8px;
+  background: var(--blue-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.avatar-group .avatar:first-child { margin-left: 0; }
+.avatar-group .avatar svg {
+  width: 14px; height: 14px;
+  fill: var(--blue);
+}
+
+/* Progress Steps */
+.progress-steps {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.progress-steps .step {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  background: rgba(0,0,0,.06);
+  color: var(--text2);
+}
+.progress-steps .step.active {
+  background: var(--blue);
+  color: #fff;
+}
+.progress-steps .step.complete {
+  background: var(--green);
+  color: #fff;
+}
+.progress-steps .connector {
+  flex: 1;
+  height: 2px;
+  background: rgba(0,0,0,.06);
+}
+.progress-steps .connector.active {
+  background: var(--blue);
+}
+
+/* Badge Count */
+.badge-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 10px;
+  background: var(--blue);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* Info Card */
+.info-card {
+  background: rgba(10,132,255,.04);
+  border: 1px solid rgba(10,132,255,.1);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.info-card svg {
+  width: 18px; height: 18px;
+  fill: var(--blue);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.info-card p {
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Success Card */
+.success-card {
+  background: var(--green-bg);
+  border: 1px solid rgba(22,111,71,.15);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.success-card svg {
+  width: 18px; height: 18px;
+  fill: var(--green);
+  flex-shrink: 0;
+}
+.success-card p {
+  font-size: 13px;
+  color: var(--green);
+  line-height: 1.5;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Warning Card */
+.warning-card {
+  background: var(--amber-bg);
+  border: 1px solid rgba(194,121,10,.15);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.warning-card svg {
+  width: 18px; height: 18px;
+  fill: var(--amber);
+  flex-shrink: 0;
+}
+.warning-card p {
+  font-size: 13px;
+  color: var(--amber);
+  line-height: 1.5;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+}
+.empty-state svg {
+  width: 48px; height: 48px;
+  stroke: var(--text2);
+  fill: none;
+  stroke-width: 1.5;
+  margin-bottom: 16px;
+}
+.empty-state h4 {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.empty-state p {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.5;
+}
+
+/* List Item */
+.list-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all .2s;
+}
+.list-item:hover {
+  border-color: var(--blue);
+}
+.list-item .list-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.list-item .list-info {
+  flex: 1;
+}
+.list-item .list-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+.list-item .list-subtitle {
+  font-size: 12px;
+  color: var(--text2);
+}
+.list-item .list-action {
+  font-size: 13px;
+  color: var(--blue);
+  font-weight: 600;
+}
+
+/* Section Header with Action */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.section-header h3 {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+}
+.section-header .see-all {
+  font-size: 13px;
+  color: var(--blue);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* AI Personality Indicator */
+.ai-personality {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: linear-gradient(135deg, rgba(10,132,255,.06), rgba(94,92,230,.06));
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+.ai-personality .personality-avatar {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--blue), #5e5ce6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ai-personality .personality-avatar svg {
+  width: 12px; height: 12px;
+  fill: #fff;
+}
+.ai-personality .personality-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+}
+.ai-personality .personality-status {
+  font-size: 11px;
+  color: var(--text2);
+}
+
+/* Horizontal Scroll Container */
+.h-scroll {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 4px 0 12px;
+  -webkit-overflow-scrolling: touch;
+}
+.h-scroll::-webkit-scrollbar { display: none; }
+.h-scroll > * {
+  flex-shrink: 0;
+}
+
+/* Gradient Overlay */
+.gradient-overlay {
+  position: relative;
+}
+.gradient-overlay::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 60px;
+  background: linear-gradient(transparent, var(--bg));
+  pointer-events: none;
+}
+
+/* Floating Action Button */
+.fab {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: var(--blue);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(10,132,255,.3);
+  cursor: pointer;
+  position: absolute;
+  bottom: 100px;
+  right: 20px;
+  z-index: 4;
+}
+.fab svg {
+  width: 24px; height: 24px;
+  fill: #fff;
+}
+
+/* Divider with Text */
+.divider-text {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0;
+}
+.divider-text::before,
+.divider-text::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+.divider-text span {
+  font-size: 11px;
+  color: var(--text2);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  font-weight: 600;
+}
+
+/* Stat Card */
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  text-align: center;
+}
+.stat-card .stat-value {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.stat-card .stat-label {
+  font-size: 12px;
+  color: var(--text2);
+}
+.stat-card .stat-change {
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+.stat-card .stat-change.positive { color: var(--green); }
+.stat-card .stat-change.negative { color: var(--red); }
+
+/* Onboarding Step */
+.onboarding-step {
+  text-align: center;
+  padding: 20px;
+}
+.onboarding-step .step-number {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: rgba(10,132,255,.08);
+  color: var(--blue);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+.onboarding-step h4 {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.onboarding-step p {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.5;
+}
+
+/* Permission Request Card */
+.permission-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 12px;
+}
+.permission-card .permission-icon {
+  width: 48px; height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin-bottom: 12px;
+}
+.permission-card h4 {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.permission-card p {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+.permission-card .permission-actions {
+  display: flex;
+  gap: 8px;
+}
+.permission-card .permission-actions button {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+}
+.permission-card .permission-actions .allow {
+  background: var(--blue);
+  color: #fff;
+}
+.permission-card .permission-actions .deny {
+  background: var(--bg);
+  color: var(--text);
+}
+
+<!-- ============================================
+     END OF FILE
+     Generated: 2026-07-22
+     Advizmo Design System - AI Discovery Section
+     Screen: Setting Up (393x852 iPhone 16)
+     Concepts: 5 (Loading + Default + Conversation each)
+     Total phone mockups: 15
+     ============================================ -->
+
+
+
+
