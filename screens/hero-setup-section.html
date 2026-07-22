@@ -1,0 +1,1951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advizmo — Hero Setup Section Concepts</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f2f2f7;
+    --card: #fff;
+    --text: #1c1c1e;
+    --text2: #8e8e93;
+    --border: rgba(0,0,0,.06);
+    --blue: #0a84ff;
+    --green: #166f47;
+    --green-bg: #e8f8ec;
+    --amber: #c2790a;
+    --amber-bg: #fff5e6;
+    --red: #b91c1c;
+    --red-bg: #ffe8e8;
+    --phone-w: 393px;
+    --phone-h: 852px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #1a1a2e;
+    color: #fff;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ============================================
+     SIDEBAR NAVIGATION
+     ============================================ */
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 280px;
+    height: 100vh;
+    background: #111128;
+    border-right: 1px solid rgba(255,255,255,.06);
+    padding: 32px 24px;
+    overflow-y: auto;
+    z-index: 100;
+  }
+
+  .sidebar-logo {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+    letter-spacing: -0.3px;
+  }
+
+  .sidebar-sub {
+    font-size: 11px;
+    color: rgba(255,255,255,.35);
+    margin-bottom: 36px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    font-weight: 500;
+  }
+
+  .sidebar-section-title {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: rgba(255,255,255,.25);
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+
+  .sidebar-link {
+    display: block;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    color: rgba(255,255,255,.55);
+    text-decoration: none;
+    margin-bottom: 2px;
+    transition: all .2s ease;
+    font-weight: 500;
+  }
+
+  .sidebar-link:hover {
+    background: rgba(255,255,255,.06);
+    color: rgba(255,255,255,.85);
+  }
+
+  .sidebar-link.active {
+    background: var(--blue);
+    color: #fff;
+  }
+
+  .sidebar-divider {
+    height: 1px;
+    background: rgba(255,255,255,.06);
+    margin: 20px 0;
+  }
+
+  /* ============================================
+     MAIN CONTENT AREA
+     ============================================ */
+  .main {
+    margin-left: 280px;
+    padding: 48px 64px 120px;
+    min-height: 100vh;
+  }
+
+  .page-title {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+    letter-spacing: -0.5px;
+  }
+
+  .page-desc {
+    font-size: 14px;
+    color: rgba(255,255,255,.4);
+    margin-bottom: 64px;
+    line-height: 1.6;
+  }
+
+  /* ============================================
+     CONCEPT SECTIONS
+     ============================================ */
+  .concept-section {
+    margin-bottom: 96px;
+  }
+
+  .concept-header {
+    margin-bottom: 32px;
+  }
+
+  .concept-number {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--blue);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .concept-title {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+    letter-spacing: -0.3px;
+  }
+
+  .concept-philosophy {
+    font-size: 13px;
+    color: rgba(255,255,255,.4);
+    line-height: 1.5;
+  }
+
+  .phone-showcase {
+    display: flex;
+    justify-content: center;
+    padding: 48px 0;
+  }
+
+  /* ============================================
+     PHONE MOCKUP FRAME
+     ============================================ */
+  .phone-frame {
+    width: var(--phone-w);
+    height: var(--phone-h);
+    background: var(--bg);
+    border-radius: 44px;
+    overflow: hidden;
+    position: relative;
+    box-shadow:
+      0 0 0 2px rgba(255,255,255,.08),
+      0 25px 80px rgba(0,0,0,.5),
+      0 8px 32px rgba(0,0,0,.3);
+    flex-shrink: 0;
+  }
+
+  .phone-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .phone-inner::-webkit-scrollbar { display: none; }
+
+  /* ============================================
+     iOS STATUS BAR
+     ============================================ */
+  .status-bar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 28px 0;
+    height: 54px;
+    background: var(--bg);
+  }
+
+  .status-time {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.3px;
+  }
+
+  .dynamic-island {
+    width: 126px;
+    height: 36px;
+    background: #000;
+    border-radius: 20px;
+    position: absolute;
+    left: 50%;
+    top: 12px;
+    transform: translateX(-50%);
+  }
+
+  .status-icons {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .status-icons svg {
+    width: 16px;
+    height: 16px;
+    fill: var(--text);
+  }
+
+  .status-signal {
+    width: 17px;
+    height: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 1.5px;
+  }
+
+  .status-signal span {
+    display: block;
+    background: var(--text);
+    border-radius: 1px;
+  }
+
+  .status-signal span:nth-child(1) { width: 3px; height: 3px; }
+  .status-signal span:nth-child(2) { width: 3px; height: 5px; }
+  .status-signal span:nth-child(3) { width: 3px; height: 7px; }
+  .status-signal span:nth-child(4) { width: 3px; height: 10px; }
+
+  .status-battery {
+    width: 25px;
+    height: 12px;
+    border: 1.5px solid var(--text);
+    border-radius: 3px;
+    position: relative;
+    padding: 1.5px;
+  }
+
+  .status-battery::after {
+    content: '';
+    position: absolute;
+    right: -4px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2px;
+    height: 5px;
+    background: var(--text);
+    border-radius: 0 1px 1px 0;
+  }
+
+  .status-battery-fill {
+    width: 70%;
+    height: 100%;
+    background: var(--text);
+    border-radius: 1px;
+  }
+
+  /* ============================================
+     BOTTOM NAVIGATION
+     ============================================ */
+  .bottom-nav {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 84px;
+    background: rgba(255,255,255,.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    padding-top: 10px;
+    z-index: 50;
+  }
+
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .nav-icon {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .nav-label {
+    font-size: 10px;
+    font-weight: 500;
+  }
+
+  .nav-item.active .nav-label {
+    color: var(--blue);
+  }
+
+  .nav-item.inactive .nav-label {
+    color: var(--text2);
+  }
+
+  .nav-item.inactive svg {
+    fill: var(--text2);
+  }
+
+  .nav-item.active svg {
+    fill: var(--blue);
+  }
+
+  /* ============================================
+     CONCEPT 1: CONNECTED TIMELINE
+     ============================================ */
+  .hero-header {
+    padding: 12px 24px 0;
+  }
+
+  .hero-title {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.4px;
+    line-height: 1.2;
+  }
+
+  .hero-subtitle {
+    font-size: 13px;
+    color: var(--text2);
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+
+  /* Timeline progress */
+  .timeline-progress {
+    padding: 20px 24px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+  }
+
+  .timeline-progress-label {
+    font-size: 12px;
+    color: var(--text2);
+    font-weight: 500;
+  }
+
+  .timeline-progress-count {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12px;
+    color: var(--text2);
+    font-weight: 500;
+  }
+
+  .progress-bar-container {
+    padding: 0 24px;
+    margin-bottom: 24px;
+  }
+
+  .progress-bar-track {
+    width: 100%;
+    height: 4px;
+    background: rgba(0,0,0,.06);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--blue);
+    border-radius: 2px;
+    transition: width .3s ease;
+  }
+
+  .progress-bar-fill.p20 { width: 20%; }
+  .progress-bar-fill.p40 { width: 40%; }
+  .progress-bar-fill.p60 { width: 60%; }
+
+  /* Connected Timeline Steps */
+  .timeline-steps {
+    padding: 0 24px 100px;
+    position: relative;
+  }
+
+  .timeline-line {
+    position: absolute;
+    left: 43px;
+    top: 20px;
+    bottom: 100px;
+    width: 2px;
+    background: rgba(0,0,0,.08);
+  }
+
+  .timeline-step {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 0;
+    position: relative;
+    padding-bottom: 4px;
+  }
+
+  .timeline-step-indicator {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+  }
+
+  .timeline-step-indicator.active {
+    background: var(--blue);
+    color: #fff;
+    box-shadow: 0 0 0 4px rgba(10,132,255,.15);
+  }
+
+  .timeline-step-indicator.completed {
+    background: var(--green);
+    color: #fff;
+  }
+
+  .timeline-step-indicator.locked {
+    background: rgba(0,0,0,.06);
+    color: var(--text2);
+  }
+
+  .timeline-step-content {
+    flex: 1;
+    padding-top: 4px;
+    padding-bottom: 20px;
+  }
+
+  .timeline-step-name {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  .timeline-step.locked .timeline-step-name {
+    color: var(--text2);
+  }
+
+  .timeline-step-desc {
+    font-size: 12px;
+    color: var(--text2);
+    margin-top: 2px;
+    line-height: 1.4;
+  }
+
+  .timeline-step-desc.locked-desc {
+    color: rgba(142,142,147,.6);
+  }
+
+  /* Step CTA */
+  .step-cta {
+    margin-top: 16px;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--blue);
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    padding: 14px 28px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .2s ease;
+    width: 100%;
+    letter-spacing: -0.1px;
+  }
+
+  .btn-primary:hover {
+    background: #0070e0;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(10,132,255,.3);
+  }
+
+  .btn-primary:active {
+    transform: translateY(0);
+  }
+
+  /* ============================================
+     CONCEPT 2: FINANCIAL DASHBOARD
+     ============================================ */
+  .dashboard-content {
+    padding: 12px 24px 100px;
+  }
+
+  /* Readiness Score Card */
+  .readiness-card {
+    background: var(--card);
+    border-radius: 20px;
+    padding: 28px;
+    text-align: center;
+    margin-bottom: 20px;
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .readiness-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--blue), #5ac8fa);
+  }
+
+  .readiness-ring {
+    width: 110px;
+    height: 110px;
+    margin: 0 auto 16px;
+    position: relative;
+  }
+
+  .readiness-ring svg {
+    width: 110px;
+    height: 110px;
+    transform: rotate(-90deg);
+  }
+
+  .readiness-ring-bg {
+    fill: none;
+    stroke: rgba(0,0,0,.06);
+    stroke-width: 8;
+  }
+
+  .readiness-ring-fill {
+    fill: none;
+    stroke: var(--blue);
+    stroke-width: 8;
+    stroke-linecap: round;
+    stroke-dasharray: 283;
+    stroke-dashoffset: 169.8;
+    transition: stroke-dashoffset .6s ease;
+  }
+
+  .readiness-value {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--blue);
+    letter-spacing: -0.5px;
+  }
+
+  .readiness-label {
+    font-size: 11px;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 500;
+  }
+
+  /* Dashboard Steps */
+  .dashboard-step {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border: 1px solid var(--border);
+    transition: all .2s ease;
+  }
+
+  .dashboard-step.active {
+    border-color: rgba(10,132,255,.2);
+    box-shadow: 0 2px 12px rgba(10,132,255,.08);
+  }
+
+  .dashboard-step-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  .dashboard-step-num.completed {
+    background: var(--green);
+    color: #fff;
+  }
+
+  .dashboard-step-num.active {
+    background: var(--blue);
+    color: #fff;
+  }
+
+  .dashboard-step-num.locked {
+    background: rgba(0,0,0,.06);
+    color: var(--text2);
+  }
+
+  .dashboard-step-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .dashboard-step-name {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .dashboard-step.locked .dashboard-step-name {
+    color: var(--text2);
+    font-weight: 500;
+  }
+
+  .dashboard-step-sub {
+    font-size: 12px;
+    color: var(--text2);
+    margin-top: 1px;
+  }
+
+  .dashboard-step-badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    flex-shrink: 0;
+  }
+
+  .badge-done {
+    background: var(--green-bg);
+    color: var(--green);
+  }
+
+  .dashboard-step-expanded {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+  }
+
+  .dashboard-step-expanded p {
+    font-size: 12px;
+    color: var(--text2);
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+
+  /* ============================================
+     CONCEPT 3: PROGRESS HUB
+     ============================================ */
+  .hub-content {
+    padding: 12px 24px 100px;
+  }
+
+  /* Progress Circles Row */
+  .hub-circles {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+    padding: 0 4px;
+    position: relative;
+  }
+
+  .hub-circles-line {
+    position: absolute;
+    top: 20px;
+    left: 30px;
+    right: 30px;
+    height: 2px;
+    background: rgba(0,0,0,.08);
+    z-index: 0;
+  }
+
+  .hub-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+  }
+
+  .hub-circle.completed {
+    background: var(--green);
+    color: #fff;
+  }
+
+  .hub-circle.active {
+    background: var(--blue);
+    color: #fff;
+    box-shadow: 0 0 0 4px rgba(10,132,255,.15);
+  }
+
+  .hub-circle.locked {
+    background: rgba(0,0,0,.06);
+    color: var(--text2);
+  }
+
+  .hub-circle svg {
+    width: 18px;
+    height: 18px;
+    fill: #fff;
+  }
+
+  .hub-labels {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 0px;
+    margin-bottom: 24px;
+  }
+
+  .hub-label {
+    width: 40px;
+    text-align: center;
+    font-size: 10px;
+    color: var(--text2);
+    font-weight: 500;
+  }
+
+  .hub-label.active {
+    color: var(--blue);
+    font-weight: 600;
+  }
+
+  /* Active Step Card */
+  .hub-active-card {
+    background: var(--card);
+    border-radius: 18px;
+    padding: 24px;
+    border: 1px solid var(--border);
+    margin-bottom: 16px;
+    border-left: 3px solid var(--blue);
+  }
+
+  .hub-active-card-title {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .hub-active-card-desc {
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+
+  /* Hub Lists */
+  .hub-list-section {
+    margin-bottom: 12px;
+  }
+
+  .hub-list-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text2);
+    font-weight: 600;
+    margin-bottom: 8px;
+    padding-left: 4px;
+  }
+
+  .hub-list-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    background: var(--card);
+    border-radius: 12px;
+    margin-bottom: 6px;
+    border: 1px solid var(--border);
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .hub-list-item.completed {
+    color: var(--green);
+  }
+
+  .hub-list-item.locked {
+    color: var(--text2);
+    opacity: .6;
+  }
+
+  .hub-list-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    flex-shrink: 0;
+  }
+
+  .hub-list-icon.done {
+    background: var(--green-bg);
+    color: var(--green);
+  }
+
+  .hub-list-icon.pending {
+    background: rgba(0,0,0,.04);
+    color: var(--text2);
+  }
+
+  /* ============================================
+     CONCEPT 4: PREMIUM CHECKLIST
+     ============================================ */
+  .checklist-content {
+    padding: 12px 24px 100px;
+  }
+
+  .checklist-items {
+    margin-bottom: 24px;
+  }
+
+  .checklist-item {
+    display: flex;
+    gap: 14px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+
+  .checklist-item:last-child {
+    border-bottom: none;
+  }
+
+  .checklist-checkbox {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .checklist-checkbox.completed {
+    background: var(--green);
+  }
+
+  .checklist-checkbox.active {
+    background: var(--blue);
+  }
+
+  .checklist-checkbox.locked {
+    background: rgba(0,0,0,.06);
+  }
+
+  .checklist-checkbox svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .checklist-text {
+    flex: 1;
+  }
+
+  .checklist-name {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  .checklist-item.completed .checklist-name {
+    text-decoration: line-through;
+    color: var(--text2);
+    font-weight: 500;
+  }
+
+  .checklist-item.locked .checklist-name {
+    color: var(--text2);
+    font-weight: 500;
+  }
+
+  .checklist-detail {
+    font-size: 12px;
+    color: var(--text2);
+    margin-top: 3px;
+    line-height: 1.4;
+  }
+
+  .checklist-item.locked .checklist-detail {
+    opacity: .5;
+  }
+
+  .checklist-status {
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .checklist-badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  .checklist-counter {
+    text-align: center;
+    font-size: 12px;
+    color: var(--text2);
+    margin-top: 8px;
+  }
+
+  /* ============================================
+     CONCEPT 5: SETUP ROADMAP
+     ============================================ */
+  .roadmap-content {
+    padding: 12px 24px 100px;
+  }
+
+  /* Roadmap Visual */
+  .roadmap-visual {
+    background: var(--card);
+    border-radius: 18px;
+    padding: 24px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .roadmap-visual::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--green) 0%, var(--green) 40%, var(--blue) 40%, var(--blue) 60%, rgba(0,0,0,.1) 60%);
+  }
+
+  .roadmap-track {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    padding: 0 8px;
+  }
+
+  .roadmap-point {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    position: relative;
+  }
+
+  .roadmap-point.start {
+    background: var(--green);
+  }
+
+  .roadmap-point.current {
+    background: var(--blue);
+    box-shadow: 0 0 0 4px rgba(10,132,255,.2);
+    animation: pulse-blue 2s infinite;
+  }
+
+  .roadmap-point.end {
+    background: rgba(0,0,0,.1);
+  }
+
+  @keyframes pulse-blue {
+    0%, 100% { box-shadow: 0 0 0 4px rgba(10,132,255,.2); }
+    50% { box-shadow: 0 0 0 8px rgba(10,132,255,.08); }
+  }
+
+  .roadmap-track-line {
+    flex: 1;
+    height: 3px;
+    margin: 0 8px;
+    border-radius: 2px;
+  }
+
+  .roadmap-track-line.done {
+    background: var(--green);
+  }
+
+  .roadmap-track-line.partial {
+    background: linear-gradient(90deg, var(--blue), rgba(10,132,255,.2));
+  }
+
+  .roadmap-track-line.pending {
+    background: rgba(0,0,0,.06);
+  }
+
+  .roadmap-step-label {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text2);
+    text-align: center;
+  }
+
+  .roadmap-step-label .highlight {
+    color: var(--blue);
+  }
+
+  /* Roadmap Steps */
+  .roadmap-steps {
+    margin-bottom: 16px;
+  }
+
+  .roadmap-step {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background: var(--card);
+    border-radius: 12px;
+    margin-bottom: 6px;
+    border: 1px solid var(--border);
+  }
+
+  .roadmap-step.active-step {
+    border-color: rgba(10,132,255,.2);
+    background: rgba(10,132,255,.03);
+  }
+
+  .roadmap-step-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+
+  .roadmap-step-icon.done {
+    background: var(--green);
+    color: #fff;
+  }
+
+  .roadmap-step-icon.current {
+    background: var(--blue);
+    color: #fff;
+  }
+
+  .roadmap-step-icon.pending {
+    background: rgba(0,0,0,.06);
+    color: var(--text2);
+  }
+
+  .roadmap-step-text {
+    flex: 1;
+  }
+
+  .roadmap-step-title {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .roadmap-step.locked .roadmap-step-title {
+    color: var(--text2);
+    font-weight: 500;
+  }
+
+  .roadmap-step-subtitle {
+    font-size: 11px;
+    color: var(--text2);
+    margin-top: 1px;
+  }
+
+  .roadmap-footer {
+    text-align: center;
+    font-size: 12px;
+    color: var(--text2);
+    padding-top: 8px;
+  }
+
+  .roadmap-footer strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  /* ============================================
+     CHECKMARK SVG
+     ============================================ */
+  .checkmark-svg {
+    width: 14px;
+    height: 14px;
+    fill: none;
+    stroke: #fff;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .checkmark-svg.dark {
+    stroke: var(--green);
+  }
+
+  /* ============================================
+     RESPONSIVE ADJUSTMENTS
+     ============================================ */
+  @media (max-width: 1200px) {
+    .main {
+      margin-left: 0;
+      padding: 32px 24px 80px;
+    }
+    .sidebar {
+      display: none;
+    }
+    .phone-showcase {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  /* Scroll behavior */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Section anchor offset */
+  .concept-section {
+    scroll-margin-top: 32px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================
+     SIDEBAR NAVIGATION
+     ============================================ -->
+<nav class="sidebar">
+  <div class="sidebar-logo">Advizmo</div>
+  <div class="sidebar-sub">Design System</div>
+
+  <div class="sidebar-section-title">Hero Sections</div>
+  <a href="#concept-1" class="sidebar-link active">Concept 1 — Connected Timeline</a>
+  <a href="#concept-2" class="sidebar-link">Concept 2 — Financial Dashboard</a>
+  <a href="#concept-3" class="sidebar-link">Concept 3 — Progress Hub</a>
+  <a href="#concept-4" class="sidebar-link">Concept 4 — Premium Checklist</a>
+  <a href="#concept-5" class="sidebar-link">Concept 5 — Setup Roadmap</a>
+
+  <div class="sidebar-divider"></div>
+
+  <div class="sidebar-section-title">Specifications</div>
+  <a href="#" class="sidebar-link">Screen: 393 × 852</a>
+  <a href="#" class="sidebar-link">Device: iPhone 16</a>
+  <a href="#" class="sidebar-link">Design System</a>
+  <a href="#" class="sidebar-link">Typography</a>
+  <a href="#" class="sidebar-link">Colors</a>
+
+  <div class="sidebar-divider"></div>
+
+  <div class="sidebar-section-title">Setup Steps</div>
+  <a href="#" class="sidebar-link" style="font-size:11px;">1. Connect Accounts</a>
+  <a href="#" class="sidebar-link" style="font-size:11px;">2. Set Money Goals</a>
+  <a href="#" class="sidebar-link" style="font-size:11px;">3. Review Monthly Money</a>
+  <a href="#" class="sidebar-link" style="font-size:11px;">4. Open Auto Invest</a>
+  <a href="#" class="sidebar-link" style="font-size:11px;">5. Start Investing</a>
+</nav>
+
+<!-- ============================================
+     MAIN CONTENT
+     ============================================ -->
+<main class="main">
+  <h1 class="page-title">Hero Setup Section</h1>
+  <p class="page-desc">Five distinct hero section concepts for the Advizmo homepage setup journey. Each shows Step 3 active (2 completed, 1 active, 2 locked). Screen: 393 × 852 iPhone 16.</p>
+
+  <!-- ============================================
+       CONCEPT 1: CONNECTED TIMELINE
+       ============================================ -->
+  <section class="concept-section" id="concept-1">
+    <div class="concept-header">
+      <div class="concept-number">Concept 01</div>
+      <h2 class="concept-title">Connected Timeline</h2>
+      <p class="concept-philosophy">Vertical connected steps with timeline visualization. Clear linear progression with numbered indicators and connecting lines.</p>
+    </div>
+
+    <div class="phone-showcase">
+      <div class="phone-frame">
+        <div class="phone-inner">
+          <!-- iOS Status Bar -->
+          <div class="status-bar">
+            <span class="status-time">9:41</span>
+            <div class="dynamic-island"></div>
+            <div class="status-icons">
+              <div class="status-signal">
+                <span></span><span></span><span></span><span></span>
+              </div>
+              <svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+              <div class="status-battery">
+                <div class="status-battery-fill"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hero Header -->
+          <div class="hero-header">
+            <h1 class="hero-title">Let's set up your money</h1>
+            <p class="hero-subtitle">Complete these 5 steps to unlock automation</p>
+          </div>
+
+          <!-- Progress Indicator -->
+          <div class="timeline-progress">
+            <span class="timeline-progress-label">Step 3 of 5</span>
+            <span class="timeline-progress-count">60%</span>
+          </div>
+          <div class="progress-bar-container">
+            <div class="progress-bar-track">
+              <div class="progress-bar-fill p60"></div>
+            </div>
+          </div>
+
+          <!-- Connected Timeline -->
+          <div class="timeline-steps">
+            <div class="timeline-line"></div>
+
+            <!-- Step 1: Completed -->
+            <div class="timeline-step completed">
+              <div class="timeline-step-indicator completed">
+                <svg class="checkmark-svg" viewBox="0 0 24 24"><polyline points="6 12 10 16 18 8"/></svg>
+              </div>
+              <div class="timeline-step-content">
+                <div class="timeline-step-name">Connect Accounts</div>
+                <div class="timeline-step-desc">Link your checking and savings</div>
+              </div>
+            </div>
+
+            <!-- Step 2: Completed -->
+            <div class="timeline-step completed">
+              <div class="timeline-step-indicator completed">
+                <svg class="checkmark-svg" viewBox="0 0 24 24"><polyline points="6 12 10 16 18 8"/></svg>
+              </div>
+              <div class="timeline-step-content">
+                <div class="timeline-step-name">Set Money Goals</div>
+                <div class="timeline-step-desc">Configure your targets</div>
+              </div>
+            </div>
+
+            <!-- Step 3: Active -->
+            <div class="timeline-step active">
+              <div class="timeline-step-indicator active">3</div>
+              <div class="timeline-step-content">
+                <div class="timeline-step-name">Review Monthly Money</div>
+                <div class="timeline-step-desc">Check income and expenses</div>
+                <div class="step-cta">
+                  <button class="btn-primary">Review now</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 4: Locked -->
+            <div class="timeline-step locked">
+              <div class="timeline-step-indicator locked">4</div>
+              <div class="timeline-step-content">
+                <div class="timeline-step-name">Open Auto Invest</div>
+                <div class="timeline-step-desc locked-desc">Create investment account</div>
+              </div>
+            </div>
+
+            <!-- Step 5: Locked -->
+            <div class="timeline-step locked">
+              <div class="timeline-step-indicator locked">5</div>
+              <div class="timeline-step-content">
+                <div class="timeline-step-name">Start Investing</div>
+                <div class="timeline-step-desc locked-desc">Make your first investment</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Nav -->
+          <div class="bottom-nav">
+            <div class="nav-item active">
+              <div class="nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+              </div>
+              <span class="nav-label">Home</span>
+            </div>
+            <div class="nav-item inactive">
+              <div class="nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+              </div>
+              <span class="nav-label">Accounts</span>
+            </div>
+            <div class="nav-item inactive">
+              <div class="nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+              </div>
+              <span class="nav-label">Invest</span>
+            </div>
+            <div class="nav-item inactive">
+              <div class="nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+              </div>
+              <span class="nav-label">Profile</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       CONCEPT 2: FINANCIAL DASHBOARD
+       ============================================ -->
+  <section class="concept-section" id="concept-2">
+    <div class="concept-header">
+      <div class="concept-number">Concept 02</div>
+      <h2 class="concept-title">Financial Dashboard</h2>
+      <p class="concept-philosophy">Dashboard-style module with financial readiness score. Circular progress ring visualizes overall completion percentage.</p>
+    </div>
+
+    <div class="phone-showcase">
+      <div class="phone-frame">
+        <div class="phone-inner">
+          <!-- iOS Status Bar -->
+          <div class="status-bar">
+            <span class="status-time">9:41</span>
+            <div class="dynamic-island"></div>
+            <div class="status-icons">
+              <div class="status-signal">
+                <span></span><span></span><span></span><span></span>
+              </div>
+              <svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+              <div class="status-battery">
+                <div class="status-battery-fill"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hero Header -->
+          <div class="hero-header">
+            <h1 class="hero-title">Your financial setup</h1>
+            <p class="hero-subtitle">40% ready — 3 steps to go</p>
+          </div>
+
+          <!-- Dashboard Content -->
+          <div class="dashboard-content">
+            <!-- Readiness Score Card -->
+            <div class="readiness-card">
+              <div class="readiness-ring">
+                <svg viewBox="0 0 100 100">
+                  <circle class="readiness-ring-bg" cx="50" cy="50" r="45"/>
+                  <circle class="readiness-ring-fill" cx="50" cy="50" r="45"/>
+                </svg>
+                <div class="readiness-value">40%</div>
+              </div>
+              <div class="readiness-label">Financial Readiness</div>
+            </div>
+
+            <!-- Step 1: Completed -->
+            <div class="dashboard-step">
+              <div class="dashboard-step-num completed">
+                <svg class="checkmark-svg" viewBox="0 0 24 24"><polyline points="6 12 10 16 18 8"/></svg>
+              </div>
+              <div class="dashboard-step-info">
+                <div class="dashboard-step-name">Connect Accounts</div>
+              </div>
+              <span class="dashboard-step-badge badge-done">Done</span>
+            </div>
+
+            <!-- Step 2: Completed -->
+            <div class="dashboard-step">
+              <div class="dashboard-step-num completed">
+                <svg class="checkmark-svg" viewBox="0 0 24 24"><polyline points="6 12 10 16 18 8"/></svg>
+              </div>
+              <div class="dashboard-step-info">
+                <div class="dashboard-step-name">Set Money Goals</div>
+              </div>
+              <span class="dashboard-step-badge badge-done">Done</span>
+            </div>
+
+            <!-- Step 3: Active -->
+            <div class="dashboard-step active">
+              <div class="dashboard-step-num active">3</div>
+              <div class="dashboard-step-info">
+                <div class="dashboard-step-name">Review Monthly Money</div>
+                <div class="dashboard-step-sub">Check your recurring income and expenses</div>
+                <div class="dashboard-step-expanded">
+                  <p>Review your recurring income, expenses, and upcoming bills to understand your monthly cash flow.</p>
+                  <button class="btn-primary">Review now</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 4: Locked -->
+            <div class="dashboard-step locked">
+              <div class="dashboard-step-num locked">4</div>
+              <div class="dashboard-step-info">
+                <div class="dashboard-step-name">Open Auto Invest</div>
+                <div class="dashboard-step-sub">Create investment account</div>
+              </div>
+            </div>
+
+            <!-- Step 5: Locked -->
+            <div class="dashboard-step locked">
+              <div class="dashboard-step-num locked">5</div>
+              <div class="dashboard-step-info">
+                <div class="dashboard-step-name">Start Investing</div>
+                <div class="dashboard-step-sub">Make your first investment</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Nav -->
+          <div class="bottom-nav">
+            <div class="nav-item active">
+              <div class="nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+              </div>
+              <span class="nav-label">Home</span>
+            </div>
+            <div class="nav-item inactive">
+              <div class="nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+              </div>
+              <span class="nav-label">Accounts</span>
+            </div>
+            <div class="nav-item inactive">
+              <div class="nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+              </div>
+              <span class="nav-label">Invest</span>
+            </div>
+            <div class="nav-item inactive">
+              <div class="nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+              </div>
+              <span class="nav-label">Profile</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       CONCEPT 3: PROGRESS HUB
+       ============================================ -->
+  <section class="concept-section" id="concept-3">
+    <div class="concept-header">
+      <div class="concept-number">Concept 03</div>
+      <h2 class="concept-title">Progress Hub</h2>
+      <p class="concept-philosophy">Hub-style layout with progress visualization. Horizontal circle indicators show completion at a glance with connected flow.</p>
+    </div>
+
+    <div class="phone-showcase">
+      <div class="phone-frame">
+        <div class="phone-inner">
+          <!-- iOS Status Bar -->
+          <div class="status-bar">
+            <span class="status-time">9:41</span>
+            <div class="dynamic-island"></div>
+            <div class="status-icons">
+              <div class="status-signal">
+                <span></span><span></span><span></span><span></span>
+              </div>
+              <svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+              <div class="status-battery">
+                <div class="status-battery-fill"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hero Header -->
+          <div class="hero-header">
+            <h1 class="hero-title">Your money setup</h1>
+            <p class="hero-subtitle">2 of 5 steps complete</p>
+          </div>
+
+          <!-- Hub Content -->
+          <div class="hub-content">
+            <!-- Progress Circles -->
+            <div class="hub-circles">
+              <div class="hub-circles-line"></div>
+              <div class="hub-circle completed">
+                <svg class="checkmark-svg" viewBox="0 0 24 24"><polyline points="6 12 10 16 18 8"/></svg>
+              </div>
+              <div class="hub-circle completed">
+                <svg class="checkmark-svg" viewBox="0 0 24 24"><polyline points="6 12 10 16 18 8"/></svg>
+              </div>
+              <div class="hub-circle active">3</div>
+              <div class="hub-circle locked">4</div>
+              <div class="hub-circle locked">5</div>
+            </div>
+            <div class="hub-labels">
+              <span class="hub-label">Connect</span>
+              <span class="hub-label">Goals</span>
+              <span class="hub-label active">Review</span>
+              <span class="hub-label">Invest</span>
+              <span class="hub-label">Start</span>
+            </div>
+
+            <!-- Active Step Card -->
+            <div class="hub-active-card">
+              <div class="hub-active-card-title">Review Monthly Money</div>
+              <div class="hub-active-card-desc">Check your recurring income and expenses</div>
+              <button class="btn-primary">Review now</button>
+            </div>
+
+            <!-- Completed Steps -->
+            <div class="hub-list-section">
+              <div class="hub-list-label">Completed</div>
+              <div class="hub-list-item completed">
+                <div class="hub-list-icon done">
+                  <svg class="checkmark-svg dark" viewBox="0 0 24 24"><polyline points="6 12 10 16 18 8"/></svg>
+                </div>
+                Connect Accounts
+              </div>
+              <div class="hub-list-item completed">
+                <div class="hub-list-icon done">
+                  <svg class="checkmark-svg dark" viewBox="0 0 24 24"><polyline points="6 12 10 16 18 8"/></svg>
+                </div>
+                Set Money Goals
+              </div>
+            </div>
+
+            <!-- Locked Steps -->
+            <div class="hub-list-section">
+              <div class="hub-list-label">Up Next</div>
+              <div class="hub-list-item locked">
+                <div class="hub-list-icon pending">○</div>
+                Open Auto Invest
+              </div>
+              <div class="hub-list-item locked">
+                <div class="hub-list-icon pending">○</div>
+                Start Investing
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Nav -->
+          <div class="bottom-nav">
+            <div class="nav-item active">
+              <div class="nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+              </div>
+              <span class="nav-label">Home</span>
+            </div>
+            <div class="nav-item inactive">
+              <div class="nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+              </div>
+              <span class="nav-label">Accounts</span>
+            </div>
+            <div class="nav-item inactive">
+              <div class="nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+              </div>
+              <span class="nav-label">Invest</span>
+            </div>
+            <div class="nav-item inactive">
+              <div class="nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+              </div>
+              <span class="nav-label">Profile</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       CONCEPT 4: PREMIUM CHECKLIST
+       ============================================ -->
+  <section class="concept-section" id="concept-4">
+    <div class="concept-header">
+      <div class="concept-number">Concept 04</div>
+      <h2 class="concept-title">Premium Checklist</h2>
+      <p class="concept-philosophy">Apple-style premium checklist with subtle animations. Strikethrough completed items, clean visual hierarchy.</p>
+    </div>
+
+    <div class="phone-showcase">
+      <div class="phone-frame">
+        <div class="phone-inner">
+          <!-- iOS Status Bar -->
+          <div class="status-bar">
+            <span class="status-time">9:41</span>
+            <div class="dynamic-island"></div>
+            <div class="status-icons">
+              <div class="status-signal">
+                <span></span><span></span><span></span><span></span>
+              </div>
+              <svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+              <div class="status-battery">
+                <div class="status-battery-fill"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hero Header -->
+          <div class="hero-header">
+            <h1 class="hero-title">Almost there</h1>
+            <p class="hero-subtitle">3 steps left to unlock full automation</p>
+          </div>
+
+          <!-- Checklist Content -->
+          <div class="checklist-content">
+            <div class="checklist-items">
+              <!-- Step 1: Completed -->
+              <div class="checklist-item completed">
+                <div class="checklist-checkbox completed">
+                  <svg class="checkmark-svg" viewBox="0 0 24 24"><polyline points="6 12 10 16 18 8"/></svg>
+                </div>
+                <div class="checklist-text">
+                  <div class="checklist-name">Connect Accounts</div>
+                </div>
+              </div>
+
+              <!-- Step 2: Completed -->
+              <div class="checklist-item completed">
+                <div class="checklist-checkbox completed">
+                  <svg class="checkmark-svg" viewBox="0 0 24 24"><polyline points="6 12 10 16 18 8"/></svg>
+                </div>
+                <div class="checklist-text">
+                  <div class="checklist-name">Set Money Goals</div>
+                </div>
+              </div>
+
+              <!-- Step 3: Active -->
+              <div class="checklist-item active">
+                <div class="checklist-checkbox active">
+                  <span style="font-family:'IBM Plex Sans';font-size:12px;font-weight:600;color:#fff;">3</span>
+                </div>
+                <div class="checklist-text">
+                  <div class="checklist-name">Review Monthly Money</div>
+                  <div class="checklist-detail">Review recurring income, expenses, and bills</div>
+                  <div class="step-cta">
+                    <button class="btn-primary">Start review</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Step 4: Locked -->
+              <div class="checklist-item locked">
+                <div class="checklist-checkbox locked">
+                  <span style="font-family:'IBM Plex Sans';font-size:12px;font-weight:600;color:var(--text2);">4</span>
+                </div>
+                <div class="checklist-text">
+                  <div class="checklist-name">Open Auto Invest</div>
+                  <div class="checklist-detail">Create investment account</div>
+                </div>
+              </div>
+
+              <!-- Step 5: Locked -->
+              <div class="checklist-item locked">
+                <div class="checklist-checkbox locked">
+                  <span style="font-family:'IBM Plex Sans';font-size:12px;font-weight:600;color:var(--text2);">5</span>
+                </div>
+                <div class="checklist-text">
+                  <div class="checklist-name">Start Investing</div>
+                  <div class="checklist-detail">Make your first investment</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="checklist-counter">2 of 5 complete</div>
+          </div>
+
+          <!-- Bottom Nav -->
+          <div class="bottom-nav">
+            <div class="nav-item active">
+              <div class="nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+              </div>
+              <span class="nav-label">Home</span>
+            </div>
+            <div class="nav-item inactive">
+              <div class="nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+              </div>
+              <span class="nav-label">Accounts</span>
+            </div>
+            <div class="nav-item inactive">
+              <div class="nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+              </div>
+              <span class="nav-label">Invest</span>
+            </div>
+            <div class="nav-item inactive">
+              <div class="nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+              </div>
+              <span class="nav-label">Profile</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       CONCEPT 5: SETUP ROADMAP
+       ============================================ -->
+  <section class="concept-section" id="concept-5">
+    <div class="concept-header">
+      <div class="concept-number">Concept 05</div>
+      <h2 class="concept-title">Setup Roadmap</h2>
+      <p class="concept-philosophy">Roadmap-style visualization with clear progression. Horizontal track shows start, current, and end points with pulsing indicator.</p>
+    </div>
+
+    <div class="phone-showcase">
+      <div class="phone-frame">
+        <div class="phone-inner">
+          <!-- iOS Status Bar -->
+          <div class="status-bar">
+            <span class="status-time">9:41</span>
+            <div class="dynamic-island"></div>
+            <div class="status-icons">
+              <div class="status-signal">
+                <span></span><span></span><span></span><span></span>
+              </div>
+              <svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+              <div class="status-battery">
+                <div class="status-battery-fill"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hero Header -->
+          <div class="hero-header">
+            <h1 class="hero-title">Your setup roadmap</h1>
+            <p class="hero-subtitle">Follow these steps to get started</p>
+          </div>
+
+          <!-- Roadmap Content -->
+          <div class="roadmap-content">
+            <!-- Roadmap Visual -->
+            <div class="roadmap-visual">
+              <div class="roadmap-track">
+                <div class="roadmap-point start"></div>
+                <div class="roadmap-track-line done"></div>
+                <div class="roadmap-track-line done"></div>
+                <div class="roadmap-point current"></div>
+                <div class="roadmap-track-line pending"></div>
+                <div class="roadmap-point end"></div>
+              </div>
+              <div class="roadmap-step-label">
+                Step <span class="highlight">3</span> of 5
+              </div>
+            </div>
+
+            <!-- Roadmap Steps -->
+            <div class="roadmap-steps">
+              <!-- Step 1: Completed -->
+              <div class="roadmap-step">
+                <div class="roadmap-step-icon done">
+                  <svg class="checkmark-svg" viewBox="0 0 24 24"><polyline points="6 12 10 16 18 8"/></svg>
+                </div>
+                <div class="roadmap-step-text">
+                  <div class="roadmap-step-title">Connect Accounts</div>
+                  <div class="roadmap-step-subtitle">Checking & savings linked</div>
+                </div>
+              </div>
+
+              <!-- Step 2: Completed -->
+              <div class="roadmap-step">
+                <div class="roadmap-step-icon done">
+                  <svg class="checkmark-svg" viewBox="0 0 24 24"><polyline points="6 12 10 16 18 8"/></svg>
+                </div>
+                <div class="roadmap-step-text">
+                  <div class="roadmap-step-title">Set Money Goals</div>
+                  <div class="roadmap-step-subtitle">Targets configured</div>
+                </div>
+              </div>
+
+              <!-- Step 3: Active -->
+              <div class="roadmap-step active-step">
+                <div class="roadmap-step-icon current">3</div>
+                <div class="roadmap-step-text">
+                  <div class="roadmap-step-title">Review Monthly Money</div>
+                  <div class="roadmap-step-subtitle">Check your income, expenses, and bills</div>
+                </div>
+              </div>
+
+              <!-- Step 4: Locked -->
+              <div class="roadmap-step locked">
+                <div class="roadmap-step-icon pending">4</div>
+                <div class="roadmap-step-text">
+                  <div class="roadmap-step-title">Open Auto Invest</div>
+                  <div class="roadmap-step-subtitle">Create investment account</div>
+                </div>
+              </div>
+
+              <!-- Step 5: Locked -->
+              <div class="roadmap-step locked">
+                <div class="roadmap-step-icon pending">5</div>
+                <div class="roadmap-step-text">
+                  <div class="roadmap-step-title">Start Investing</div>
+                  <div class="roadmap-step-subtitle">Make your first investment</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- CTA for active step -->
+            <button class="btn-primary" style="margin-bottom:16px;">Review now</button>
+
+            <div class="roadmap-footer">
+              Complete setup to unlock <strong>Auto Invest</strong>
+            </div>
+          </div>
+
+          <!-- Bottom Nav -->
+          <div class="bottom-nav">
+            <div class="nav-item active">
+              <div class="nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+              </div>
+              <span class="nav-label">Home</span>
+            </div>
+            <div class="nav-item inactive">
+              <div class="nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+              </div>
+              <span class="nav-label">Accounts</span>
+            </div>
+            <div class="nav-item inactive">
+              <div class="nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+              </div>
+              <span class="nav-label">Invest</span>
+            </div>
+            <div class="nav-item inactive">
+              <div class="nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+              </div>
+              <span class="nav-label">Profile</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============================================
+     SIDEBAR ACTIVE LINK HIGHLIGHTING
+     ============================================ -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const links = document.querySelectorAll('.sidebar-link[href^="#concept-"]');
+    const sections = [];
+
+    links.forEach(function(link) {
+      const id = link.getAttribute('href').substring(1);
+      const section = document.getElementById(id);
+      if (section) sections.push({ el: section, link: link });
+    });
+
+    function updateActive() {
+      let current = null;
+      const scrollY = window.scrollY + 120;
+
+      sections.forEach(function(item) {
+        if (item.el.offsetTop <= scrollY) {
+          current = item;
+        }
+      });
+
+      links.forEach(function(l) { l.classList.remove('active'); });
+      if (current) current.link.classList.add('active');
+    }
+
+    window.addEventListener('scroll', updateActive, { passive: true });
+    updateActive();
+  });
+</script>
+
+</body>
+</html>
