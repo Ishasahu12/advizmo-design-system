@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advizmo Accounts Lifecycle States — Advizmo Design System</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#f2f2f7;--card:#fff;--text:#1c1c1e;--text2:#8e8e93;--border:rgba(0,0,0,.06);--blue:#0a84ff;--green:#166f47;--green-bg:#e8f8ec;--amber:#c2790a;--amber-bg:#fff5e6;--red:#b91c1c;--red-bg:#ffe8e8;--sidebar-bg:#1c1c1e;--font-heading:'IBM Plex Sans',sans-serif;--font-body:'Inter',sans-serif}
+    html{scroll-behavior:smooth}
+    body{font-family:var(--font-body);background:#0d0d0d;color:#fff;display:flex;min-height:100vh}
+    .sidebar{position:fixed;left:0;top:0;bottom:0;width:260px;background:var(--sidebar-bg);padding:32px 0;display:flex;flex-direction:column;z-index:100}
+    .sidebar-brand{padding:0 24px 28px;border-bottom:1px solid rgba(255,255,255,.08)}
+    .sidebar-brand h1{font-family:var(--font-heading);font-size:17px;font-weight:700;color:#fff;letter-spacing:-.2px}
+    .sidebar-brand p{font-size:11px;color:rgba(255,255,255,.4);margin-top:4px;text-transform:uppercase;letter-spacing:.5px}
+    .sidebar-nav{flex:1;padding:16px 12px;overflow-y:auto}
+    .sidebar-nav a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;color:rgba(255,255,255,.55);font-size:13px;font-weight:500;text-decoration:none;transition:all .2s}
+    .sidebar-nav a:hover{color:#fff;background:rgba(255,255,255,.06)}
+    .sidebar-nav a.active{color:#fff;background:rgba(10,132,255,.18)}
+    .sidebar-nav a .num{font-size:10px;font-weight:600;background:rgba(255,255,255,.08);width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.4);flex-shrink:0}
+    .sidebar-nav a.active .num{background:rgba(10,132,255,.3);color:#0a84ff}
+    .sidebar-nav a:hover .num{background:rgba(255,255,255,.12)}
+    .sidebar-footer{padding:16px 24px;border-top:1px solid rgba(255,255,255,.08)}
+    .sidebar-footer a{font-size:12px;color:rgba(255,255,255,.35);text-decoration:none;display:flex;align-items:center;gap:8px;transition:color .2s}
+    .sidebar-footer a:hover{color:rgba(255,255,255,.7)}
+    .main{margin-left:260px;flex:1;padding:40px 48px 80px;max-width:1200px}
+    .main h2{font-family:var(--font-heading);font-size:28px;font-weight:700;color:#fff;margin-bottom:6px}
+    .section-subtitle{font-size:14px;color:rgba(255,255,255,.4);margin-bottom:48px;max-width:520px;line-height:1.5}
+    .concept-label{font-family:var(--font-heading);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:rgba(255,255,255,.3);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+    .concept-label span{background:rgba(255,255,255,.06);padding:3px 10px;border-radius:6px;color:rgba(255,255,255,.5)}
+    .phone-wrap{display:flex;justify-content:center;padding:24px 0}
+    .phone{width:393px;background:#000;border-radius:44px;padding:12px;box-shadow:0 20px 60px rgba(0,0,0,.5);position:relative;flex-shrink:0}
+    .phone-screen{border-radius:34px;min-height:852px;position:relative;overflow:hidden;display:flex;flex-direction:column}
+    .status-bar{display:flex;justify-content:space-between;align-items:center;padding:10px 24px 6px;font-size:14px;font-weight:600;color:#fff;position:relative;z-index:5}
+    .dynamic-island{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:85px;height:22px;background:#000;border-radius:20px;z-index:10}
+    .status-bar .left{display:flex;align-items:center;gap:4px}
+    .status-bar .right{display:flex;align-items:center;gap:6px}
+    .status-bar .right svg{width:16px;height:16px}
+    .bottom-nav{position:absolute;bottom:0;left:0;right:0;display:flex;justify-content:space-around;align-items:center;padding:10px 16px 28px;background:rgba(30,30,30,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,.06);z-index:5}
+    .bottom-nav .nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;color:rgba(255,255,255,.35);font-weight:500}
+    .bottom-nav .nav-item.active{color:var(--blue)}
+    .bottom-nav .nav-item svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8}
+    .phone-content{flex:1;padding:4px 20px 90px;overflow:hidden;display:flex;flex-direction:column}
+    hr.divider{border:none;border-top:1px solid rgba(255,255,255,.06);margin:56px 0}
+    .sec-label{font-size:11px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:.06em;margin:24px 0 10px}
+    .bento-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .bento-card{background:#fff;border-radius:14px;padding:14px 16px;border:0.5px solid rgba(0,0,0,.04)}
+    .bento-card-label{font-size:11px;color:#8e8e93;margin-bottom:3px}
+    .bento-card-value{font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700;color:#1c1c1e}
+    .bento-card-sub{font-size:11px;color:#6b7280;margin-top:2px}
+    .bento-card.wide{grid-column:1/-1}
+    .health-bar{height:6px;background:#e5e5ea;border-radius:3px;overflow:hidden;margin-top:6px}
+    .health-bar-fill{height:100%;border-radius:3px}
+    .section-card{background:#fff;border-radius:16px;padding:18px;margin-bottom:10px;border:0.5px solid rgba(0,0,0,.04)}
+    .section-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+    .section-card-title{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600;color:#1c1c1e}
+    .section-card-value{font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:700}
+    .pill{display:inline-block;padding:3px 10px;border-radius:8px;font-size:11px;font-weight:600}
+    .pill-green{background:var(--green-bg);color:var(--green)}
+    .pill-amber{background:var(--amber-bg);color:var(--amber)}
+    .pill-red{background:var(--red-bg);color:var(--red)}
+    .pill-blue{background:#e0f0ff;color:var(--blue)}
+    .spending-bar{height:8px;background:#e5e5ea;border-radius:4px;overflow:hidden;margin:8px 0}
+    .spending-fill{height:100%;border-radius:4px}
+    .ai-card{background:#1c1c1e;border-radius:16px;padding:16px;color:#fff;margin-bottom:10px}
+    .ai-card-header{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+    .ai-card-dot{width:8px;height:8px;border-radius:50%;background:var(--blue)}
+    .ai-card-title{font-size:11px;font-weight:600;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.05em}
+    .ai-card-text{font-size:14px;color:rgba(255,255,255,.8);line-height:1.45}
+    .btn{width:100%;padding:12px;border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;cursor:pointer;text-align:center}
+    .btn-blue{background:var(--blue);color:#fff}
+    .btn-green{background:var(--green);color:#fff}
+    .btn-amber{background:var(--amber);color:#fff}
+    .empty-state{text-align:center;padding:28px 20px}
+    .empty-state-icon{width:48px;height:48px;border-radius:14px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center}
+    .empty-state-title{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600;color:#1c1c1e;margin-bottom:4px}
+    .empty-state-text{font-size:13px;color:#8e8e93;line-height:1.45;margin-bottom:14px}
+    .holding-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:0.5px solid rgba(0,0,0,.04)}
+    .holding-row:last-child{border:none}
+    .holding-left{display:flex;align-items:center;gap:10px}
+    .holding-icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+    .holding-name{font-size:13px;font-weight:600;color:#1c1c1e}
+    .holding-sub{font-size:11px;color:#8e8e93}
+    .holding-value{text-align:right}
+    .holding-amount{font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600;color:#1c1c1e}
+    .holding-change{font-size:11px;font-weight:600}
+    .holding-change.up{color:var(--green)}
+    .holding-change.down{color:var(--red)}
+    .alert-row{display:flex;align-items:center;gap:10px;padding:8px 12px;background:#f8f8fa;border-radius:10px;margin-bottom:6px}
+    .alert-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+    .alert-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;flex-shrink:0}
+    .metric-pill{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600;margin-right:6px;margin-bottom:6px}
+    .account-mini{display:flex;align-items:center;gap:10px;padding:8px 12px;background:#f8f8fa;border-radius:10px;margin-bottom:6px}
+    .account-mini-icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0}
+    .flow-arrow{display:flex;align-items:center;justify-content:center;color:var(--text2);font-size:18px;margin:4px 0}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+    ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:4px}
+  </style>
+</head>
+<body>
+  <nav class="sidebar">
+    <div class="sidebar-brand"><h1>Advizmo Accounts</h1><p>Advizmo Design System</p></div>
+    <div class="sidebar-nav">
+      <a href="#s1" class="active"><span class="num">1</span>No Accounts</a>
+      <a href="#s2"><span class="num">2</span>Connected External</a>
+      <a href="#s3"><span class="num">3</span>Accounts Opened</a>
+      <a href="#s4"><span class="num">4</span>Need to Move Money</a>
+      <a href="#s5"><span class="num">5</span>Mature User</a>
+    </div>
+    <div class="sidebar-footer"><a href="../index.html">&larr; Back to Index</a></div>
+  </nav>
+  <div class="main">
+    <h2>Advizmo Accounts Lifecycle States</h2>
+    <p class="section-subtitle">5 lifecycle states for the "Your Advizmo Accounts" section. Both investment paths — direct from connected banks or through Advizmo accounts — are always presented as equal options.</p>
+
+<!-- STATE 1: No Accounts -->
+<section id="s1">
+<div class="concept-label">State 01 <span>No Accounts</span></div>
+<div class="phone-wrap"><div class="phone">
+<div class="phone-screen" style="background:var(--bg)">
+  <div class="dynamic-island"></div>
+  <div class="status-bar" style="color:#1c1c1e"><div class="left" style="color:#1c1c1e">9:41</div>
+    <div class="right" style="color:#1c1c1e"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 7h2v6H1V7zm4-3h2v9H5V4zm4-2h2v11H9V2zm4-2h2v13h-2V0z"/></svg><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 3C4.5 3 1.5 5 0 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5zm0 8.5A3.5 3.5 0 118 4.5a3.5 3.5 0 010 7z"/></svg><svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="0" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="9" height="8" rx="1" fill="currentColor"/><rect x="17" y="3.5" width="2.5" height="5" rx="1"/></svg></div>
+  </div>
+  <div class="phone-content">
+    <div style="padding:8px 0 4px">
+      <div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:var(--text)">Welcome, James</div>
+      <div style="font-size:11px;color:var(--text2)">Friday, Jun 5</div>
+    </div>
+    <div style="display:flex;gap:0;margin-bottom:12px;border-bottom:1px solid var(--border)">
+      <div style="padding:8px 12px;font-size:12px;font-weight:600;color:var(--blue);border-bottom:2px solid var(--blue)">Overview</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Accounts</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Targets</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Actions</div>
+    </div>
+
+    <!-- HERO: Educational Ecosystem -->
+    <div style="background:#1c1c1e;border-radius:20px;padding:22px 20px;color:#fff;position:relative;overflow:hidden;margin-bottom:16px">
+      <div style="position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:rgba(10,132,255,.12);border-radius:50%"></div>
+      <div style="position:absolute;bottom:-20px;left:-20px;width:80px;height:80px;background:rgba(139,92,246,.08);border-radius:50%"></div>
+      <div style="position:relative;z-index:2;margin-bottom:16px">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:rgba(255,255,255,.4);margin-bottom:6px">Your Advizmo Accounts</div>
+        <div style="font-family:var(--font-heading);font-size:20px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:6px">Optional accounts that help your money work harder</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.5);line-height:1.45">Advizmo accounts are one way to organize and grow your money — but you can also invest directly from your connected banks.</div>
+      </div>
+      <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:0;margin-bottom:14px">
+        <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px;margin-bottom:0">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><div style="width:28px;height:28px;border-radius:7px;background:var(--blue);display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div><div><div style="font-size:12px;font-weight:600;color:rgba(255,255,255,.9)">Cash Account</div><div style="font-size:10px;color:rgba(255,255,255,.4)">Cash available inside Advizmo</div></div></div>
+          <div style="font-size:11px;color:rgba(255,255,255,.45);line-height:1.35">Hold money inside Advizmo before transferring or investing.</div>
+        </div>
+        <div class="flow-arrow" style="color:rgba(255,255,255,.2);font-size:14px">&#8595;</div>
+        <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px;margin-bottom:0">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><div style="width:28px;height:28px;border-radius:7px;background:#228b22;display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div><div><div style="font-size:12px;font-weight:600;color:rgba(255,255,255,.9)">Money Market</div><div style="font-size:10px;color:rgba(255,255,255,.4)">Earn on money waiting to be invested</div></div></div>
+          <div style="font-size:11px;color:rgba(255,255,255,.45);line-height:1.35">Idle cash can earn interest while staying available.</div>
+        </div>
+        <div class="flow-arrow" style="color:rgba(255,255,255,.2);font-size:14px">&#8595;</div>
+        <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><div style="width:28px;height:28px;border-radius:7px;background:#8b5cf6;display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div><div style="font-size:12px;font-weight:600;color:rgba(255,255,255,.9)">Auto Invest</div><div style="font-size:10px;color:rgba(255,255,255,.4)">Automate your investing</div></div></div>
+          <div style="font-size:11px;color:rgba(255,255,255,.45);line-height:1.35">Schedule recurring investments or automatically invest available cash.</div>
+        </div>
+      </div>
+      <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:8px">
+        <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.05em;text-align:center;margin-bottom:2px">Two ways to invest</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px;text-align:center">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="2" style="margin-bottom:6px"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+            <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.9);margin-bottom:2px">Invest directly</div>
+            <div style="font-size:10px;color:rgba(255,255,255,.4);line-height:1.3">From your connected banks</div>
+          </div>
+          <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px;text-align:center">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="2" style="margin-bottom:6px"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.9);margin-bottom:2px">Use Advizmo accounts</div>
+            <div style="font-size:10px;color:rgba(255,255,255,.4);line-height:1.3">Optional enhanced tools</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Net Worth -->
+    <div class="sec-label">Net Worth</div>
+    <div class="bento-grid">
+      <div class="bento-card"><div class="bento-card-label">Total Balance</div><div class="bento-card-value" style="color:#c7c7cc">--</div><div class="bento-card-sub">Connect accounts to see</div></div>
+      <div class="bento-card"><div class="bento-card-label">Cash Available</div><div class="bento-card-value" style="color:#c7c7cc">--</div><div class="bento-card-sub">Connect accounts to see</div></div>
+      <div class="bento-card"><div class="bento-card-label">Upcoming Bills</div><div class="bento-card-value" style="color:#c7c7cc">--</div><div class="bento-card-sub">Connect accounts to see</div></div>
+      <div class="bento-card"><div class="bento-card-label">Safe to Invest</div><div class="bento-card-value" style="color:#c7c7cc">--</div><div class="bento-card-sub">Connect accounts to see</div></div>
+    </div>
+
+    <!-- Accounts Section -->
+    <div class="sec-label">Your Advizmo Accounts</div>
+    <div class="section-card">
+      <div class="empty-state">
+        <div class="empty-state-icon" style="background:rgba(10,132,255,.1)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0a84ff" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M12 2v20"/></svg></div>
+        <div class="empty-state-title">Explore Advizmo accounts</div>
+        <div class="empty-state-text">Optional accounts that help you organize and grow your money. You can also invest directly from your banks.</div>
+        <button class="btn btn-blue" style="max-width:200px;margin:0 auto">Learn more</button>
+      </div>
+    </div>
+
+    <div class="ai-card"><div class="ai-card-header"><div class="ai-card-dot"></div><div class="ai-card-title">AI Insight</div></div><div class="ai-card-text">Advizmo accounts are optional. You can invest directly from your connected banks at any time.</div></div>
+  </div>
+  <div class="bottom-nav">
+    <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Invest</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path d="M9 12l2 2 4-4"/></svg>Insights</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Cashflow</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Activity</div>
+  </div>
+</div></div></div>
+</section>
+<hr class="divider">
+
+<!-- STATE 2: Connected External -->
+<section id="s2">
+<div class="concept-label">State 02 <span>Connected External</span></div>
+<div class="phone-wrap"><div class="phone">
+<div class="phone-screen" style="background:var(--bg)">
+  <div class="dynamic-island"></div>
+  <div class="status-bar" style="color:#1c1c1e"><div class="left" style="color:#1c1c1e">9:41</div>
+    <div class="right" style="color:#1c1c1e"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 7h2v6H1V7zm4-3h2v9H5V4zm4-2h2v11H9V2zm4-2h2v13h-2V0z"/></svg><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 3C4.5 3 1.5 5 0 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5zm0 8.5A3.5 3.5 0 118 4.5a3.5 3.5 0 010 7z"/></svg><svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="0" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="9" height="8" rx="1" fill="currentColor"/><rect x="17" y="3.5" width="2.5" height="5" rx="1"/></svg></div>
+  </div>
+  <div class="phone-content">
+    <div style="padding:8px 0 4px">
+      <div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:var(--text)">Good morning, James</div>
+      <div style="font-size:11px;color:var(--text2)">Monday, Jun 9</div>
+    </div>
+    <div style="display:flex;gap:0;margin-bottom:12px;border-bottom:1px solid var(--border)">
+      <div style="padding:8px 12px;font-size:12px;font-weight:600;color:var(--blue);border-bottom:2px solid var(--blue)">Overview</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Accounts</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Targets</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Actions</div>
+    </div>
+
+    <!-- HERO: Investment Pathway -->
+    <div style="background:#1c1c1e;border-radius:20px;padding:22px 20px;color:#fff;position:relative;overflow:hidden;margin-bottom:16px">
+      <div style="position:absolute;top:-20px;right:-20px;width:100px;height:100px;background:rgba(22,111,71,.15);border-radius:50%"></div>
+      <div style="position:relative;z-index:2;margin-bottom:12px">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--green);margin-bottom:6px;display:flex;align-items:center;gap:6px"><span style="width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite"></span>3 Accounts Connected</div>
+        <div style="font-family:var(--font-heading);font-size:20px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:4px">Choose your investment path</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.5);line-height:1.45">Both options work great. Pick what fits your style.</div>
+      </div>
+      <!-- Pathway Diagram -->
+      <div style="position:relative;z-index:2;margin-bottom:14px">
+        <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:start">
+          <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px;text-align:center">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="2" style="margin-bottom:6px"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+            <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.9);margin-bottom:2px">Direct Invest</div>
+            <div style="font-size:10px;color:rgba(255,255,255,.4);line-height:1.3">Invest from any connected bank</div>
+            <div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:700;color:#fff;margin-top:6px">$1,830 available</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding-top:16px;color:rgba(255,255,255,.3)">
+            <div style="font-size:10px;font-weight:600;margin-bottom:4px">OR</div>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </div>
+          <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px;text-align:center">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="2" style="margin-bottom:6px"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.9);margin-bottom:2px">Auto Invest</div>
+            <div style="font-size:10px;color:rgba(255,255,255,.4);line-height:1.3">Move cash to an Advizmo account first</div>
+            <div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:700;color:#fff;margin-top:6px">$1,830 available</div>
+          </div>
+        </div>
+        <div style="font-size:11px;color:rgba(255,255,255,.4);text-align:center;margin-top:10px;line-height:1.4">Both paths lead to the same diversified portfolio.</div>
+      </div>
+      <!-- Connected Banks -->
+      <div style="position:relative;z-index:2">
+        <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Connected Banks</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div class="account-mini" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08)"><div class="account-mini-icon" style="background:#1a6bb5;font-size:9px">CHASE</div><div style="flex:1"><div style="font-size:12px;font-weight:500;color:rgba(255,255,255,.85)">Chase Checking ****0203</div></div><div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#fff">$3,200</div></div>
+          <div class="account-mini" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08)"><div class="account-mini-icon" style="background:#228b22;font-size:9px">MARC</div><div style="flex:1"><div style="font-size:12px;font-weight:500;color:rgba(255,255,255,.85)">Marcus Savings ****7291</div></div><div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#fff">$4,850</div></div>
+          <div class="account-mini" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08)"><div class="account-mini-icon" style="background:#b22222;font-size:9px">CAP1</div><div style="flex:1"><div style="font-size:12px;font-weight:500;color:rgba(255,255,255,.85)">Capital One ****5349</div></div><div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#fff">$1,200</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Net Worth -->
+    <div class="sec-label">Net Worth</div>
+    <div class="bento-grid">
+      <div class="bento-card"><div class="bento-card-label">Cash</div><div class="bento-card-value">$9,250</div><div class="bento-card-sub">3 accounts</div></div>
+      <div class="bento-card"><div class="bento-card-label">Safe to Invest</div><div class="bento-card-value" style="color:var(--green)">$1,830</div><div class="bento-card-sub">After obligations</div></div>
+      <div class="bento-card"><div class="bento-card-label">Bills Identified</div><div class="bento-card-value" style="color:var(--amber)">$1,170</div><div class="bento-card-sub">Due this month</div></div>
+      <div class="bento-card"><div class="bento-card-label">Emergency Fund</div><div class="bento-card-value">$3,000</div><div class="bento-card-sub">Recommended: $6,500</div></div>
+    </div>
+
+    <!-- Your Advizmo Accounts -->
+    <div class="sec-label">Your Advizmo Accounts</div>
+    <div class="section-card">
+      <div class="section-card-header"><div class="section-card-title">Optional accounts</div><div class="pill pill-blue">Not required</div></div>
+      <div style="font-size:12px;color:#8e8e93;line-height:1.4;margin-bottom:12px">You can invest directly from your banks. These accounts offer additional tools if you want them.</div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#f8f8fa;border-radius:8px"><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:7px;background:var(--blue);display:flex;align-items:center;justify-content:center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div><div><div style="font-size:12px;font-weight:600;color:#1c1c1e">Cash Account</div><div style="font-size:10px;color:#8e8e93">Hold money inside Advizmo</div></div></div><div class="pill" style="background:#f0f0f0;color:#8e8e93">Open</div></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#f8f8fa;border-radius:8px"><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:7px;background:#228b22;display:flex;align-items:center;justify-content:center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div><div><div style="font-size:12px;font-weight:600;color:#1c1c1e">Money Market</div><div style="font-size:10px;color:#8e8e93">Earn on idle cash</div></div></div><div class="pill" style="background:#f0f0f0;color:#8e8e93">Open</div></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#f8f8fa;border-radius:8px"><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:7px;background:#8b5cf6;display:flex;align-items:center;justify-content:center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div><div style="font-size:12px;font-weight:600;color:#1c1c1e">Auto Invest</div><div style="font-size:10px;color:#8e8e93">Automate investing</div></div></div><div class="pill" style="background:#f0f0f0;color:#8e8e93">Open</div></div>
+      </div>
+    </div>
+
+    <div class="ai-card"><div class="ai-card-header"><div class="ai-card-dot" style="background:var(--green)"></div><div class="ai-card-title">AI Insight</div></div><div class="ai-card-text">You have $1,830 safe to invest. Choose to invest directly from your banks or open an Advizmo account for extra tools.</div></div>
+  </div>
+  <div class="bottom-nav">
+    <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Invest</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path d="M9 12l2 2 4-4"/></svg>Insights</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Cashflow</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Activity</div>
+  </div>
+</div></div></div>
+</section>
+<hr class="divider">
+
+<!-- STATE 3: Accounts Opened -->
+<section id="s3">
+<div class="concept-label">State 03 <span>Accounts Opened</span></div>
+<div class="phone-wrap"><div class="phone">
+<div class="phone-screen" style="background:var(--bg)">
+  <div class="dynamic-island"></div>
+  <div class="status-bar" style="color:#1c1c1e"><div class="left" style="color:#1c1c1e">9:41</div>
+    <div class="right" style="color:#1c1c1e"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 7h2v6H1V7zm4-3h2v9H5V4zm4-2h2v11H9V2zm4-2h2v13h-2V0z"/></svg><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 3C4.5 3 1.5 5 0 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5zm0 8.5A3.5 3.5 0 118 4.5a3.5 3.5 0 010 7z"/></svg><svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="0" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="9" height="8" rx="1" fill="currentColor"/><rect x="17" y="3.5" width="2.5" height="5" rx="1"/></svg></div>
+  </div>
+  <div class="phone-content">
+    <div style="padding:8px 0 4px">
+      <div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:var(--text)">Good morning, James</div>
+      <div style="font-size:11px;color:var(--text2)">Wednesday, Jun 11</div>
+    </div>
+    <div style="display:flex;gap:0;margin-bottom:12px;border-bottom:1px solid var(--border)">
+      <div style="padding:8px 12px;font-size:12px;font-weight:600;color:var(--blue);border-bottom:2px solid var(--blue)">Overview</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Accounts</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Targets</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Actions</div>
+    </div>
+
+    <!-- HERO: Progressive Cards -->
+    <div style="background:#1c1c1e;border-radius:20px;padding:22px 20px;color:#fff;position:relative;overflow:hidden;margin-bottom:16px">
+      <div style="position:absolute;top:-20px;right:-20px;width:100px;height:100px;background:rgba(22,111,71,.15);border-radius:50%"></div>
+      <div style="position:relative;z-index:2;margin-bottom:14px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+          <div><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--green);margin-bottom:6px;display:flex;align-items:center;gap:6px"><span style="width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite"></span>2 of 3 Open</div><div style="font-family:var(--font-heading);font-size:20px;font-weight:700;color:#fff;line-height:1.2">Your accounts are growing</div></div>
+          <div style="text-align:right"><div style="font-family:'IBM Plex Sans',sans-serif;font-size:28px;font-weight:700;color:#fff">$2,450</div><div style="font-size:11px;color:rgba(255,255,255,.5)">Total balance</div></div>
+        </div>
+      </div>
+      <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:8px;margin-bottom:12px">
+        <!-- Cash Account - Open -->
+        <div style="background:rgba(22,111,71,.15);border:1px solid rgba(22,111,71,.25);border-radius:12px;padding:12px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><div style="width:28px;height:28px;border-radius:7px;background:var(--blue);display:flex;align-items:center;justify-content:center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div><div style="flex:1"><div style="font-size:12px;font-weight:600;color:rgba(255,255,255,.9)">Cash Account</div><div style="font-size:10px;color:rgba(255,255,255,.4)">Cash available inside Advizmo</div></div><div class="pill pill-green" style="font-size:10px">Open</div></div>
+          <div style="display:flex;justify-content:space-between;align-items:center"><div style="font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700;color:#fff">$1,200</div><div style="font-size:11px;color:rgba(255,255,255,.4)">Ready to invest</div></div>
+        </div>
+        <!-- Money Market - Open -->
+        <div style="background:rgba(22,111,71,.15);border:1px solid rgba(22,111,71,.25);border-radius:12px;padding:12px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><div style="width:28px;height:28px;border-radius:7px;background:#228b22;display:flex;align-items:center;justify-content:center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div><div style="flex:1"><div style="font-size:12px;font-weight:600;color:rgba(255,255,255,.9)">Money Market</div><div style="font-size:10px;color:rgba(255,255,255,.4)">Earn on money waiting to be invested</div></div><div class="pill pill-green" style="font-size:10px">Open</div></div>
+          <div style="display:flex;justify-content:space-between;align-items:center"><div style="font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700;color:#fff">$1,250</div><div style="font-size:11px;color:rgba(255,255,255,.5)">Earning 4.2% APY</div></div>
+        </div>
+        <!-- Auto Invest - Locked -->
+        <div style="background:rgba(255,255,255,.04);border:1px dashed rgba(255,255,255,.12);border-radius:12px;padding:12px;opacity:.7">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><div style="width:28px;height:28px;border-radius:7px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div style="flex:1"><div style="font-size:12px;font-weight:600;color:rgba(255,255,255,.5)">Auto Invest</div><div style="font-size:10px;color:rgba(255,255,255,.3)">Automate your investing</div></div><div class="pill" style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.4);font-size:10px">Next</div></div>
+          <div style="font-size:11px;color:rgba(255,255,255,.3)">Open after funding your accounts</div>
+        </div>
+      </div>
+      <div style="font-size:11px;color:rgba(255,255,255,.4);text-align:center;line-height:1.4;position:relative;z-index:2">Both direct investing and Advizmo accounts are available to you.</div>
+    </div>
+
+    <!-- Net Worth -->
+    <div class="sec-label">Net Worth</div>
+    <div class="bento-grid">
+      <div class="bento-card"><div class="bento-card-label">Cash</div><div class="bento-card-value">$9,250</div><div class="bento-card-sub">3 external + 2 Advizmo</div></div>
+      <div class="bento-card"><div class="bento-card-label">Safe to Invest</div><div class="bento-card-value" style="color:var(--green)">$1,830</div><div class="bento-card-sub">Verified</div></div>
+      <div class="bento-card"><div class="bento-card-label">Advizmo Accounts</div><div class="bento-card-value" style="color:var(--blue)">$2,450</div><div class="bento-card-sub">2 of 3 open</div></div>
+      <div class="bento-card"><div class="bento-card-label">Money Market Yield</div><div class="bento-card-value" style="color:var(--green)">$4.38</div><div class="bento-card-sub">This month</div></div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="sec-label">Recent Activity</div>
+    <div class="section-card">
+      <div style="display:flex;flex-direction:column;gap:0">
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:0.5px solid rgba(0,0,0,.04)"><div style="width:32px;height:32px;border-radius:50%;background:var(--green-bg);display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div><div style="flex:1"><div style="font-size:12px;font-weight:600;color:#1c1c1e">Cash Account opened</div><div style="font-size:11px;color:#8e8e93">Today, 9:15 AM</div></div><div class="pill pill-green" style="font-size:10px">+$500</div></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:0.5px solid rgba(0,0,0,.04)"><div style="width:32px;height:32px;border-radius:50%;background:#e8f8ec;display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#228b22" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div><div style="flex:1"><div style="font-size:12px;font-weight:600;color:#1c1c1e">Money Market opened</div><div style="font-size:11px;color:#8e8e93">Today, 9:20 AM</div></div><div class="pill pill-green" style="font-size:10px">+$750</div></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 0"><div style="width:32px;height:32px;border-radius:50%;background:#f0f0f5;display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8e8e93" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div style="flex:1"><div style="font-size:12px;font-weight:600;color:#1c1c1e">Auto Invest available</div><div style="font-size:11px;color:#8e8e93">Ready to set up</div></div><div class="pill" style="background:#f0f0f5;color:#8e8e93;font-size:10px">Setup</div></div>
+      </div>
+    </div>
+
+    <div class="ai-card"><div class="ai-card-header"><div class="ai-card-dot" style="background:var(--green)"></div><div class="ai-card-title">AI Insight</div></div><div class="ai-card-text">Great progress! Your Money Market is earning 4.2% APY on $1,250. Consider opening Auto Invest to put idle cash to work automatically.</div></div>
+  </div>
+  <div class="bottom-nav">
+    <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Invest</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path d="M9 12l2 2 4-4"/></svg>Insights</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Cashflow</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Activity</div>
+  </div>
+</div></div></div>
+</section>
+<hr class="divider">
+
+<!-- STATE 4: Need to Move Money -->
+<section id="s4">
+<div class="concept-label">State 04 <span>Need to Move Money</span></div>
+<div class="phone-wrap"><div class="phone">
+<div class="phone-screen" style="background:var(--bg)">
+  <div class="dynamic-island"></div>
+  <div class="status-bar" style="color:#1c1c1e"><div class="left" style="color:#1c1c1e">9:41</div>
+    <div class="right" style="color:#1c1c1e"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 7h2v6H1V7zm4-3h2v9H5V4zm4-2h2v11H9V2zm4-2h2v13h-2V0z"/></svg><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 3C4.5 3 1.5 5 0 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5zm0 8.5A3.5 3.5 0 118 4.5a3.5 3.5 0 010 7z"/></svg><svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="0" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="9" height="8" rx="1" fill="currentColor"/><rect x="17" y="3.5" width="2.5" height="5" rx="1"/></svg></div>
+  </div>
+  <div class="phone-content">
+    <div style="padding:8px 0 4px">
+      <div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:var(--text)">Good morning, James</div>
+      <div style="font-size:11px;color:var(--text2)">Thursday, Jun 12</div>
+    </div>
+    <div style="display:flex;gap:0;margin-bottom:12px;border-bottom:1px solid var(--border)">
+      <div style="padding:8px 12px;font-size:12px;font-weight:600;color:var(--blue);border-bottom:2px solid var(--blue)">Overview</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Accounts</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Targets</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Actions</div>
+    </div>
+
+    <!-- HERO: Dashboard Widgets -->
+    <div style="background:#1c1c1e;border-radius:20px;padding:22px 20px;color:#fff;position:relative;overflow:hidden;margin-bottom:16px">
+      <div style="position:absolute;top:-20px;right:-20px;width:100px;height:100px;background:rgba(194,121,10,.12);border-radius:50%"></div>
+      <div style="position:absolute;bottom:-30px;left:-30px;width:120px;height:120px;background:rgba(194,121,10,.06);border-radius:50%"></div>
+      <div style="position:relative;z-index:2;margin-bottom:14px">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--amber);margin-bottom:6px;display:flex;align-items:center;gap:6px"><span style="width:6px;height:6px;border-radius:50%;background:var(--amber);animation:pulse 2s infinite"></span>Action Needed</div>
+        <div style="font-family:var(--font-heading);font-size:20px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:4px">Move $1,830 to start investing</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.5);line-height:1.45">Your safe-to-invest amount is ready. Choose where to put it.</div>
+      </div>
+      <!-- Suggested Actions -->
+      <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:6px;margin-bottom:14px">
+        <div style="background:rgba(194,121,10,.12);border:1px solid rgba(194,121,10,.2);border-radius:10px;padding:10px 12px"><div style="font-size:11px;font-weight:600;color:var(--amber);margin-bottom:4px">Suggested Actions</div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <div style="display:flex;align-items:center;gap:8px"><div style="width:6px;height:6px;border-radius:50%;background:var(--amber);flex-shrink:0"></div><div style="font-size:12px;color:rgba(255,255,255,.8)">Transfer $500 from Chase to Cash Account</div></div>
+            <div style="display:flex;align-items:center;gap:8px"><div style="width:6px;height:6px;border-radius:50%;background:var(--amber);flex-shrink:0"></div><div style="font-size:12px;color:rgba(255,255,255,.8)">Move $1,330 to Money Market for 4.2% yield</div></div>
+          </div>
+        </div>
+      </div>
+      <!-- Two Equal Options -->
+      <div style="position:relative;z-index:2">
+        <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;text-align:center">Choose your investment option</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:14px 12px;text-align:center">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="2" style="margin-bottom:6px"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+            <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.9);margin-bottom:2px">Invest Directly</div>
+            <div style="font-size:10px;color:rgba(255,255,255,.4);line-height:1.3">From Chase ****0203</div>
+            <div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:700;color:#fff;margin-top:6px">$1,830</div>
+          </div>
+          <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:14px 12px;text-align:center">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="2" style="margin-bottom:6px"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.9);margin-bottom:2px">Use Auto Invest</div>
+            <div style="font-size:10px;color:rgba(255,255,255,.4);line-height:1.3">Move to Money Market first</div>
+            <div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:700;color:#fff;margin-top:6px">$1,830</div>
+          </div>
+        </div>
+        <div style="font-size:11px;color:rgba(255,255,255,.4);text-align:center;margin-top:10px;line-height:1.4">Both options lead to the same diversified portfolio.</div>
+      </div>
+    </div>
+
+    <!-- Net Worth -->
+    <div class="sec-label">Net Worth</div>
+    <div class="bento-grid">
+      <div class="bento-card"><div class="bento-card-label">Cash</div><div class="bento-card-value">$9,250</div><div class="bento-card-sub">Across all accounts</div></div>
+      <div class="bento-card"><div class="bento-card-label">Safe to Invest</div><div class="bento-card-value" style="color:var(--amber)">$1,830</div><div class="bento-card-sub">Needs to be moved</div></div>
+      <div class="bento-card"><div class="bento-card-label">Advizmo Balance</div><div class="bento-card-value" style="color:var(--blue)">$2,450</div><div class="bento-card-sub">2 accounts active</div></div>
+      <div class="bento-card"><div class="bento-card-label">Idle Cash</div><div class="bento-card-value" style="color:var(--amber)">$1,830</div><div class="bento-card-sub">Not yet invested</div></div>
+    </div>
+
+    <!-- Your Advizmo Accounts -->
+    <div class="sec-label">Your Advizmo Accounts</div>
+    <div class="section-card">
+      <div class="section-card-header"><div class="section-card-title">Account balances</div><div class="pill pill-amber">Move funds</div></div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#f8f8fa;border-radius:8px"><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:7px;background:var(--blue);display:flex;align-items:center;justify-content:center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div><div><div style="font-size:12px;font-weight:600;color:#1c1c1e">Cash Account</div><div style="font-size:10px;color:#8e8e93">Ready to receive funds</div></div></div><div style="font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600;color:#1c1c1e">$1,200</div></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#f8f8fa;border-radius:8px"><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:7px;background:#228b22;display:flex;align-items:center;justify-content:center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div><div><div style="font-size:12px;font-weight:600;color:#1c1c1e">Money Market</div><div style="font-size:10px;color:var(--green)">Earning 4.2% APY</div></div></div><div style="font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600;color:#1c1c1e">$1,250</div></div>
+      </div>
+      <button class="btn btn-amber" style="margin-top:10px">Move $1,830 to invest</button>
+    </div>
+
+    <div class="ai-card" style="background:linear-gradient(135deg,#1c1c1e,#2a2010)"><div class="ai-card-header"><div class="ai-card-dot" style="background:var(--amber)"></div><div class="ai-card-title">AI Insight</div></div><div class="ai-card-text">$1,830 is ready to invest. Move it to your Money Market to earn 4.2% while you decide, or invest directly from Chase.</div></div>
+  </div>
+  <div class="bottom-nav">
+    <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Invest</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path d="M9 12l2 2 4-4"/></svg>Insights</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Cashflow</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Activity</div>
+  </div>
+</div></div></div>
+</section>
+<hr class="divider">
+
+<!-- STATE 5: Mature User -->
+<section id="s5">
+<div class="concept-label">State 05 <span>Mature User</span></div>
+<div class="phone-wrap"><div class="phone">
+<div class="phone-screen" style="background:var(--bg)">
+  <div class="dynamic-island"></div>
+  <div class="status-bar" style="color:#1c1c1e"><div class="left" style="color:#1c1c1e">9:41</div>
+    <div class="right" style="color:#1c1c1e"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 7h2v6H1V7zm4-3h2v9H5V4zm4-2h2v11H9V2zm4-2h2v13h-2V0z"/></svg><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 3C4.5 3 1.5 5 0 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5zm0 8.5A3.5 3.5 0 118 4.5a3.5 3.5 0 010 7z"/></svg><svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="0" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="9" height="8" rx="1" fill="currentColor"/><rect x="17" y="3.5" width="2.5" height="5" rx="1"/></svg></div>
+  </div>
+  <div class="phone-content">
+    <div style="padding:8px 0 4px">
+      <div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:var(--text)">Good morning, James</div>
+      <div style="font-size:11px;color:var(--text2)">Thursday, Sep 4 · 3 months with Advizmo</div>
+    </div>
+    <div style="display:flex;gap:0;margin-bottom:12px;border-bottom:1px solid var(--border)">
+      <div style="padding:8px 12px;font-size:12px;font-weight:600;color:var(--blue);border-bottom:2px solid var(--blue)">Overview</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Accounts</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Targets</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Actions</div>
+    </div>
+
+    <!-- HERO: Financial Workspace -->
+    <div style="background:#1c1c1e;border-radius:20px;padding:22px 20px;color:#fff;position:relative;overflow:hidden;margin-bottom:16px">
+      <div style="position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:rgba(22,111,71,.12);border-radius:50%"></div>
+      <div style="position:absolute;bottom:-20px;left:-20px;width:80px;height:80px;background:rgba(10,132,255,.08);border-radius:50%"></div>
+      <div style="position:relative;z-index:2">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+          <div><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:rgba(255,255,255,.4);margin-bottom:6px">All Accounts Active</div><div style="font-family:var(--font-heading);font-size:20px;font-weight:700;color:#fff;line-height:1.2">Your financial workspace</div></div>
+        </div>
+        <div style="font-size:12px;color:rgba(255,255,255,.5);line-height:1.45;margin-bottom:12px">3 accounts active. $420 idle cash detected across accounts.</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px">
+          <div class="metric-pill" style="background:rgba(22,111,71,.2);color:var(--green)"><span style="width:6px;height:6px;border-radius:50%;background:var(--green)"></span>Score 87</div>
+          <div class="metric-pill" style="background:rgba(22,111,71,.2);color:var(--green)">+4.2% yield</div>
+          <div class="metric-pill" style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.7)">$12,800 total</div>
+          <div class="metric-pill" style="background:rgba(194,121,10,.2);color:var(--amber)">$420 idle</div>
+        </div>
+        <!-- Account Balances -->
+        <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px">
+          <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px"><div style="width:28px;height:28px;border-radius:7px;background:var(--blue);display:flex;align-items:center;justify-content:center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div><div style="flex:1"><div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.8)">Cash Account</div><div style="font-size:10px;color:rgba(255,255,255,.4)">Operating buffer</div></div><div style="text-align:right"><div style="font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600;color:#fff">$3,200</div></div></div>
+          <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px"><div style="width:28px;height:28px;border-radius:7px;background:#228b22;display:flex;align-items:center;justify-content:center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div><div style="flex:1"><div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.8)">Money Market</div><div style="font-size:10px;color:var(--green)">Earning 4.2% APY</div></div><div style="text-align:right"><div style="font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600;color:#fff">$5,400</div><div style="font-size:10px;color:var(--green)">+$18.90/mo</div></div></div>
+          <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px"><div style="width:28px;height:28px;border-radius:7px;background:#8b5cf6;display:flex;align-items:center;justify-content:center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div style="flex:1"><div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.8)">Auto Invest</div><div style="font-size:10px;color:rgba(255,255,255,.4)">$500/mo recurring</div></div><div style="text-align:right"><div style="font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600;color:#fff">$4,200</div><div style="font-size:10px;color:var(--green)">+$14.70/mo</div></div></div>
+        </div>
+        <!-- Optimization Suggestions -->
+        <div style="background:rgba(10,132,255,.12);border:1px solid rgba(10,132,255,.2);border-radius:10px;padding:10px 12px"><div style="font-size:11px;font-weight:600;color:var(--blue);margin-bottom:6px">Optimization Suggestions</div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <div style="display:flex;align-items:center;gap:8px"><div style="width:6px;height:6px;border-radius:50%;background:var(--blue);flex-shrink:0"></div><div style="font-size:12px;color:rgba(255,255,255,.8)">Move $420 idle cash to Money Market (+$1.47/mo)</div></div>
+            <div style="display:flex;align-items:center;gap:8px"><div style="width:6px;height:6px;border-radius:50%;background:var(--blue);flex-shrink:0"></div><div style="font-size:12px;color:rgba(255,255,255,.8)">Increase Auto Invest to $600/mo for faster growth</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Net Worth -->
+    <div class="sec-label">Net Worth</div>
+    <div class="bento-grid">
+      <div class="bento-card wide"><div style="display:flex;justify-content:space-between;align-items:center"><div><div class="bento-card-label">Net Worth</div><div class="bento-card-value">$52,800</div></div><div class="pill pill-green">+$3,200</div></div></div>
+      <div class="bento-card"><div class="bento-card-label">Cash</div><div class="bento-card-value">$12,800</div><div class="bento-card-sub">All accounts</div></div>
+      <div class="bento-card"><div class="bento-card-label">Invested</div><div class="bento-card-value" style="color:var(--green)">$40,000</div><div class="bento-card-sub">+4.2% return</div></div>
+    </div>
+
+    <!-- Your Advizmo Accounts -->
+    <div class="sec-label">Your Advizmo Accounts</div>
+    <div class="section-card" style="padding:8px 16px">
+      <div class="holding-row">
+        <div class="holding-left"><div class="holding-icon" style="background:var(--blue)">$</div><div><div class="holding-name">Cash Account</div><div class="holding-sub">Operating buffer</div></div></div>
+        <div class="holding-value"><div class="holding-amount">$3,200</div><div class="holding-change" style="color:var(--text2)">Stable</div></div>
+      </div>
+      <div class="holding-row">
+        <div class="holding-left"><div class="holding-icon" style="background:#228b22">MM</div><div><div class="holding-name">Money Market</div><div class="holding-sub">4.2% APY</div></div></div>
+        <div class="holding-value"><div class="holding-amount">$5,400</div><div class="holding-change up">+$18.90/mo</div></div>
+      </div>
+      <div class="holding-row">
+        <div class="holding-left"><div class="holding-icon" style="background:#8b5cf6">AI</div><div><div class="holding-name">Auto Invest</div><div class="holding-sub">$500/mo recurring</div></div></div>
+        <div class="holding-value"><div class="holding-amount">$4,200</div><div class="holding-change up">+$14.70/mo</div></div>
+      </div>
+    </div>
+
+    <!-- Financial Health -->
+    <div class="sec-label">Financial Health</div>
+    <div class="section-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <div><div style="font-family:var(--font-heading);font-size:14px;font-weight:600;color:#1c1c1e">Excellent</div><div style="font-size:12px;color:var(--green)">Top 15% of users</div></div>
+        <div style="font-family:'IBM Plex Sans',sans-serif;font-size:28px;font-weight:700;color:var(--green)">87</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:#f8f8fa;border-radius:8px"><div style="font-size:12px;color:#1c1c1e">Cash Efficiency</div><div style="display:flex;align-items:center;gap:6px"><div class="health-bar" style="width:60px;margin:0"><div class="health-bar-fill" style="width:92%;background:var(--green)"></div></div><span style="font-size:12px;font-weight:600;color:var(--green)">92</span></div></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:#f8f8fa;border-radius:8px"><div style="font-size:12px;color:#1c1c1e">Yield Optimization</div><div style="display:flex;align-items:center;gap:6px"><div class="health-bar" style="width:60px;margin:0"><div class="health-bar-fill" style="width:88%;background:var(--green)"></div></div><span style="font-size:12px;font-weight:600;color:var(--green)">88</span></div></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:#f8f8fa;border-radius:8px"><div style="font-size:12px;color:#1c1c1e">Auto Invest Rate</div><div style="display:flex;align-items:center;gap:6px"><div class="health-bar" style="width:60px;margin:0"><div class="health-bar-fill" style="width:85%;background:var(--green)"></div></div><span style="font-size:12px;font-weight:600;color:var(--green)">$500/mo</span></div></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:#f8f8fa;border-radius:8px"><div style="font-size:12px;color:#1c1c1e">Diversification</div><div style="display:flex;align-items:center;gap:6px"><div class="health-bar" style="width:60px;margin:0"><div class="health-bar-fill" style="width:95%;background:var(--green)"></div></div><span style="font-size:12px;font-weight:600;color:var(--green)">95</span></div></div>
+      </div>
+    </div>
+
+    <div class="ai-card" style="background:linear-gradient(135deg,#166f47,#0a84ff)"><div class="ai-card-header"><div class="ai-card-dot" style="background:#fff"></div><div class="ai-card-title">AI Insight</div></div><div class="ai-card-text">Your 3 accounts earned $33.60 in yield this month. Moving $420 idle cash to Money Market could add $1.47/mo more.</div></div>
+  </div>
+  <div class="bottom-nav">
+    <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Invest</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path d="M9 12l2 2 4-4"/></svg>Insights</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Cashflow</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Activity</div>
+  </div>
+</div></div></div>
+</section>
+  </div>
+  <script>
+    document.querySelectorAll('.sidebar-nav a').forEach(function(link){
+      link.addEventListener('click', function(){
+        document.querySelectorAll('.sidebar-nav a').forEach(function(l){l.classList.remove('active')});
+        this.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
