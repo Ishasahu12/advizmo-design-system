@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Advizmo Membership Experience - Design System</title>
+  <title>Membership Status Cards — Advizmo Design System</title>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -46,117 +46,79 @@
     .btn{width:100%;padding:12px;border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;cursor:pointer;text-align:center}
     .btn-blue{background:var(--blue);color:#fff}
     .btn-green{background:var(--green);color:#fff}
-    .pill{display:inline-block;padding:3px 10px;border-radius:8px;font-size:11px;font-weight:600}
-    .pill-green{background:var(--green-bg);color:var(--green)}
-    .pill-amber{background:var(--amber-bg);color:var(--amber)}
-    .pill-blue{background:#e0f0ff;color:var(--blue)}
-    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
     ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:4px}
   </style>
 </head>
 <body>
   <nav class="sidebar">
-    <div class="sidebar-brand"><h1>Membership Experience</h1><p>Advizmo Design System</p></div>
+    <div class="sidebar-brand"><h1>Membership Cards</h1><p>Advizmo Design System</p></div>
     <div class="sidebar-nav">
-      <a href="#c1" class="active"><span class="num">C1</span>Membership Passport</a>
-      <a href="#c2"><span class="num">C2</span>iCloud+ Style</a>
-      <a href="#c3"><span class="num">C3</span>Financial Card</a>
-      <a href="#c4"><span class="num">C4</span>Monitoring Dashboard</a>
-      <a href="#c5"><span class="num">C5</span>Continue Your Journey</a>
-      <a href="#p6"><span class="num">P6</span>Apple Settings Paused</a>
-      <a href="#p7"><span class="num">P7</span>Banking Expired Card</a>
-      <a href="#p8"><span class="num">P8</span>Dashboard Paused</a>
-      <a href="#p9"><span class="num">P9</span>Reassurance First</a>
-      <a href="#p10"><span class="num">P10</span>Continue Financial Journey</a>
+      <a href="#c1" class="active"><span class="num">1</span>Apple Settings Style</a>
+      <a href="#c2"><span class="num">2</span>Premium Gradient</a>
+      <a href="#c3"><span class="num">3</span>Glass Surface</a>
+      <a href="#c4"><span class="num">4</span>Elevated Container</a>
+      <a href="#c5"><span class="num">5</span>Membership Ribbon</a>
+      <a href="#p6"><span class="num">6</span>Apple Paused</a>
+      <a href="#p7"><span class="num">7</span>Premium Paused</a>
+      <a href="#p8"><span class="num">8</span>Glass Paused</a>
+      <a href="#p9"><span class="num">9</span>Reassurance Card</a>
+      <a href="#p10"><span class="num">10</span>Minimal Status</a>
     </div>
     <div class="sidebar-footer"><a href="../index.html">&larr; Back to Index</a></div>
   </nav>
   <div class="main">
-    <h2>Membership Experience</h2>
-    <p class="section-subtitle">10 concepts for communicating membership status. Complimentary membership ending (C1-C5) and membership paused (P6-P10).</p>
-<!-- C1: MEMBERSHIP PASSPORT -->
+    <h2>Membership Status Cards</h2>
+    <p class="section-subtitle">10 premium membership status card concepts for Advizmo. Each card communicates membership state — complimentary trial ending or membership paused — with calm, Apple-quality clarity.</p>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- EXPERIENCE 1: COMPLIMENTARY MEMBERSHIP ENDING                 -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+
+<!-- C1: Apple Settings Style -->
 <section id="c1">
-<div class="concept-label">Experience 01 <span>Membership Passport</span></div>
+<div class="concept-label">C1 <span>Apple Settings Style</span></div>
 <div class="phone-wrap"><div class="phone">
-<div class="phone-screen" style="background:#f2f2f7">
+<div class="phone-screen" style="background:var(--bg)">
   <div class="dynamic-island"></div>
   <div class="status-bar" style="color:#1c1c1e"><div class="left" style="color:#1c1c1e">9:41</div>
     <div class="right" style="color:#1c1c1e"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 7h2v6H1V7zm4-3h2v9H5V4zm4-2h2v11H9V2zm4-2h2v13h-2V0z"/></svg><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 3C4.5 3 1.5 5 0 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5zm0 8.5A3.5 3.5 0 118 4.5a3.5 3.5 0 010 7z"/></svg><svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="0" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="9" height="8" rx="1" fill="currentColor"/><rect x="17" y="3.5" width="2.5" height="5" rx="1"/></svg></div>
   </div>
-  <div class="phone-content" style="padding:4px 20px 90px">
-    <div style="text-align:center;padding:8px 0 4px;margin-bottom:16px">
-      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#8e8e93;margin-bottom:2px">Advizmo</div>
-      <div style="font-family:var(--font-heading);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#8e8e93">Membership Passport</div>
+  <div class="phone-content">
+    <div style="padding:8px 0 4px">
+      <div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:var(--text)">Welcome back, James</div>
+      <div style="font-size:11px;color:var(--text2)">Friday, Jun 13</div>
     </div>
-    <div style="background:linear-gradient(135deg,#1c1c1e 0%,#2d2d30 100%);border-radius:20px;padding:24px 22px;color:#fff;position:relative;overflow:hidden;margin-bottom:16px;border:1px solid rgba(255,255,255,.08)">
-      <div style="position:absolute;top:-40px;right:-40px;width:140px;height:140px;background:rgba(10,132,255,.08);border-radius:50%"></div>
-      <div style="position:absolute;bottom:-30px;left:-20px;width:100px;height:100px;background:rgba(22,111,71,.06);border-radius:50%"></div>
-      <div style="position:relative;z-index:2">
-        <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px">
-          <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--blue),#5856d6);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:#fff;flex-shrink:0">J</div>
-          <div style="flex:1">
-            <div style="font-family:var(--font-heading);font-size:17px;font-weight:700;color:#fff">James Mitchell</div>
-            <div style="font-size:12px;color:rgba(255,255,255,.5);margin-top:2px">Premium Member &middot; Since Jan 2026</div>
-          </div>
-        </div>
-        <div style="display:flex;gap:8px;margin-bottom:18px">
-          <div style="padding:5px 14px;background:rgba(255,255,255,.08);border-radius:20px;font-size:11px;font-weight:600;color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.1)">COMPLIMENTARY</div>
-          <div style="padding:5px 14px;background:rgba(10,132,255,.15);border-radius:20px;font-size:11px;font-weight:600;color:var(--blue);border:1px solid rgba(10,132,255,.2)">7 DAYS LEFT</div>
-        </div>
-        <div style="background:rgba(255,255,255,.06);border-radius:12px;padding:14px 16px;border:1px solid rgba(255,255,255,.06)">
-          <div style="font-size:10px;font-weight:600;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Your Journey Timeline</div>
-          <div style="display:flex;align-items:center;gap:0;margin-bottom:6px">
-            <div style="width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0"></div>
-            <div style="flex:1;height:2px;background:var(--green);margin:0 -1px"></div>
-            <div style="width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0"></div>
-            <div style="flex:1;height:2px;background:var(--green);margin:0 -1px"></div>
-            <div style="width:8px;height:8px;border-radius:50%;background:var(--blue);flex-shrink:0;animation:pulse 2s infinite"></div>
-            <div style="flex:1;height:2px;background:rgba(255,255,255,.15);margin:0 -1px"></div>
-            <div style="width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.2);flex-shrink:0"></div>
-          </div>
-          <div style="display:flex;justify-content:space-between;font-size:9px;color:rgba(255,255,255,.35)"><span>Jan 2026</span><span>Now</span><span>Jul 31</span><span>Premium</span></div>
-        </div>
+    <div style="display:flex;gap:0;margin-bottom:16px;border-bottom:1px solid var(--border)">
+      <div style="padding:8px 12px;font-size:12px;font-weight:600;color:var(--blue);border-bottom:2px solid var(--blue)">Overview</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Accounts</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Targets</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Actions</div>
+    </div>
+
+    <!-- MEMBERSHIP CARD -->
+    <div style="background:#fff;border-radius:16px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.04);margin-bottom:16px">
+      <div style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:8px;background:#f0f0f5;margin-bottom:14px">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+        <span style="font-size:11px;font-weight:600;color:var(--amber);letter-spacing:.03em">FREE TRIAL · 7 DAYS LEFT</span>
       </div>
+      <div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:6px">Keep your financial guidance active</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.5;margin-bottom:16px">Your complimentary membership ends in 7 days. Continue receiving monitoring, recommendations, and alerts.</div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:16px">$3/mo · Cancel anytime · 0.25% advisory fee after investing</div>
+      <button class="btn btn-blue" style="margin-bottom:8px">Continue Membership</button>
+      <div style="text-align:center;font-size:13px;color:var(--text2);padding:10px 0;cursor:pointer">Maybe Later</div>
     </div>
-    <div style="text-align:center;margin-bottom:16px">
-      <div style="font-family:var(--font-heading);font-size:19px;font-weight:700;color:#1c1c1e;line-height:1.3;margin-bottom:4px">Your journey with Advizmo</div>
-      <div style="font-size:13px;color:#8e8e93;line-height:1.4">Your complimentary membership ends in 7 days. Here's what you've unlocked.</div>
-    </div>
+
+    <!-- Dashboard cards below to show context -->
+    <div style="font-size:11px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:.06em;margin:8px 0 10px">Net Worth</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px">
-      <div style="background:#fff;border-radius:14px;padding:14px;border:0.5px solid rgba(0,0,0,.04);text-align:center">
-        <div style="width:40px;height:40px;border-radius:12px;background:var(--green-bg);display:flex;align-items:center;justify-content:center;margin:0 auto 8px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
-        <div style="font-family:var(--font-heading);font-size:12px;font-weight:600;color:#1c1c1e;margin-bottom:2px">Account Monitoring</div>
-        <div style="font-size:10px;color:#8e8e93">3 accounts tracked</div>
-        <div style="margin-top:6px"><span class="pill pill-green">Active</span></div>
-      </div>
-      <div style="background:#fff;border-radius:14px;padding:14px;border:0.5px solid rgba(0,0,0,.04);text-align:center">
-        <div style="width:40px;height:40px;border-radius:12px;background:#e0f0ff;display:flex;align-items:center;justify-content:center;margin:0 auto 8px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg></div>
-        <div style="font-family:var(--font-heading);font-size:12px;font-weight:600;color:#1c1c1e;margin-bottom:2px">Smart Alerts</div>
-        <div style="font-size:10px;color:#8e8e93">12 insights delivered</div>
-        <div style="margin-top:6px"><span class="pill pill-green">Active</span></div>
-      </div>
-      <div style="background:#fff;border-radius:14px;padding:14px;border:0.5px solid rgba(0,0,0,.04);text-align:center">
-        <div style="width:40px;height:40px;border-radius:12px;background:var(--amber-bg);display:flex;align-items:center;justify-content:center;margin:0 auto 8px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div>
-        <div style="font-family:var(--font-heading);font-size:12px;font-weight:600;color:#1c1c1e;margin-bottom:2px">Recommendations</div>
-        <div style="font-size:10px;color:#8e8e93">$1,830 invested</div>
-        <div style="margin-top:6px"><span class="pill pill-green">Active</span></div>
-      </div>
-      <div style="background:#fff;border-radius:14px;padding:14px;border:0.5px solid rgba(0,0,0,.04);text-align:center">
-        <div style="width:40px;height:40px;border-radius:12px;background:rgba(139,92,246,.1);display:flex;align-items:center;justify-content:center;margin:0 auto 8px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg></div>
-        <div style="font-family:var(--font-heading);font-size:12px;font-weight:600;color:#1c1c1e;margin-bottom:2px">Financial Health</div>
-        <div style="font-size:10px;color:#8e8e93">Score: 87/100</div>
-        <div style="margin-top:6px"><span class="pill pill-green">Active</span></div>
-      </div>
+      <div style="background:#fff;border-radius:14px;padding:14px 16px;border:0.5px solid rgba(0,0,0,.04)"><div style="font-size:11px;color:#8e8e93;margin-bottom:3px">Total Balance</div><div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:var(--text)">$48,200</div></div>
+      <div style="background:#fff;border-radius:14px;padding:14px 16px;border:0.5px solid rgba(0,0,0,.04)"><div style="font-size:11px;color:#8e8e93;margin-bottom:3px">Safe to Invest</div><div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:var(--green)">$1,830</div></div>
     </div>
-    <div style="background:#fff;border-radius:14px;padding:16px 18px;margin-bottom:14px;border:0.5px solid rgba(0,0,0,.04)">
-      <div style="font-family:var(--font-heading);font-size:13px;font-weight:600;color:#1c1c1e;margin-bottom:10px">Membership Fee</div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid rgba(0,0,0,.04)"><div style="font-size:12px;color:#8e8e93">Monthly membership</div><div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#1c1c1e">$3/mo</div></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid rgba(0,0,0,.04)"><div style="font-size:12px;color:#8e8e93">Cancel anytime</div><div style="font-size:12px;color:var(--green);font-weight:600">Free</div></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid rgba(0,0,0,.04)"><div style="font-size:12px;color:#8e8e93">Advisory fee after investing</div><div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#1c1c1e">0.25%</div></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0"><div style="font-size:12px;color:#8e8e93">Hidden fees</div><div style="font-size:12px;color:var(--green);font-weight:600">None</div></div>
+
+    <div style="background:#1c1c1e;border-radius:16px;padding:16px;color:#fff">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><div style="width:8px;height:8px;border-radius:50%;background:var(--blue)"></div><div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.05em">AI Insight</div></div>
+      <div style="font-size:14px;color:rgba(255,255,255,.8);line-height:1.45">Your financial system is working. 7 days of complimentary membership remain.</div>
     </div>
-    <button class="btn btn-blue" style="margin-bottom:8px">Continue Your Journey</button>
-    <button class="btn" style="background:transparent;color:var(--blue);font-weight:600;border:1px solid var(--blue);margin-bottom:12px">View Membership Details</button>
   </div>
   <div class="bottom-nav">
     <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</div>
@@ -169,59 +131,54 @@
 </section>
 <hr class="divider">
 
-<!-- C2: APPLE iCLOUD+ STYLE -->
+<!-- C2: Premium Gradient Card -->
 <section id="c2">
-<div class="concept-label">Experience 02 <span>iCloud+ Style</span></div>
+<div class="concept-label">C2 <span>Premium Gradient Card</span></div>
 <div class="phone-wrap"><div class="phone">
 <div class="phone-screen" style="background:var(--bg)">
   <div class="dynamic-island"></div>
-  <div class="status-bar" style="color:#1c1c1e"><div class="left" style="color:#1c1c1e">9:41</div>
-    <div class="right" style="color:#1c1c1e"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 7h2v6H1V7zm4-3h2v9H5V4zm4-2h2v11H9V2zm4-2h2v13h-2V0z"/></svg><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 3C4.5 3 1.5 5 0 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5zm0 8.5A3.5 3.5 0 118 4.5a3.5 3.5 0 010 7z"/></svg><svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="0" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="9" height="8" rx="1" fill="currentColor"/><rect x="17" y="3.5" width="2.5" height="5" rx="1"/></svg></div>
+  <div class="status-bar" style="color:#fff"><div class="left">9:41</div>
+    <div class="right"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 7h2v6H1V7zm4-3h2v9H5V4zm4-2h2v11H9V2zm4-2h2v13h-2V0z"/></svg><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 3C4.5 3 1.5 5 0 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5zm0 8.5A3.5 3.5 0 118 4.5a3.5 3.5 0 010 7z"/></svg><svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="0" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="9" height="8" rx="1" fill="currentColor"/><rect x="17" y="3.5" width="2.5" height="5" rx="1"/></svg></div>
   </div>
-  <div class="phone-content" style="padding:4px 20px 90px">
-    <div style="text-align:center;padding:20px 0 24px">
-      <div style="width:72px;height:72px;border-radius:20px;background:linear-gradient(135deg,var(--blue),#5856d6);margin:0 auto 14px;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(10,132,255,.3)"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
-      <div style="font-family:var(--font-heading);font-size:20px;font-weight:700;color:#1c1c1e;line-height:1.2;margin-bottom:4px">Keep Advizmo working for you</div>
-      <div style="font-size:13px;color:#8e8e93;line-height:1.4">Your complimentary membership ends in 7 days</div>
+  <div class="phone-content">
+    <div style="padding:8px 0 4px">
+      <div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:var(--text)">Welcome back, James</div>
+      <div style="font-size:11px;color:var(--text2)">Friday, Jun 13</div>
     </div>
-    <div style="background:#fff;border-radius:14px;padding:16px 18px;margin-bottom:10px;border:0.5px solid rgba(0,0,0,.04)">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
-        <div style="width:32px;height:32px;border-radius:8px;background:var(--green-bg);display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
-        <div style="font-family:var(--font-heading);font-size:14px;font-weight:600;color:#1c1c1e">What continues</div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#f8f8fa;border-radius:10px"><div style="width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0"></div><div style="font-size:13px;color:#1c1c1e">Connected accounts &amp; history</div></div>
-        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#f8f8fa;border-radius:10px"><div style="width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0"></div><div style="font-size:13px;color:#1c1c1e">Investment portfolio</div></div>
-        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#f8f8fa;border-radius:10px"><div style="width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0"></div><div style="font-size:13px;color:#1c1c1e">Financial goals &amp; targets</div></div>
+    <div style="display:flex;gap:0;margin-bottom:16px;border-bottom:1px solid var(--border)">
+      <div style="padding:8px 12px;font-size:12px;font-weight:600;color:var(--blue);border-bottom:2px solid var(--blue)">Overview</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Accounts</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Targets</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Actions</div>
+    </div>
+
+    <!-- MEMBERSHIP CARD: Dark Gradient -->
+    <div style="background:linear-gradient(135deg,#1c1c1e 0%,#0a84ff 100%);border-radius:20px;padding:24px 20px;color:#fff;position:relative;overflow:hidden;margin-bottom:16px">
+      <div style="position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:rgba(255,255,255,.06);border-radius:50%"></div>
+      <div style="position:absolute;bottom:-20px;left:-20px;width:80px;height:80px;background:rgba(255,255,255,.04);border-radius:50%"></div>
+      <div style="position:relative;z-index:2">
+        <div style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:8px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.15);margin-bottom:16px">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+          <span style="font-size:11px;font-weight:600;letter-spacing:.03em">FREE TRIAL · 7 DAYS LEFT</span>
+        </div>
+        <div style="font-family:var(--font-heading);font-size:20px;font-weight:700;color:#fff;line-height:1.25;margin-bottom:6px">Your financial guidance continues</div>
+        <div style="font-size:13px;color:rgba(255,255,255,.6);line-height:1.5;margin-bottom:20px">7 days remaining on your complimentary membership.</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.45);margin-bottom:20px">$3/mo · Cancel anytime</div>
+        <button class="btn" style="background:#fff;color:#1c1c1e;margin-bottom:8px">Keep My Membership</button>
+        <div style="text-align:center;font-size:13px;color:rgba(255,255,255,.5);padding:10px 0;cursor:pointer">View Details</div>
       </div>
     </div>
-    <div style="background:#fff;border-radius:14px;padding:16px 18px;margin-bottom:10px;border:0.5px solid rgba(0,0,0,.04)">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
-        <div style="width:32px;height:32px;border-radius:8px;background:var(--amber-bg);display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M10 15V9M14 15V9"/></svg></div>
-        <div style="font-family:var(--font-heading);font-size:14px;font-weight:600;color:#1c1c1e">What pauses</div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#f8f8fa;border-radius:10px"><div style="width:6px;height:6px;border-radius:50%;background:var(--amber);flex-shrink:0"></div><div style="font-size:13px;color:#1c1c1e">Balance refreshes</div></div>
-        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#f8f8fa;border-radius:10px"><div style="width:6px;height:6px;border-radius:50%;background:var(--amber);flex-shrink:0"></div><div style="font-size:13px;color:#1c1c1e">Smart alerts &amp; recommendations</div></div>
-        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#f8f8fa;border-radius:10px"><div style="width:6px;height:6px;border-radius:50%;background:var(--amber);flex-shrink:0"></div><div style="font-size:13px;color:#1c1c1e">Financial Health monitoring</div></div>
-      </div>
+
+    <div style="font-size:11px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:.06em;margin:8px 0 10px">Net Worth</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px">
+      <div style="background:#fff;border-radius:14px;padding:14px 16px;border:0.5px solid rgba(0,0,0,.04)"><div style="font-size:11px;color:#8e8e93;margin-bottom:3px">Total Balance</div><div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:var(--text)">$48,200</div></div>
+      <div style="background:#fff;border-radius:14px;padding:14px 16px;border:0.5px solid rgba(0,0,0,.04)"><div style="font-size:11px;color:#8e8e93;margin-bottom:3px">Safe to Invest</div><div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:var(--green)">$1,830</div></div>
     </div>
-    <div style="background:#fff;border-radius:14px;padding:16px 18px;margin-bottom:14px;border:0.5px solid rgba(0,0,0,.04)">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
-        <div style="width:32px;height:32px;border-radius:8px;background:#e0f0ff;display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
-        <div style="font-family:var(--font-heading);font-size:14px;font-weight:600;color:#1c1c1e">What remains</div>
-      </div>
-      <div style="font-size:13px;color:#8e8e93;line-height:1.45;padding:8px 12px;background:#f8f8fa;border-radius:10px">All your data stays exactly where it is. You can download it anytime.</div>
+
+    <div style="background:#1c1c1e;border-radius:16px;padding:16px;color:#fff">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><div style="width:8px;height:8px;border-radius:50%;background:var(--blue)"></div><div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.05em">AI Insight</div></div>
+      <div style="font-size:14px;color:rgba(255,255,255,.8);line-height:1.45">Your financial system is working. 7 days of complimentary membership remain.</div>
     </div>
-    <div style="background:#fff;border-radius:14px;padding:16px 18px;margin-bottom:14px;border:0.5px solid rgba(0,0,0,.04)">
-      <div style="font-family:var(--font-heading);font-size:13px;font-weight:600;color:#1c1c1e;margin-bottom:10px">Membership Plan</div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid rgba(0,0,0,.04)"><div style="font-size:12px;color:#8e8e93">Monthly</div><div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#1c1c1e">$3/mo</div></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid rgba(0,0,0,.04)"><div style="font-size:12px;color:#8e8e93">Cancel anytime</div><div style="font-size:12px;color:var(--green);font-weight:600">Free</div></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid rgba(0,0,0,.04)"><div style="font-size:12px;color:#8e8e93">Advisory fee</div><div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#1c1c1e">0.25%</div></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0"><div style="font-size:12px;color:#8e8e93">Hidden fees</div><div style="font-size:12px;color:var(--green);font-weight:600">None</div></div>
-    </div>
-    <button class="btn btn-blue" style="margin-bottom:8px">Upgrade to Advizmo</button>
-    <button class="btn" style="background:transparent;color:var(--blue);font-weight:600;border:1px solid var(--blue)">Compare Plans</button>
   </div>
   <div class="bottom-nav">
     <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</div>
@@ -234,55 +191,50 @@
 </section>
 <hr class="divider">
 
-<!-- C3: FINANCIAL MEMBERSHIP CARD -->
+<!-- C3: Glass Surface Card -->
 <section id="c3">
-<div class="concept-label">Experience 03 <span>Financial Membership Card</span></div>
+<div class="concept-label">C3 <span>Glass Surface Card</span></div>
 <div class="phone-wrap"><div class="phone">
-<div class="phone-screen" style="background:#1c1c1e">
+<div class="phone-screen" style="background:linear-gradient(180deg,#e8ecf0 0%,#f2f2f7 100%)">
   <div class="dynamic-island"></div>
-  <div class="status-bar"><div class="left">9:41</div>
-    <div class="right"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 7h2v6H1V7zm4-3h2v9H5V4zm4-2h2v11H9V2zm4-2h2v13h-2V0z"/></svg><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 3C4.5 3 1.5 5 0 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5zm0 8.5A3.5 3.5 0 118 4.5a3.5 3.5 0 010 7z"/></svg><svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="0" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="9" height="8" rx="1" fill="currentColor"/><rect x="17" y="3.5" width="2.5" height="5" rx="1"/></svg></div>
+  <div class="status-bar" style="color:#1c1c1e"><div class="left" style="color:#1c1c1e">9:41</div>
+    <div class="right" style="color:#1c1c1e"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 7h2v6H1V7zm4-3h2v9H5V4zm4-2h2v11H9V2zm4-2h2v13h-2V0z"/></svg><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 3C4.5 3 1.5 5 0 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5zm0 8.5A3.5 3.5 0 118 4.5a3.5 3.5 0 010 7z"/></svg><svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="0" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="9" height="8" rx="1" fill="currentColor"/><rect x="17" y="3.5" width="2.5" height="5" rx="1"/></svg></div>
   </div>
-  <div class="phone-content" style="padding:4px 20px 90px">
-    <div style="background:linear-gradient(135deg,#0a0a0a 0%,#1a1a2e 50%,#16213e 100%);border-radius:20px;padding:22px;color:#fff;position:relative;overflow:hidden;margin-bottom:16px;border:1px solid rgba(255,255,255,.06)">
-      <div style="position:absolute;top:-50px;right:-50px;width:160px;height:160px;background:linear-gradient(135deg,rgba(10,132,255,.12),rgba(88,86,216,.08));border-radius:50%"></div>
-      <div style="position:relative;z-index:2">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px">
-          <div><div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.35);margin-bottom:4px">Advizmo</div><div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:#fff">Premium Membership</div></div>
-          <div style="width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--blue),#5856d6);display:flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div>
-        </div>
-        <div style="font-size:12px;color:rgba(255,255,255,.5);margin-bottom:14px">James Mitchell &middot; Member since Jan 2026</div>
-        <div style="display:flex;gap:8px">
-          <div style="padding:5px 12px;background:rgba(255,255,255,.08);border-radius:8px;font-size:11px;font-weight:600;color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.06)">COMPLIMENTARY</div>
-          <div style="padding:5px 12px;background:rgba(10,132,255,.15);border-radius:8px;font-size:11px;font-weight:600;color:var(--blue);border:1px solid rgba(10,132,255,.15)">7 DAYS LEFT</div>
-        </div>
+  <div class="phone-content">
+    <div style="padding:8px 0 4px">
+      <div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:var(--text)">Welcome back, James</div>
+      <div style="font-size:11px;color:var(--text2)">Friday, Jun 13</div>
+    </div>
+    <div style="display:flex;gap:0;margin-bottom:16px;border-bottom:1px solid var(--border)">
+      <div style="padding:8px 12px;font-size:12px;font-weight:600;color:var(--blue);border-bottom:2px solid var(--blue)">Overview</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Accounts</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Targets</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Actions</div>
+    </div>
+
+    <!-- MEMBERSHIP CARD: Frosted Glass -->
+    <div style="background:rgba(255,255,255,.65);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.8);border-radius:20px;padding:24px 20px;box-shadow:0 4px 24px rgba(0,0,0,.06);margin-bottom:16px">
+      <div style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:8px;background:rgba(194,121,10,.08);border:1px solid rgba(194,121,10,.15);margin-bottom:14px">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+        <span style="font-size:11px;font-weight:600;color:var(--amber);letter-spacing:.03em">FREE TRIAL · 7 DAYS LEFT</span>
       </div>
+      <div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:6px">Maintain your financial momentum</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.5;margin-bottom:14px">Your complimentary membership ends soon.</div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:18px">$3/mo · Cancel anytime</div>
+      <button class="btn btn-blue" style="margin-bottom:8px">Continue with Advizmo</button>
+      <div style="text-align:center;font-size:13px;color:var(--text2);padding:10px 0;cursor:pointer">Maybe Later</div>
     </div>
-    <div style="margin-bottom:16px">
-      <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Membership Status</div>
-      <div style="background:rgba(255,255,255,.04);border-radius:14px;padding:16px;border:1px solid rgba(255,255,255,.06)">
-        <div style="font-family:var(--font-heading);font-size:16px;font-weight:700;color:#fff;margin-bottom:4px">Your complimentary membership is almost complete</div>
-        <div style="font-size:13px;color:rgba(255,255,255,.45);line-height:1.4">Continue your membership to keep monitoring, alerts, and personalized recommendations active.</div>
-      </div>
+
+    <div style="font-size:11px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:.06em;margin:8px 0 10px">Net Worth</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px">
+      <div style="background:#fff;border-radius:14px;padding:14px 16px;border:0.5px solid rgba(0,0,0,.04)"><div style="font-size:11px;color:#8e8e93;margin-bottom:3px">Total Balance</div><div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:var(--text)">$48,200</div></div>
+      <div style="background:#fff;border-radius:14px;padding:14px 16px;border:0.5px solid rgba(0,0,0,.04)"><div style="font-size:11px;color:#8e8e93;margin-bottom:3px">Safe to Invest</div><div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:var(--green)">$1,830</div></div>
     </div>
-    <div style="margin-bottom:16px">
-      <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Your Benefits</div>
-      <div style="display:flex;flex-wrap:wrap;gap:8px">
-        <div style="padding:8px 14px;background:rgba(22,111,71,.12);border:1px solid rgba(22,111,71,.2);border-radius:10px;font-size:12px;font-weight:500;color:var(--green);display:flex;align-items:center;gap:6px"><div style="width:6px;height:6px;border-radius:50%;background:var(--green)"></div>3 accounts monitored</div>
-        <div style="padding:8px 14px;background:rgba(10,132,255,.12);border:1px solid rgba(10,132,255,.2);border-radius:10px;font-size:12px;font-weight:500;color:var(--blue);display:flex;align-items:center;gap:6px"><div style="width:6px;height:6px;border-radius:50%;background:var(--blue)"></div>12 recommendations</div>
-        <div style="padding:8px 14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:10px;font-size:12px;font-weight:500;color:rgba(255,255,255,.6);display:flex;align-items:center;gap:6px"><div style="width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.3)"></div>Financial health score</div>
-        <div style="padding:8px 14px;background:rgba(139,92,246,.12);border:1px solid rgba(139,92,246,.2);border-radius:10px;font-size:12px;font-weight:500;color:#8b5cf6;display:flex;align-items:center;gap:6px"><div style="width:6px;height:6px;border-radius:50%;background:#8b5cf6"></div>$1,830 invested</div>
-      </div>
+
+    <div style="background:#1c1c1e;border-radius:16px;padding:16px;color:#fff">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><div style="width:8px;height:8px;border-radius:50%;background:var(--blue)"></div><div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.05em">AI Insight</div></div>
+      <div style="font-size:14px;color:rgba(255,255,255,.8);line-height:1.45">Your financial system is working. 7 days of complimentary membership remain.</div>
     </div>
-    <div style="background:rgba(255,255,255,.04);border-radius:14px;padding:16px;border:1px solid rgba(255,255,255,.06);margin-bottom:16px">
-      <div style="font-family:var(--font-heading);font-size:13px;font-weight:600;color:#fff;margin-bottom:12px">Billing Summary</div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid rgba(255,255,255,.06)"><div style="font-size:12px;color:rgba(255,255,255,.45)">Monthly membership</div><div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#fff">$3/mo</div></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid rgba(255,255,255,.06)"><div style="font-size:12px;color:rgba(255,255,255,.45)">Cancel anytime</div><div style="font-size:12px;color:var(--green);font-weight:600">Free</div></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid rgba(255,255,255,.06)"><div style="font-size:12px;color:rgba(255,255,255,.45)">Advisory fee</div><div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#fff">0.25%</div></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0"><div style="font-size:12px;color:rgba(255,255,255,.45)">Hidden fees</div><div style="font-size:12px;color:var(--green);font-weight:600">None</div></div>
-    </div>
-    <button class="btn btn-blue" style="margin-bottom:8px">Stay Protected</button>
-    <button class="btn" style="background:rgba(255,255,255,.06);color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.08)">Download My Data</button>
   </div>
   <div class="bottom-nav">
     <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</div>
@@ -295,55 +247,56 @@
 </section>
 <hr class="divider">
 
-<!-- C4: MONITORING DASHBOARD -->
+<!-- C4: Elevated Premium Container -->
 <section id="c4">
-<div class="concept-label">Experience 04 <span>Monitoring Dashboard</span></div>
+<div class="concept-label">C4 <span>Elevated Premium Container</span></div>
 <div class="phone-wrap"><div class="phone">
 <div class="phone-screen" style="background:var(--bg)">
   <div class="dynamic-island"></div>
   <div class="status-bar" style="color:#1c1c1e"><div class="left" style="color:#1c1c1e">9:41</div>
     <div class="right" style="color:#1c1c1e"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 7h2v6H1V7zm4-3h2v9H5V4zm4-2h2v11H9V2zm4-2h2v13h-2V0z"/></svg><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 3C4.5 3 1.5 5 0 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5zm0 8.5A3.5 3.5 0 118 4.5a3.5 3.5 0 010 7z"/></svg><svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="0" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="9" height="8" rx="1" fill="currentColor"/><rect x="17" y="3.5" width="2.5" height="5" rx="1"/></svg></div>
   </div>
-  <div class="phone-content" style="padding:4px 20px 90px">
-    <div style="padding:8px 0 4px;margin-bottom:12px">
-      <div style="font-size:11px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px">Monitoring Status</div>
-      <div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:#1c1c1e">Your services are active</div>
+  <div class="phone-content">
+    <div style="padding:8px 0 4px">
+      <div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:var(--text)">Welcome back, James</div>
+      <div style="font-size:11px;color:var(--text2)">Friday, Jun 13</div>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
-      <div style="background:#fff;border-radius:14px;padding:14px;border:0.5px solid rgba(0,0,0,.04)">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div style="width:32px;height:32px;border-radius:8px;background:var(--green-bg);display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div><span class="pill pill-green">Active</span></div>
-        <div style="font-family:var(--font-heading);font-size:13px;font-weight:600;color:#1c1c1e;margin-bottom:2px">Account Monitoring</div>
-        <div style="font-size:11px;color:#8e8e93">3 accounts tracked</div>
-      </div>
-      <div style="background:#fff;border-radius:14px;padding:14px;border:0.5px solid rgba(0,0,0,.04)">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div style="width:32px;height:32px;border-radius:8px;background:var(--green-bg);display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><span class="pill pill-green">Active</span></div>
-        <div style="font-family:var(--font-heading);font-size:13px;font-weight:600;color:#1c1c1e;margin-bottom:2px">Recommendations</div>
-        <div style="font-size:11px;color:#8e8e93">12 insights</div>
-      </div>
-      <div style="background:#fff;border-radius:14px;padding:14px;border:0.5px solid rgba(0,0,0,.04)">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div style="width:32px;height:32px;border-radius:8px;background:var(--green-bg);display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div><span class="pill pill-green">Active</span></div>
-        <div style="font-family:var(--font-heading);font-size:13px;font-weight:600;color:#1c1c1e;margin-bottom:2px">Smart Alerts</div>
-        <div style="font-size:11px;color:#8e8e93">Real-time</div>
-      </div>
-      <div style="background:#fff;border-radius:14px;padding:14px;border:0.5px solid rgba(0,0,0,.04)">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div style="width:32px;height:32px;border-radius:8px;background:var(--green-bg);display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg></div><span class="pill pill-green">Active</span></div>
-        <div style="font-family:var(--font-heading);font-size:13px;font-weight:600;color:#1c1c1e;margin-bottom:2px">Financial Health</div>
-        <div style="font-size:11px;color:#8e8e93">Score: 87</div>
-      </div>
+    <div style="display:flex;gap:0;margin-bottom:16px;border-bottom:1px solid var(--border)">
+      <div style="padding:8px 12px;font-size:12px;font-weight:600;color:var(--blue);border-bottom:2px solid var(--blue)">Overview</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Accounts</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Targets</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Actions</div>
     </div>
-    <div style="background:#fff;border-radius:14px;padding:16px 18px;margin-bottom:14px;border:0.5px solid rgba(0,0,0,.04)">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div style="width:32px;height:32px;border-radius:8px;background:#e0f0ff;display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></div><div style="font-family:var(--font-heading);font-size:13px;font-weight:600;color:#1c1c1e">What continues with membership</div></div>
-      <div style="font-size:12px;color:#8e8e93;line-height:1.5;padding-left:42px">All 4 services remain active. Your financial picture stays complete with continuous monitoring, personalized alerts, and investment-ready insights.</div>
+
+    <!-- MEMBERSHIP CARD: Elevated -->
+    <div style="background:#fff;border-radius:20px;padding:24px 20px;box-shadow:0 2px 8px rgba(0,0,0,.04),0 12px 40px rgba(0,0,0,.08);border:1px solid rgba(0,0,0,.03);margin-bottom:16px">
+      <div style="display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:10px;background:linear-gradient(135deg,rgba(10,132,255,.08),rgba(10,132,255,.04));border:1px solid rgba(10,132,255,.12);margin-bottom:16px">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        <span style="font-size:12px;font-weight:600;color:var(--blue);letter-spacing:.02em">FREE TRIAL · 7 DAYS LEFT</span>
+      </div>
+      <div style="font-family:var(--font-heading);font-size:20px;font-weight:700;color:var(--text);line-height:1.25;margin-bottom:8px">Keep Advizmo working for you</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.5;margin-bottom:16px">7 days left on your complimentary membership.</div>
+      <div style="display:flex;gap:12px;font-size:12px;color:var(--text2);margin-bottom:18px">
+        <span>$3/mo</span>
+        <span style="color:var(--border)">·</span>
+        <span>Cancel anytime</span>
+        <span style="color:var(--border)">·</span>
+        <span>0.25% advisory fee</span>
+      </div>
+      <button class="btn btn-blue" style="margin-bottom:8px">Stay Protected</button>
+      <div style="text-align:center;font-size:13px;color:var(--text2);padding:10px 0;cursor:pointer">Learn More</div>
     </div>
-    <div style="background:#fff;border-radius:14px;padding:16px 18px;margin-bottom:14px;border:0.5px solid rgba(0,0,0,.04)">
-      <div style="font-family:var(--font-heading);font-size:13px;font-weight:600;color:#1c1c1e;margin-bottom:10px">Membership</div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid rgba(0,0,0,.04)"><div style="font-size:12px;color:#8e8e93">Monthly</div><div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#1c1c1e">$3/mo</div></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid rgba(0,0,0,.04)"><div style="font-size:12px;color:#8e8e93">Cancel anytime</div><div style="font-size:12px;color:var(--green);font-weight:600">Free</div></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid rgba(0,0,0,.04)"><div style="font-size:12px;color:#8e8e93">Advisory fee</div><div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#1c1c1e">0.25%</div></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0"><div style="font-size:12px;color:#8e8e93">Hidden fees</div><div style="font-size:12px;color:var(--green);font-weight:600">None</div></div>
+
+    <div style="font-size:11px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:.06em;margin:8px 0 10px">Net Worth</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px">
+      <div style="background:#fff;border-radius:14px;padding:14px 16px;border:0.5px solid rgba(0,0,0,.04)"><div style="font-size:11px;color:#8e8e93;margin-bottom:3px">Total Balance</div><div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:var(--text)">$48,200</div></div>
+      <div style="background:#fff;border-radius:14px;padding:14px 16px;border:0.5px solid rgba(0,0,0,.04)"><div style="font-size:11px;color:#8e8e93;margin-bottom:3px">Safe to Invest</div><div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:var(--green)">$1,830</div></div>
     </div>
-    <button class="btn btn-blue" style="margin-bottom:8px">Continue Monitoring</button>
-    <button class="btn" style="background:transparent;color:var(--blue);font-weight:600;border:1px solid var(--blue)">Manage Billing</button>
+
+    <div style="background:#1c1c1e;border-radius:16px;padding:16px;color:#fff">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><div style="width:8px;height:8px;border-radius:50%;background:var(--blue)"></div><div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.05em">AI Insight</div></div>
+      <div style="font-size:14px;color:rgba(255,255,255,.8);line-height:1.45">Your financial system is working. 7 days of complimentary membership remain.</div>
+    </div>
   </div>
   <div class="bottom-nav">
     <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</div>
@@ -356,51 +309,52 @@
 </section>
 <hr class="divider">
 
-<!-- C5: CONTINUE YOUR JOURNEY -->
+<!-- C5: Membership Ribbon -->
 <section id="c5">
-<div class="concept-label">Experience 05 <span>Continue Your Journey</span></div>
+<div class="concept-label">C5 <span>Membership Ribbon</span></div>
 <div class="phone-wrap"><div class="phone">
 <div class="phone-screen" style="background:var(--bg)">
   <div class="dynamic-island"></div>
   <div class="status-bar" style="color:#1c1c1e"><div class="left" style="color:#1c1c1e">9:41</div>
     <div class="right" style="color:#1c1c1e"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 7h2v6H1V7zm4-3h2v9H5V4zm4-2h2v11H9V2zm4-2h2v13h-2V0z"/></svg><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 3C4.5 3 1.5 5 0 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5zm0 8.5A3.5 3.5 0 118 4.5a3.5 3.5 0 010 7z"/></svg><svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="0" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="9" height="8" rx="1" fill="currentColor"/><rect x="17" y="3.5" width="2.5" height="5" rx="1"/></svg></div>
   </div>
-  <div class="phone-content" style="padding:4px 20px 90px">
-    <div style="background:linear-gradient(135deg,#166f47 0%,#0a84ff 100%);border-radius:20px;padding:22px 20px;color:#fff;position:relative;overflow:hidden;margin-bottom:16px">
-      <div style="position:absolute;top:-40px;right:-40px;width:140px;height:140px;background:rgba(255,255,255,.08);border-radius:50%"></div>
-      <div style="position:absolute;bottom:-30px;left:-20px;width:100px;height:100px;background:rgba(255,255,255,.05);border-radius:50%"></div>
-      <div style="position:relative;z-index:2">
-        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.5);margin-bottom:8px">Your Advizmo Journey</div>
-        <div style="font-family:var(--font-heading);font-size:20px;font-weight:700;color:#fff;line-height:1.25;margin-bottom:16px">Everything you've accomplished with your complimentary membership</div>
-        <div style="display:flex;flex-direction:column;gap:10px">
-          <div style="display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.1);border-radius:12px;padding:12px 14px;border:1px solid rgba(255,255,255,.1)"><div style="width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div><div style="flex:1"><div style="font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700;color:#fff">3</div><div style="font-size:11px;color:rgba(255,255,255,.6)">Accounts monitored</div></div></div>
-          <div style="display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.1);border-radius:12px;padding:12px 14px;border:1px solid rgba(255,255,255,.1)"><div style="width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div><div style="flex:1"><div style="font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700;color:#fff">$1,830</div><div style="font-size:11px;color:rgba(255,255,255,.6)">Safe to invest identified</div></div></div>
-          <div style="display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.1);border-radius:12px;padding:12px 14px;border:1px solid rgba(255,255,255,.1)"><div style="width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg></div><div style="flex:1"><div style="font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700;color:#fff">12</div><div style="font-size:11px;color:rgba(255,255,255,.6)">Recommendations delivered</div></div></div>
-        </div>
+  <div class="phone-content">
+    <div style="padding:8px 0 4px">
+      <div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:var(--text)">Welcome back, James</div>
+      <div style="font-size:11px;color:var(--text2)">Friday, Jun 13</div>
+    </div>
+    <div style="display:flex;gap:0;margin-bottom:16px;border-bottom:1px solid var(--border)">
+      <div style="padding:8px 12px;font-size:12px;font-weight:600;color:var(--blue);border-bottom:2px solid var(--blue)">Overview</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Accounts</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Targets</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Actions</div>
+    </div>
+
+    <!-- MEMBERSHIP CARD: Ribbon -->
+    <div style="background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.04);margin-bottom:16px;position:relative">
+      <div style="background:linear-gradient(90deg,var(--blue),#4da3ff);padding:8px 20px;display:flex;align-items:center;gap:8px">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+        <span style="font-size:12px;font-weight:600;color:#fff;letter-spacing:.03em">FREE TRIAL · 7 DAYS LEFT</span>
+      </div>
+      <div style="padding:20px">
+        <div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:6px">Your financial guidance continues</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.5;margin-bottom:14px">Continue receiving personalized insights.</div>
+        <div style="font-size:12px;color:var(--text2);margin-bottom:16px">$3/mo · Cancel anytime</div>
+        <button class="btn btn-blue" style="margin-bottom:8px">Continue Membership</button>
+        <div style="text-align:center;font-size:13px;color:var(--text2);padding:10px 0;cursor:pointer">Download My Data</div>
       </div>
     </div>
-    <div style="text-align:center;margin-bottom:16px">
-      <div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:#1c1c1e;line-height:1.3;margin-bottom:4px">Everything continues with your membership</div>
-      <div style="font-size:13px;color:#8e8e93;line-height:1.4">Your complimentary membership ends in 7 days. Keep your financial guidance going.</div>
+
+    <div style="font-size:11px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:.06em;margin:8px 0 10px">Net Worth</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px">
+      <div style="background:#fff;border-radius:14px;padding:14px 16px;border:0.5px solid rgba(0,0,0,.04)"><div style="font-size:11px;color:#8e8e93;margin-bottom:3px">Total Balance</div><div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:var(--text)">$48,200</div></div>
+      <div style="background:#fff;border-radius:14px;padding:14px 16px;border:0.5px solid rgba(0,0,0,.04)"><div style="font-size:11px;color:#8e8e93;margin-bottom:3px">Safe to Invest</div><div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:var(--green)">$1,830</div></div>
     </div>
-    <div style="background:#fff;border-radius:14px;padding:16px 18px;margin-bottom:14px;border:0.5px solid rgba(0,0,0,.04)">
-      <div style="font-family:var(--font-heading);font-size:13px;font-weight:600;color:#1c1c1e;margin-bottom:10px">With membership, you keep</div>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--green-bg);border-radius:10px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><div style="font-size:12px;font-weight:500;color:var(--green)">Continuous account monitoring</div></div>
-        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--green-bg);border-radius:10px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><div style="font-size:12px;font-weight:500;color:var(--green)">Smart alerts &amp; recommendations</div></div>
-        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--green-bg);border-radius:10px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><div style="font-size:12px;font-weight:500;color:var(--green)">Financial Health score tracking</div></div>
-        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--green-bg);border-radius:10px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><div style="font-size:12px;font-weight:500;color:var(--green)">Investment portfolio management</div></div>
-      </div>
+
+    <div style="background:#1c1c1e;border-radius:16px;padding:16px;color:#fff">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><div style="width:8px;height:8px;border-radius:50%;background:var(--blue)"></div><div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.05em">AI Insight</div></div>
+      <div style="font-size:14px;color:rgba(255,255,255,.8);line-height:1.45">Your financial system is working. 7 days of complimentary membership remain.</div>
     </div>
-    <div style="background:#fff;border-radius:14px;padding:16px 18px;margin-bottom:14px;border:0.5px solid rgba(0,0,0,.04)">
-      <div style="font-family:var(--font-heading);font-size:13px;font-weight:600;color:#1c1c1e;margin-bottom:10px">Membership</div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid rgba(0,0,0,.04)"><div style="font-size:12px;color:#8e8e93">Monthly</div><div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#1c1c1e">$3/mo</div></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid rgba(0,0,0,.04)"><div style="font-size:12px;color:#8e8e93">Cancel anytime</div><div style="font-size:12px;color:var(--green);font-weight:600">Free</div></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid rgba(0,0,0,.04)"><div style="font-size:12px;color:#8e8e93">Advisory fee</div><div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#1c1c1e">0.25%</div></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0"><div style="font-size:12px;color:#8e8e93">Hidden fees</div><div style="font-size:12px;color:var(--green);font-weight:600">None</div></div>
-    </div>
-    <button class="btn btn-green" style="margin-bottom:8px">Maintain My Financial Guidance</button>
-    <button class="btn" style="background:transparent;color:var(--blue);font-weight:600;border:1px solid var(--blue)">Learn More</button>
   </div>
   <div class="bottom-nav">
     <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</div>
@@ -413,47 +367,54 @@
 </section>
 <hr class="divider">
 
-<!-- P6: APPLE SETTINGS PAUSED -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- EXPERIENCE 2: MEMBERSHIP PAUSED                                -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+
+<!-- P6: Apple Settings Paused -->
 <section id="p6">
-<div class="concept-label">Experience 06 <span>Apple Settings Paused</span></div>
+<div class="concept-label">P6 <span>Apple Settings Paused</span></div>
 <div class="phone-wrap"><div class="phone">
 <div class="phone-screen" style="background:var(--bg)">
   <div class="dynamic-island"></div>
   <div class="status-bar" style="color:#1c1c1e"><div class="left" style="color:#1c1c1e">9:41</div>
     <div class="right" style="color:#1c1c1e"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 7h2v6H1V7zm4-3h2v9H5V4zm4-2h2v11H9V2zm4-2h2v13h-2V0z"/></svg><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 3C4.5 3 1.5 5 0 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5zm0 8.5A3.5 3.5 0 118 4.5a3.5 3.5 0 010 7z"/></svg><svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="0" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="9" height="8" rx="1" fill="currentColor"/><rect x="17" y="3.5" width="2.5" height="5" rx="1"/></svg></div>
   </div>
-  <div class="phone-content" style="padding:4px 20px 90px">
-    <div style="text-align:center;padding:16px 0 20px">
-      <div style="width:64px;height:64px;border-radius:16px;background:var(--amber-bg);margin:0 auto 12px;display:flex;align-items:center;justify-content:center"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M10 15V9M14 15V9"/></svg></div>
-      <div style="padding:5px 16px;background:var(--amber-bg);border-radius:20px;font-size:11px;font-weight:600;color:var(--amber);display:inline-block;margin-bottom:10px">MEMBERSHIP PAUSED</div>
-      <div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:#1c1c1e;line-height:1.3;margin-bottom:4px">Your Advizmo membership ended June 1</div>
-      <div style="font-size:13px;color:#8e8e93;line-height:1.4">Your financial history is still here</div>
+  <div class="phone-content">
+    <div style="padding:8px 0 4px">
+      <div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:var(--text)">Welcome back, James</div>
+      <div style="font-size:11px;color:var(--text2)">Friday, Jun 13</div>
     </div>
-    <div style="background:#fff;border-radius:14px;padding:16px 18px;margin-bottom:10px;border:0.5px solid rgba(0,0,0,.04)">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><div style="width:32px;height:32px;border-radius:8px;background:var(--amber-bg);display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M10 15V9M14 15V9"/></svg></div><div style="font-family:var(--font-heading);font-size:14px;font-weight:600;color:#1c1c1e">Monitoring Paused</div></div>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#f8f8fa;border-radius:10px"><div style="width:6px;height:6px;border-radius:50%;background:var(--amber);flex-shrink:0"></div><div style="font-size:12px;color:#1c1c1e">Balance refreshes paused</div></div>
-        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#f8f8fa;border-radius:10px"><div style="width:6px;height:6px;border-radius:50%;background:var(--amber);flex-shrink:0"></div><div style="font-size:12px;color:#1c1c1e">Smart alerts paused</div></div>
-        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#f8f8fa;border-radius:10px"><div style="width:6px;height:6px;border-radius:50%;background:var(--amber);flex-shrink:0"></div><div style="font-size:12px;color:#1c1c1e">Recommendations paused</div></div>
+    <div style="display:flex;gap:0;margin-bottom:16px;border-bottom:1px solid var(--border)">
+      <div style="padding:8px 12px;font-size:12px;font-weight:600;color:var(--blue);border-bottom:2px solid var(--blue)">Overview</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Accounts</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Targets</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Actions</div>
+    </div>
+
+    <!-- MEMBERSHIP CARD: Paused - Apple Settings -->
+    <div style="background:#fff;border-radius:16px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.04);margin-bottom:16px">
+      <div style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:8px;background:var(--amber-bg);margin-bottom:14px">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2.5"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
+        <span style="font-size:11px;font-weight:600;color:var(--amber);letter-spacing:.03em">MEMBERSHIP PAUSED</span>
       </div>
+      <div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:6px">Recommendations are paused</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.5;margin-bottom:16px">Your membership ended June 1. Advizmo has paused monitoring. Your accounts and history remain exactly as you left them.</div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:16px">$3/mo · Cancel anytime</div>
+      <button class="btn" style="background:var(--amber);color:#fff;margin-bottom:8px">Resume Membership</button>
+      <div style="text-align:center;font-size:13px;color:var(--text2);padding:10px 0;cursor:pointer">Download My Data</div>
     </div>
-    <div style="background:#fff;border-radius:14px;padding:16px 18px;margin-bottom:14px;border:0.5px solid rgba(0,0,0,.04)">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><div style="width:32px;height:32px;border-radius:8px;background:var(--green-bg);display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div style="font-family:var(--font-heading);font-size:14px;font-weight:600;color:#1c1c1e">History Preserved</div></div>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#f8f8fa;border-radius:10px"><div style="width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0"></div><div style="font-size:12px;color:#1c1c1e">Connected accounts preserved</div></div>
-        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#f8f8fa;border-radius:10px"><div style="width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0"></div><div style="font-size:12px;color:#1c1c1e">Investment history saved</div></div>
-        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#f8f8fa;border-radius:10px"><div style="width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0"></div><div style="font-size:12px;color:#1c1c1e">Financial goals intact</div></div>
-      </div>
+
+    <div style="font-size:11px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:.06em;margin:8px 0 10px">Net Worth</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px">
+      <div style="background:#fff;border-radius:14px;padding:14px 16px;border:0.5px solid rgba(0,0,0,.04)"><div style="font-size:11px;color:#8e8e93;margin-bottom:3px">Total Balance</div><div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:var(--text)">$48,200</div></div>
+      <div style="background:#fff;border-radius:14px;padding:14px 16px;border:0.5px solid rgba(0,0,0,.04)"><div style="font-size:11px;color:#8e8e93;margin-bottom:3px">Safe to Invest</div><div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:#c7c7cc">Paused</div></div>
     </div>
-    <div style="background:#fff;border-radius:14px;padding:16px 18px;margin-bottom:14px;border:0.5px solid rgba(0,0,0,.04)">
-      <div style="font-family:var(--font-heading);font-size:13px;font-weight:600;color:#1c1c1e;margin-bottom:10px">Resume Membership</div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid rgba(0,0,0,.04)"><div style="font-size:12px;color:#8e8e93">Monthly</div><div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#1c1c1e">$3/mo</div></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid rgba(0,0,0,.04)"><div style="font-size:12px;color:#8e8e93">Cancel anytime</div><div style="font-size:12px;color:var(--green);font-weight:600">Free</div></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid rgba(0,0,0,.04)"><div style="font-size:12px;color:#8e8e93">Advisory fee</div><div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#1c1c1e">0.25%</div></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0"><div style="font-size:12px;color:#8e8e93">Hidden fees</div><div style="font-size:12px;color:var(--green);font-weight:600">None</div></div>
+
+    <div style="background:#1c1c1e;border-radius:16px;padding:16px;color:#fff">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><div style="width:8px;height:8px;border-radius:50%;background:var(--amber)"></div><div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.05em">AI Insight</div></div>
+      <div style="font-size:14px;color:rgba(255,255,255,.8);line-height:1.45">Your data is preserved. Resume membership to continue monitoring and recommendations.</div>
     </div>
-    <button class="btn btn-blue" style="margin-bottom:8px">Resume Membership</button>
-    <button class="btn" style="background:transparent;color:var(--blue);font-weight:600;border:1px solid var(--blue)">Download My Data</button>
   </div>
   <div class="bottom-nav">
     <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</div>
@@ -466,60 +427,53 @@
 </section>
 <hr class="divider">
 
-<!-- P7: BANKING EXPIRED CARD -->
+<!-- P7: Premium Paused Card -->
 <section id="p7">
-<div class="concept-label">Experience 07 <span>Banking Expired Card</span></div>
+<div class="concept-label">P7 <span>Premium Paused Card</span></div>
 <div class="phone-wrap"><div class="phone">
-<div class="phone-screen" style="background:#1c1c1e">
+<div class="phone-screen" style="background:var(--bg)">
   <div class="dynamic-island"></div>
-  <div class="status-bar"><div class="left">9:41</div>
-    <div class="right"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 7h2v6H1V7zm4-3h2v9H5V4zm4-2h2v11H9V2zm4-2h2v13h-2V0z"/></svg><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 3C4.5 3 1.5 5 0 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5zm0 8.5A3.5 3.5 0 118 4.5a3.5 3.5 0 010 7z"/></svg><svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="0" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="9" height="8" rx="1" fill="currentColor"/><rect x="17" y="3.5" width="2.5" height="5" rx="1"/></svg></div>
+  <div class="status-bar" style="color:#1c1c1e"><div class="left" style="color:#1c1c1e">9:41</div>
+    <div class="right" style="color:#1c1c1e"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 7h2v6H1V7zm4-3h2v9H5V4zm4-2h2v11H9V2zm4-2h2v13h-2V0z"/></svg><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 3C4.5 3 1.5 5 0 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5zm0 8.5A3.5 3.5 0 118 4.5a3.5 3.5 0 010 7z"/></svg><svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="0" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="9" height="8" rx="1" fill="currentColor"/><rect x="17" y="3.5" width="2.5" height="5" rx="1"/></svg></div>
   </div>
-  <div class="phone-content" style="padding:4px 20px 90px">
-    <div style="background:linear-gradient(135deg,#2d1a00 0%,#1a0e00 50%,#0d0d0d 100%);border-radius:20px;padding:22px;color:#fff;position:relative;overflow:hidden;margin-bottom:16px;border:1px solid rgba(194,121,10,.15)">
-      <div style="position:absolute;top:-50px;right:-50px;width:160px;height:160px;background:rgba(194,121,10,.08);border-radius:50%"></div>
+  <div class="phone-content">
+    <div style="padding:8px 0 4px">
+      <div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:var(--text)">Welcome back, James</div>
+      <div style="font-size:11px;color:var(--text2)">Friday, Jun 13</div>
+    </div>
+    <div style="display:flex;gap:0;margin-bottom:16px;border-bottom:1px solid var(--border)">
+      <div style="padding:8px 12px;font-size:12px;font-weight:600;color:var(--blue);border-bottom:2px solid var(--blue)">Overview</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Accounts</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Targets</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Actions</div>
+    </div>
+
+    <!-- MEMBERSHIP CARD: Paused - Dark Premium -->
+    <div style="background:#1c1c1e;border-radius:20px;padding:24px 20px;color:#fff;position:relative;overflow:hidden;margin-bottom:16px">
+      <div style="position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:rgba(194,121,10,.1);border-radius:50%"></div>
       <div style="position:relative;z-index:2">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
-          <div><div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.3);margin-bottom:4px">Advizmo</div><div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:#fff">Premium Membership</div></div>
-          <div style="width:40px;height:40px;border-radius:10px;background:var(--amber-bg);display:flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M10 15V9M14 15V9"/></svg></div>
+        <div style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:8px;background:rgba(194,121,10,.15);border:1px solid rgba(194,121,10,.2);margin-bottom:16px">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2.5"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
+          <span style="font-size:11px;font-weight:600;color:var(--amber);letter-spacing:.03em">MEMBERSHIP PAUSED</span>
         </div>
-        <div style="font-size:12px;color:rgba(255,255,255,.45);margin-bottom:14px">James Mitchell &middot; Paused June 1, 2026</div>
-        <div style="padding:6px 14px;background:rgba(194,121,10,.12);border:1px solid rgba(194,121,10,.15);border-radius:8px;font-size:11px;font-weight:600;color:var(--amber);display:inline-block">MEMBERSHIP PAUSED</div>
+        <div style="font-family:var(--font-heading);font-size:20px;font-weight:700;color:#fff;line-height:1.25;margin-bottom:6px">Monitoring has been paused</div>
+        <div style="font-size:13px;color:rgba(255,255,255,.5);line-height:1.5;margin-bottom:20px">Your financial history is preserved. Resume anytime.</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.35);margin-bottom:20px">$3/mo · Cancel anytime</div>
+        <button class="btn" style="background:var(--amber);color:#fff;margin-bottom:8px">Resume Membership</button>
+        <div style="text-align:center;font-size:13px;color:rgba(255,255,255,.45);padding:10px 0;cursor:pointer">View My Data</div>
       </div>
     </div>
-    <div style="margin-bottom:16px">
-      <div style="font-family:var(--font-heading);font-size:16px;font-weight:700;color:#fff;margin-bottom:4px">Advizmo has paused monitoring your finances</div>
-      <div style="font-size:13px;color:rgba(255,255,255,.45);line-height:1.4">Your data remains safe. Resume anytime to pick up where you left off.</div>
+
+    <div style="font-size:11px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:.06em;margin:8px 0 10px">Net Worth</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px">
+      <div style="background:#fff;border-radius:14px;padding:14px 16px;border:0.5px solid rgba(0,0,0,.04)"><div style="font-size:11px;color:#8e8e93;margin-bottom:3px">Total Balance</div><div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:var(--text)">$48,200</div></div>
+      <div style="background:#fff;border-radius:14px;padding:14px 16px;border:0.5px solid rgba(0,0,0,.04)"><div style="font-size:11px;color:#8e8e93;margin-bottom:3px">Safe to Invest</div><div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:#c7c7cc">Paused</div></div>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
-      <div style="background:rgba(22,111,71,.08);border:1px solid rgba(22,111,71,.12);border-radius:14px;padding:14px">
-        <div style="font-family:var(--font-heading);font-size:12px;font-weight:600;color:var(--green);margin-bottom:10px">Still available</div>
-        <div style="display:flex;flex-direction:column;gap:8px">
-          <div style="display:flex;align-items:center;gap:8px"><div style="width:5px;height:5px;border-radius:50%;background:var(--green);flex-shrink:0"></div><div style="font-size:11px;color:rgba(255,255,255,.6)">Connected accounts</div></div>
-          <div style="display:flex;align-items:center;gap:8px"><div style="width:5px;height:5px;border-radius:50%;background:var(--green);flex-shrink:0"></div><div style="font-size:11px;color:rgba(255,255,255,.6)">Investment history</div></div>
-          <div style="display:flex;align-items:center;gap:8px"><div style="width:5px;height:5px;border-radius:50%;background:var(--green);flex-shrink:0"></div><div style="font-size:11px;color:rgba(255,255,255,.6)">Financial goals</div></div>
-          <div style="display:flex;align-items:center;gap:8px"><div style="width:5px;height:5px;border-radius:50%;background:var(--green);flex-shrink:0"></div><div style="font-size:11px;color:rgba(255,255,255,.6)">Targets</div></div>
-        </div>
-      </div>
-      <div style="background:rgba(194,121,10,.08);border:1px solid rgba(194,121,10,.12);border-radius:14px;padding:14px">
-        <div style="font-family:var(--font-heading);font-size:12px;font-weight:600;color:var(--amber);margin-bottom:10px">Paused</div>
-        <div style="display:flex;flex-direction:column;gap:8px">
-          <div style="display:flex;align-items:center;gap:8px"><div style="width:5px;height:5px;border-radius:50%;background:var(--amber);flex-shrink:0"></div><div style="font-size:11px;color:rgba(255,255,255,.6)">Balance refreshes</div></div>
-          <div style="display:flex;align-items:center;gap:8px"><div style="width:5px;height:5px;border-radius:50%;background:var(--amber);flex-shrink:0"></div><div style="font-size:11px;color:rgba(255,255,255,.6)">Recommendations</div></div>
-          <div style="display:flex;align-items:center;gap:8px"><div style="width:5px;height:5px;border-radius:50%;background:var(--amber);flex-shrink:0"></div><div style="font-size:11px;color:rgba(255,255,255,.6)">Smart alerts</div></div>
-          <div style="display:flex;align-items:center;gap:8px"><div style="width:5px;height:5px;border-radius:50%;background:var(--amber);flex-shrink:0"></div><div style="font-size:11px;color:rgba(255,255,255,.6)">Financial Health</div></div>
-        </div>
-      </div>
+
+    <div style="background:#1c1c1e;border-radius:16px;padding:16px;color:#fff">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><div style="width:8px;height:8px;border-radius:50%;background:var(--amber)"></div><div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.05em">AI Insight</div></div>
+      <div style="font-size:14px;color:rgba(255,255,255,.8);line-height:1.45">Your data is preserved. Resume membership to continue monitoring and recommendations.</div>
     </div>
-    <div style="background:rgba(255,255,255,.04);border-radius:14px;padding:16px;border:1px solid rgba(255,255,255,.06);margin-bottom:14px">
-      <div style="font-family:var(--font-heading);font-size:13px;font-weight:600;color:#fff;margin-bottom:10px">Resume Membership</div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid rgba(255,255,255,.06)"><div style="font-size:12px;color:rgba(255,255,255,.45)">Monthly</div><div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#fff">$3/mo</div></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid rgba(255,255,255,.06)"><div style="font-size:12px;color:rgba(255,255,255,.45)">Cancel anytime</div><div style="font-size:12px;color:var(--green);font-weight:600">Free</div></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid rgba(255,255,255,.06)"><div style="font-size:12px;color:rgba(255,255,255,.45)">Advisory fee</div><div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#fff">0.25%</div></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0"><div style="font-size:12px;color:rgba(255,255,255,.45)">Hidden fees</div><div style="font-size:12px;color:var(--green);font-weight:600">None</div></div>
-    </div>
-    <button class="btn btn-blue" style="margin-bottom:8px">Resume Membership</button>
-    <button class="btn" style="background:rgba(255,255,255,.06);color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.08)">View My Data</button>
   </div>
   <div class="bottom-nav">
     <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</div>
@@ -532,55 +486,50 @@
 </section>
 <hr class="divider">
 
-<!-- P8: DASHBOARD PAUSED -->
+<!-- P8: Glass Surface Paused -->
 <section id="p8">
-<div class="concept-label">Experience 08 <span>Dashboard Paused</span></div>
+<div class="concept-label">P8 <span>Glass Surface Paused</span></div>
 <div class="phone-wrap"><div class="phone">
-<div class="phone-screen" style="background:var(--bg)">
+<div class="phone-screen" style="background:linear-gradient(180deg,#e8ecf0 0%,#f2f2f7 100%)">
   <div class="dynamic-island"></div>
   <div class="status-bar" style="color:#1c1c1e"><div class="left" style="color:#1c1c1e">9:41</div>
     <div class="right" style="color:#1c1c1e"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 7h2v6H1V7zm4-3h2v9H5V4zm4-2h2v11H9V2zm4-2h2v13h-2V0z"/></svg><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 3C4.5 3 1.5 5 0 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5zm0 8.5A3.5 3.5 0 118 4.5a3.5 3.5 0 010 7z"/></svg><svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="0" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="9" height="8" rx="1" fill="currentColor"/><rect x="17" y="3.5" width="2.5" height="5" rx="1"/></svg></div>
   </div>
-  <div class="phone-content" style="padding:4px 20px 90px">
-    <div style="padding:8px 0 4px;margin-bottom:12px">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><div style="padding:3px 10px;background:var(--amber-bg);border-radius:6px;font-size:10px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:.04em">Paused</div></div>
-      <div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:#1c1c1e">Monitoring Paused</div>
+  <div class="phone-content">
+    <div style="padding:8px 0 4px">
+      <div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:var(--text)">Welcome back, James</div>
+      <div style="font-size:11px;color:var(--text2)">Friday, Jun 13</div>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
-      <div style="background:#fff;border-radius:14px;padding:14px;border:0.5px solid rgba(0,0,0,.04);opacity:.7">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div style="width:32px;height:32px;border-radius:8px;background:var(--amber-bg);display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div><span class="pill pill-amber">Paused</span></div>
-        <div style="font-family:var(--font-heading);font-size:13px;font-weight:600;color:#1c1c1e;margin-bottom:2px">Account Monitoring</div>
-        <div style="font-size:11px;color:#8e8e93">Last checked Jun 1</div>
-      </div>
-      <div style="background:#fff;border-radius:14px;padding:14px;border:0.5px solid rgba(0,0,0,.04);opacity:.7">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div style="width:32px;height:32px;border-radius:8px;background:var(--amber-bg);display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><span class="pill pill-amber">Paused</span></div>
-        <div style="font-family:var(--font-heading);font-size:13px;font-weight:600;color:#1c1c1e;margin-bottom:2px">Recommendations</div>
-        <div style="font-size:11px;color:#8e8e93">12 delivered</div>
-      </div>
-      <div style="background:#fff;border-radius:14px;padding:14px;border:0.5px solid rgba(0,0,0,.04);opacity:.7">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div style="width:32px;height:32px;border-radius:8px;background:var(--amber-bg);display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div><span class="pill pill-amber">Paused</span></div>
-        <div style="font-family:var(--font-heading);font-size:13px;font-weight:600;color:#1c1c1e;margin-bottom:2px">Smart Alerts</div>
-        <div style="font-size:11px;color:#8e8e93">No new alerts</div>
-      </div>
-      <div style="background:#fff;border-radius:14px;padding:14px;border:0.5px solid rgba(0,0,0,.04);opacity:.7">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div style="width:32px;height:32px;border-radius:8px;background:var(--amber-bg);display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg></div><span class="pill pill-amber">Paused</span></div>
-        <div style="font-family:var(--font-heading);font-size:13px;font-weight:600;color:#1c1c1e;margin-bottom:2px">Financial Health</div>
-        <div style="font-size:11px;color:#8e8e93">Score frozen at 87</div>
-      </div>
+    <div style="display:flex;gap:0;margin-bottom:16px;border-bottom:1px solid var(--border)">
+      <div style="padding:8px 12px;font-size:12px;font-weight:600;color:var(--blue);border-bottom:2px solid var(--blue)">Overview</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Accounts</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Targets</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Actions</div>
     </div>
-    <div style="background:#fff;border-radius:14px;padding:16px 18px;margin-bottom:14px;border:0.5px solid rgba(0,0,0,.04)">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div style="width:32px;height:32px;border-radius:8px;background:var(--green-bg);display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div style="font-family:var(--font-heading);font-size:13px;font-weight:600;color:#1c1c1e">Your data remains safe</div></div>
-      <div style="font-size:12px;color:#8e8e93;line-height:1.5;padding-left:42px">All connected accounts, investment history, financial goals, and AI conversations are preserved. Resume anytime to continue.</div>
+
+    <!-- MEMBERSHIP CARD: Paused - Glass -->
+    <div style="background:rgba(255,255,255,.65);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.8);border-radius:20px;padding:24px 20px;box-shadow:0 4px 24px rgba(0,0,0,.06);margin-bottom:16px">
+      <div style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:8px;background:rgba(194,121,10,.08);border:1px solid rgba(194,121,10,.15);margin-bottom:14px">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2.5"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
+        <span style="font-size:11px;font-weight:600;color:var(--amber);letter-spacing:.03em">MEMBERSHIP PAUSED</span>
+      </div>
+      <div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:6px">Your Advizmo is paused</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.5;margin-bottom:14px">Everything remains safe. Resume to continue.</div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:18px">$3/mo · Cancel anytime</div>
+      <button class="btn" style="background:var(--amber);color:#fff;margin-bottom:8px">Reactivate</button>
+      <div style="text-align:center;font-size:13px;color:var(--text2);padding:10px 0;cursor:pointer">Learn More</div>
     </div>
-    <div style="background:#fff;border-radius:14px;padding:16px 18px;margin-bottom:14px;border:0.5px solid rgba(0,0,0,.04)">
-      <div style="font-family:var(--font-heading);font-size:13px;font-weight:600;color:#1c1c1e;margin-bottom:10px">Resume</div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid rgba(0,0,0,.04)"><div style="font-size:12px;color:#8e8e93">Monthly</div><div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#1c1c1e">$3/mo</div></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid rgba(0,0,0,.04)"><div style="font-size:12px;color:#8e8e93">Cancel anytime</div><div style="font-size:12px;color:var(--green);font-weight:600">Free</div></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid rgba(0,0,0,.04)"><div style="font-size:12px;color:#8e8e93">Advisory fee</div><div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#1c1c1e">0.25%</div></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0"><div style="font-size:12px;color:#8e8e93">Hidden fees</div><div style="font-size:12px;color:var(--green);font-weight:600">None</div></div>
+
+    <div style="font-size:11px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:.06em;margin:8px 0 10px">Net Worth</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px">
+      <div style="background:#fff;border-radius:14px;padding:14px 16px;border:0.5px solid rgba(0,0,0,.04)"><div style="font-size:11px;color:#8e8e93;margin-bottom:3px">Total Balance</div><div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:var(--text)">$48,200</div></div>
+      <div style="background:#fff;border-radius:14px;padding:14px 16px;border:0.5px solid rgba(0,0,0,.04)"><div style="font-size:11px;color:#8e8e93;margin-bottom:3px">Safe to Invest</div><div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:#c7c7cc">Paused</div></div>
     </div>
-    <button class="btn btn-blue" style="margin-bottom:8px">Resume Monitoring</button>
-    <button class="btn" style="background:transparent;color:var(--blue);font-weight:600;border:1px solid var(--blue)">Manage Billing</button>
+
+    <div style="background:#1c1c1e;border-radius:16px;padding:16px;color:#fff">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><div style="width:8px;height:8px;border-radius:50%;background:var(--amber)"></div><div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.05em">AI Insight</div></div>
+      <div style="font-size:14px;color:rgba(255,255,255,.8);line-height:1.45">Your data is preserved. Resume membership to continue monitoring and recommendations.</div>
+    </div>
   </div>
   <div class="bottom-nav">
     <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</div>
@@ -593,53 +542,54 @@
 </section>
 <hr class="divider">
 
-<!-- P9: REASSURANCE FIRST -->
+<!-- P9: Reassurance Card -->
 <section id="p9">
-<div class="concept-label">Experience 09 <span>Reassurance First</span></div>
+<div class="concept-label">P9 <span>Reassurance Card</span></div>
 <div class="phone-wrap"><div class="phone">
 <div class="phone-screen" style="background:var(--bg)">
   <div class="dynamic-island"></div>
   <div class="status-bar" style="color:#1c1c1e"><div class="left" style="color:#1c1c1e">9:41</div>
     <div class="right" style="color:#1c1c1e"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 7h2v6H1V7zm4-3h2v9H5V4zm4-2h2v11H9V2zm4-2h2v13h-2V0z"/></svg><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 3C4.5 3 1.5 5 0 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5zm0 8.5A3.5 3.5 0 118 4.5a3.5 3.5 0 010 7z"/></svg><svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="0" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="9" height="8" rx="1" fill="currentColor"/><rect x="17" y="3.5" width="2.5" height="5" rx="1"/></svg></div>
   </div>
-  <div class="phone-content" style="padding:4px 20px 90px">
-    <div style="background:linear-gradient(135deg,var(--green),#0d9b5a);border-radius:20px;padding:28px 22px;color:#fff;position:relative;overflow:hidden;margin-bottom:16px">
-      <div style="position:absolute;top:-40px;right:-40px;width:140px;height:140px;background:rgba(255,255,255,.08);border-radius:50%"></div>
-      <div style="position:absolute;bottom:-30px;left:-20px;width:100px;height:100px;background:rgba(255,255,255,.05);border-radius:50%"></div>
-      <div style="position:relative;z-index:2;text-align:center">
-        <div style="width:56px;height:56px;border-radius:16px;background:rgba(255,255,255,.15);margin:0 auto 14px;display:flex;align-items:center;justify-content:center"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-        <div style="font-family:var(--font-heading);font-size:20px;font-weight:700;color:#fff;line-height:1.3;margin-bottom:6px">Everything you've built stays exactly as it is</div>
-        <div style="font-size:13px;color:rgba(255,255,255,.7);line-height:1.4">Your membership has paused, but your financial foundation remains intact.</div>
+  <div class="phone-content">
+    <div style="padding:8px 0 4px">
+      <div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:var(--text)">Welcome back, James</div>
+      <div style="font-size:11px;color:var(--text2)">Friday, Jun 13</div>
+    </div>
+    <div style="display:flex;gap:0;margin-bottom:16px;border-bottom:1px solid var(--border)">
+      <div style="padding:8px 12px;font-size:12px;font-weight:600;color:var(--blue);border-bottom:2px solid var(--blue)">Overview</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Accounts</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Targets</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Actions</div>
+    </div>
+
+    <!-- MEMBERSHIP CARD: Paused - Reassurance with green accent -->
+    <div style="background:#fff;border-radius:16px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.04);margin-bottom:16px;border-left:3px solid var(--green)">
+      <div style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:8px;background:var(--amber-bg);margin-bottom:14px">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2.5"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
+        <span style="font-size:11px;font-weight:600;color:var(--amber);letter-spacing:.03em">MEMBERSHIP PAUSED</span>
       </div>
-    </div>
-    <div style="background:#fff;border-radius:14px;padding:16px 18px;margin-bottom:10px;border:0.5px solid rgba(0,0,0,.04)">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><div style="width:28px;height:28px;border-radius:8px;background:var(--green-bg);display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div><div style="font-family:var(--font-heading);font-size:14px;font-weight:600;color:#1c1c1e">What's preserved</div></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
-        <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--green-bg);border-radius:8px"><div style="width:5px;height:5px;border-radius:50%;background:var(--green);flex-shrink:0"></div><div style="font-size:11px;font-weight:500;color:var(--green)">Connected accounts</div></div>
-        <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--green-bg);border-radius:8px"><div style="width:5px;height:5px;border-radius:50%;background:var(--green);flex-shrink:0"></div><div style="font-size:11px;font-weight:500;color:var(--green)">Investment history</div></div>
-        <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--green-bg);border-radius:8px"><div style="width:5px;height:5px;border-radius:50%;background:var(--green);flex-shrink:0"></div><div style="font-size:11px;font-weight:500;color:var(--green)">Financial goals</div></div>
-        <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--green-bg);border-radius:8px"><div style="width:5px;height:5px;border-radius:50%;background:var(--green);flex-shrink:0"></div><div style="font-size:11px;font-weight:500;color:var(--green)">Targets</div></div>
-        <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--green-bg);border-radius:8px;grid-column:1/-1"><div style="width:5px;height:5px;border-radius:50%;background:var(--green);flex-shrink:0"></div><div style="font-size:11px;font-weight:500;color:var(--green)">AI conversations</div></div>
+      <div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:6px">Everything stays exactly as it is</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.5;margin-bottom:14px">Monitoring paused. Your data remains secure.</div>
+      <div style="display:flex;align-items:center;gap:6px;padding:8px 12px;background:var(--green-bg);border-radius:10px;margin-bottom:14px">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+        <span style="font-size:12px;color:var(--green);font-weight:500">Your data is safe and preserved</span>
       </div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:16px">$3/mo · Cancel anytime</div>
+      <button class="btn btn-blue" style="margin-bottom:8px">Resume Membership</button>
+      <div style="text-align:center;font-size:13px;color:var(--text2);padding:10px 0;cursor:pointer">View Billing</div>
     </div>
-    <div style="background:#fff;border-radius:14px;padding:16px 18px;margin-bottom:14px;border:0.5px solid rgba(0,0,0,.04)">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><div style="width:28px;height:28px;border-radius:8px;background:var(--amber-bg);display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M10 15V9M14 15V9"/></svg></div><div style="font-family:var(--font-heading);font-size:14px;font-weight:600;color:#1c1c1e">What's paused</div></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
-        <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--amber-bg);border-radius:8px"><div style="width:5px;height:5px;border-radius:50%;background:var(--amber);flex-shrink:0"></div><div style="font-size:11px;font-weight:500;color:var(--amber)">Balance refreshes</div></div>
-        <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--amber-bg);border-radius:8px"><div style="width:5px;height:5px;border-radius:50%;background:var(--amber);flex-shrink:0"></div><div style="font-size:11px;font-weight:500;color:var(--amber)">Smart alerts</div></div>
-        <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--amber-bg);border-radius:8px"><div style="width:5px;height:5px;border-radius:50%;background:var(--amber);flex-shrink:0"></div><div style="font-size:11px;font-weight:500;color:var(--amber)">Recommendations</div></div>
-        <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--amber-bg);border-radius:8px"><div style="width:5px;height:5px;border-radius:50%;background:var(--amber);flex-shrink:0"></div><div style="font-size:11px;font-weight:500;color:var(--amber)">Financial Health</div></div>
-      </div>
+
+    <div style="font-size:11px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:.06em;margin:8px 0 10px">Net Worth</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px">
+      <div style="background:#fff;border-radius:14px;padding:14px 16px;border:0.5px solid rgba(0,0,0,.04)"><div style="font-size:11px;color:#8e8e93;margin-bottom:3px">Total Balance</div><div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:var(--text)">$48,200</div></div>
+      <div style="background:#fff;border-radius:14px;padding:14px 16px;border:0.5px solid rgba(0,0,0,.04)"><div style="font-size:11px;color:#8e8e93;margin-bottom:3px">Safe to Invest</div><div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:#c7c7cc">Paused</div></div>
     </div>
-    <div style="background:#fff;border-radius:14px;padding:16px 18px;margin-bottom:14px;border:0.5px solid rgba(0,0,0,.04)">
-      <div style="font-family:var(--font-heading);font-size:13px;font-weight:600;color:#1c1c1e;margin-bottom:10px">Resume</div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid rgba(0,0,0,.04)"><div style="font-size:12px;color:#8e8e93">Monthly</div><div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#1c1c1e">$3/mo</div></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid rgba(0,0,0,.04)"><div style="font-size:12px;color:#8e8e93">Cancel anytime</div><div style="font-size:12px;color:var(--green);font-weight:600">Free</div></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid rgba(0,0,0,.04)"><div style="font-size:12px;color:#8e8e93">Advisory fee</div><div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#1c1c1e">0.25%</div></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0"><div style="font-size:12px;color:#8e8e93">Hidden fees</div><div style="font-size:12px;color:var(--green);font-weight:600">None</div></div>
+
+    <div style="background:#1c1c1e;border-radius:16px;padding:16px;color:#fff">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><div style="width:8px;height:8px;border-radius:50%;background:var(--amber)"></div><div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.05em">AI Insight</div></div>
+      <div style="font-size:14px;color:rgba(255,255,255,.8);line-height:1.45">Your data is preserved. Resume membership to continue monitoring and recommendations.</div>
     </div>
-    <button class="btn btn-blue" style="margin-bottom:8px">Reactivate My Account</button>
-    <button class="btn" style="background:transparent;color:var(--blue);font-weight:600;border:1px solid var(--blue)">Learn More</button>
   </div>
   <div class="bottom-nav">
     <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</div>
@@ -652,59 +602,52 @@
 </section>
 <hr class="divider">
 
-<!-- P10: CONTINUE YOUR FINANCIAL JOURNEY -->
+<!-- P10: Minimal Status Panel -->
 <section id="p10">
-<div class="concept-label">Experience 10 <span>Continue Your Financial Journey</span></div>
+<div class="concept-label">P10 <span>Minimal Status Panel</span></div>
 <div class="phone-wrap"><div class="phone">
 <div class="phone-screen" style="background:var(--bg)">
   <div class="dynamic-island"></div>
   <div class="status-bar" style="color:#1c1c1e"><div class="left" style="color:#1c1c1e">9:41</div>
     <div class="right" style="color:#1c1c1e"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 7h2v6H1V7zm4-3h2v9H5V4zm4-2h2v11H9V2zm4-2h2v13h-2V0z"/></svg><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 3C4.5 3 1.5 5 0 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5zm0 8.5A3.5 3.5 0 118 4.5a3.5 3.5 0 010 7z"/></svg><svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="0" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="9" height="8" rx="1" fill="currentColor"/><rect x="17" y="3.5" width="2.5" height="5" rx="1"/></svg></div>
   </div>
-  <div class="phone-content" style="padding:4px 20px 90px">
-    <div style="background:linear-gradient(135deg,#5856d6,var(--blue));border-radius:20px;padding:28px 22px;color:#fff;position:relative;overflow:hidden;margin-bottom:16px">
-      <div style="position:absolute;top:-40px;right:-40px;width:140px;height:140px;background:rgba(255,255,255,.08);border-radius:50%"></div>
-      <div style="position:absolute;bottom:-30px;left:-20px;width:100px;height:100px;background:rgba(255,255,255,.05);border-radius:50%"></div>
-      <div style="position:relative;z-index:2;text-align:center">
-        <div style="width:56px;height:56px;border-radius:16px;background:rgba(255,255,255,.15);margin:0 auto 14px;display:flex;align-items:center;justify-content:center"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
-        <div style="font-family:var(--font-heading);font-size:20px;font-weight:700;color:#fff;line-height:1.3;margin-bottom:6px">Resume your financial journey</div>
-        <div style="font-size:13px;color:rgba(255,255,255,.7);line-height:1.4">Everything resumes instantly after reactivation.</div>
+  <div class="phone-content">
+    <div style="padding:8px 0 4px">
+      <div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:var(--text)">Welcome back, James</div>
+      <div style="font-size:11px;color:var(--text2)">Friday, Jun 13</div>
+    </div>
+    <div style="display:flex;gap:0;margin-bottom:16px;border-bottom:1px solid var(--border)">
+      <div style="padding:8px 12px;font-size:12px;font-weight:600;color:var(--blue);border-bottom:2px solid var(--blue)">Overview</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Accounts</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Targets</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Actions</div>
+    </div>
+
+    <!-- MEMBERSHIP CARD: Paused - Ultra Minimal -->
+    <div style="background:#fff;border-radius:16px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.04);margin-bottom:16px;text-align:center">
+      <div style="width:48px;height:48px;border-radius:14px;background:var(--amber-bg);display:flex;align-items:center;justify-content:center;margin:0 auto 14px">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
       </div>
-    </div>
-    <div style="margin-bottom:16px">
-      <div style="font-family:var(--font-heading);font-size:16px;font-weight:700;color:#1c1c1e;margin-bottom:12px">What you built before</div>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <div style="display:flex;align-items:center;gap:12px;padding:12px;background:#fff;border-radius:12px;border:0.5px solid rgba(0,0,0,.04)">
-          <div style="width:40px;height:40px;border-radius:10px;background:var(--green-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
-          <div style="flex:1"><div style="font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;color:#1c1c1e">3 accounts connected</div><div style="font-size:11px;color:#8e8e93">Monitoring your complete financial picture</div></div>
-        </div>
-        <div style="display:flex;align-items:center;gap:12px;padding:12px;background:#fff;border-radius:12px;border:0.5px solid rgba(0,0,0,.04)">
-          <div style="width:40px;height:40px;border-radius:10px;background:#e0f0ff;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
-          <div style="flex:1"><div style="font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;color:#1c1c1e">$1,830 identified</div><div style="font-size:11px;color:#8e8e93">Safe to invest amount calculated</div></div>
-        </div>
-        <div style="display:flex;align-items:center;gap:12px;padding:12px;background:#fff;border-radius:12px;border:0.5px solid rgba(0,0,0,.04)">
-          <div style="width:40px;height:40px;border-radius:10px;background:rgba(139,92,246,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg></div>
-          <div style="flex:1"><div style="font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;color:#1c1c1e">Score: 87/100</div><div style="font-size:11px;color:#8e8e93">Financial health score tracked</div></div>
-        </div>
+      <div style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:8px;background:var(--amber-bg);margin-bottom:14px">
+        <span style="font-size:11px;font-weight:600;color:var(--amber);letter-spacing:.03em">MEMBERSHIP PAUSED</span>
       </div>
+      <div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:6px">Continue your financial journey</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.5;margin-bottom:12px">Resume to pick up where you left off.</div>
+      <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:18px">$3/mo</div>
+      <button class="btn btn-blue" style="margin-bottom:8px">Continue Where I Left Off</button>
+      <div style="text-align:center;font-size:13px;color:var(--text2);padding:10px 0;cursor:pointer">Maybe Later</div>
     </div>
-    <div style="background:#fff;border-radius:14px;padding:16px 18px;margin-bottom:14px;border:0.5px solid rgba(0,0,0,.04)">
-      <div style="font-family:var(--font-heading);font-size:13px;font-weight:600;color:#1c1c1e;margin-bottom:10px">Benefits of returning</div>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--green-bg);border-radius:10px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><div style="font-size:12px;font-weight:500;color:var(--green)">Instant monitoring resume</div></div>
-        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--green-bg);border-radius:10px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><div style="font-size:12px;font-weight:500;color:var(--green)">No data lost, pick up where you left off</div></div>
-        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--green-bg);border-radius:10px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><div style="font-size:12px;font-weight:500;color:var(--green)">Continue receiving personalized insights</div></div>
-      </div>
+
+    <div style="font-size:11px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:.06em;margin:8px 0 10px">Net Worth</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px">
+      <div style="background:#fff;border-radius:14px;padding:14px 16px;border:0.5px solid rgba(0,0,0,.04)"><div style="font-size:11px;color:#8e8e93;margin-bottom:3px">Total Balance</div><div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:var(--text)">$48,200</div></div>
+      <div style="background:#fff;border-radius:14px;padding:14px 16px;border:0.5px solid rgba(0,0,0,.04)"><div style="font-size:11px;color:#8e8e93;margin-bottom:3px">Safe to Invest</div><div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:#c7c7cc">Paused</div></div>
     </div>
-    <div style="background:#fff;border-radius:14px;padding:16px 18px;margin-bottom:14px;border:0.5px solid rgba(0,0,0,.04)">
-      <div style="font-family:var(--font-heading);font-size:13px;font-weight:600;color:#1c1c1e;margin-bottom:10px">Membership</div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid rgba(0,0,0,.04)"><div style="font-size:12px;color:#8e8e93">Monthly</div><div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#1c1c1e">$3/mo</div></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid rgba(0,0,0,.04)"><div style="font-size:12px;color:#8e8e93">Cancel anytime</div><div style="font-size:12px;color:var(--green);font-weight:600">Free</div></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid rgba(0,0,0,.04)"><div style="font-size:12px;color:#8e8e93">Advisory fee</div><div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#1c1c1e">0.25%</div></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0"><div style="font-size:12px;color:#8e8e93">Hidden fees</div><div style="font-size:12px;color:var(--green);font-weight:600">None</div></div>
+
+    <div style="background:#1c1c1e;border-radius:16px;padding:16px;color:#fff">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><div style="width:8px;height:8px;border-radius:50%;background:var(--amber)"></div><div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.05em">AI Insight</div></div>
+      <div style="font-size:14px;color:rgba(255,255,255,.8);line-height:1.45">Your data is preserved. Resume membership to continue monitoring and recommendations.</div>
     </div>
-    <button class="btn btn-blue" style="margin-bottom:8px">Continue Where I Left Off</button>
-    <button class="btn" style="background:transparent;color:var(--blue);font-weight:600;border:1px solid var(--blue)">View Membership</button>
   </div>
   <div class="bottom-nav">
     <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</div>
@@ -715,6 +658,7 @@
   </div>
 </div></div></div>
 </section>
+
   </div>
   <script>
     document.querySelectorAll('.sidebar-nav a').forEach(function(link){
