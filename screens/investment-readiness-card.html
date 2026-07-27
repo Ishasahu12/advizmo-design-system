@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Investment Readiness Card - Advizmo Design System</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#f2f2f7;--card:#fff;--text:#1c1c1e;--text2:#8e8e93;--border:rgba(0,0,0,.06);--blue:#0a84ff;--green:#166f47;--green-bg:#e8f8ec;--amber:#c2790a;--amber-bg:#fff5e6;--red:#b91c1c;--red-bg:#ffe8e8;--sidebar-bg:#1c1c1e;--font-heading:'IBM Plex Sans',sans-serif;--font-body:'Inter',sans-serif}
+    html{scroll-behavior:smooth}
+    body{font-family:var(--font-body);background:#0d0d0d;color:#fff;display:flex;min-height:100vh}
+    .sidebar{position:fixed;left:0;top:0;bottom:0;width:260px;background:var(--sidebar-bg);padding:32px 0;display:flex;flex-direction:column;z-index:100}
+    .sidebar-brand{padding:0 24px 28px;border-bottom:1px solid rgba(255,255,255,.08)}
+    .sidebar-brand h1{font-family:var(--font-heading);font-size:17px;font-weight:700;color:#fff;letter-spacing:-.2px}
+    .sidebar-brand p{font-size:11px;color:rgba(255,255,255,.4);margin-top:4px;text-transform:uppercase;letter-spacing:.5px}
+    .sidebar-nav{flex:1;padding:16px 12px;overflow-y:auto}
+    .sidebar-nav a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;color:rgba(255,255,255,.55);font-size:13px;font-weight:500;text-decoration:none;transition:all .2s}
+    .sidebar-nav a:hover{color:#fff;background:rgba(255,255,255,.06)}
+    .sidebar-nav a.active{color:#fff;background:rgba(10,132,255,.18)}
+    .sidebar-nav a .num{font-size:10px;font-weight:600;background:rgba(255,255,255,.08);width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.4);flex-shrink:0}
+    .sidebar-nav a.active .num{background:rgba(10,132,255,.3);color:#0a84ff}
+    .sidebar-nav a:hover .num{background:rgba(255,255,255,.12)}
+    .sidebar-footer{padding:16px 24px;border-top:1px solid rgba(255,255,255,.08)}
+    .sidebar-footer a{font-size:12px;color:rgba(255,255,255,.35);text-decoration:none;display:flex;align-items:center;gap:8px;transition:color .2s}
+    .sidebar-footer a:hover{color:rgba(255,255,255,.7)}
+    .main{margin-left:260px;flex:1;padding:40px 48px 80px;max-width:1400px}
+    .main h2{font-family:var(--font-heading);font-size:28px;font-weight:700;color:#fff;margin-bottom:6px}
+    .section-subtitle{font-size:14px;color:rgba(255,255,255,.4);margin-bottom:48px;max-width:600px;line-height:1.5}
+    .concept-label{font-family:var(--font-heading);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:rgba(255,255,255,.3);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+    .concept-label span{background:rgba(255,255,255,.06);padding:3px 10px;border-radius:6px;color:rgba(255,255,255,.5)}
+    .concept-desc{font-size:12px;color:rgba(255,255,255,.3);margin-bottom:20px;line-height:1.5}
+    .phone-row{display:flex;gap:24px;justify-content:center;padding:24px 0;flex-wrap:nowrap}
+    .phone-wrap{display:flex;justify-content:center;padding:0}
+    .phone{width:393px;background:#000;border-radius:44px;padding:12px;box-shadow:0 20px 60px rgba(0,0,0,.5);position:relative;flex-shrink:0}
+    .phone-screen{border-radius:34px;min-height:852px;position:relative;overflow:hidden;display:flex;flex-direction:column}
+    .status-bar{display:flex;justify-content:space-between;align-items:center;padding:10px 24px 6px;font-size:14px;font-weight:600;color:#fff;position:relative;z-index:5}
+    .dynamic-island{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:85px;height:22px;background:#000;border-radius:20px;z-index:10}
+    .bottom-nav{position:absolute;bottom:0;left:0;right:0;display:flex;justify-content:space-around;align-items:center;padding:10px 16px 28px;background:rgba(30,30,30,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,.06);z-index:5}
+    .bottom-nav .nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;color:rgba(255,255,255,.35);font-weight:500}
+    .bottom-nav .nav-item.active{color:var(--blue)}
+    .bottom-nav .nav-item svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8}
+    .phone-content{flex:1;padding:4px 20px 90px;overflow:hidden;display:flex;flex-direction:column}
+    hr.divider{border:none;border-top:1px solid rgba(255,255,255,.06);margin:56px 0}
+    .v-label{font-size:11px;font-weight:600;color:rgba(255,255,255,.25);text-align:center;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+    @keyframes glow{0%,100%{box-shadow:0 0 8px rgba(10,132,255,.3)}50%{box-shadow:0 0 16px rgba(10,132,255,.6)}}
+    ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:4px}
+  </style>
+</head>
+<body>
+  <nav class="sidebar">
+    <div class="sidebar-brand"><h1>Investment Readiness</h1><p>Advizmo Design System</p></div>
+    <div class="sidebar-nav">
+      <a href="#c1" class="active"><span class="num">1</span>Investment Journey</a>
+      <a href="#c2"><span class="num">2</span>Decision Card</a>
+      <a href="#c3"><span class="num">3</span>Readiness Score</a>
+      <a href="#c4"><span class="num">4</span>Next Best Action</a>
+      <a href="#c5"><span class="num">5</span>Investment Workspace</a>
+    </div>
+    <div class="sidebar-footer"><a href="../index.html">&larr; Back to Index</a></div>
+  </nav>
+  <div class="main">
+    <h2>Investment Readiness Card</h2>
+    <p class="section-subtitle">5 concepts for the Investment Readiness Card, each with 4 lifecycle versions. Shows the journey from no accounts connected to fully ready to invest.</p>
+
+<!-- ======================== CONCEPT 1: INVESTMENT JOURNEY ======================== -->
+<section id="c1">
+<div class="concept-label">Concept 01 <span>Investment Journey</span></div>
+<div class="concept-desc">Horizontal journey/timeline showing progress toward first investment.</div>
+<div class="phone-row">
+<div><div class="v-label">V1 - No Accounts</div><div class="phone-wrap"><div class="phone">
+<div class="phone-screen" style="background:var(--bg)">
+  <div class="dynamic-island"></div>
+  <div class="status-bar" style="color:#1c1c1e"><div class="left" style="color:#1c1c1e">9:41</div>
+    <div class="right" style="color:#1c1c1e"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 7h2v6H1V7zm4-3h2v9H5V4zm4-2h2v11H9V2zm4-2h2v13h-2V0z"/></svg><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 3C4.5 3 1.5 5 0 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5zm0 8.5A3.5 3.5 0 118 4.5a3.5 3.5 0 010 7z"/></svg><svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="0" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="9" height="8" rx="1" fill="currentColor"/><rect x="17" y="3.5" width="2.5" height="5" rx="1"/></svg></div>
+  </div>
+  <div class="phone-content">
+    <div style="padding:8px 0 4px"><div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:var(--text)">Invest</div></div>
+    <div style="display:flex;gap:0;margin-bottom:12px;border-bottom:1px solid var(--border)">
+      <div style="padding:8px 12px;font-size:12px;font-weight:600;color:var(--blue);border-bottom:2px solid var(--blue)">Readiness</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Portfolio</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Activity</div>
+    </div>
+    
+    <div style="background:#1c1c1e;border-radius:20px;padding:22px 20px;color:#fff;position:relative;overflow:hidden;margin-bottom:16px">
+      <div style="position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:rgba(10,132,255,.08);border-radius:50%"></div>
+      <div style="position:relative;z-index:2;margin-bottom:18px">
+        <div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:6px">Your investment journey</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.5);line-height:1.4">Connect accounts to see how much is safe to invest.</div>
+      </div>
+      <div style="position:relative;z-index:2;margin-bottom:18px">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,.3);margin-bottom:6px"><span>Start</span><span>Invest</span></div>
+        <div style="height:6px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden"><div style="width:0%;height:100%;background:var(--blue);border-radius:3px"></div></div>
+        <div style="text-align:center;margin-top:8px;font-size:11px;color:rgba(255,255,255,.4)">0% complete</div>
+      </div>
+      <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:12px">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(10,132,255,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+          <div style="flex:1"><div style="font-size:12px;font-weight:600;color:rgba(255,255,255,.9)">Connect accounts</div><div style="font-size:10px;color:rgba(255,255,255,.35)">Where your money lives</div></div>
+          <div style="width:20px;height:20px;border-radius:50%;border:2px solid rgba(255,255,255,.15)"></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.04);border-radius:12px;opacity:.4">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+          <div style="flex:1"><div style="font-size:12px;font-weight:600;color:rgba(255,255,255,.5)">Choose method</div><div style="font-size:10px;color:rgba(255,255,255,.25)">Direct or Auto Invest</div></div>
+          <div style="width:20px;height:20px;border-radius:50%;border:2px solid rgba(255,255,255,.08)"></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.04);border-radius:12px;opacity:.4">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg></div>
+          <div style="flex:1"><div style="font-size:12px;font-weight:600;color:rgba(255,255,255,.5)">Start investing</div><div style="font-size:10px;color:rgba(255,255,255,.25)">Grow your wealth</div></div>
+          <div style="width:20px;height:20px;border-radius:50%;border:2px solid rgba(255,255,255,.08)"></div>
+        </div>
+      </div>
+      <button style="width:100%;padding:13px;border:none;border-radius:12px;background:var(--blue);color:#fff;font-family:var(--font-body);font-size:14px;font-weight:600;cursor:pointer;position:relative;z-index:2">Connect your first account</button>
+    </div>
+    <div style="background:#fff;border-radius:14px;padding:14px 16px;border:0.5px solid rgba(0,0,0,.04);margin-bottom:10px">
+      <div style="font-size:12px;color:var(--text2);line-height:1.5">Without connected accounts, Advizmo cannot determine how much is safe to invest. Your idle cash could be working harder.</div>
+    </div>
+  </div>
+  <div class="bottom-nav">
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</div>
+    <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Invest</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path d="M9 12l2 2 4-4"/></svg>Insights</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Cashflow</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Activity</div>
+  </div>
+</div></div></div>
+</div>
+<div><div class="v-label">V2 - External Connected</div><div class="phone-wrap"><div class="phone">
+<div class="phone-screen" style="background:var(--bg)">
+  <div class="dynamic-island"></div>
+  <div class="status-bar" style="color:#1c1c1e"><div class="left" style="color:#1c1c1e">9:41</div>
+    <div class="right" style="color:#1c1c1e"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 7h2v6H1V7zm4-3h2v9H5V4zm4-2h2v11H9V2zm4-2h2v13h-2V0z"/></svg><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 3C4.5 3 1.5 5 0 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5zm0 8.5A3.5 3.5 0 118 4.5a3.5 3.5 0 010 7z"/></svg><svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="0" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="9" height="8" rx="1" fill="currentColor"/><rect x="17" y="3.5" width="2.5" height="5" rx="1"/></svg></div>
+  </div>
+  <div class="phone-content">
+    <div style="padding:8px 0 4px"><div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:var(--text)">Invest</div></div>
+    <div style="display:flex;gap:0;margin-bottom:12px;border-bottom:1px solid var(--border)">
+      <div style="padding:8px 12px;font-size:12px;font-weight:600;color:var(--blue);border-bottom:2px solid var(--blue)">Readiness</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Portfolio</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Activity</div>
+    </div>
+    
+    <div style="background:#1c1c1e;border-radius:20px;padding:22px 20px;color:#fff;position:relative;overflow:hidden;margin-bottom:16px">
+      <div style="position:absolute;top:-20px;right:-20px;width:100px;height:100px;background:rgba(22,111,71,.1);border-radius:50%"></div>
+      <div style="position:relative;z-index:2;margin-bottom:18px">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--green);margin-bottom:6px;display:flex;align-items:center;gap:6px"><span style="width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite"></span>Halfway there</div>
+        <div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:6px">Choose how to invest</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.5);line-height:1.4">Accounts connected. Pick a method to start investing.</div>
+      </div>
+      <div style="position:relative;z-index:2;margin-bottom:18px">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,.3);margin-bottom:6px"><span>Start</span><span>Invest</span></div>
+        <div style="height:6px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden"><div style="width:50%;height:100%;background:var(--green);border-radius:3px"></div></div>
+        <div style="text-align:center;margin-top:8px;font-size:11px;color:rgba(255,255,255,.4)">50% complete</div>
+      </div>
+      <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(22,111,71,.1);border:1px solid rgba(22,111,71,.2);border-radius:12px">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(22,111,71,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+          <div style="flex:1"><div style="font-size:12px;font-weight:600;color:rgba(255,255,255,.9)">Connect accounts</div><div style="font-size:10px;color:rgba(255,255,255,.5)">3 accounts linked</div></div>
+          <div style="width:20px;height:20px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:12px">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(10,132,255,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+          <div style="flex:1"><div style="font-size:12px;font-weight:600;color:rgba(255,255,255,.9)">Choose method</div><div style="font-size:10px;color:rgba(255,255,255,.4)">Direct or Auto Invest</div></div>
+          <div style="width:20px;height:20px;border-radius:50%;border:2px solid var(--blue);animation:glow 2s infinite"></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.04);border-radius:12px;opacity:.4">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg></div>
+          <div style="flex:1"><div style="font-size:12px;font-weight:600;color:rgba(255,255,255,.5)">Start investing</div><div style="font-size:10px;color:rgba(255,255,255,.25)">Grow your wealth</div></div>
+          <div style="width:20px;height:20px;border-radius:50%;border:2px solid rgba(255,255,255,.08)"></div>
+        </div>
+      </div>
+      <div style="position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px;text-align:center;cursor:pointer">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="2" style="margin-bottom:6px"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+          <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.9);margin-bottom:2px">Invest directly</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.4);line-height:1.3">From connected banks</div>
+        </div>
+        <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px;text-align:center;cursor:pointer">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="2" style="margin-bottom:6px"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.9);margin-bottom:2px">Open Auto Invest</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.4);line-height:1.3">Automated investing</div>
+        </div>
+      </div>
+    </div>
+    <div style="background:#fff;border-radius:14px;padding:14px 16px;border:0.5px solid rgba(0,0,0,.04);margin-bottom:10px">
+      <div style="font-size:12px;color:var(--text2);line-height:1.5">Both options let you invest. Direct investing uses your connected accounts. Auto Invest automates recurring investments.</div>
+    </div>
+  </div>
+  <div class="bottom-nav">
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</div>
+    <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Invest</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path d="M9 12l2 2 4-4"/></svg>Insights</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Cashflow</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Activity</div>
+  </div>
+</div></div></div>
+</div>
+<div><div class="v-label">V3 - Auto Invest Opened</div><div class="phone-wrap"><div class="phone">
+<div class="phone-screen" style="background:var(--bg)">
+  <div class="dynamic-island"></div>
+  <div class="status-bar" style="color:#1c1c1e"><div class="left" style="color:#1c1c1e">9:41</div>
+    <div class="right" style="color:#1c1c1e"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 7h2v6H1V7zm4-3h2v9H5V4zm4-2h2v11H9V2zm4-2h2v13h-2V0z"/></svg><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 3C4.5 3 1.5 5 0 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5zm0 8.5A3.5 3.5 0 118 4.5a3.5 3.5 0 010 7z"/></svg><svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="0" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="9" height="8" rx="1" fill="currentColor"/><rect x="17" y="3.5" width="2.5" height="5" rx="1"/></svg></div>
+  </div>
+  <div class="phone-content">
+    <div style="padding:8px 0 4px"><div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:var(--text)">Invest</div></div>
+    <div style="display:flex;gap:0;margin-bottom:12px;border-bottom:1px solid var(--border)">
+      <div style="padding:8px 12px;font-size:12px;font-weight:600;color:var(--blue);border-bottom:2px solid var(--blue)">Readiness</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Portfolio</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Activity</div>
+    </div>
+    
+    <div style="background:#1c1c1e;border-radius:20px;padding:22px 20px;color:#fff;position:relative;overflow:hidden;margin-bottom:16px">
+      <div style="position:absolute;top:-20px;left:-20px;width:100px;height:100px;background:rgba(10,132,255,.1);border-radius:50%"></div>
+      <div style="position:relative;z-index:2;margin-bottom:18px">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--blue);margin-bottom:6px;display:flex;align-items:center;gap:6px"><span style="width:6px;height:6px;border-radius:50%;background:var(--blue);animation:pulse 2s infinite"></span>Almost ready</div>
+        <div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:6px">Connect accounts for better recommendations</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.5);line-height:1.4">Auto Invest is open. Connect banks for direct investing and smarter suggestions.</div>
+      </div>
+      <div style="position:relative;z-index:2;margin-bottom:18px">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,.3);margin-bottom:6px"><span>Start</span><span>Invest</span></div>
+        <div style="height:6px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden"><div style="width:75%;height:100%;background:linear-gradient(90deg,var(--green),var(--blue));border-radius:3px"></div></div>
+        <div style="text-align:center;margin-top:8px;font-size:11px;color:rgba(255,255,255,.4)">75% complete</div>
+      </div>
+      <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:12px">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(22,111,71,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+          <div style="flex:1"><div style="font-size:12px;font-weight:600;color:rgba(255,255,255,.9)">Connect accounts</div><div style="font-size:10px;color:rgba(255,255,255,.5)">Add banks for direct investing</div></div>
+          <div style="font-size:10px;padding:3px 8px;border-radius:6px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.5);font-weight:600">Optional</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(22,111,71,.1);border:1px solid rgba(22,111,71,.2);border-radius:12px">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(22,111,71,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+          <div style="flex:1"><div style="font-size:12px;font-weight:600;color:rgba(255,255,255,.9)">Auto Invest open</div><div style="font-size:10px;color:rgba(255,255,255,.5)">Automated investing active</div></div>
+          <div style="width:20px;height:20px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.04);border-radius:12px;opacity:.4">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg></div>
+          <div style="flex:1"><div style="font-size:12px;font-weight:600;color:rgba(255,255,255,.5)">Start investing</div><div style="font-size:10px;color:rgba(255,255,255,.25)">Grow your wealth</div></div>
+          <div style="width:20px;height:20px;border-radius:50%;border:2px solid rgba(255,255,255,.08)"></div>
+        </div>
+      </div>
+      <button style="width:100%;padding:13px;border:none;border-radius:12px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.8);font-family:var(--font-body);font-size:14px;font-weight:600;cursor:pointer;position:relative;z-index:2">Connect banks for direct investing</button>
+    </div>
+    <div style="background:#fff;border-radius:14px;padding:14px 16px;border:0.5px solid rgba(0,0,0,.04);margin-bottom:10px">
+      <div style="font-size:12px;color:var(--text2);line-height:1.5">Connecting banks lets Advizmo recommend smarter allocations. Auto Invest works without them.</div>
+    </div>
+  </div>
+  <div class="bottom-nav">
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</div>
+    <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Invest</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path d="M9 12l2 2 4-4"/></svg>Insights</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Cashflow</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Activity</div>
+  </div>
+</div></div></div>
+</div>
+<div><div class="v-label">V4 - Fully Ready</div><div class="phone-wrap"><div class="phone">
+<div class="phone-screen" style="background:var(--bg)">
+  <div class="dynamic-island"></div>
+  <div class="status-bar" style="color:#1c1c1e"><div class="left" style="color:#1c1c1e">9:41</div>
+    <div class="right" style="color:#1c1c1e"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 7h2v6H1V7zm4-3h2v9H5V4zm4-2h2v11H9V2zm4-2h2v13h-2V0z"/></svg><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 3C4.5 3 1.5 5 0 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5zm0 8.5A3.5 3.5 0 118 4.5a3.5 3.5 0 010 7z"/></svg><svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="0" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="9" height="8" rx="1" fill="currentColor"/><rect x="17" y="3.5" width="2.5" height="5" rx="1"/></svg></div>
+  </div>
+  <div class="phone-content">
+    <div style="padding:8px 0 4px"><div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:var(--text)">Invest</div></div>
+    <div style="display:flex;gap:0;margin-bottom:12px;border-bottom:1px solid var(--border)">
+      <div style="padding:8px 12px;font-size:12px;font-weight:600;color:var(--blue);border-bottom:2px solid var(--blue)">Readiness</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Portfolio</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Activity</div>
+    </div>
+    
+    <div style="background:linear-gradient(135deg,#166f47,#0a84ff);border-radius:20px;padding:22px 20px;color:#fff;position:relative;overflow:hidden;margin-bottom:16px">
+      <div style="position:absolute;top:-20px;right:-20px;width:100px;height:100px;background:rgba(255,255,255,.08);border-radius:50%"></div>
+      <div style="position:absolute;bottom:-20px;left:-20px;width:80px;height:80px;background:rgba(255,255,255,.05);border-radius:50%"></div>
+      <div style="position:relative;z-index:2;margin-bottom:18px">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:rgba(255,255,255,.8);margin-bottom:6px;display:flex;align-items:center;gap:6px"><span style="width:6px;height:6px;border-radius:50%;background:#fff;animation:pulse 2s infinite"></span>Ready to invest</div>
+        <div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:6px">You are all set, James</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.7);line-height:1.4">All steps complete. Your money is ready to work for you.</div>
+      </div>
+      <div style="position:relative;z-index:2;margin-bottom:18px">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,.5);margin-bottom:6px"><span>Start</span><span>Invest</span></div>
+        <div style="height:6px;background:rgba(255,255,255,.15);border-radius:3px;overflow:hidden"><div style="width:100%;height:100%;background:#fff;border-radius:3px"></div></div>
+        <div style="text-align:center;margin-top:8px;font-size:11px;color:#fff;font-weight:600">100% complete</div>
+      </div>
+      <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:12px">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+          <div style="flex:1"><div style="font-size:12px;font-weight:600;color:#fff">Accounts connected</div><div style="font-size:10px;color:rgba(255,255,255,.7)">3 accounts linked</div></div>
+          <div style="width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:12px">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+          <div style="flex:1"><div style="font-size:12px;font-weight:600;color:#fff">Method chosen</div><div style="font-size:10px;color:rgba(255,255,255,.7)">Direct + Auto Invest</div></div>
+          <div style="width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:12px">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg></div>
+          <div style="flex:1"><div style="font-size:12px;font-weight:600;color:#fff">Ready to invest</div><div style="font-size:10px;color:rgba(255,255,255,.7)">$1,830 available</div></div>
+          <div style="width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+        </div>
+      </div>
+      <button style="width:100%;padding:13px;border:none;border-radius:12px;background:#fff;color:var(--green);font-family:var(--font-body);font-size:14px;font-weight:600;cursor:pointer;position:relative;z-index:2">Start investing</button>
+    </div>
+    <div style="background:var(--green-bg);border-radius:14px;padding:14px 16px;border:0.5px solid rgba(22,111,71,.08);margin-bottom:10px">
+      <div style="font-size:12px;color:var(--green);font-weight:600;margin-bottom:2px">Ready to grow</div>
+      <div style="font-size:12px;color:#166f47;line-height:1.5">You have $1,830 safe to invest. Choose direct investing or Auto Invest.</div>
+    </div>
+  </div>
+  <div class="bottom-nav">
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</div>
+    <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Invest</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path d="M9 12l2 2 4-4"/></svg>Insights</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Cashflow</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Activity</div>
+  </div>
+</div></div></div>
+</div></div></section><hr class="divider">
+
+<!-- ======================== CONCEPT 2: DECISION CARD ======================== -->
+<section id="c2">
+<div class="concept-label">Concept 02 <span>Decision Card</span></div>
+<div class="concept-desc">Two equal pathways side by side: Invest directly vs Use Auto Invest.</div>
+<div class="phone-row">
+<div><div class="v-label">V1 - No Accounts</div><div class="phone-wrap"><div class="phone">
+<div class="phone-screen" style="background:var(--bg)">
+  <div class="dynamic-island"></div>
+  <div class="status-bar" style="color:#1c1c1e"><div class="left" style="color:#1c1c1e">9:41</div>
+    <div class="right" style="color:#1c1c1e"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 7h2v6H1V7zm4-3h2v9H5V4zm4-2h2v11H9V2zm4-2h2v13h-2V0z"/></svg><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 3C4.5 3 1.5 5 0 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5zm0 8.5A3.5 3.5 0 118 4.5a3.5 3.5 0 010 7z"/></svg><svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="0" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="9" height="8" rx="1" fill="currentColor"/><rect x="17" y="3.5" width="2.5" height="5" rx="1"/></svg></div>
+  </div>
+  <div class="phone-content">
+    <div style="padding:8px 0 4px"><div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:var(--text)">Invest</div></div>
+    <div style="display:flex;gap:0;margin-bottom:12px;border-bottom:1px solid var(--border)">
+      <div style="padding:8px 12px;font-size:12px;font-weight:600;color:var(--blue);border-bottom:2px solid var(--blue)">Readiness</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Portfolio</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Activity</div>
+    </div>
+    
+    <div style="background:#1c1c1e;border-radius:20px;padding:22px 20px;color:#fff;position:relative;overflow:hidden;margin-bottom:16px">
+      <div style="position:relative;z-index:2;margin-bottom:18px">
+        <div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:6px">Connect accounts first</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.5);line-height:1.4">Link your bank accounts to unlock both investment options.</div>
+      </div>
+      <div style="position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
+        <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);border-radius:16px;padding:18px 14px;text-align:center;opacity:.4">
+          <div style="width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;margin:0 auto 10px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+          <div style="font-family:var(--font-heading);font-size:13px;font-weight:600;color:rgba(255,255,255,.5);margin-bottom:4px">Invest directly</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.25);line-height:1.3">Transfer from connected accounts</div>
+        </div>
+        <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);border-radius:16px;padding:18px 14px;text-align:center;opacity:.4">
+          <div style="width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;margin:0 auto 10px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+          <div style="font-family:var(--font-heading);font-size:13px;font-weight:600;color:rgba(255,255,255,.5);margin-bottom:4px">Use Auto Invest</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.25);line-height:1.3">Automate recurring investments</div>
+        </div>
+      </div>
+      <button style="width:100%;padding:13px;border:none;border-radius:12px;background:var(--blue);color:#fff;font-family:var(--font-body);font-size:14px;font-weight:600;cursor:pointer;position:relative;z-index:2">Connect your first account</button>
+    </div>
+    <div style="background:#fff;border-radius:14px;padding:14px 16px;border:0.5px solid rgba(0,0,0,.04);margin-bottom:10px">
+      <div style="font-size:12px;color:var(--text2);line-height:1.5">Without connected accounts, neither investment option is available. Start by linking your bank.</div>
+    </div>
+  </div>
+  <div class="bottom-nav">
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</div>
+    <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Invest</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path d="M9 12l2 2 4-4"/></svg>Insights</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Cashflow</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Activity</div>
+  </div>
+</div></div></div>
+</div>
+<div><div class="v-label">V2 - Both Paths Active</div><div class="phone-wrap"><div class="phone">
+<div class="phone-screen" style="background:var(--bg)">
+  <div class="dynamic-island"></div>
+  <div class="status-bar" style="color:#1c1c1e"><div class="left" style="color:#1c1c1e">9:41</div>
+    <div class="right" style="color:#1c1c1e"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 7h2v6H1V7zm4-3h2v9H5V4zm4-2h2v11H9V2zm4-2h2v13h-2V0z"/></svg><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 3C4.5 3 1.5 5 0 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5zm0 8.5A3.5 3.5 0 118 4.5a3.5 3.5 0 010 7z"/></svg><svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="0" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="9" height="8" rx="1" fill="currentColor"/><rect x="17" y="3.5" width="2.5" height="5" rx="1"/></svg></div>
+  </div>
+  <div class="phone-content">
+    <div style="padding:8px 0 4px"><div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:var(--text)">Invest</div></div>
+    <div style="display:flex;gap:0;margin-bottom:12px;border-bottom:1px solid var(--border)">
+      <div style="padding:8px 12px;font-size:12px;font-weight:600;color:var(--blue);border-bottom:2px solid var(--blue)">Readiness</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Portfolio</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Activity</div>
+    </div>
+    
+    <div style="background:#1c1c1e;border-radius:20px;padding:22px 20px;color:#fff;position:relative;overflow:hidden;margin-bottom:16px">
+      <div style="position:absolute;top:-20px;left:-20px;width:100px;height:100px;background:rgba(10,132,255,.1);border-radius:50%"></div>
+      <div style="position:relative;z-index:2;margin-bottom:18px">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--green);margin-bottom:6px;display:flex;align-items:center;gap:6px"><span style="width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite"></span>Accounts connected</div>
+        <div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:6px">Choose your path</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.5);line-height:1.4">Two ways to invest. Both equally available to you.</div>
+      </div>
+      <div style="position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+        <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:18px 14px;text-align:center;cursor:pointer">
+          <div style="width:40px;height:40px;border-radius:12px;background:rgba(10,132,255,.15);display:flex;align-items:center;justify-content:center;margin:0 auto 10px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+          <div style="font-family:var(--font-heading);font-size:13px;font-weight:600;color:rgba(255,255,255,.9);margin-bottom:4px">Invest directly</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.4);line-height:1.3">Use connected accounts</div>
+          <div style="font-size:10px;color:var(--blue);margin-top:8px;font-weight:600">$1,830 available</div>
+        </div>
+        <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:18px 14px;text-align:center;cursor:pointer">
+          <div style="width:40px;height:40px;border-radius:12px;background:rgba(22,111,71,.15);display:flex;align-items:center;justify-content:center;margin:0 auto 10px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+          <div style="font-family:var(--font-heading);font-size:13px;font-weight:600;color:rgba(255,255,255,.9);margin-bottom:4px">Use Auto Invest</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.4);line-height:1.3">Automate recurring</div>
+          <div style="font-size:10px;color:var(--green);margin-top:8px;font-weight:600">From $25/week</div>
+        </div>
+      </div>
+      <div style="position:relative;z-index:2;display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(255,255,255,.04);border-radius:10px">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        <div style="font-size:11px;color:rgba(255,255,255,.5);line-height:1.4">You can use both methods. Many investors do.</div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-nav">
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</div>
+    <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Invest</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path d="M9 12l2 2 4-4"/></svg>Insights</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Cashflow</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Activity</div>
+  </div>
+</div></div></div>
+</div>
+<div><div class="v-label">V3 - Auto Invest Opened</div><div class="phone-wrap"><div class="phone">
+<div class="phone-screen" style="background:var(--bg)">
+  <div class="dynamic-island"></div>
+  <div class="status-bar" style="color:#1c1c1e"><div class="left" style="color:#1c1c1e">9:41</div>
+    <div class="right" style="color:#1c1c1e"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 7h2v6H1V7zm4-3h2v9H5V4zm4-2h2v11H9V2zm4-2h2v13h-2V0z"/></svg><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 3C4.5 3 1.5 5 0 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5zm0 8.5A3.5 3.5 0 118 4.5a3.5 3.5 0 010 7z"/></svg><svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="0" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="9" height="8" rx="1" fill="currentColor"/><rect x="17" y="3.5" width="2.5" height="5" rx="1"/></svg></div>
+  </div>
+  <div class="phone-content">
+    <div style="padding:8px 0 4px"><div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:var(--text)">Invest</div></div>
+    <div style="display:flex;gap:0;margin-bottom:12px;border-bottom:1px solid var(--border)">
+      <div style="padding:8px 12px;font-size:12px;font-weight:600;color:var(--blue);border-bottom:2px solid var(--blue)">Readiness</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Portfolio</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Activity</div>
+    </div>
+    
+    <div style="background:#1c1c1e;border-radius:20px;padding:22px 20px;color:#fff;position:relative;overflow:hidden;margin-bottom:16px">
+      <div style="position:absolute;top:-20px;right:-20px;width:100px;height:100px;background:rgba(10,132,255,.1);border-radius:50%"></div>
+      <div style="position:relative;z-index:2;margin-bottom:18px">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--blue);margin-bottom:6px;display:flex;align-items:center;gap:6px"><span style="width:6px;height:6px;border-radius:50%;background:var(--blue);animation:pulse 2s infinite"></span>Auto Invest active</div>
+        <div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:6px">Connect accounts for direct investing</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.5);line-height:1.4">Auto Invest is running. Add banks to also invest directly.</div>
+      </div>
+      <div style="position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+        <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);border-radius:16px;padding:18px 14px;text-align:center;opacity:.5">
+          <div style="width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;margin:0 auto 10px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+          <div style="font-family:var(--font-heading);font-size:13px;font-weight:600;color:rgba(255,255,255,.5);margin-bottom:4px">Invest directly</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.25);line-height:1.3">Add banks to enable</div>
+          <button style="margin-top:8px;padding:6px 12px;border:none;border-radius:8px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.6);font-size:10px;font-weight:600;cursor:pointer">Connect banks</button>
+        </div>
+        <div style="background:rgba(22,111,71,.1);border:1px solid rgba(22,111,71,.2);border-radius:16px;padding:18px 14px;text-align:center">
+          <div style="width:40px;height:40px;border-radius:12px;background:rgba(22,111,71,.2);display:flex;align-items:center;justify-content:center;margin:0 auto 10px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+          <div style="font-family:var(--font-heading);font-size:13px;font-weight:600;color:rgba(255,255,255,.9);margin-bottom:4px">Use Auto Invest</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.5);line-height:1.3">Automated investing</div>
+          <div style="margin-top:8px;display:flex;align-items:center;justify-content:center;gap:4px"><div style="width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite"></div><span style="font-size:10px;color:var(--green);font-weight:600">Active</span></div>
+        </div>
+      </div>
+    </div>
+    <div style="background:#fff;border-radius:14px;padding:14px 16px;border:0.5px solid rgba(0,0,0,.04);margin-bottom:10px">
+      <div style="font-size:12px;color:var(--text2);line-height:1.5">Auto Invest works independently. Connect banks to also invest directly from your accounts.</div>
+    </div>
+  </div>
+  <div class="bottom-nav">
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</div>
+    <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Invest</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path d="M9 12l2 2 4-4"/></svg>Insights</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Cashflow</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Activity</div>
+  </div>
+</div></div></div>
+</div>
+<div><div class="v-label">V4 - Fully Ready</div><div class="phone-wrap"><div class="phone">
+<div class="phone-screen" style="background:var(--bg)">
+  <div class="dynamic-island"></div>
+  <div class="status-bar" style="color:#1c1c1e"><div class="left" style="color:#1c1c1e">9:41</div>
+    <div class="right" style="color:#1c1c1e"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 7h2v6H1V7zm4-3h2v9H5V4zm4-2h2v11H9V2zm4-2h2v13h-2V0z"/></svg><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 3C4.5 3 1.5 5 0 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5zm0 8.5A3.5 3.5 0 118 4.5a3.5 3.5 0 010 7z"/></svg><svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="0" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="9" height="8" rx="1" fill="currentColor"/><rect x="17" y="3.5" width="2.5" height="5" rx="1"/></svg></div>
+  </div>
+  <div class="phone-content">
+    <div style="padding:8px 0 4px"><div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:var(--text)">Invest</div></div>
+    <div style="display:flex;gap:0;margin-bottom:12px;border-bottom:1px solid var(--border)">
+      <div style="padding:8px 12px;font-size:12px;font-weight:600;color:var(--blue);border-bottom:2px solid var(--blue)">Readiness</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Portfolio</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Activity</div>
+    </div>
+    
+    <div style="background:linear-gradient(135deg,#166f47,#0a84ff);border-radius:20px;padding:22px 20px;color:#fff;position:relative;overflow:hidden;margin-bottom:16px">
+      <div style="position:absolute;top:-20px;right:-20px;width:100px;height:100px;background:rgba(255,255,255,.08);border-radius:50%"></div>
+      <div style="position:relative;z-index:2;margin-bottom:18px">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:rgba(255,255,255,.8);margin-bottom:6px;display:flex;align-items:center;gap:6px"><span style="width:6px;height:6px;border-radius:50%;background:#fff;animation:pulse 2s infinite"></span>All set</div>
+        <div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:6px">Start investing</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.7);line-height:1.4">Both methods ready. $1,830 available.</div>
+      </div>
+      <div style="position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+        <div style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);border-radius:16px;padding:18px 14px;text-align:center;cursor:pointer">
+          <div style="width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;margin:0 auto 10px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+          <div style="font-family:var(--font-heading);font-size:13px;font-weight:600;color:#fff;margin-bottom:4px">Invest directly</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.7);line-height:1.3">From connected banks</div>
+          <div style="margin-top:8px;padding:6px 12px;border-radius:8px;background:rgba(255,255,255,.15);font-size:10px;color:#fff;font-weight:600">Start now</div>
+        </div>
+        <div style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);border-radius:16px;padding:18px 14px;text-align:center;cursor:pointer">
+          <div style="width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;margin:0 auto 10px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+          <div style="font-family:var(--font-heading);font-size:13px;font-weight:600;color:#fff;margin-bottom:4px">Auto Invest</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.7);line-height:1.3">Automated recurring</div>
+          <div style="margin-top:8px;padding:6px 12px;border-radius:8px;background:rgba(255,255,255,.15);font-size:10px;color:#fff;font-weight:600">Configure</div>
+        </div>
+      </div>
+    </div>
+    <div style="background:var(--green-bg);border-radius:14px;padding:14px 16px;border:0.5px solid rgba(22,111,71,.08);margin-bottom:10px">
+      <div style="font-size:12px;color:var(--green);font-weight:600;margin-bottom:2px">Investment ready</div>
+      <div style="font-size:12px;color:#166f47;line-height:1.5">All options available. Choose how you want to invest.</div>
+    </div>
+  </div>
+  <div class="bottom-nav">
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</div>
+    <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Invest</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path d="M9 12l2 2 4-4"/></svg>Insights</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Cashflow</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Activity</div>
+  </div>
+</div></div></div>
+</div></div></section><hr class="divider">
+
+<!-- ======================== CONCEPT 3: READINESS SCORE ======================== -->
+<section id="c3">
+<div class="concept-label">Concept 03 <span>Readiness Score</span></div>
+<div class="concept-desc">Circular readiness meter showing percentage.</div>
+<div class="phone-row">
+<div><div class="v-label">V1 - 0% Readiness</div><div class="phone-wrap"><div class="phone">
+<div class="phone-screen" style="background:var(--bg)">
+  <div class="dynamic-island"></div>
+  <div class="status-bar" style="color:#1c1c1e"><div class="left" style="color:#1c1c1e">9:41</div>
+    <div class="right" style="color:#1c1c1e"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 7h2v6H1V7zm4-3h2v9H5V4zm4-2h2v11H9V2zm4-2h2v13h-2V0z"/></svg><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 3C4.5 3 1.5 5 0 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5zm0 8.5A3.5 3.5 0 118 4.5a3.5 3.5 0 010 7z"/></svg><svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="0" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="9" height="8" rx="1" fill="currentColor"/><rect x="17" y="3.5" width="2.5" height="5" rx="1"/></svg></div>
+  </div>
+  <div class="phone-content">
+    <div style="padding:8px 0 4px"><div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:var(--text)">Invest</div></div>
+    <div style="display:flex;gap:0;margin-bottom:12px;border-bottom:1px solid var(--border)">
+      <div style="padding:8px 12px;font-size:12px;font-weight:600;color:var(--blue);border-bottom:2px solid var(--blue)">Readiness</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Portfolio</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Activity</div>
+    </div>
+    
+    <div style="background:#1c1c1e;border-radius:20px;padding:24px 20px;color:#fff;position:relative;overflow:hidden;margin-bottom:16px;text-align:center">
+      <div style="position:relative;z-index:2">
+        <div style="width:120px;height:120px;border-radius:50%;margin:0 auto 16px;position:relative">
+          <svg width="120" height="120" viewBox="0 0 120 120" style="transform:rotate(-90deg)">
+            <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="8"/>
+            <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="8" stroke-dasharray="0 327" stroke-linecap="round"/>
+          </svg>
+          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center">
+            <div style="font-family:var(--font-heading);font-size:32px;font-weight:700;color:rgba(255,255,255,.15)">0%</div>
+            <div style="font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.05em">readiness</div>
+          </div>
+        </div>
+        <div style="font-family:var(--font-heading);font-size:16px;font-weight:700;color:rgba(255,255,255,.9);margin-bottom:6px">Connect accounts to calculate</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.4);line-height:1.4;margin-bottom:16px">Advizmo needs to see your accounts to determine investment readiness.</div>
+        <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(255,255,255,.04);border-radius:8px"><div style="font-size:11px;color:rgba(255,255,255,.4)">Account status</div><div style="font-size:11px;color:rgba(255,255,255,.2)">Not connected</div></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(255,255,255,.04);border-radius:8px"><div style="font-size:11px;color:rgba(255,255,255,.4)">Cash available</div><div style="font-size:11px;color:rgba(255,255,255,.2)">Unknown</div></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(255,255,255,.04);border-radius:8px"><div style="font-size:11px;color:rgba(255,255,255,.4)">Investment method</div><div style="font-size:11px;color:rgba(255,255,255,.2)">Not chosen</div></div>
+        </div>
+        <button style="width:100%;padding:13px;border:none;border-radius:12px;background:var(--blue);color:#fff;font-family:var(--font-body);font-size:14px;font-weight:600;cursor:pointer">Connect accounts</button>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-nav">
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</div>
+    <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Invest</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path d="M9 12l2 2 4-4"/></svg>Insights</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Cashflow</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Activity</div>
+  </div>
+</div></div></div>
+</div>
+<div><div class="v-label">V2 - 60% Readiness</div><div class="phone-wrap"><div class="phone">
+<div class="phone-screen" style="background:var(--bg)">
+  <div class="dynamic-island"></div>
+  <div class="status-bar" style="color:#1c1c1e"><div class="left" style="color:#1c1c1e">9:41</div>
+    <div class="right" style="color:#1c1c1e"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 7h2v6H1V7zm4-3h2v9H5V4zm4-2h2v11H9V2zm4-2h2v13h-2V0z"/></svg><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 3C4.5 3 1.5 5 0 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5zm0 8.5A3.5 3.5 0 118 4.5a3.5 3.5 0 010 7z"/></svg><svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="0" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="9" height="8" rx="1" fill="currentColor"/><rect x="17" y="3.5" width="2.5" height="5" rx="1"/></svg></div>
+  </div>
+  <div class="phone-content">
+    <div style="padding:8px 0 4px"><div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:var(--text)">Invest</div></div>
+    <div style="display:flex;gap:0;margin-bottom:12px;border-bottom:1px solid var(--border)">
+      <div style="padding:8px 12px;font-size:12px;font-weight:600;color:var(--blue);border-bottom:2px solid var(--blue)">Readiness</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Portfolio</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Activity</div>
+    </div>
+    
+    <div style="background:#1c1c1e;border-radius:20px;padding:24px 20px;color:#fff;position:relative;overflow:hidden;margin-bottom:16px;text-align:center">
+      <div style="position:relative;z-index:2">
+        <div style="width:120px;height:120px;border-radius:50%;margin:0 auto 16px;position:relative">
+          <svg width="120" height="120" viewBox="0 0 120 120" style="transform:rotate(-90deg)">
+            <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="8"/>
+            <circle cx="60" cy="60" r="52" fill="none" stroke="var(--amber)" stroke-width="8" stroke-dasharray="196 131" stroke-linecap="round"/>
+          </svg>
+          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center">
+            <div style="font-family:var(--font-heading);font-size:32px;font-weight:700;color:var(--amber)">60%</div>
+            <div style="font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.05em">readiness</div>
+          </div>
+        </div>
+        <div style="font-family:var(--font-heading);font-size:16px;font-weight:700;color:rgba(255,255,255,.9);margin-bottom:6px">One step away</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.4);line-height:1.4;margin-bottom:16px">Accounts connected. Choose how to invest to increase your score.</div>
+        <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(22,111,71,.1);border-radius:8px"><div style="font-size:11px;color:rgba(255,255,255,.6)">Account status</div><div style="font-size:11px;color:var(--green);font-weight:600">Connected</div></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(22,111,71,.1);border-radius:8px"><div style="font-size:11px;color:rgba(255,255,255,.6)">Cash available</div><div style="font-size:11px;color:var(--green);font-weight:600">$1,830</div></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(255,255,255,.04);border-radius:8px"><div style="font-size:11px;color:rgba(255,255,255,.4)">Investment method</div><div style="font-size:11px;color:var(--amber);font-weight:600">Not chosen</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <button style="padding:12px;border:none;border-radius:10px;background:rgba(10,132,255,.15);color:var(--blue);font-family:var(--font-body);font-size:12px;font-weight:600;cursor:pointer">Invest directly</button>
+          <button style="padding:12px;border:none;border-radius:10px;background:rgba(22,111,71,.15);color:var(--green);font-family:var(--font-body);font-size:12px;font-weight:600;cursor:pointer">Open Auto Invest</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-nav">
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</div>
+    <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Invest</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path d="M9 12l2 2 4-4"/></svg>Insights</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Cashflow</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Activity</div>
+  </div>
+</div></div></div>
+</div>
+<div><div class="v-label">V3 - 75% Readiness</div><div class="phone-wrap"><div class="phone">
+<div class="phone-screen" style="background:var(--bg)">
+  <div class="dynamic-island"></div>
+  <div class="status-bar" style="color:#1c1c1e"><div class="left" style="color:#1c1c1e">9:41</div>
+    <div class="right" style="color:#1c1c1e"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 7h2v6H1V7zm4-3h2v9H5V4zm4-2h2v11H9V2zm4-2h2v13h-2V0z"/></svg><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 3C4.5 3 1.5 5 0 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5zm0 8.5A3.5 3.5 0 118 4.5a3.5 3.5 0 010 7z"/></svg><svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="0" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="9" height="8" rx="1" fill="currentColor"/><rect x="17" y="3.5" width="2.5" height="5" rx="1"/></svg></div>
+  </div>
+  <div class="phone-content">
+    <div style="padding:8px 0 4px"><div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:var(--text)">Invest</div></div>
+    <div style="display:flex;gap:0;margin-bottom:12px;border-bottom:1px solid var(--border)">
+      <div style="padding:8px 12px;font-size:12px;font-weight:600;color:var(--blue);border-bottom:2px solid var(--blue)">Readiness</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Portfolio</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Activity</div>
+    </div>
+    
+    <div style="background:#1c1c1e;border-radius:20px;padding:24px 20px;color:#fff;position:relative;overflow:hidden;margin-bottom:16px;text-align:center">
+      <div style="position:relative;z-index:2">
+        <div style="width:120px;height:120px;border-radius:50%;margin:0 auto 16px;position:relative">
+          <svg width="120" height="120" viewBox="0 0 120 120" style="transform:rotate(-90deg)">
+            <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="8"/>
+            <circle cx="60" cy="60" r="52" fill="none" stroke="var(--blue)" stroke-width="8" stroke-dasharray="245 82" stroke-linecap="round"/>
+          </svg>
+          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center">
+            <div style="font-family:var(--font-heading);font-size:32px;font-weight:700;color:var(--blue)">75%</div>
+            <div style="font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.05em">readiness</div>
+          </div>
+        </div>
+        <div style="font-family:var(--font-heading);font-size:16px;font-weight:700;color:rgba(255,255,255,.9);margin-bottom:6px">Almost there</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.4);line-height:1.4;margin-bottom:16px">Auto Invest is open. Connect banks for better recommendations and direct investing.</div>
+        <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(22,111,71,.1);border-radius:8px"><div style="font-size:11px;color:rgba(255,255,255,.6)">Account status</div><div style="font-size:11px;color:var(--green);font-weight:600">Connected</div></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(22,111,71,.1);border-radius:8px"><div style="font-size:11px;color:rgba(255,255,255,.6)">Cash available</div><div style="font-size:11px;color:var(--green);font-weight:600">$1,830</div></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(10,132,255,.1);border-radius:8px"><div style="font-size:11px;color:rgba(255,255,255,.6)">Investment method</div><div style="font-size:11px;color:var(--blue);font-weight:600">Auto Invest open</div></div>
+        </div>
+        <button style="width:100%;padding:13px;border:none;border-radius:12px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.8);font-family:var(--font-body);font-size:14px;font-weight:600;cursor:pointer">Connect banks for direct investing</button>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-nav">
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</div>
+    <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Invest</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path d="M9 12l2 2 4-4"/></svg>Insights</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Cashflow</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Activity</div>
+  </div>
+</div></div></div>
+</div>
+<div><div class="v-label">V4 - 100% Ready</div><div class="phone-wrap"><div class="phone">
+<div class="phone-screen" style="background:var(--bg)">
+  <div class="dynamic-island"></div>
+  <div class="status-bar" style="color:#1c1c1e"><div class="left" style="color:#1c1c1e">9:41</div>
+    <div class="right" style="color:#1c1c1e"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 7h2v6H1V7zm4-3h2v9H5V4zm4-2h2v11H9V2zm4-2h2v13h-2V0z"/></svg><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 3C4.5 3 1.5 5 0 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5zm0 8.5A3.5 3.5 0 118 4.5a3.5 3.5 0 010 7z"/></svg><svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="0" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="9" height="8" rx="1" fill="currentColor"/><rect x="17" y="3.5" width="2.5" height="5" rx="1"/></svg></div>
+  </div>
+  <div class="phone-content">
+    <div style="padding:8px 0 4px"><div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:var(--text)">Invest</div></div>
+    <div style="display:flex;gap:0;margin-bottom:12px;border-bottom:1px solid var(--border)">
+      <div style="padding:8px 12px;font-size:12px;font-weight:600;color:var(--blue);border-bottom:2px solid var(--blue)">Readiness</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Portfolio</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Activity</div>
+    </div>
+    
+    <div style="background:linear-gradient(135deg,#166f47,#0a84ff);border-radius:20px;padding:24px 20px;color:#fff;position:relative;overflow:hidden;margin-bottom:16px;text-align:center">
+      <div style="position:absolute;top:-20px;right:-20px;width:100px;height:100px;background:rgba(255,255,255,.08);border-radius:50%"></div>
+      <div style="position:relative;z-index:2">
+        <div style="width:120px;height:120px;border-radius:50%;margin:0 auto 16px;position:relative">
+          <svg width="120" height="120" viewBox="0 0 120 120" style="transform:rotate(-90deg)">
+            <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="8"/>
+            <circle cx="60" cy="60" r="52" fill="none" stroke="#fff" stroke-width="8" stroke-dasharray="327 0" stroke-linecap="round"/>
+          </svg>
+          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center">
+            <div style="font-family:var(--font-heading);font-size:32px;font-weight:700;color:#fff">100%</div>
+            <div style="font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.05em">readiness</div>
+          </div>
+        </div>
+        <div style="font-family:var(--font-heading);font-size:16px;font-weight:700;color:#fff;margin-bottom:6px">Investment ready</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.7);line-height:1.4;margin-bottom:16px">All checks complete. Start investing now.</div>
+        <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(255,255,255,.1);border-radius:8px"><div style="font-size:11px;color:rgba(255,255,255,.7)">Account status</div><div style="font-size:11px;color:#fff;font-weight:600">Connected</div></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(255,255,255,.1);border-radius:8px"><div style="font-size:11px;color:rgba(255,255,255,.7)">Cash available</div><div style="font-size:11px;color:#fff;font-weight:600">$1,830</div></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(255,255,255,.1);border-radius:8px"><div style="font-size:11px;color:rgba(255,255,255,.7)">Investment method</div><div style="font-size:11px;color:#fff;font-weight:600">Both ready</div></div>
+        </div>
+        <button style="width:100%;padding:13px;border:none;border-radius:12px;background:#fff;color:var(--green);font-family:var(--font-body);font-size:14px;font-weight:600;cursor:pointer">Start investing</button>
+      </div>
+    </div>
+    <div style="background:var(--green-bg);border-radius:14px;padding:14px 16px;border:0.5px solid rgba(22,111,71,.08);margin-bottom:10px">
+      <div style="font-size:12px;color:var(--green);font-weight:600;margin-bottom:2px">Ready to grow</div>
+      <div style="font-size:12px;color:#166f47;line-height:1.5">All checks complete. Start investing now.</div>
+    </div>
+  </div>
+  <div class="bottom-nav">
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</div>
+    <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Invest</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path d="M9 12l2 2 4-4"/></svg>Insights</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Cashflow</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Activity</div>
+  </div>
+</div></div></div>
+</div></div></section><hr class="divider">
+
+<!-- ======================== CONCEPT 4: NEXT BEST ACTION ======================== -->
+<section id="c4">
+<div class="concept-label">Concept 04 <span>Next Best Action</span></div>
+<div class="concept-desc">Single focused recommendation card.</div>
+<div class="phone-row">
+<div><div class="v-label">V1 - No Accounts</div><div class="phone-wrap"><div class="phone">
+<div class="phone-screen" style="background:var(--bg)">
+  <div class="dynamic-island"></div>
+  <div class="status-bar" style="color:#1c1c1e"><div class="left" style="color:#1c1c1e">9:41</div>
+    <div class="right" style="color:#1c1c1e"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 7h2v6H1V7zm4-3h2v9H5V4zm4-2h2v11H9V2zm4-2h2v13h-2V0z"/></svg><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 3C4.5 3 1.5 5 0 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5zm0 8.5A3.5 3.5 0 118 4.5a3.5 3.5 0 010 7z"/></svg><svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="0" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="9" height="8" rx="1" fill="currentColor"/><rect x="17" y="3.5" width="2.5" height="5" rx="1"/></svg></div>
+  </div>
+  <div class="phone-content">
+    <div style="padding:8px 0 4px"><div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:var(--text)">Invest</div></div>
+    <div style="display:flex;gap:0;margin-bottom:12px;border-bottom:1px solid var(--border)">
+      <div style="padding:8px 12px;font-size:12px;font-weight:600;color:var(--blue);border-bottom:2px solid var(--blue)">Readiness</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Portfolio</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Activity</div>
+    </div>
+    
+    <div style="background:#1c1c1e;border-radius:20px;padding:22px 20px;color:#fff;position:relative;overflow:hidden;margin-bottom:16px">
+      <div style="position:relative;z-index:2;margin-bottom:16px">
+        <div style="width:48px;height:48px;border-radius:14px;background:rgba(10,132,255,.15);display:flex;align-items:center;justify-content:center;margin-bottom:12px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+        <div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:6px">Connect your accounts</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.5);line-height:1.4">Link your bank accounts so Advizmo can see where your money lives and identify what is safe to invest.</div>
+      </div>
+      <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,255,255,.04);border-radius:10px">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <div style="font-size:12px;color:rgba(255,255,255,.6);line-height:1.4">See all your money in one place</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,255,255,.04);border-radius:10px">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <div style="font-size:12px;color:rgba(255,255,255,.6);line-height:1.4">Get personalized recommendations</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,255,255,.04);border-radius:10px">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <div style="font-size:12px;color:rgba(255,255,255,.6);line-height:1.4">Find money safe to invest</div>
+        </div>
+      </div>
+      <button style="width:100%;padding:13px;border:none;border-radius:12px;background:var(--blue);color:#fff;font-family:var(--font-body);font-size:14px;font-weight:600;cursor:pointer;position:relative;z-index:2">Connect your first account</button>
+    </div>
+    <div style="background:#fff;border-radius:14px;padding:14px 16px;border:0.5px solid rgba(0,0,0,.04);margin-bottom:10px">
+      <div style="font-size:12px;color:var(--text2);line-height:1.5">Without connected accounts, you cannot see your safe-to-invest amount. Your idle cash could be growing.</div>
+    </div>
+  </div>
+  <div class="bottom-nav">
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</div>
+    <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Invest</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path d="M9 12l2 2 4-4"/></svg>Insights</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Cashflow</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Activity</div>
+  </div>
+</div></div></div>
+</div>
+<div><div class="v-label">V2 - External Connected</div><div class="phone-wrap"><div class="phone">
+<div class="phone-screen" style="background:var(--bg)">
+  <div class="dynamic-island"></div>
+  <div class="status-bar" style="color:#1c1c1e"><div class="left" style="color:#1c1c1e">9:41</div>
+    <div class="right" style="color:#1c1c1e"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 7h2v6H1V7zm4-3h2v9H5V4zm4-2h2v11H9V2zm4-2h2v13h-2V0z"/></svg><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 3C4.5 3 1.5 5 0 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5zm0 8.5A3.5 3.5 0 118 4.5a3.5 3.5 0 010 7z"/></svg><svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="0" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="9" height="8" rx="1" fill="currentColor"/><rect x="17" y="3.5" width="2.5" height="5" rx="1"/></svg></div>
+  </div>
+  <div class="phone-content">
+    <div style="padding:8px 0 4px"><div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:var(--text)">Invest</div></div>
+    <div style="display:flex;gap:0;margin-bottom:12px;border-bottom:1px solid var(--border)">
+      <div style="padding:8px 12px;font-size:12px;font-weight:600;color:var(--blue);border-bottom:2px solid var(--blue)">Readiness</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Portfolio</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Activity</div>
+    </div>
+    
+    <div style="background:#1c1c1e;border-radius:20px;padding:22px 20px;color:#fff;position:relative;overflow:hidden;margin-bottom:16px">
+      <div style="position:absolute;top:-20px;right:-20px;width:100px;height:100px;background:rgba(22,111,71,.1);border-radius:50%"></div>
+      <div style="position:relative;z-index:2;margin-bottom:16px">
+        <div style="width:48px;height:48px;border-radius:14px;background:rgba(22,111,71,.15);display:flex;align-items:center;justify-content:center;margin-bottom:12px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:6px">Choose how to invest</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.5);line-height:1.4">Accounts connected. Two equal ways to start investing.</div>
+      </div>
+      <div style="position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+        <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:16px 12px;text-align:center;cursor:pointer">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" style="margin-bottom:8px"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+          <div style="font-family:var(--font-heading);font-size:12px;font-weight:600;color:rgba(255,255,255,.9);margin-bottom:4px">Invest directly</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.4)">From connected banks</div>
+        </div>
+        <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:16px 12px;text-align:center;cursor:pointer">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" style="margin-bottom:8px"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          <div style="font-family:var(--font-heading);font-size:12px;font-weight:600;color:rgba(255,255,255,.9);margin-bottom:4px">Open Auto Invest</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.4)">Automated recurring</div>
+        </div>
+      </div>
+      <div style="position:relative;z-index:2;display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(255,255,255,.04);border-radius:10px">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        <div style="font-size:11px;color:rgba(255,255,255,.5);line-height:1.4">$1,830 safe to invest. Both options are equally available.</div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-nav">
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</div>
+    <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Invest</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path d="M9 12l2 2 4-4"/></svg>Insights</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Cashflow</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Activity</div>
+  </div>
+</div></div></div>
+</div>
+<div><div class="v-label">V3 - Auto Invest Opened</div><div class="phone-wrap"><div class="phone">
+<div class="phone-screen" style="background:var(--bg)">
+  <div class="dynamic-island"></div>
+  <div class="status-bar" style="color:#1c1c1e"><div class="left" style="color:#1c1c1e">9:41</div>
+    <div class="right" style="color:#1c1c1e"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 7h2v6H1V7zm4-3h2v9H5V4zm4-2h2v11H9V2zm4-2h2v13h-2V0z"/></svg><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 3C4.5 3 1.5 5 0 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5zm0 8.5A3.5 3.5 0 118 4.5a3.5 3.5 0 010 7z"/></svg><svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="0" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="9" height="8" rx="1" fill="currentColor"/><rect x="17" y="3.5" width="2.5" height="5" rx="1"/></svg></div>
+  </div>
+  <div class="phone-content">
+    <div style="padding:8px 0 4px"><div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:var(--text)">Invest</div></div>
+    <div style="display:flex;gap:0;margin-bottom:12px;border-bottom:1px solid var(--border)">
+      <div style="padding:8px 12px;font-size:12px;font-weight:600;color:var(--blue);border-bottom:2px solid var(--blue)">Readiness</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Portfolio</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Activity</div>
+    </div>
+    
+    <div style="background:#1c1c1e;border-radius:20px;padding:22px 20px;color:#fff;position:relative;overflow:hidden;margin-bottom:16px">
+      <div style="position:relative;z-index:2;margin-bottom:16px">
+        <div style="width:48px;height:48px;border-radius:14px;background:rgba(10,132,255,.15);display:flex;align-items:center;justify-content:center;margin-bottom:12px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+        <div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:6px">Connect accounts for better recommendations</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.5);line-height:1.4">Auto Invest is open. Connecting banks lets Advizmo suggest smarter allocations.</div>
+      </div>
+      <div style="position:relative;z-index:2;padding:12px;background:rgba(22,111,71,.1);border:1px solid rgba(22,111,71,.2);border-radius:12px;margin-bottom:14px">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div style="display:flex;align-items:center;gap:8px"><div style="width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite"></div><div style="font-size:12px;color:rgba(255,255,255,.8);font-weight:600">Auto Invest active</div></div>
+          <div style="font-size:11px;color:var(--green);font-weight:600">Working</div>
+        </div>
+      </div>
+      <button style="width:100%;padding:13px;border:none;border-radius:12px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.8);font-family:var(--font-body);font-size:14px;font-weight:600;cursor:pointer;position:relative;z-index:2">Connect banks for direct investing</button>
+    </div>
+    <div style="background:#fff;border-radius:14px;padding:14px 16px;border:0.5px solid rgba(0,0,0,.04);margin-bottom:10px">
+      <div style="font-size:12px;color:var(--text2);line-height:1.5">Connecting banks is optional. Auto Invest works without them, but banks enable direct investing and better suggestions.</div>
+    </div>
+  </div>
+  <div class="bottom-nav">
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</div>
+    <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Invest</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path d="M9 12l2 2 4-4"/></svg>Insights</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Cashflow</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Activity</div>
+  </div>
+</div></div></div>
+</div>
+<div><div class="v-label">V4 - Fully Ready</div><div class="phone-wrap"><div class="phone">
+<div class="phone-screen" style="background:var(--bg)">
+  <div class="dynamic-island"></div>
+  <div class="status-bar" style="color:#1c1c1e"><div class="left" style="color:#1c1c1e">9:41</div>
+    <div class="right" style="color:#1c1c1e"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 7h2v6H1V7zm4-3h2v9H5V4zm4-2h2v11H9V2zm4-2h2v13h-2V0z"/></svg><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 3C4.5 3 1.5 5 0 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5zm0 8.5A3.5 3.5 0 118 4.5a3.5 3.5 0 010 7z"/></svg><svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="0" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="9" height="8" rx="1" fill="currentColor"/><rect x="17" y="3.5" width="2.5" height="5" rx="1"/></svg></div>
+  </div>
+  <div class="phone-content">
+    <div style="padding:8px 0 4px"><div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:var(--text)">Invest</div></div>
+    <div style="display:flex;gap:0;margin-bottom:12px;border-bottom:1px solid var(--border)">
+      <div style="padding:8px 12px;font-size:12px;font-weight:600;color:var(--blue);border-bottom:2px solid var(--blue)">Readiness</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Portfolio</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Activity</div>
+    </div>
+    
+    <div style="background:linear-gradient(135deg,#166f47,#0a84ff);border-radius:20px;padding:22px 20px;color:#fff;position:relative;overflow:hidden;margin-bottom:16px">
+      <div style="position:absolute;top:-20px;right:-20px;width:100px;height:100px;background:rgba(255,255,255,.08);border-radius:50%"></div>
+      <div style="position:relative;z-index:2;margin-bottom:16px">
+        <div style="width:48px;height:48px;border-radius:14px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;margin-bottom:12px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg></div>
+        <div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:6px">Start investing</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.7);line-height:1.4">You have $1,830 safe to invest. Both methods are ready.</div>
+      </div>
+      <div style="position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+        <div style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:16px 12px;text-align:center;cursor:pointer">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" style="margin-bottom:8px"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+          <div style="font-family:var(--font-heading);font-size:12px;font-weight:600;color:#fff;margin-bottom:4px">Invest directly</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.7)">$1,830 available</div>
+        </div>
+        <div style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:16px 12px;text-align:center;cursor:pointer">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" style="margin-bottom:8px"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          <div style="font-family:var(--font-heading);font-size:12px;font-weight:600;color:#fff;margin-bottom:4px">Auto Invest</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.7)">From $25/week</div>
+        </div>
+      </div>
+      <button style="width:100%;padding:13px;border:none;border-radius:12px;background:#fff;color:var(--green);font-family:var(--font-body);font-size:14px;font-weight:600;cursor:pointer;position:relative;z-index:2">Start investing</button>
+    </div>
+    <div style="background:var(--green-bg);border-radius:14px;padding:14px 16px;border:0.5px solid rgba(22,111,71,.08);margin-bottom:10px">
+      <div style="font-size:12px;color:var(--green);font-weight:600;margin-bottom:2px">Investment ready</div>
+      <div style="font-size:12px;color:#166f47;line-height:1.5">$1,830 available. Both investment methods are ready to use.</div>
+    </div>
+  </div>
+  <div class="bottom-nav">
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</div>
+    <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Invest</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path d="M9 12l2 2 4-4"/></svg>Insights</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Cashflow</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Activity</div>
+  </div>
+</div></div></div>
+</div></div></section><hr class="divider">
+
+<!-- ======================== CONCEPT 5: INVESTMENT WORKSPACE ======================== -->
+<section id="c5">
+<div class="concept-label">Concept 05 <span>Investment Workspace</span></div>
+<div class="concept-desc">Shows available investment methods as tools.</div>
+<div class="phone-row">
+<div><div class="v-label">V1 - No Accounts</div><div class="phone-wrap"><div class="phone">
+<div class="phone-screen" style="background:var(--bg)">
+  <div class="dynamic-island"></div>
+  <div class="status-bar" style="color:#1c1c1e"><div class="left" style="color:#1c1c1e">9:41</div>
+    <div class="right" style="color:#1c1c1e"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 7h2v6H1V7zm4-3h2v9H5V4zm4-2h2v11H9V2zm4-2h2v13h-2V0z"/></svg><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 3C4.5 3 1.5 5 0 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5zm0 8.5A3.5 3.5 0 118 4.5a3.5 3.5 0 010 7z"/></svg><svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="0" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="9" height="8" rx="1" fill="currentColor"/><rect x="17" y="3.5" width="2.5" height="5" rx="1"/></svg></div>
+  </div>
+  <div class="phone-content">
+    <div style="padding:8px 0 4px"><div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:var(--text)">Invest</div></div>
+    <div style="display:flex;gap:0;margin-bottom:12px;border-bottom:1px solid var(--border)">
+      <div style="padding:8px 12px;font-size:12px;font-weight:600;color:var(--blue);border-bottom:2px solid var(--blue)">Readiness</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Portfolio</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Activity</div>
+    </div>
+    
+    <div style="background:#1c1c1e;border-radius:20px;padding:22px 20px;color:#fff;position:relative;overflow:hidden;margin-bottom:16px">
+      <div style="position:relative;z-index:2;margin-bottom:18px">
+        <div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:6px">Add accounts to begin</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.5);line-height:1.4">Your investment workspace is empty. Connect accounts to unlock tools.</div>
+      </div>
+      <div style="position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
+        <div style="background:rgba(255,255,255,.02);border:1px dashed rgba(255,255,255,.1);border-radius:14px;padding:20px 12px;text-align:center;opacity:.4">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="1.5" style="margin-bottom:8px"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+          <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.3);margin-bottom:2px">Direct investing</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.15);line-height:1.3">Locked</div>
+        </div>
+        <div style="background:rgba(255,255,255,.02);border:1px dashed rgba(255,255,255,.1);border-radius:14px;padding:20px 12px;text-align:center;opacity:.4">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="1.5" style="margin-bottom:8px"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.3);margin-bottom:2px">Auto Invest</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.15);line-height:1.3">Locked</div>
+        </div>
+      </div>
+      <button style="width:100%;padding:13px;border:none;border-radius:12px;background:var(--blue);color:#fff;font-family:var(--font-body);font-size:14px;font-weight:600;cursor:pointer;position:relative;z-index:2">Connect your first account</button>
+    </div>
+    <div style="background:#fff;border-radius:14px;padding:14px 16px;border:0.5px solid rgba(0,0,0,.04);margin-bottom:10px">
+      <div style="font-size:12px;color:var(--text2);line-height:1.5">Both investment tools are locked. Connect accounts to unlock your workspace and start investing.</div>
+    </div>
+  </div>
+  <div class="bottom-nav">
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</div>
+    <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Invest</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path d="M9 12l2 2 4-4"/></svg>Insights</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Cashflow</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Activity</div>
+  </div>
+</div></div></div>
+</div>
+<div><div class="v-label">V2 - External Connected</div><div class="phone-wrap"><div class="phone">
+<div class="phone-screen" style="background:var(--bg)">
+  <div class="dynamic-island"></div>
+  <div class="status-bar" style="color:#1c1c1e"><div class="left" style="color:#1c1c1e">9:41</div>
+    <div class="right" style="color:#1c1c1e"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 7h2v6H1V7zm4-3h2v9H5V4zm4-2h2v11H9V2zm4-2h2v13h-2V0z"/></svg><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 3C4.5 3 1.5 5 0 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5zm0 8.5A3.5 3.5 0 118 4.5a3.5 3.5 0 010 7z"/></svg><svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="0" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="9" height="8" rx="1" fill="currentColor"/><rect x="17" y="3.5" width="2.5" height="5" rx="1"/></svg></div>
+  </div>
+  <div class="phone-content">
+    <div style="padding:8px 0 4px"><div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:var(--text)">Invest</div></div>
+    <div style="display:flex;gap:0;margin-bottom:12px;border-bottom:1px solid var(--border)">
+      <div style="padding:8px 12px;font-size:12px;font-weight:600;color:var(--blue);border-bottom:2px solid var(--blue)">Readiness</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Portfolio</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Activity</div>
+    </div>
+    
+    <div style="background:#1c1c1e;border-radius:20px;padding:22px 20px;color:#fff;position:relative;overflow:hidden;margin-bottom:16px">
+      <div style="position:absolute;top:-20px;left:-20px;width:100px;height:100px;background:rgba(10,132,255,.08);border-radius:50%"></div>
+      <div style="position:relative;z-index:2;margin-bottom:18px">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--green);margin-bottom:6px;display:flex;align-items:center;gap:6px"><span style="width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite"></span>Workspace unlocked</div>
+        <div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:6px">Invest directly or open Auto Invest</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.5);line-height:1.4">Both tools are available. Pick one or use both.</div>
+      </div>
+      <div style="position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+        <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:16px 12px;text-align:center;cursor:pointer">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" style="margin-bottom:8px"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+          <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.9);margin-bottom:2px">Direct investing</div>
+          <div style="font-size:10px;color:var(--blue);margin-top:4px;font-weight:600">$1,830 available</div>
+        </div>
+        <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:16px 12px;text-align:center;cursor:pointer">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" style="margin-bottom:8px"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.9);margin-bottom:2px">Auto Invest</div>
+          <div style="font-size:10px;color:var(--green);margin-top:4px;font-weight:600">From $25/week</div>
+        </div>
+      </div>
+      <div style="position:relative;z-index:2;display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(255,255,255,.04);border-radius:10px">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        <div style="font-size:11px;color:rgba(255,255,255,.5);line-height:1.4">Both tools are equally available. Many investors use both.</div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-nav">
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</div>
+    <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Invest</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path d="M9 12l2 2 4-4"/></svg>Insights</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Cashflow</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Activity</div>
+  </div>
+</div></div></div>
+</div>
+<div><div class="v-label">V3 - Auto Invest Opened</div><div class="phone-wrap"><div class="phone">
+<div class="phone-screen" style="background:var(--bg)">
+  <div class="dynamic-island"></div>
+  <div class="status-bar" style="color:#1c1c1e"><div class="left" style="color:#1c1c1e">9:41</div>
+    <div class="right" style="color:#1c1c1e"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 7h2v6H1V7zm4-3h2v9H5V4zm4-2h2v11H9V2zm4-2h2v13h-2V0z"/></svg><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 3C4.5 3 1.5 5 0 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5zm0 8.5A3.5 3.5 0 118 4.5a3.5 3.5 0 010 7z"/></svg><svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="0" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="9" height="8" rx="1" fill="currentColor"/><rect x="17" y="3.5" width="2.5" height="5" rx="1"/></svg></div>
+  </div>
+  <div class="phone-content">
+    <div style="padding:8px 0 4px"><div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:var(--text)">Invest</div></div>
+    <div style="display:flex;gap:0;margin-bottom:12px;border-bottom:1px solid var(--border)">
+      <div style="padding:8px 12px;font-size:12px;font-weight:600;color:var(--blue);border-bottom:2px solid var(--blue)">Readiness</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Portfolio</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Activity</div>
+    </div>
+    
+    <div style="background:#1c1c1e;border-radius:20px;padding:22px 20px;color:#fff;position:relative;overflow:hidden;margin-bottom:16px">
+      <div style="position:absolute;top:-20px;right:-20px;width:100px;height:100px;background:rgba(22,111,71,.1);border-radius:50%"></div>
+      <div style="position:relative;z-index:2;margin-bottom:18px">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--blue);margin-bottom:6px;display:flex;align-items:center;gap:6px"><span style="width:6px;height:6px;border-radius:50%;background:var(--blue);animation:pulse 2s infinite"></span>Workspace active</div>
+        <div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:6px">Add banks for direct investing</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.5);line-height:1.4">Auto Invest is working. Unlock direct investing by adding banks.</div>
+      </div>
+      <div style="position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+        <div style="background:rgba(255,255,255,.02);border:1px dashed rgba(255,255,255,.1);border-radius:14px;padding:16px 12px;text-align:center;opacity:.5">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="1.5" style="margin-bottom:8px"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+          <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.4);margin-bottom:2px">Direct investing</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.25);margin-top:4px">Add banks</div>
+        </div>
+        <div style="background:rgba(22,111,71,.1);border:1px solid rgba(22,111,71,.2);border-radius:14px;padding:16px 12px;text-align:center">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" style="margin-bottom:8px"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.9);margin-bottom:2px">Auto Invest</div>
+          <div style="margin-top:4px;display:flex;align-items:center;justify-content:center;gap:4px"><div style="width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite"></div><span style="font-size:10px;color:var(--green);font-weight:600">Active</span></div>
+        </div>
+      </div>
+      <button style="width:100%;padding:13px;border:none;border-radius:12px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.8);font-family:var(--font-body);font-size:14px;font-weight:600;cursor:pointer;position:relative;z-index:2">Connect banks</button>
+    </div>
+    <div style="background:#fff;border-radius:14px;padding:14px 16px;border:0.5px solid rgba(0,0,0,.04);margin-bottom:10px">
+      <div style="font-size:12px;color:var(--text2);line-height:1.5">Direct investing is optional. Auto Invest works independently, but banks enable one-tap investing.</div>
+    </div>
+  </div>
+  <div class="bottom-nav">
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</div>
+    <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Invest</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path d="M9 12l2 2 4-4"/></svg>Insights</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Cashflow</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Activity</div>
+  </div>
+</div></div></div>
+</div>
+<div><div class="v-label">V4 - Fully Ready</div><div class="phone-wrap"><div class="phone">
+<div class="phone-screen" style="background:var(--bg)">
+  <div class="dynamic-island"></div>
+  <div class="status-bar" style="color:#1c1c1e"><div class="left" style="color:#1c1c1e">9:41</div>
+    <div class="right" style="color:#1c1c1e"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 7h2v6H1V7zm4-3h2v9H5V4zm4-2h2v11H9V2zm4-2h2v13h-2V0z"/></svg><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 3C4.5 3 1.5 5 0 8c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5zm0 8.5A3.5 3.5 0 118 4.5a3.5 3.5 0 010 7z"/></svg><svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="0" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="9" height="8" rx="1" fill="currentColor"/><rect x="17" y="3.5" width="2.5" height="5" rx="1"/></svg></div>
+  </div>
+  <div class="phone-content">
+    <div style="padding:8px 0 4px"><div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:var(--text)">Invest</div></div>
+    <div style="display:flex;gap:0;margin-bottom:12px;border-bottom:1px solid var(--border)">
+      <div style="padding:8px 12px;font-size:12px;font-weight:600;color:var(--blue);border-bottom:2px solid var(--blue)">Readiness</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Portfolio</div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--text2)">Activity</div>
+    </div>
+    
+    <div style="background:linear-gradient(135deg,#166f47,#0a84ff);border-radius:20px;padding:22px 20px;color:#fff;position:relative;overflow:hidden;margin-bottom:16px">
+      <div style="position:absolute;top:-20px;right:-20px;width:100px;height:100px;background:rgba(255,255,255,.08);border-radius:50%"></div>
+      <div style="position:relative;z-index:2;margin-bottom:18px">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:rgba(255,255,255,.8);margin-bottom:6px;display:flex;align-items:center;gap:6px"><span style="width:6px;height:6px;border-radius:50%;background:#fff;animation:pulse 2s infinite"></span>Full workspace</div>
+        <div style="font-family:var(--font-heading);font-size:18px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:6px">Both methods active</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.7);line-height:1.4">$1,830 ready. All tools unlocked.</div>
+      </div>
+      <div style="position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+        <div style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:16px 12px;text-align:center;cursor:pointer">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" style="margin-bottom:8px"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+          <div style="font-size:11px;font-weight:600;color:#fff;margin-bottom:2px">Direct investing</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.7);margin-top:4px">$1,830 available</div>
+        </div>
+        <div style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:16px 12px;text-align:center;cursor:pointer">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" style="margin-bottom:8px"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          <div style="font-size:11px;font-weight:600;color:#fff;margin-bottom:2px">Auto Invest</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.7);margin-top:4px">From $25/week</div>
+        </div>
+      </div>
+      <button style="width:100%;padding:13px;border:none;border-radius:12px;background:#fff;color:var(--green);font-family:var(--font-body);font-size:14px;font-weight:600;cursor:pointer;position:relative;z-index:2">Start investing</button>
+    </div>
+    <div style="background:var(--green-bg);border-radius:14px;padding:14px 16px;border:0.5px solid rgba(22,111,71,.08);margin-bottom:10px">
+      <div style="font-size:12px;color:var(--green);font-weight:600;margin-bottom:2px">Workspace ready</div>
+      <div style="font-size:12px;color:#166f47;line-height:1.5">All tools unlocked. $1,830 available. Start investing your way.</div>
+    </div>
+  </div>
+  <div class="bottom-nav">
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</div>
+    <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Invest</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path d="M9 12l2 2 4-4"/></svg>Insights</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Cashflow</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Activity</div>
+  </div>
+</div></div></div>
+</div></div></section>
+
+  </div>
+  <script>
+    document.querySelectorAll('.sidebar-nav a').forEach(function(link){
+      link.addEventListener('click', function(){
+        document.querySelectorAll('.sidebar-nav a').forEach(function(l){l.classList.remove('active')});
+        this.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
